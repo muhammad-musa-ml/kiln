@@ -66,12 +66,16 @@ def main() -> int:
         print("AUDIT FAILED - not pushing.")
         return 1
 
-    run(["git", "add", "-A"])
-    code, out = run(["git", "commit", "-m",
-                     f"Add {after['total']-before['total']} item(s) from the inbox"])
-    if code != 0 and "nothing to commit" in out.lower():
+    # Only public/ goes out. It's the one folder the audit just checked, so a
+    # stray log or half-finished work elsewhere can't ride along to GitHub.
+    run(["git", "add", "-A", "--", "public"])
+    code, _ = run(["git", "diff", "--cached", "--quiet", "--", "public"])
+    if code == 0:
         print("[4/4] nothing to commit")
         return 0
+    run(["git", "commit", "-m",
+         f"Add {after['total']-before['total']} item(s) from the inbox",
+         "--", "public"])
     code, out = run(["git", "push", "origin", "master"])
     print(f"[4/4] push exit={code}")
     if code != 0:
