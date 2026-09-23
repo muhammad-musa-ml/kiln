@@ -482,7 +482,7 @@ function detail(it){
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin:11px 0">
       <button class="btn run" onclick="doBuild('${it.id}','copy')">Copy the prompt</button>
       ${LOCAL ? `<button class="btn" onclick="doBuild('${it.id}','queue')">Queue it for me to run</button>
-      <button class="btn" onclick="doBuild('${it.id}','local')">Run here now</button>` : ''}
+      <button class="btn" onclick="doBuild('${it.id}','local')">Save job to run here</button>` : ''}
     </div>
     <div id="buildOut"></div></div>` : '';
 
@@ -691,11 +691,13 @@ async function doBuildServer(id, target){
       out.innerHTML = `<div class="warn">Queued as <code>${esc(j.id)}</code>.</div>
         <div class="out">Saved to ${esc(j.file || '')}
 
-Next time I'm in a session here, I'll pick it up and build it.
-Or run:  python -m kiln.jobs pending</div>`;
+Nothing runs this automatically yet. To build it now:
+  python -m kiln.runner run <the file above>
+To list what is queued:
+  python -m kiln.jobs pending</div>`;
       toast('queued');
     } else {
-      out.innerHTML = `<div class="warn">Job written for the local agent.</div>
+      out.innerHTML = `<div class="warn">Job saved. It does not start on its own yet.</div>
         <div class="out">${esc(j.file || '')}</div>`;
       toast('job written');
     }
