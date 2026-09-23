@@ -20,7 +20,7 @@ OUT = config.ROOT / "public"
 
 # --- the whitelist -------------------------------------------------------
 ITEM_FIELDS = ("id", "url", "kind", "action", "title", "hook", "summary",
-               "owner", "posted", "slide_count", "focus_slide")
+               "owner", "posted", "slide_count", "focus_slide", "links_checked")
 # Added by public_item(): media_id, pdf_file - both opaque, neither a real path.
 
 NOTE_FIELDS = ("sections", "onscreen_text", "entities", "topics",
@@ -100,6 +100,16 @@ def public_item(full: dict) -> dict:
         pdf = full.get("pdf_path") or ""
         if pdf:
             d["pdf_file"] = Path(pdf).name
+
+    # Ship the build prompt with the data rather than rebuilding it in JS.
+    # The published page has no server, and two implementations of the same
+    # text drift. This way jobs.py stays the only place it is written.
+    if (enr.get("project") or {}).get("name"):
+        try:
+            from . import jobs
+            d["build_prompt"] = scrub(jobs.build_prompt(full))
+        except Exception:
+            pass
     return d
 
 

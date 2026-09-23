@@ -473,12 +473,16 @@ function detail(it){
       (e.project.stretch||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`:''}
     </div>` : '';
 
-  const build = (e.project && LOCAL) ? `<div class="sec"><h4>Build it</h4>
-    <p class="warn" style="margin-top:0">Three ways. The prompt is the same in all of them, so nothing drifts.</p>
+  // Copy works anywhere, because the prompt is built from data already on
+  // the page. Queue and Run need a machine, so they only show locally.
+  const build = e.project ? `<div class="sec"><h4>Build it</h4>
+    <p class="warn" style="margin-top:0">${LOCAL
+      ? 'Three ways. Same prompt in all of them, so nothing drifts.'
+      : 'Copy this into any chat and you get the project back.'}</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin:11px 0">
       <button class="btn run" onclick="doBuild('${it.id}','copy')">Copy the prompt</button>
-      <button class="btn" onclick="doBuild('${it.id}','queue')">Queue it for me to run</button>
-      <button class="btn" onclick="doBuild('${it.id}','local')">Run here now</button>
+      ${LOCAL ? `<button class="btn" onclick="doBuild('${it.id}','queue')">Queue it for me to run</button>
+      <button class="btn" onclick="doBuild('${it.id}','local')">Run here now</button>` : ''}
     </div>
     <div id="buildOut"></div></div>` : '';
 
@@ -495,7 +499,7 @@ function detail(it){
     </div>
     <div id="runOut"></div></div>` : '';
 
-  const links = (it.links||[]).length ? `<div class="sec"><h4>Links, checked just now</h4>${
+  const links = (it.links||[]).length ? `<div class="sec"><h4>Links${it.links_checked ? ", checked " + esc(it.links_checked) : " I found"}</h4>${
     (it.links||[]).map(l=>`<div class="linkrow">
       <span class="pill ${l.alive?'ok':'bad'}">${l.alive?'live':(l.status_code||'dead')}</span>
       <a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.page_title||l.url)}</a>
@@ -578,7 +582,101 @@ function detail(it){
 }
 
 /* ---------- build ---------- */
+// Mirrors kiln/jobs.py build_prompt. Duplicated deliberately: the published
+// page has no server, and a copy button that only works on localhost is
+// useless when you are on your phone looking at the site.
+const cleanTxt = s => String(s == null ? '' : s)
+  .replace(/\s*(?:\[\d+\])+/g, '').replace(/^\s*\d+[.)]\s*/, '').trim();
+
+function splitScope(scope){
+  if(scope && typeof scope === 'object')
+    return [scope.in || [], scope.out || []];
+  const text = String(scope || '');
+  if(!text.trim()) return [[], []];
+  const m = text.split(/\bOUT\s*[:\-]/i);
+  const head = m[0].replace(/^\s*IN\s*[:\-]\s*/i, '');
+  const items = c => c.split(/[;\n]|,(?![^(]*\))/)
+      .map(x => x.replace(/^[\s.]+|[\s.]+$/g, '')).filter(x => x.length > 2);
+  return [items(head), items(m[1] || '')];
+}
+
+function buildPromptJS(it){
+  const e = it.enrich || {}, p = e.project || {};
+  const [sin, sout] = splitScope(p.scope);
+  const L = [];
+  L.push(`# Build: ${p.name || it.title || 'project'}`, '');
+  if(p.one_liner) L.push(cleanTxt(p.one_liner), '');
+  L.push('I want a working repository I can push to GitHub. Build it completely,',
+         'runnable code, tests where they make sense, and a README.', '');
+  if(p.why_portfolio_worthy) L.push('## Why this matters', cleanTxt(p.why_portfolio_worthy), '');
+  if(sin.length || sout.length){
+    L.push('## Scope');
+    if(sin.length){ L.push('Build these:'); sin.forEach(x => L.push(`- ${cleanTxt(x)}`)); }
+    if(sout.length){ L.push('', 'Explicitly do NOT build these:');
+                     sout.forEach(x => L.push(`- ${cleanTxt(x)}`)); }
+    L.push('');
+  }
+  if((p.stack||[]).length){
+    L.push('## Stack, use these exact versions');
+    p.stack.forEach(s => L.push(`- ${cleanTxt(s)}`)); L.push('');
+  }
+  if((p.milestones||[]).length){
+    L.push('## Milestones, each must be verifiably done before the next');
+    p.milestones.forEach((m, i) => {
+      L.push(`${i+1}. **${cleanTxt(m.step)}**`);
+      if(m.outcome) L.push(`   - Done when: ${cleanTxt(m.outcome)}`);
+    });
+    L.push('');
+  }
+  if((p.readme_outline||[]).length){
+    L.push('## README must cover');
+    p.readme_outline.forEach(s => L.push(`- ${cleanTxt(s)}`)); L.push('');
+  }
+  if((p.stretch||[]).length){
+    L.push('## Only after everything above works');
+    p.stretch.forEach(s => L.push(`- ${cleanTxt(s)}`)); L.push('');
+  }
+  if(e.what_it_is) L.push('## Background', cleanTxt(e.what_it_is), '');
+  if((e.gotchas||[]).length){
+    L.push('## Known traps, handle these rather than rediscovering them');
+    e.gotchas.forEach(g => L.push(`- ${cleanTxt(g)}`)); L.push('');
+  }
+  const live = (it.links||[]).filter(l => l.alive);
+  const docs = (e.official_docs||[]).filter(d => d && d.url);
+  if(live.length || docs.length){
+    L.push('## Reference');
+    docs.slice(0,6).forEach(d => L.push(`- ${d.title || 'doc'}: ${d.url}`));
+    live.slice(0,6).forEach(l => L.push(`- ${l.page_title || l.url}: ${l.url}`));
+    L.push('');
+  }
+  L.push('## How I want it delivered',
+         '- A single repository, ready to git init and push.',
+         '- Pin every dependency to the versions above.',
+         '- A README that explains what it does and how to run it, written plainly.',
+         '- No placeholder code and no TODO stubs. If something is out of scope,',
+         '  leave it out rather than stubbing it.', '');
+  L.push(`Source this came from: ${it.url || ''}`);
+  if(p.est_hours) L.push(`Rough size: about ${p.est_hours} hours of work.`);
+  return L.join('\n');
+}
+
 async function doBuild(id, target){
+  const out = document.getElementById('buildOut');
+  if(STATIC || target === 'copy'){
+    const it = STATIC ? (_cache.items||[]).find(x => x.id === id) : await api('/api/item/'+id);
+    // The publisher ships the prompt, so there is one source of truth.
+    // buildPromptJS is only a fallback for items published before that.
+    const prompt = it.build_prompt || buildPromptJS(it);
+    try{ await navigator.clipboard.writeText(prompt); toast('prompt copied'); }
+    catch{ toast('select the text below and copy'); }
+    out.innerHTML = `<div class="warn">Paste this into any chat. It stands on its own.</div>
+      <textarea class="out" style="width:100%;min-height:280px" readonly>${esc(prompt)}</textarea>`;
+    return;
+  }
+  return doBuildServer(id, target);
+}
+
+async function doBuildServer(id, target){
   const out = document.getElementById('buildOut');
   out.innerHTML = '<div class="out">preparing...</div>';
   try{
