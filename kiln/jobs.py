@@ -163,9 +163,21 @@ def build_prompt(item: dict) -> str:
 # ---------------------------------------------------------------------------
 # The queue
 # ---------------------------------------------------------------------------
+def existing(job_id: str) -> dict:
+    """Where a job already lives, if it does."""
+    for folder, state in ((PENDING, "pending"), (DONE, "done")):
+        for f in sorted(folder.glob(f"{job_id}*.md")):
+            return {"file": str(f), "job_state": state}
+    return {}
+
+
 def create(item_id: str, *, target: str = "copy", repo_name: str = "",
            directory: str = "", conn=None) -> dict:
-    """Write a job. `target` is copy | queue | local | actions."""
+    """Write a job. `target` is copy | local | actions.
+
+    The id comes from the item, not the clock, so pressing the button twice
+    finds the job that is already there instead of making another one.
+    """
     own = conn is None
     conn = conn or store.connect()
     item = store.get_item(conn, item_id)
@@ -176,7 +188,7 @@ def create(item_id: str, *, target: str = "copy", repo_name: str = "",
 
     proj = (item.get("enrich") or {}).get("project") or {}
     name = repo_name or _slug(proj.get("name") or item.get("title") or "project")
-    jid = f"{int(time.time())}-{name}"[:60]
+    jid = f"{item_id[:12]}-{name}"[:60]
     prompt = build_prompt(item)
 
     job = {
@@ -188,7 +200,12 @@ def create(item_id: str, *, target: str = "copy", repo_name: str = "",
         "prompt": prompt,
     }
 
-    if target in ("queue", "local", "actions"):
+    if target in ("local", "actions"):
+        prior = existing(jid)
+        if prior:
+            job.update(prior)
+            job["already"] = True
+            return job
         path = PENDING / f"{jid}.md"
         path.write_text(_job_file(job), encoding="utf-8")
         job["file"] = str(path)

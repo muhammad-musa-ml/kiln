@@ -477,12 +477,11 @@ function detail(it){
   // the page. Queue and Run need a machine, so they only show locally.
   const build = e.project ? `<div class="sec"><h4>Build it</h4>
     <p class="warn" style="margin-top:0">${LOCAL
-      ? 'Three ways. Same prompt in all of them, so nothing drifts.'
+      ? 'Same prompt either way, so nothing drifts.'
       : 'Copy this into any chat and you get the project back.'}</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin:11px 0">
       <button class="btn run" onclick="doBuild('${it.id}','copy')">Copy the prompt</button>
-      ${LOCAL ? `<button class="btn" onclick="doBuild('${it.id}','queue')">Queue it for me to run</button>
-      <button class="btn" onclick="doBuild('${it.id}','local')">Save job to run here</button>` : ''}
+      ${LOCAL ? `<button class="btn" onclick="doBuild('${it.id}','local')">Build it on the next run</button>` : ''}
     </div>
     <div id="buildOut"></div></div>` : '';
 
@@ -687,19 +686,15 @@ async function doBuildServer(id, target){
       catch{ toast('select and copy below'); }
       out.innerHTML = `<div class="warn">Paste this into any chat. It stands alone.</div>
         <textarea class="out" style="width:100%;min-height:260px" readonly>${esc(j.prompt)}</textarea>`;
-    } else if(target === 'queue'){
-      out.innerHTML = `<div class="warn">Queued as <code>${esc(j.id)}</code>.</div>
-        <div class="out">Saved to ${esc(j.file || '')}
-
-Nothing runs this automatically yet. To build it now:
-  python -m kiln.runner run <the file above>
-To list what is queued:
-  python -m kiln.jobs pending</div>`;
-      toast('queued');
     } else {
-      out.innerHTML = `<div class="warn">Job saved. It does not start on its own yet.</div>
-        <div class="out">${esc(j.file || '')}</div>`;
-      toast('job written');
+      const again = j.already ? 'Already queued' : 'Queued';
+      out.innerHTML = `<div class="warn">${again} as <code>${esc(j.id)}</code>.</div>
+        <div class="out">${esc(j.file || '')}
+
+It builds on the next scheduled run, gets reviewed, and is pushed to GitHub.
+To build it right now instead:
+  python -m kiln.runner run <the file above></div>`;
+      toast(j.already ? 'already queued' : 'queued');
     }
   }catch(err){ out.innerHTML = `<div class="out">${esc(err.message)}</div>`; }
 }
