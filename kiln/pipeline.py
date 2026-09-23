@@ -181,6 +181,10 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
         except Exception:
             health = []
     store.set_links(conn, iid, health)
+    # When the check actually ran. The published page can only show stored
+    # results, so it has to say when they were taken rather than implying now.
+    rec["links_checked"] = time.strftime("%d %b %Y", time.localtime())
+    store.upsert_item(conn, rec)
 
     body = "\n".join([
         note.get("summary", ""),

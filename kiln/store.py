@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS items (
   focus_slide   INTEGER,
   pdf_path      TEXT,
   media_dir     TEXT,
+  links_checked TEXT,                  -- when the link check actually ran
   gate_json     TEXT,                  -- comment/DM gate detection
   note_json     TEXT,                  -- full extraction
   enrich_json   TEXT,                  -- full enrichment
@@ -138,7 +139,7 @@ def upsert_item(conn: sqlite3.Connection, rec: dict) -> str:
     cols = [c for c in rec if c in {
         "id", "url", "source", "kind", "action", "status", "urgent", "deadline",
         "title", "hook", "summary", "owner", "posted", "user_note", "user_do",
-        "slide_count", "focus_slide", "pdf_path", "media_dir", "gate_json",
+        "slide_count", "focus_slide", "pdf_path", "media_dir", "links_checked", "gate_json",
         "note_json", "enrich_json", "cost_usd", "created_at", "updated_at",
         "processed_at", "error"}]
     placeholders = ",".join("?" for _ in cols)

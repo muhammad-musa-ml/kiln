@@ -104,7 +104,7 @@ def main() -> int:
     data = json.loads((OUT / "data" / "items.json").read_text(encoding="utf-8"))
     allowed = set(publish.ITEM_FIELDS) | {
         "note", "enrich", "tags", "links", "gate",
-        "media_id", "pdf_file", "slide_ext"}
+        "media_id", "pdf_file", "slide_ext", "build_prompt"}
     extra: set[str] = set()
     for it in data.get("items", []):
         extra |= set(it.keys()) - allowed
