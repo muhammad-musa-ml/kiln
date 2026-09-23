@@ -128,9 +128,13 @@ def all_states() -> list[dict]:
         log = Path(d.get("log", ""))
         if log.exists():
             try:
-                tail = log.read_text(encoding="utf-8", errors="replace")[-1800:]
-                d["tail"] = tail
-                d["log_bytes"] = log.stat().st_size
+                size = log.stat().st_size
+                # Seek rather than read the file in. A build log runs to
+                # megabytes, and the UI asks for this on every poll.
+                with log.open("rb") as fh:
+                    fh.seek(max(0, size - 4000))
+                    d["tail"] = fh.read().decode("utf-8", "replace")[-1800:]
+                d["log_bytes"] = size
             except Exception:
                 pass
         out.append(d)
