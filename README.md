@@ -10,6 +10,63 @@ slide, pulls the caption and whatever text is on screen, checks if the links
 still work, and then goes and looks up the stuff the post skipped. Everything
 lands in a local UI I can search.
 
+**Live: https://kiln-by-m.vercel.app**
+
+That link is a published copy of my library, not the app itself. Worth
+explaining properly, because half of Kiln isn't there and that's on purpose.
+
+## What the live site is, and isn't
+
+It's a static export. A folder of JSON and images on a CDN. There is no
+database behind it, no API key, and no write endpoint at all. Not hidden,
+not disabled by a flag, just not built into it.
+
+**Works there:** browsing everything, filtering by tag, search, every
+carousel slide, the PDFs, the full write-up for each item, the project
+briefs, and the copy-the-prompt button. That last one works because the
+prompt ships inside the data, so it needs no server.
+
+**Doesn't work there, and why:**
+
+- **Adding links.** No write route exists. If you POST to one you get a 405.
+- **Running or queueing a build.** Needs a real machine with a shell.
+- **Installing anything.** Same. A public endpoint that runs shell commands
+  is remote code execution with extra steps, so it only exists locally and
+  it refuses to load unless `KILN_LOCAL=1`.
+- **Live link checking.** It says "checked 23 Sep" rather than "checked just
+  now" because that's the truth. The check ran when I processed the item and
+  the result was stored. A static page has nothing to re-check with. The
+  heading used to say "just now" and that was wrong, so I changed it.
+- **Model controls.** The panel lists which providers I hold keys for. That's
+  information about my setup, so it's local only.
+- **Cost meter.** Nobody needs to know what my week cost.
+
+**The reason the whole thing can't just live on Vercel:** Instagram blocks
+requests from data centre IP ranges. The browser trick works *because* it
+runs unauthenticated from a normal home connection. Move it to a server and
+you get the same 401s that killed every other approach. That isn't a Vercel
+limitation, and no amount of code fixes it. So the reading happens on my
+laptop and the result gets published.
+
+## What only exists on localhost
+
+Everything that touches a key, a browser, or a shell:
+
+- Adding links and re-processing them
+- Model management: add any provider, reorder the fallback ladder, disable
+  one, test a key before it's saved
+- Build jobs: queue one, or run it here in a directory I pick
+- Install previews with a Run button
+- The Google Drive sync
+- Live model health and spend
+
+I haven't moved these online because each one would mean putting my API keys
+on a host I don't control, and I'd be building auth, rate limiting and
+row-level security for an app with exactly one user. The static export gets
+me the part worth sharing without any of that surface. If I ever want to add
+links from my phone, the smallest honest version is a tiny authenticated
+endpoint that only writes to a queue, and the laptop still does the work.
+
 ## Running it
 
 ```bash

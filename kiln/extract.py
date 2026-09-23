@@ -77,8 +77,18 @@ def _context_block(acq: Acquired, user_note: str = "") -> str:
         )
     if acq.comment_count:
         bits.append(f"The post has {acq.comment_count} comments.")
+    if getattr(acq, "duration", 0):
+        bits.append(f"Runtime: {acq.duration // 60} minutes.")
     if user_note:
         bits.append(f"What the person saving it said: \"{user_note}\"")
+
+    # For a video with captions or an article there are no pixels to send,
+    # and the transcript IS the content. Without this the model only ever
+    # saw the description and wrote a note about the blurb.
+    if acq.body_text and not acq.slides and not acq.video:
+        label = ("Full transcript of the video" if acq.kind in ("youtube", "tiktok")
+                 else "Full text of the page")
+        bits.append(f"\n{label}:\n{acq.body_text[:120000]}")
     return "\n".join(bits)
 
 

@@ -1,6 +1,1278 @@
 {
  "items": [
   {
+   "id": "9d3aadf6a3f54689",
+   "url": "https://www.youtube.com/watch?v=gh2_PhgZGsM",
+   "kind": "course",
+   "action": "watch",
+   "title": "The Ultimate Guide to Mastering Anthropic's Claude Code",
+   "hook": "Learn to turn Claude into a seamless, autonomous part of your professional development workflow.",
+   "summary": "This comprehensive guide teaches you how to integrate Anthropic's Claude Code into your development environment to boost productivity. You will learn everything from initial setup and configuration to managing complex, multi-file projects and autonomous task completion. The course covers practical applications like building projects from scratch, writing effective prompts, and performing deep architectural and code quality audits. By the end, you'll have a structured methodology for using AI to handle scaffolding, testing, and debugging.",
+   "owner": "freeCodeCamp.org",
+   "posted": "20260513",
+   "slide_count": 0,
+   "links_checked": "23 Sep 2026",
+   "note": {
+    "sections": [
+     {
+      "heading": "Introduction and Setup",
+      "detail": "Covers prerequisites like Node.js 18+, global installation via npm, and initial authentication using a Claude Pro or API account."
+     },
+     {
+      "heading": "First Session and Project Scaffolding",
+      "detail": "Demonstrates initializing a project with Claude MD, creating a Python-based CSV reader, and transforming a simple script into a professional, testable package."
+     },
+     {
+      "heading": "Advanced Codebase Analysis",
+      "detail": "Shows how to use Claude to analyze large existing codebases, explain architectural patterns, identify bugs in logs, and implement fixes."
+     },
+     {
+      "heading": "Environment and Configuration",
+      "detail": "Addresses specific challenges like installing Claude Code on Ubuntu/EC2 instances and managing terminal integrations."
+     },
+     {
+      "heading": "Building a Real-World Application",
+      "detail": "Walks through building a METAR weather reader web app using Flask, including template creation and testing."
+     },
+     {
+      "heading": "Code Quality and Maintenance",
+      "detail": "Explores using Claude for SOLID principles evaluation, error handling audits, code duplication detection, and test coverage analysis."
+     }
+    ],
+    "onscreen_text": [
+     "Learn all about Claude Code.",
+     "🔗 IMPORTANT LINKS",
+     "🔬 Practice with Hands-On Labs: https://kode.wiki/claude-code",
+     "🎓 Get the Full Course here: https://kode.wiki/claude-code-course",
+     "❤️ Support for this channel comes from our friends at Scrimba – the coding platform that's reinvented interactive learning: https://scrimba.com/freecodecamp",
+     "⭐️ Contents ⭐️",
+     "0:00:00 Introduction",
+     "0:00:30 Prerequisites and Initial Setup",
+     "0:09:25 Start your first session",
+     "0:23:58 Understanding Codebases with Claude",
+     "0:32:21 Installing Claude on Ubuntu Virtual Machines",
+     "0:49:34 Building a project from scratch",
+     "0:49:34 Getting project ready for public release",
+     "0:56:49 Creating Unit Tests for our Project",
+     "1:03:20 Autonomous Task Completion",
+     "1:17:11 Environment and Configuration Management",
+     "1:30:17 Managing Long Sessions Effectively",
+     "2:07:52 Writing Effective Development Prompts",
+     "2:23:39 Multi-file Project Navigation",
+     "2:32:10 Working with APIs and External Services",
+     "2:46:16 Initial Project Analysis",
+     "2:56:24 Design Pattern Implementation Review",
+     "3:05:50 SOLID Principles Evaluation",
+     "3:24:04 Error Handling & Resilience Audit",
+     "3:36:04 Exception Flow Analysis",
+     "3:52:12 Resilience & Fault Tolerance",
+     "3:53:09 Code Quality Metrics & Standards",
+     "4:02:17 Code Duplication Detection",
+     "4:12:14 Naming Conventions & Readability",
+     "4:19:23 Test Coverage & Quality Analysis",
+     "🎉 Thanks to our Champion and Sponsor supporters:",
+     "Learn to code for free and get a developer job: https://www.freecodecamp.org",
+     "Read hundreds of articles on programming: https://freecodecamp.org/news"
+    ],
+    "entities": [
+     {
+      "name": "Claude Code",
+      "type": "tool",
+      "why": "The primary AI-powered development tool being taught."
+     },
+     {
+      "name": "Anthropic",
+      "type": "company",
+      "why": "The creator of Claude."
+     },
+     {
+      "name": "Jeremy Morgan",
+      "type": "person",
+      "why": "The developer who created this course."
+     },
+     {
+      "name": "Scrimba",
+      "type": "company",
+      "why": "Sponsor of the channel."
+     },
+     {
+      "name": "NodeJS",
+      "type": "library",
+      "why": "Required runtime for Claude Code."
+     },
+     {
+      "name": "Flask",
+      "type": "library",
+      "why": "Used for building the METAR reader web application."
+     }
+    ],
+    "topics": [
+     "ai",
+     "coding",
+     "development",
+     "claude",
+     "productivity"
+    ],
+    "code_snippets": [
+     "brew install node",
+     "npm install -g @anthropic/claude-code",
+     "claude",
+     "pip install -e",
+     "black",
+     "flake8",
+     "mypy",
+     "curl -fSSL https://claude.ai/install.sh | bash"
+    ],
+    "spoken_transcript": "Master Cloud Code and learn to integrate Anthropic's powerful AI directly into your development environment. This course is designed to take you from initial setup to managing complex multifile projects with a structured professional methodology. You will learn how to scaffold applications, enforce testing standards, and leverage AI for deep architectural reviews and security audits. Jeremy Morgan from CodeCloud developed this course.",
+    "open_questions": [
+     "What are the specific limitations of Claude Code when working with non-Node/Python environments?",
+     "How does the pricing model scale for enterprise-level projects?"
+    ]
+   },
+   "enrich": {},
+   "tags": {
+    "action": [
+     "watch"
+    ],
+    "topic": [
+     "ai",
+     "claude",
+     "coding",
+     "development",
+     "productivity"
+    ]
+   },
+   "links": [
+    {
+     "url": "https://freecodecamp.org/news",
+     "label": "freeCodeCamp News",
+     "alive": true,
+     "page_title": "freeCodeCamp Programming Tutorials: Python, JavaScript, Git & More"
+    },
+    {
+     "url": "https://kode.wiki/claude-code",
+     "label": "Hands-On Labs",
+     "alive": true,
+     "page_title": "KodeKloud"
+    },
+    {
+     "url": "https://kode.wiki/claude-code-course",
+     "label": "Full Course",
+     "alive": true,
+     "page_title": "KodeKloud"
+    },
+    {
+     "url": "https://scrimba.com/freecodecamp",
+     "label": "Scrimba",
+     "alive": true,
+     "page_title": "Learn to code with Scrimba"
+    },
+    {
+     "url": "https://www.freecodecamp.org",
+     "label": "freeCodeCamp",
+     "alive": true,
+     "page_title": ""
+    }
+   ]
+  },
+  {
+   "id": "4091b1ffc3d48ceb",
+   "url": "https://www.youtube.com/watch?v=CcrC5zSv1iA",
+   "kind": "other",
+   "action": "watch",
+   "title": "LLM Fine-Tuning Course – From Supervised FT to RLHF, LoRA, and Multimodal",
+   "owner": "freeCodeCamp.org",
+   "posted": "20260310",
+   "slide_count": 0,
+   "links_checked": "23 Sep 2026",
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "watch"
+    ]
+   },
+   "links": []
+  },
+  {
+   "id": "af2a35ea434953c0",
+   "url": "https://www.freecodecamp.org/news/ai-agents-for-beginners/",
+   "kind": "course",
+   "action": "read",
+   "title": "Master AI Agents: From LLM Fundamentals to Multi-Agent Systems",
+   "hook": "Learn to build autonomous AI agents and multi-agent systems in this comprehensive hands-on course.",
+   "summary": "We just released an in-depth, hands-on video course on the freeCodeCamp.org YouTube channel about AI agents. Led by Mumshad Mannambeth, founder of CodeCloud, this full-length course is designed to take you from the absolute fundamentals of Large Language Models to building specialized, multi-agent systems. You will learn core concepts, the distinction between workflows and agents, and build four distinct agent personalities. We also cover production patterns, security, and a deep dive into the OpenClaw framework.",
+   "owner": "Beau Carnes",
+   "posted": "2026-07-07",
+   "slide_count": 0,
+   "links_checked": "23 Sep 2026",
+   "note": {
+    "sections": [
+     {
+      "heading": "To Watch: AI Agent Development",
+      "detail": "A 3-hour comprehensive course covering LLM fundamentals, agent architecture, and practical implementation."
+     },
+     {
+      "heading": "To Watch: Production & Security Patterns",
+      "detail": "Advanced topics including structured JSON outputs, input/output guardrails, human-in-the-loop approvals, and secure sandbox execution."
+     },
+     {
+      "heading": "To Watch: Case Studies",
+      "detail": "A deep dive into the OpenClaw open-source personal assistant framework, analyzing its 5-phase loop and session state management."
+     }
+    ],
+    "onscreen_text": [
+     "We just released an in-depth, hands-on video course on the freeCodeCamp.org YouTube channel about AI agents",
+     "Led by Mumshad Mannambeth, founder of CodeCloud, this full-length course is designed to take you from the absolute fundamentals of Large Language Models (LLMs) to building specialized, multi-agent systems.",
+     "Here are the core things you will learn in this course:",
+     "LLM Core Concepts: Learn how generative pre-trained transformers (GPT) work, understand tokens and tokenization, and see how temperature shapes model predictability.",
+     "Workflows vs. Agents: Learn the important architectural distinction between predefined code pathways (workflows) and fully autonomous loops where the AI decides its own next steps using tools.",
+     "Hands-on Implementation: Build four distinct agent personalities from scratch: Zippy (the orchestrator), Savvy (the research specialist utilizing the React pattern), Meshi (the memory manager), and Cody (the code and automation specialist).",
+     "Production Patterns & Security: Explore critical design patterns including structured JSON outputs, input/output guardrails, human-in-the-loop approvals, and secure sandbox execution.",
+     "OpenClaw Case Study: Wrap up the course by dissecting OpenClaw, a popular open-source, production-grade personal assistant framework. You will trace its 5-phase loop, check how it manages session state, and see how it dynamically builds a 19-section system prompt based on real-world research.",
+     "Watch the full course on the freeCodeCamp.org YouTube channel (3-hour watch)."
+    ],
+    "entities": [
+     {
+      "name": "Mumshad Mannambeth",
+      "type": "person",
+      "why": "Founder of CodeCloud and lead instructor for the course."
+     },
+     {
+      "name": "CodeCloud",
+      "type": "company",
+      "why": "The organization founded by the course instructor."
+     },
+     {
+      "name": "OpenClaw",
+      "type": "repo",
+      "why": "An open-source, production-grade personal assistant framework used as a case study."
+     },
+     {
+      "name": "Large Language Models",
+      "type": "concept",
+      "why": "The foundational technology covered in the course."
+     }
+    ],
+    "topics": [
+     "ai agents",
+     "llm",
+     "programming",
+     "automation",
+     "software architecture"
+    ],
+    "open_questions": [
+     "What specific programming language or framework is used for the hands-on implementation?",
+     "Are there any prerequisites beyond basic programming knowledge?"
+    ]
+   },
+   "enrich": {},
+   "tags": {
+    "action": [
+     "read"
+    ],
+    "topic": [
+     "ai agents",
+     "automation",
+     "llm",
+     "programming",
+     "software architecture"
+    ]
+   },
+   "links": []
+  },
+  {
+   "id": "2152113dedecef67",
+   "url": "https://www.youtube.com/watch?v=viZrOnJclY0",
+   "kind": "tutorial",
+   "action": "watch",
+   "title": "StatQuest: Understanding Word Embeddings and word2vec",
+   "hook": "Learn how to convert words into meaningful numbers for neural networks using word embeddings and word2vec.",
+   "summary": "Words are great for communication, but neural networks need numbers to process them. In this StatQuest, we explore how to create word embeddings by training a simple neural network to predict context. We then dive into the popular word2vec tool, which uses continuous bag-of-words and skip-gram strategies to handle large vocabularies. Finally, we explain how negative sampling makes training these massive models efficient. Bam!",
+   "owner": "StatQuest with Josh Starmer",
+   "posted": "20230313",
+   "slide_count": 0,
+   "links_checked": "23 Sep 2026",
+   "note": {
+    "sections": [
+     {
+      "heading": "Introduction",
+      "detail": "Introduction to the problem of converting words into numbers for machine learning and the goal of creating word embeddings where similar words have similar numerical values."
+     },
+     {
+      "heading": "Building a Neural Network for Word Embedding",
+      "detail": "Step-by-step process of creating a simple neural network with inputs for unique words, activation functions representing embedding dimensions, and output layers using softmax and cross-entropy to predict the next word in a phrase."
+     },
+     {
+      "heading": "Visualizing and Validating",
+      "detail": "Plotting word weights on a graph to visualize how backpropagation adjusts embeddings so that words used in similar contexts move closer together in vector space."
+     },
+     {
+      "heading": "Summary of Main Ideas",
+      "detail": "Recap of how neural networks use context to optimize embeddings, making language processing easier by grouping similar words."
+     },
+     {
+      "heading": "word2vec",
+      "detail": "Explanation of continuous bag-of-words (CBOW) and skip-gram strategies used by word2vec to capture more context than simple next-word prediction."
+     },
+     {
+      "heading": "Speeding up training with Negative Sampling",
+      "detail": "How negative sampling improves efficiency by randomly selecting a small subset of words to avoid predicting, significantly reducing the number of weights optimized during backpropagation."
+     }
+    ],
+    "onscreen_text": [
+     "StatQuest",
+     "Word Embedding and word2vec",
+     "Clearly Explained",
+     "Lightning",
+     "The letters 'A', 'B', and 'C'",
+     "24. 0.3 5.1",
+     "Troll 2 is great!",
+     "Troll 2 is awesome!",
+     "Troll 2",
+     "Gymkata",
+     "is",
+     "great!",
+     "0.38",
+     "0.42",
+     "Continuous Bag-of-Words",
+     "Skip-gram",
+     "Negative Sampling"
+    ],
+    "entities": [
+     {
+      "name": "StatQuest",
+      "type": "company",
+      "why": "The educational channel producing the content."
+     },
+     {
+      "name": "Josh Starmer",
+      "type": "person",
+      "why": "The creator and host of StatQuest."
+     },
+     {
+      "name": "word2vec",
+      "type": "tool",
+      "why": "A popular method for creating word embeddings."
+     },
+     {
+      "name": "The StatQuest Illustrated Guide to Machine Learning",
+      "type": "book",
+      "why": "A book recommended by the creator for offline study."
+     }
+    ],
+    "topics": [
+     "machine learning",
+     "neural networks",
+     "word embeddings",
+     "word2vec",
+     "natural language processing"
+    ],
+    "spoken_transcript": "If you want to turn words into numbers... ...and you want those numbers to make sense... ...then use word embeddings and similar words will have similar numbers! Hooray! StatQuest! Hello, I'm Josh Starmer and welcome to StatQuest! Today we're going to talk about Word Embedding and word2vec and they're going to be clearly explained. Lightning makes using the cloud just as easy to use as your laptop and that's cool! This StatQuest is also brought to you by the letters 'A', 'B', and 'C'. 'A' always, 'B' be, 'C' curious. Always be curious! Also, I want to give a special thanks to Alex Lavaee and the students at Boston University's Spark! for letting me test this StatQuest out on them. Note: This StatQuest is focused on how neural networks can be used to create word embeddings and assumes that you are already familiar with the basic ideas of neural networks and backpropagation, as well as the main ideas about the softmax function and cross entropy. If not, check out the Quests. Words are great. We can use them to communicate all kinds of cool ideas. For example: Hey Norm, isn't StatQuest awesome? It sure is Squatch! Unfortunately, a lot of machine learning algorithms, including neural networks, don't work well with words. Hey, Neural Network, isn't StatQuest awesome! So if we want to plug words into a neural network, or some other machine learning algorithm, we need a way to turn the words into numbers. 24. 0.3 5.1 Yes, StatQuest is awesome! Bam! One super easy way to convert words into numbers is to just assign each word to a random number. For example, if someone just saw the hit movie Troll 2 and said, \"Troll 2 is great!\", we can just give each word a random number. Note: For the purposes of this StatQuest, were going to treat \"Troll 2\" as a single word. Anyway, if the next person said, \"Troll 2 is awesome!\", then we could reuse the random numbers that we already selected for \"Troll 2\" and \"is\", and assign a new random number to the new word, \"awesome!\". In theory, this is fine, but it means that even though \"great!\" and \"awesome!\" mean similar things and are used in similar ways, they have very different numbers associated with them, 4.2 and - 32.1, and that means the neural network will probably need a lot more complexity and training because learning how to correctly process the word \"great!\", won't help the neural network correctly use the word \"awesome!\". So it would be nice if similar words that are used in similar ways could be given similar numbers so that learning how to use one word will help learn how to use the other at the same time. And because the same words can be used in different contexts, or made plural, or used in some other way, it might be nice to assign each word more than one number, so that the neural network can more easily adjust to different contexts. For example, the word \"great\" can be used in a positive way, like \"StatQuest is great!\", and it can also be used in a sarcastic, negative way, like \"My cell phone is broken, great\", and it would be nice if we had one number that could keep track of the positive ways that \"great\" is used and a different number to keep track of the negative ways. Hey Josh, deciding what words are similar and used in similar contexts sounds like a lot of work. And using more than one number per word to account for different contexts sounds like even more work. Don't worry Squatch. The good news is that we can get a super simple neural network to do all of the work for us. Bam! To show how we can get a super simple neural network to figure out what numbers should go with different words. Let's imagine we have two phrases: \"Troll 2 is great!\" and \"Gymkata is great!\". Anyway, both phrases have two words, \"Troll 2\" and \"Gymkata\", in similar contexts, because someone, and I'm not going to name names, thinks that these two terrible movies are great! So, in order to create a neural network to figure out what numbers we should associate with each word, the first thing we do is create inputs for each unique word. In this case, we have four unique words in the training data, so we have four inputs. Now we connect each input to at least one activation function. Note: This activation function uses the identity function, and thus, the input value is the same as the output value. In other words, this activation function doesn't do anything except give us a place to do addition. The number of activation functions corresponds to how many numbers we want to associate with each word. And the weights on those connections will ultimately be the numbers that we associate with each word. Now, in this example, we want to associate two numbers with each word. So that means we'll use two activation functions. And the weights on the connections to the second activation function will be another number associated with each word. However, like always, these weights start out with random values that we will optimize with backpropagation. Now, in order to do backpropagation, we have to make predictions. So we'll use the input word to predict the next word in the phrase. So if the phrase is \"Troll 2 is great\", then we can use the word \"Troll 2\" to predict the word \"is\". In other words, if the input word is \"Troll 2\", and we indicate that by putting a 1 into the \"Troll 2\" input and 0s into all of the other inputs, then we want the output for the word, \"is\", to have the largest value. And if the input word is \"is\", which means that the input for \"is\" is is 1 and all of the other inputs are 0, then we want the output for the next word, \"great!\", to have the largest value. Lastly, if the input word is \"Gymkata\", which means that the input for \"Gymkata\" is 1 and all of the other inputs are 0, then we want the output for the next word, \"is\", to have the largest value. In order to make these predictions, we connect the activation functions to outputs and we add weights to those connections with random initialization values. And then we run the outputs through the softmax function because we have multiple outputs for classification. And that means we can use the cross entropy loss function for backpropagation. Again, the goal is to train this neural network so that it correctly predicts the next word in a phrase. And now, before training, if we plug the word \"Troll 2\" into the input and do the math, we get lucky and correctly predict the next word, \"is\", but just barely. However, when we plug the word \"is\" into the input and do the math, then we fail to correctly predict the next word \"great!\" and instead predict \"is\". So we need to train this neural network. However, before we optimize all of the weights, remember that I said that these weights would be the numbers associated with each word. And since, in this example, we have two weights for each word, we can plot each word on a graph that has the weight values to the top activation function on the x axis and the weight values the bottom activation function on the y-axis. For example, the word \"Troll 2\" goes here, because it's top weight is 0.38 and its bottom weight is 0.42. Likewise, the word \"is\" goes here, and the word \"great\" goes here, and \"Gymkata\" goes here. Now, with this graph, we see that the words \"Troll 2\" and \"Gymkata\" are currently no more similar to each other as they are to any of the other words. However, because both words appear in the same context in the training data, we hope that backpropagation will make their weights more similar. So we start with these weights and we end up with these new weights. The new weights on the connections from the inputs to the activation functions are the word embeddings. And when we plot the words using the new weights, which are now the embeddings, we see that \"Troll 2\" and \"Gymkata\" are now relatively close to each other compared to the other words in the training data. Bam! Now that we've trained the neural network, we can see how well it predicts the next word. For example, if we plug the word \"Troll 2\" into the input and do the math, then the output for the next word, \"is\", is 1 and everything else is 0, and that is exactly what we wanted. And when we plug the word \"is\" into the input and do the math, then the output for the next word in both phrases \"great!\" is 1 and everything else is 0. Lastly, when we plug the word \"Gymkata\" into the input and do the math, then the output for the next word, \"is\", is 1 and everything else is 0. Bam! Now, before we talk about a popular word embedding tool, word2vec, let's summarize what we've learned so far. First, rather than just assign random numbers to words, we can train a relatively simple neural network to assign numbers for us. The advantage of using a neural network is that it can use the context of words in the training data set to optimize weights that can be used for the embeddings. And this can result in similar words ending up with similar embeddings. Lastly, having similar words with similar embeddings means training a neural network to process language is easier because learning how one word is used helps learn how similar words are used. Double bam! Now, so far, we've shown we can train a neural network to predict the next word in each phrase. But just predicting the next word doesn't give us a lot of context to understand each one. So now let's learn about the two strategies that word2vec, a popular method for creating word embeddings, uses to include more context. The first method, called \"continuous bag-of-words\", increases the context by using the surrounding words to predict what occurs in the middle. For example, the continuous bag-of-words method could use the words \"Troll 2\" and \"great!\" to predict the word that occurs between them, \"is\". The second method, called \"skip-gram\", increases the context by using the word in the middle to predict the surrounding words. For example, the skip-gram method could use the word \"is\" to predict the surrounding words \"Troll 2\", \"great!\" and \"Gymkata\". Lastly, before we're done, just know that in practice, instead of using just 2 activation functions to create 2 embeddings per word, people often use 100 or more activation functions to create a lot of embeddings per word. And instead of using 2 sentences for training, they use the entire wikipedia. Thus, instead of just having a vocabulary of 4 words and phrases, word2vec might have a vocabulary of about 3 million words and phrases. Thus, the total number of weights in this neural network that we need to optimize is 3 million words and phrases times at least 100, the number of weights each word has going to the activation functions, x 2, for the weights that get us from the activation functions to the outputs, for a total of 600 million weights. So training can be slow. However, one way that word2vec speeds things up is to use something called Negative Sampling. Negative sampling works by randomly selecting a subset of words we don't want to predict for optimization. For example, say like we wanted the word \"aardvark\" to predict the word \"a\". That means that only the word \"aardvark\" has a 1 in it and all of the other words have zeros, and that means we can ignore the weights coming from every word but \"aardvark\", because the other words multiply their weights by zero. That alone removes close to 300 million weights from this optimization step. However, we still have 300 million weights after the activation functions. So, because we want to predict the word \"a\", then we don't want to predict \"aardvark\", \"abandon\", and all of the other words. So for this example, let's imagine word2vec randomly selects \"abandon\" as a word we don't want to predict. Note: In practice, word2vec would select between 2 and 20 words that we don't want to predict. However, in this example, we just select one, \"abandon\". So now word2vec only uses the output values for \"a\" and \"abandon\", and that means for this round of backpropagation, we can ignore the weights that lead to all of the other possible outputs. So, in the end, out of the 600 million total weights in this neural network, we only optimize 300 per step. And this is one way that word2vec can efficiently create lots of word embeddings for each word in a large vocabulary. Triple bam! Now it's time for some shameless self-promotion. If you want to review statistics and machine learning offline, check out the StatQuest PDF study guides and my book, The StatQuest Illustrated Guide to Machine Learning at statquest.org. There's something for everyone. Hooray! We've made it to the end of another exciting StatQuest. If you liked this StatQuest and want to see more, please subscribe. And if you want to support StatQuest, consider contributing to my patreon campaign, becoming a channel member, buying one or two of my original songs, or a t-shirt, or a hoodie, or just donate, the links are in the description below. All right until next time Quest on!",
+    "open_questions": [
+     "How do you determine the optimal number of activation functions (embedding dimensions) for a specific dataset?",
+     "What are the practical trade-offs between using CBOW versus skip-gram in different types of NLP tasks?"
+    ]
+   },
+   "enrich": {},
+   "tags": {
+    "action": [
+     "watch"
+    ],
+    "topic": [
+     "machine learning",
+     "natural language processing",
+     "neural networks",
+     "word embeddings",
+     "word2vec"
+    ]
+   },
+   "links": [
+    {
+     "url": "https://statquest.org/statquest-store/",
+     "label": "StatQuest store",
+     "alive": true,
+     "page_title": "The StatQuest Store!!!"
+    },
+    {
+     "url": "https://statquest.org/video-index/",
+     "label": "StatQuest video index",
+     "alive": true,
+     "page_title": "Redirecting to new page"
+    },
+    {
+     "url": "https://twitter.com/joshuastarmer",
+     "label": "Twitter",
+     "alive": true,
+     "page_title": "Joshua Starmer (@joshuastarmer) / X"
+    },
+    {
+     "url": "https://www.patreon.com/statquest",
+     "label": "Patreon",
+     "alive": true,
+     "page_title": "StatQuest with Josh Starmer | creating videos that explain statistics and machine learning. | Patreon"
+    },
+    {
+     "url": "https://www.paypal.me/statquest",
+     "label": "PayPal donation",
+     "alive": true,
+     "page_title": "PayPal.Me"
+    },
+    {
+     "url": "https://www.youtube.com/channel/UCtYLUTtgS3k1Fg4y5tAhLbw/join",
+     "label": "YouTube Membership",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://youtu.be/6ArSys5qHAU",
+     "label": "How Cross Entropy works",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://youtu.be/CqOfi41LfDw",
+     "label": "The Basics of how Neural Networks Work",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://youtu.be/IN2XmBhILt4",
+     "label": "The Basics of how Backpropagation Works",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://youtu.be/KpKog-L9veg",
+     "label": "How the Softmax function works",
+     "alive": true,
+     "page_title": ""
+    }
+   ]
+  },
+  {
+   "id": "e6aff5f4429ef53c",
+   "url": "https://www.youtube.com/watch?v=T9aRN5JkmL8",
+   "kind": "other",
+   "action": "watch",
+   "title": "Anthropic Experts Discuss the Evolution and Future of Prompt Engineering",
+   "hook": "Learn how to master prompt engineering from the experts building the models themselves.",
+   "summary": "This roundtable discussion features Anthropic's experts in alignment, developer relations, and prompt engineering as they break down the craft of communicating with AI. They explore the definition of prompt engineering, the importance of iterative testing, and how to move beyond simple tricks to achieve reliable results. The panel also shares practical advice on handling edge cases, the role of personas, and their perspectives on how prompting will evolve as AI capabilities grow.",
+   "owner": "Anthropic",
+   "posted": "20240905",
+   "slide_count": 0,
+   "links_checked": "23 Sep 2026",
+   "note": {
+    "sections": [
+     {
+      "heading": "Introduction",
+      "detail": "Alex Albert introduces the panel of Anthropic experts: Amanda Askell (Alignment Finetuning), David Hershey (Applied AI), and Zack Witten (Prompt Engineering)."
+     },
+     {
+      "heading": "Defining prompt engineering",
+      "detail": "The panel defines prompt engineering as clear communication and a systematic process of trial and error, treating prompts as a form of programming that requires iteration."
+     },
+     {
+      "heading": "What makes a good prompt engineer",
+      "detail": "Key skills include clear communication, a willingness to iterate, the ability to anticipate edge cases, and the discipline to read model outputs closely."
+     },
+     {
+      "heading": "Refining prompts",
+      "detail": "Experts discuss the importance of breaking down tasks, removing human assumptions, and using the model itself to identify ambiguities in instructions."
+     },
+     {
+      "heading": "Honesty, personas and metaphors in prompts",
+      "detail": "The panel debates the utility of role-playing and metaphors, suggesting that being direct and providing context is often more effective than using 'persona' shortcuts."
+     },
+     {
+      "heading": "Model reasoning",
+      "detail": "A discussion on whether chain-of-thought reasoning provides genuine insight into model computation or serves as a workspace for the model."
+     },
+     {
+      "heading": "Enterprise vs research vs general chat prompts",
+      "detail": "The experts contrast the needs of enterprise systems, which require robustness and error handling, with research-focused prompting."
+     },
+     {
+      "heading": "Tips to improve prompting skills",
+      "detail": "Practical advice includes treating the model like a competent temp worker, providing clear context, and giving the model 'outs' for edge cases."
+     },
+     {
+      "heading": "Jailbreaking",
+      "detail": "Brief discussion on the security and safety aspects of prompt engineering."
+     },
+     {
+      "heading": "Evolution of prompt engineering",
+      "detail": "Reflections on how the field has shifted from early pre-trained models to modern RLHF-tuned models."
+     },
+     {
+      "heading": "Future of prompt engineering",
+      "detail": "Final thoughts on the trajectory of AI capabilities and the changing nature of human-AI interaction."
+     }
+    ],
+    "onscreen_text": [
+     "0:00 Introduction",
+     "2:05 Defining prompt engineering",
+     "6:34 What makes a good prompt engineer",
+     "12:17 Refining prompts",
+     "24:27 Honesty, personas and metaphors in prompts",
+     "37:12 Model reasoning",
+     "45:18 Enterprise vs research vs general chat prompts",
+     "50:52 Tips to improve prompting skills",
+     "53:56 Jailbreaking",
+     "56:51 Evolution of prompt engineering",
+     "1:04:34 Future of prompt engineering"
+    ],
+    "entities": [
+     {
+      "name": "Anthropic",
+      "type": "company",
+      "why": "The organization hosting the roundtable and developing Claude."
+     },
+     {
+      "name": "Claude",
+      "type": "product",
+      "why": "The AI model being discussed and used for experimentation."
+     },
+     {
+      "name": "Amanda Askell",
+      "type": "person",
+      "why": "Lead of Finetuning at Anthropic."
+     },
+     {
+      "name": "Alex Albert",
+      "type": "person",
+      "why": "Lead of Developer Relations at Anthropic."
+     },
+     {
+      "name": "David Hershey",
+      "type": "person",
+      "why": "Applied AI expert at Anthropic."
+     },
+     {
+      "name": "Zack Witten",
+      "type": "person",
+      "why": "Prompt Engineer at Anthropic."
+     }
+    ],
+    "topics": [
+     "prompt engineering",
+     "ai",
+     "machine learning",
+     "llm",
+     "anthropic"
+    ],
+    "spoken_transcript": "Basically, this entire roundtable session here is just gonna be focused mainly on prompt engineering. A variety of perspectives at this table around prompting from a research side, from a consumer side, and from the enterprise side. And I want to just get the whole wide range of opinions because there's a lot of them. And just open it up to discussion and explore what prompt engineering really is and what it's all about. And yeah, we'll just take it from there. So maybe we can go around the horn with intros. I can kick it off. I'm Alex. I lead Developer Relations here at Anthropic. Before that, I was technically a prompt engineer at Anthropic. I worked on our prompt engineering team, and did a variety of roles spanning from a solutions architect type of thing, to working on the research side. So with that, maybe I can hand it over to David. - Heck, yeah. My name's David Hershey. I work with customers mostly at Anthropic on a bunch of stuff technical, I help people with finetuning, but also just a lot of the generic things that make it hard to adopt language models of prompting. And just like how to build systems with language models, but spend most of my time working with customers. - Cool. I'm Amanda Askell. I lead one of the Finetuning teams at Anthropic, where I guess I try to make Claude be honest and kind. Yeah. - My name is Zack Witten. I'm a Prompt Engineer at Anthropic. Alex and I always argue about who the first one was. He says it's him, I say it's me. - Contested. - Yeah. I used to work a lot with individual customers, kind of the same way David does now. And then as we brought more solutions architects to the team, I started working on things that are meant to raise the overall levels of ambient prompting in society, I guess, like the prompt generator and the various educational materials that people use.",
+    "open_questions": [
+     "How will the role of a prompt engineer change as models become more autonomous?",
+     "What are the specific limitations of multimodal prompting compared to text-only prompting?"
+    ]
+   },
+   "enrich": {},
+   "tags": {
+    "action": [
+     "watch"
+    ],
+    "topic": [
+     "ai",
+     "anthropic",
+     "llm",
+     "machine learning",
+     "prompt engineering"
+    ]
+   },
+   "links": [
+    {
+     "url": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview",
+     "label": "Anthropic prompt engineering docs",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://www.anthropic.com/",
+     "label": "Learn more about Anthropic",
+     "alive": true,
+     "page_title": "Home \\ Anthropic"
+    }
+   ]
+  },
+  {
+   "id": "ad623be0503a235d",
+   "url": "https://www.youtube.com/watch?v=LPZh9BOjkQs",
+   "kind": "tutorial",
+   "action": "watch",
+   "title": "A Light Introduction to Large Language Models and Transformers",
+   "hook": "Understand the mathematical mechanics behind how chatbots predict text and learn language.",
+   "summary": "This video provides a conceptual overview of how large language models function, from the basic premise of word prediction to the complex architecture of transformers. I explain how models are trained on vast amounts of internet text to tune billions of parameters, and how reinforcement learning with human feedback refines their behavior. We also explore the role of GPUs in parallel processing and the specific mechanisms of attention and feed-forward networks. Ultimately, these models are sophisticated mathematical functions that produce emergent, fluent text through probabilistic prediction.",
+   "owner": "3Blue1Brown",
+   "posted": "20241120",
+   "slide_count": 0,
+   "links_checked": "23 Sep 2026",
+   "note": {
+    "sections": [
+     {
+      "heading": "The Chatbot Mechanism",
+      "detail": "Explains chatbots as systems that predict the next word in a sequence by assigning probabilities to all possible words, treating the interaction as a completion of a script."
+     },
+     {
+      "heading": "Training and Parameters",
+      "detail": "Describes pre-training as tuning billions of weights using backpropagation on massive text datasets to improve prediction accuracy."
+     },
+     {
+      "heading": "Computational Scale",
+      "detail": "Highlights the immense computational cost of training, noting it would take over 100 million years to perform the necessary operations at a rate of one billion per second."
+     },
+     {
+      "heading": "Refinement and Transformers",
+      "detail": "Covers reinforcement learning with human feedback (RLHF) and the shift from sequential processing to the parallel architecture of transformers using attention and feed-forward networks."
+     },
+     {
+      "heading": "Emergent Behavior",
+      "detail": "Concludes that while the framework is designed by researchers, the specific output behavior is an emergent phenomenon resulting from the tuned parameters."
+     },
+     {
+      "heading": "The Mechanism of Chatbots",
+      "detail": "Chatbots function by predicting the next word in a sequence. They treat a conversation as a script where the AI's response is missing, using a mathematical function to assign probabilities to all possible next words."
+     },
+     {
+      "heading": "Reinforcement Learning",
+      "detail": "Beyond pre-training, models undergo reinforcement learning with human feedback (RLHF) to align their outputs with user preferences and improve helpfulness."
+     },
+     {
+      "heading": "Transformer Architecture",
+      "detail": "Transformers process text in parallel rather than sequentially. They use 'attention' to allow words to influence each other's meanings based on context, and feed-forward networks to store learned patterns."
+     }
+    ],
+    "entities": [
+     {
+      "name": "GPT-3",
+      "type": "product",
+      "why": "Used as an example of a model trained on massive amounts of text."
+     },
+     {
+      "name": "Manim",
+      "type": "library",
+      "why": "Custom Python library used for creating the video animations."
+     },
+     {
+      "name": "Vincent Rubinetti",
+      "type": "person",
+      "why": "Composer of the music used in the video."
+     },
+     {
+      "name": "Transformer",
+      "type": "concept",
+      "why": "A model architecture that processes text in parallel using attention mechanisms."
+     },
+     {
+      "name": "Backpropagation",
+      "type": "concept",
+      "why": "Algorithm used to tweak parameters during training."
+     },
+     {
+      "name": "GPU",
+      "type": "tool",
+      "why": "Computer chips optimized for parallel operations required for training."
+     }
+    ],
+    "topics": [
+     "artificial intelligence",
+     "large language models",
+     "transformers",
+     "machine learning",
+     "neural networks"
+    ],
+    "spoken_transcript": "Imagine you happen across a short movie script that describes a scene between a person and their AI assistant. The script has what the person asks the AI, but the AI's response has been torn off. Suppose you also have this powerful magical machine that can take any text and provide a sensible prediction of what word comes next. You could then finish the script by feeding in what you have to the machine, seeing what it would predict to start the AI's answer, and then repeating this over and over with a growing script completing the dialogue. When you interact with a chatbot, this is exactly what's happening. A large language model is a sophisticated mathematical function that predicts what word comes next for any piece of text. Instead of predicting one word with certainty, though, what it does is assign a probability to all possible next words. To build a chatbot, what you do is lay out some text that describes an interaction between a user and a hypothetical AI assistant, you add on whatever the user types in as the first part of the interaction, and then have the model repeatedly predict the next word that such a hypothetical AI assistant would say in response, and that's what's presented to the user. In doing this, the output tends to look a lot more natural if you allow it to select less likely words along the way at random. So what this means is even though the model itself is deterministic, a given prompt typically gives a different answer each time it's run. Models learn how to make these predictions by processing an enormous amount of text, typically pulled from the internet. For a standard human to read the amount of text that was used to train GPT-3, for example, if they read non-stop 24-7, it would take over 2600 years. Larger models since then train on much, much more. You can think of training a little bit like tuning the dials on a big machine. The way that a language model behaves is entirely determined by these many different continuous values, usually called parameters or weights. Changing those parameters will change the probabilities that the model gives for the next word on a given input. What puts the large in large language model is how they can have hundreds of billions of these parameters. No human ever deliberately sets those parameters. Instead, they begin at random, meaning the model just outputs gibberish, but they're repeatedly refined based on many example pieces of text. One of these training examples could be just a handful of words, or it could be thousands, but in either case, the way this works is to pass in all but the last word from that example into the model and compare the prediction that it makes with the true last word from the example. An algorithm called backpropagation is used to tweak all of the parameters in such a way that it makes the model a little more likely to choose the true last word and a little less likely to choose all the others. When you do this for many, many trillions of examples, not only does the model start to give more accurate predictions on the training data, but it also starts to make more reasonable predictions on text that it's never seen before. Given the huge number of parameters and the enormous amount of training data, the scale of computation involved in training a large language model is mind-boggling. To illustrate, imagine that you could perform one billion additions and multiplications every single second. How long do you think it would take for you to do all of the operations involved in training the largest language models? Do you think it would take a year? Maybe something like 10,000 years? The answer is actually much more than that. It's well over 100 million years. This is only part of the story, though. This whole process is called pre-training. The goal of auto-completing a random passage of text from the internet is very different from the goal of being a good AI assistant. To address this, chatbots undergo another type of training, just as important, called reinforcement learning with human feedback. Workers flag unhelpful or problematic predictions, and their corrections further change the model's parameters, making them more likely to give predictions that users prefer. Looking back at the pre-training, though, this staggering amount of computation is only made possible by using special computer chips that are optimized for running many operations in parallel, known as GPUs. However, not all language models can be easily parallelized. Prior to 2017, most language models would process text one word at a time, but then a team of researchers at Google introduced a new model known as the transformer. Transformers don't read text from the start to the finish, they soak it all in at once, in parallel. The very first step inside a transformer, and most other language models for that matter, is to associate each word with a long list of numbers. The reason for this is that the training process only works with continuous values, so you have to somehow encode language using numbers, and each of these lists of numbers may somehow encode the meaning of the corresponding word. What makes transformers unique is their reliance on a special operation known as attention. This operation gives all of these lists of numbers a chance to talk to one another and refine the meanings they encode based on the context around, all done in parallel. For example, the numbers encoding the word bank might be changed based on the context surrounding it to somehow encode the more specific notion of a riverbank. Transformers typically also include a second type of operation known as a feed-forward neural network, and this gives the model extra capacity to store more patterns about language learned during training. All of this data repeatedly flows through many different iterations of these two fundamental operations, and as it does so, the hope is that each list of numbers is enriched to encode whatever information might be needed to make an accurate prediction of what word follows in the passage. At the end, one final function is performed on the last vector in this sequence, which now has had a chance to be influenced by all the other context from the input text, as well as everything the model learned during training, to produce a prediction of the next word. Again, the model's prediction looks like a probability for every possible next word. Although researchers design the framework for how each of these steps work, it's important to understand that the specific behavior is an emergent phenomenon based on how those hundreds of billions of parameters are tuned during training. This makes it incredibly challenging to determine why the model makes the exact predictions that it does. What you can see is that when you use large language model predictions to autocomplete a prompt, the words that it generates are uncannily fluent, fascinating, and even useful. If you're a new viewer and you're curious about more details on how transformers and attention work, boy do I have some material for you. One option is to jump into a series I made about deep learning, where we visualize and motivate the details of attention and all the other steps in a transformer. Also, on my second channel I just posted a talk I gave a couple months ago about this topic for the company TNG in Munich. Sometimes I actually prefer the content I make as a casual talk rather than a produced video, but I leave it up to you which one of these feels like the better follow-on.",
+    "open_questions": [
+     "How exactly does the attention mechanism mathematically refine the meaning of words in context?",
+     "What are the specific limitations of current RLHF methods in preventing model bias?",
+     "How do researchers interpret the 'black box' of emergent behaviors in models with billions of parameters?",
+     "How exactly does the 'attention' mechanism mathematically calculate the relationship between words?",
+     "What are the specific limitations of current LLMs regarding reasoning versus pattern matching?",
+     "How do researchers interpret the 'emergent' behaviors within the black box of billions of parameters?"
+    ]
+   },
+   "enrich": {},
+   "tags": {
+    "action": [
+     "watch"
+    ],
+    "topic": [
+     "artificial intelligence",
+     "large language models",
+     "machine learning",
+     "neural networks",
+     "transformers"
+    ]
+   },
+   "links": [
+    {
+     "url": "https://3b1b.co/faq#manim",
+     "label": "Manim FAQ",
+     "alive": true,
+     "page_title": "About | 3Blue1Brown"
+    },
+    {
+     "url": "https://3b1b.co/support",
+     "label": "Support 3Blue1Brown",
+     "alive": false,
+     "page_title": ""
+    },
+    {
+     "url": "https://3blue1brown.substack.com",
+     "label": "Mailing list",
+     "alive": true,
+     "page_title": "3Blue1Brown mailing list | Grant Sanderson | Substack"
+    },
+    {
+     "url": "https://computerhistory.org/",
+     "label": "Computer History Museum",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/3b1b/manim",
+     "label": "Manim GitHub",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/3b1b/videos/",
+     "label": "Video code repository",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/ManimCommunity/manim/",
+     "label": "Manim Community GitHub",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://open.spotify.com/album/1dVyjwS8FBqXhRunaG5W5u",
+     "label": "Music Spotify",
+     "alive": true,
+     "page_title": "The Music of 3blue1brown - Album by Vincent Rubinetti | Spotify"
+    },
+    {
+     "url": "https://patreon.com/3blue1brown",
+     "label": "Patreon",
+     "alive": false,
+     "page_title": ""
+    },
+    {
+     "url": "https://twitter.com/3blue1brown",
+     "label": "Twitter",
+     "alive": true,
+     "page_title": "Grant Sanderson (@3blue1brown) / X"
+    },
+    {
+     "url": "https://vincerubinetti.bandcamp.com/album/the-music-of-3blue1brown",
+     "label": "Music Bandcamp",
+     "alive": true,
+     "page_title": "The Music of 3Blue1Brown | Vincent Rubinetti"
+    },
+    {
+     "url": "https://www.3blue1brown.com",
+     "label": "Website",
+     "alive": true,
+     "page_title": "3Blue1Brown"
+    },
+    {
+     "url": "https://www.facebook.com/3blue1brown",
+     "label": "Facebook",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://www.instagram.com/3blue1brown",
+     "label": "Instagram",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://www.reddit.com/r/3blue1brown",
+     "label": "Reddit",
+     "alive": true,
+     "page_title": "Reddit"
+    },
+    {
+     "url": "https://www.vincentrubinetti.com",
+     "label": "Vincent Rubinetti website",
+     "alive": true,
+     "page_title": "Vincent Rubinetti"
+    },
+    {
+     "url": "https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi",
+     "label": "Deep learning playlist",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://youtu.be/KJtZARuO3JY",
+     "label": "Technical talk details",
+     "alive": true,
+     "page_title": ""
+    }
+   ]
+  },
+  {
+   "id": "ab1219756e383bcc",
+   "url": "https://www.youtube.com/watch?v=o126p1QN_RI",
+   "kind": "course",
+   "action": "watch",
+   "title": "Comprehensive Retrieval-Augmented Generation (RAG) Crash Course and Implementation",
+   "hook": "Master the end-to-end RAG pipeline from data ingestion to retrieval and generation.",
+   "summary": "This crash course provides a deep dive into Retrieval-Augmented Generation (RAG), explaining how to optimize LLM outputs by referencing authoritative external knowledge bases. I cover the entire pipeline, including data parsing, chunking, embedding, and vector database storage, while addressing common issues like hallucination. We move from theoretical foundations to practical, modular coding implementations using LangChain. This approach allows you to build cost-effective, domain-specific AI applications without the need for expensive model retraining.",
+   "owner": "Krish Naik",
+   "posted": "20251006",
+   "slide_count": 0,
+   "links_checked": "23 Sep 2026",
+   "note": {
+    "sections": [
+     {
+      "heading": "Introduction to RAG",
+      "detail": "Definition of RAG as a process to optimize LLM output using external knowledge. Discussion of LLM limitations, specifically hallucination and the lack of access to real-time or private organizational data."
+     },
+     {
+      "heading": "The RAG Pipeline Architecture",
+      "detail": "Breakdown of the two main pipelines: the Data Ingestion Pipeline (parsing, chunking, embedding, vector storage) and the Retrieval Pipeline (query embedding, similarity search, context augmentation, and LLM generation)."
+     },
+     {
+      "heading": "Document Structure and Data Ingestion",
+      "detail": "Deep dive into the LangChain document structure, which consists of page_content and metadata. Explanation of how metadata (source, author, date) improves retrieval accuracy through filtering."
+     },
+     {
+      "heading": "Practical Implementation",
+      "detail": "Setting up the development environment using uv, installing dependencies (langchain, pypdf, pymupdf), and demonstrating how to use TextLoader and DirectoryLoader to ingest data into the document structure."
+     },
+     {
+      "heading": "Practical Implementation and Setup",
+      "detail": "Setting up the development environment using uv, installing dependencies like langchain, langchain-community, and PDF loaders. Explanation of the Document data structure, which consists of page_content and metadata."
+     },
+     {
+      "heading": "Data Ingestion and Document Loading",
+      "detail": "Demonstration of using TextLoader and DirectoryLoader to ingest various file formats. Emphasis on the importance of metadata for filtering during similarity searches."
+     }
+    ],
+    "onscreen_text": [
+     "github: https://github.com/krishnaik06/RAG-Tutorials"
+    ],
+    "entities": [
+     {
+      "name": "LangChain",
+      "type": "library",
+      "why": "The primary framework used for building the RAG pipeline, document loading, and text splitting."
+     },
+     {
+      "name": "Krishna Naik",
+      "type": "person",
+      "why": "The creator and instructor of the crash course."
+     },
+     {
+      "name": "Vector Database",
+      "type": "concept",
+      "why": "Used to store embeddings for efficient similarity search and retrieval."
+     },
+     {
+      "name": "uv",
+      "type": "tool",
+      "why": "Used for environment management and package installation."
+     },
+     {
+      "name": "Perplexity",
+      "type": "product",
+      "why": "Cited as a real-world example of a RAG-based application."
+     }
+    ],
+    "topics": [
+     "rag",
+     "llm",
+     "langchain",
+     "ai",
+     "data engineering",
+     "artificial intelligence"
+    ],
+    "code_snippets": [
+     "uv env",
+     "uv add -r requirement.txt",
+     "uv add ipykernel",
+     "from langchain_core.documents import Document",
+     "from langchain.document_loaders import TextLoader",
+     "from langchain_community.document_loaders import DirectoryLoader"
+    ],
+    "spoken_transcript": "Hello all, my name is Krishna and I am super excited to announce this amazing crash course on rag that is retrieval augmented generation. Uh in this specific crash course it'll be somewhere around 2.5 to 3 hours but we are going to discuss everything that is related to rack completely from scratch. Uh we'll be talking about the entire pipeline from data injection to retrieval pipeline to output generation. how to use LLM models, how to use embedding models in this uh along with this uh what should be the right strategy of using chunkings and many more things right so we will be deep diving into both the theoretical understanding along with the practical implementation and we will initially go ahead step by step we'll start with the basic implementation and then as we go ahead in the advanced section we'll also implement the modular coding right the main aim of the modular coding is to link the entire pipeline in a way so that you should be able to understand how rag actually works and also implement it in your company use cases. Let me tell you one very important thing. 90%age of the use cases that are currently been worked in all the companies are specifically related to rag. So this crash course will be an amazing one for you all of you. We'll keep a simple like target of thousand uh try to complete it as soon as possible and we'll also keep a like target to some uh comments target of 500. So please try to complete it and yes go ahead and enjoy this particular crash course. Thank you.",
+    "open_questions": [
+     "What are the specific differences between semantic chunking and fixed-size chunking strategies?",
+     "How do you handle updates to the vector database when the source documents change?",
+     "How do different embedding models compare in terms of cost and accuracy for specific domain datasets?",
+     "What are the best practices for handling updates to the vector database in a production environment?",
+     "How does semantic chunking specifically improve retrieval performance compared to fixed-size chunking?"
+    ]
+   },
+   "enrich": {},
+   "tags": {
+    "action": [
+     "watch"
+    ],
+    "topic": [
+     "ai",
+     "artificial intelligence",
+     "data engineering",
+     "langchain",
+     "llm",
+     "rag"
+    ]
+   },
+   "links": [
+    {
+     "url": "https://github.com/krishnaik06/RAG-Tutorials",
+     "label": "GitHub repository for RAG tutorials",
+     "alive": true,
+     "page_title": ""
+    }
+   ]
+  },
+  {
+   "id": "a8f49c47e7728124",
+   "url": "https://www.instagram.com/p/Dc6SBfvxRux/?stkn=aTRueHF0NGEzeXZw",
+   "kind": "listicle",
+   "action": "watch",
+   "title": "Data Analyst to AI Engineer in 7 Steps Roadmap",
+   "hook": "Follow this structured 7-step guide to transition from data analyst to AI engineer using curated video courses.",
+   "summary": "This post provides a 7-step roadmap from raw data to intelligent systems for data analysts looking to become AI engineers. Each step includes a specific topic, a brief description of what to learn, and a link to a video or article resource. Topics cover RAG, LLMs, prompt engineering, embeddings, AI agents, fine-tuning, and Claude Code. The guide is designed to take learners from foundational concepts to practical implementation.",
+   "owner": "datawithsai",
+   "slide_count": 1,
+   "links_checked": "23 Sep 2026",
+   "note": {
+    "sections": [
+     {
+      "heading": "1. RAG: Complete Crash Course",
+      "detail": "Build retrieval pipelines with LangChain, not toy demos. Learn the moving parts that make answers grounded."
+     },
+     {
+      "heading": "2. LLMs, Explained Briefly",
+      "detail": "See what language models are doing beneath the hype. The clearest mental model you can build in 10 minutes."
+     },
+     {
+      "heading": "3. Prompt Engineering Deep Dive",
+      "detail": "Write prompts that are specific, testable, and reusable. Less guesswork, better outputs, fewer wasted retries."
+     },
+     {
+      "heading": "4. Embeddings & Word2Vec",
+      "detail": "Understand how machines turn meaning into vectors. The concept behind search, similarity, and modern RAG."
+     },
+     {
+      "heading": "5. AI Agents for Beginners",
+      "detail": "Move from single prompts to systems that plan and act. A practical start before 'agentic' becomes empty jargon."
+     },
+     {
+      "heading": "6. LLM Fine-Tuning Course",
+      "detail": "Learn when custom training is actually worth the effort. Go beyond prompting without burning compute blindly."
+     },
+     {
+      "heading": "7. Claude Code for Beginners",
+      "detail": "Use an AI coding partner across real project workflows. Ship faster while staying responsible for the code."
+     }
+    ],
+    "onscreen_text": [
+     "Data Analyst to AI Engineer in 7 steps",
+     "From raw data to intelligent systems",
+     "CRASH COURSE RAG LangChain WATCH NOW",
+     "1. RAG: Complete Crash Course",
+     "Build retrieval pipelines with LangChain, not toy demos. Learn the moving parts that make answers grounded.",
+     "https://www.youtube.com/watch?v=o126p1QN_RI",
+     "LLM",
+     "2. LLMs, Explained Briefly",
+     "See what language models are doing beneath the hype. The clearest mental model you can build in 10 minutes.",
+     "https://www.youtube.com/watch?v=LPZh9BOjkQs",
+     "Prompt engineering",
+     "3. Prompt Engineering Deep Dive",
+     "Write prompts that are specific, testable, and reusable. Less guesswork, better outputs, fewer wasted retries.",
+     "https://www.youtube.com/watch?v=T9arN5JKmL8",
+     "Word Embedding and Word2Vec... ...Clearly Explained!!!",
+     "4. Embeddings & Word2Vec",
+     "Understand how machines turn meaning into vectors. The concept behind search, similarity, and modern RAG.",
+     "https://www.youtube.com/watch?v=viZRonJCly0",
+     "AI Agents for Beginners with OpenClaw Case Study",
+     "5. AI Agents for Beginners",
+     "Move from single prompts to systems that plan and act. A practical start before \"agentic\" becomes empty jargon.",
+     "https://www.freecodecamp.org/news/ai-agents-for-beginners/",
+     "Learn LLM Fine-Tuning in 12 hours",
+     "6. LLM Fine-Tuning Course",
+     "Learn when custom training is actually worth the effort. Go beyond prompting without burning compute blindly.",
+     "https://www.youtube.com/watch?v=Ccrc5ZSv1iA",
+     "Claude Code for Beginners",
+     "7. Claude Code for Beginners",
+     "Use an AI coding partner across real project workflows. Ship faster while staying responsible for the code.",
+     "https://www.youtube.com/watch?v=gh2_PhgZGsM",
+     "Save this for later | Follow @datawithsai for more",
+     "SKB"
+    ],
+    "entities": [
+     {
+      "name": "LangChain",
+      "type": "library",
+      "why": "Used to build retrieval pipelines in the RAG crash course."
+     },
+     {
+      "name": "Word2Vec",
+      "type": "concept",
+      "why": "Covered to understand how machines turn meaning into vectors."
+     },
+     {
+      "name": "Claude Code",
+      "type": "tool",
+      "why": "Recommended as an AI coding partner across real project workflows."
+     }
+    ],
+    "topics": [
+     "artificial intelligence",
+     "machine learning",
+     "career transition",
+     "data science",
+     "llms"
+    ],
+    "open_questions": [
+     "What programming language proficiency is required before starting this roadmap?"
+    ]
+   },
+   "enrich": {},
+   "tags": {
+    "action": [
+     "watch"
+    ],
+    "topic": [
+     "artificial intelligence",
+     "career transition",
+     "data science",
+     "llms",
+     "machine learning"
+    ]
+   },
+   "links": [
+    {
+     "url": "https://www.freecodecamp.org/news/ai-agents-for-beginners/",
+     "label": "AI Agents for Beginners",
+     "alive": true,
+     "page_title": "AI Agents For Beginners"
+    },
+    {
+     "url": "https://www.youtube.com/watch?v=Ccrc5ZSv1iA",
+     "label": "LLM Fine-Tuning Course",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://www.youtube.com/watch?v=LPZh9BOjkQs",
+     "label": "LLMs, Explained Briefly",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://www.youtube.com/watch?v=T9arN5JKmL8",
+     "label": "Prompt Engineering Deep Dive",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://www.youtube.com/watch?v=gh2_PhgZGsM",
+     "label": "Claude Code for Beginners",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://www.youtube.com/watch?v=o126p1QN_RI",
+     "label": "RAG: Complete Crash Course",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://www.youtube.com/watch?v=viZRonJCly0",
+     "label": "Embeddings & Word2Vec",
+     "alive": true,
+     "page_title": ""
+    }
+   ],
+   "media_id": "a8f49c47e7728124",
+   "pdf_file": "doc.pdf",
+   "slide_ext": ".jpg"
+  },
+  {
+   "id": "df36fce5e7f93fd2",
+   "url": "https://www.instagram.com/p/DddmSMCCKbq/?stkn=eXRhNnBsZ2Z0bWUw",
+   "kind": "tutorial",
+   "action": "read",
+   "title": "Transformer 45 Most Important Interview Questions",
+   "hook": "Master 45 essential Transformer interview questions, complete with theoretical solutions, diagrams, and code snippets.",
+   "summary": "This comprehensive guide covers 45 of the most important Transformer interview questions across 16 slides. It breaks down core architecture details, self-attention mechanics, positional encodings, layer normalization, sequence handling, masking, and advanced variations like prefix tuning and beam search. Each question provides theoretical solutions, architecture diagrams, comparisons, follow-up questions, and interview tips to help you ace your AI interview.",
+   "owner": "techyy_bandaa",
+   "posted": "September 19, 2026",
+   "slide_count": 16,
+   "links_checked": "23 Sep 2026",
+   "note": {
+    "sections": [
+     {
+      "heading": "Overview and Introduction",
+      "detail": "Overview of the 45 most important interview questions covering core concepts, algorithms and math, implementation, applications, advanced topics, and interview focus."
+     },
+     {
+      "heading": "Pages 1-3: Self-Attention and Positional Encoding",
+      "detail": "Covers intuition behind self-attention, query/key/value vectors, attention formula, and positional encoding types including sinusoidal and learned embeddings."
+     },
+     {
+      "heading": "Pages 4-6: Architecture, LayerNorm, and Masks",
+      "detail": "Explains encoder-only, decoder-only, and encoder-decoder architectures, layer normalization vs batch normalization, and attention masking types like padding and look-ahead masks."
+     },
+     {
+      "heading": "Pages 7-9: Advanced Attention and Sequence Handling",
+      "detail": "Deep dive into multi-head attention, residual connections, feed-forward networks (FFN), handling variable-length sequences, and C++ code implementations for core mechanisms."
+     },
+     {
+      "heading": "Pages 10-12: Comparison of Models and Complexities",
+      "detail": "Compares masked self-attention vs causal self-attention, time and space complexity, cross-attention mechanics, and long-sequence handling techniques."
+     },
+     {
+      "heading": "Pages 13-16: Advanced Tuning and Generation",
+      "detail": "Covers prefix tuning, beam search, differences between BERT and GPT, advantages and disadvantages of Transformers, and trade-offs in sequence modeling."
+     }
+    ],
+    "onscreen_text": [
+     "Insta ID: @techyy_bandaa",
+     "AI TRANSFORMER",
+     "45 MOST IMPORTANT",
+     "INTERVIEW QUESTIONS",
+     "Master 45 Questions | Ace Your Interview",
+     "Core Concepts",
+     "Architecture",
+     "Encoder / Decoder",
+     "Positional Encoding",
+     "Attention Mechanism",
+     "Algorithms & Math",
+     "Scaled Dot-Product",
+     "Multi-Head Attention",
+     "Masking",
+     "Implementation",
+     "Model Components",
+     "Hyperparameters",
+     "Training Process",
+     "Inference",
+     "Applications",
+     "NLP (LLMs)",
+     "Vision (ViT)",
+     "Speech",
+     "Multimodal",
+     "Advanced Topics",
+     "Variants (BERT, GPT)",
+     "Fine-tuning",
+     "Optimization",
+     "Limitations",
+     "Interview Focus",
+     "Theory + Practical",
+     "Comparisons",
+     "Real-world Scenarios",
+     "Common Mistakes",
+     "WHY TRANSFORMER IS IMPORTANT IN AI?",
+     "Powers Modern LLMs",
+     "Enables Better Context Understanding",
+     "Improves Performance & Scalability",
+     "Used in Text, Vision, Speech & Multimodal AI",
+     "Shapes the Future of AI",
+     "Understand -> Practice -> Crack Your Interview",
+     "Transformer - Interview Questions - Page 1/15",
+     "3 INTERVIEW QUESTIONS",
+     "QUESTION 1",
+     "What is the intuition behind the self-attention mechanism in Transformers? How does it help in capturing long-range dependencies?",
+     "THEORETICAL SOLUTION:",
+     "Self-attention allows each token to attend to all other tokens in the input sequence and compute a weighted representation.",
+     "It uses Query (Q), Key (K) and Value (V) vectors to calculate attention scores.",
+     "The attention score between two tokens is based on the similarity of their Q and K vectors. If two tokens are similar, the model gives them more weight.",
+     "This helps in capturing long-range dependencies because tokens far apart in the sequence can still have high similarity.",
+     "Unlike RNNs/CNNs, self-attention is parallelizable and more efficient for long sequences.",
+     "INTERVIEW TIP:",
+     "Be clear about the role of Q, K, V and why scaling is required (to avoid large dot products).",
+     "Self-Attention (Single Head)",
+     "X (n x d_model) -> Linear (W_Q) -> Q",
+     "X (n x d_model) -> Linear (W_K) -> K",
+     "X (n x d_model) -> Linear (W_V) -> V",
+     "Attention (QK^T / sqrt(d_k)) -> Softmax -> Output (n x d_model)",
+     "Attention Formula:",
+     "Attention (Q, K, V) = softmax((QK^T) / sqrt(d_k)) V",
+     "IMPORTANT:",
+     "Scaling by sqrt(d_k) prevents large dot products.",
+     "Multi-head attention uses multiple heads to attend to information from different representation subspaces.",
+     "QUESTION 2",
+     "Explain the difference between encoder-only, decoder-only and encoder-decoder Transformer architectures. Give one example of each.",
+     "THEORETICAL SOLUTION:",
+     "Encoder-only: Used for understanding tasks (e.g., classification, sentence embedding). It only has an encoder stack.",
+     "Decoder-only: Used for generation tasks (e.g., language modeling). It only has a decoder stack with causal masking.",
+     "Encoder-Decoder: Used for sequence-to-sequence tasks (e.g., translation, summarization). It has both encoder and decoder stacks with cross-attention.",
+     "Architecture Comparison:",
+     "Encoder-only (BERT)",
+     "Decoder-only (GPT)",
+     "Encoder-Decoder (T5)",
+     "FOLLOW-UP:",
+     "Why does BERT use bidirectional attention while GPT uses causal masking?",
+     "QUESTION 3",
+     "What is positional encoding in Transformers? Discuss different types of positional encoding and why it is needed.",
+     "Sinusoidal PE:",
+     "PE(pos, 2i) = sin(pos / 10000^(2i/d_model))",
+     "PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))"
+    ],
+    "entities": [
+     {
+      "name": "Transformer",
+      "type": "concept",
+      "why": "The core neural network architecture being analyzed across all interview questions."
+     },
+     {
+      "name": "BERT",
+      "type": "model",
+      "why": "Used as the primary example of an encoder-only architecture employing bidirectional attention."
+     },
+     {
+      "name": "GPT",
+      "type": "model",
+      "why": "Used as the primary example of a decoder-only architecture employing causal masking."
+     },
+     {
+      "name": "T5",
+      "type": "model",
+      "why": "Used as an example of an encoder-decoder Transformer architecture."
+     }
+    ],
+    "topics": [
+     "transformers",
+     "machine learning",
+     "nlp",
+     "interview questions",
+     "deep learning"
+    ],
+    "code_snippets": [
+     "vector<vector<float>> scaledDotProduct(vector<vector<float>>& Q, vector<vector<float>>& K, vector<vector<float>>& V) {\n    int n = Q.size();\n    int d = Q[0].size();\n    vector<vector<float>> scores(n, vector<float>(n));\n    // Compute QK^T / sqrt(d)\n    for (int i = 0; i < n; i++) {\n        for (int j = 0; j < n; j++) {\n            float dot = 0;\n            for (int k = 0; k < d; k++) dot += Q[i][k] * K[j][k];\n            scores[i][j] = dot / sqrt(d);\n        }\n    }\n    // Apply softmax and multiply with V (omitted for brevity)\n    return {};\n}"
+    ],
+    "open_questions": [
+     "Are detailed code implementations available for all 45 questions in the requested PDF?"
+    ]
+   },
+   "enrich": {},
+   "tags": {
+    "action": [
+     "read"
+    ],
+    "topic": [
+     "deep learning",
+     "interview questions",
+     "machine learning",
+     "nlp",
+     "transformers"
+    ]
+   },
+   "links": [],
+   "media_id": "df36fce5e7f93fd2",
+   "pdf_file": "doc.pdf",
+   "slide_ext": ".webp"
+  },
+  {
    "id": "0d895b2b9d4ca82d",
    "url": "https://www.instagram.com/p/DdZQsecgKqv/?img_index=7&stkn=ZHkweDQyYWJwNXg=",
    "kind": "tutorial",
