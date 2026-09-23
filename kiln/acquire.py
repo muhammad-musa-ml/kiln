@@ -39,6 +39,7 @@ class Acquired:
     title: str = ""
     body_text: str = ""
     focus_slide: int | None = None   # from ?img_index=N - the slide THEY meant
+    duration: int = 0
     error: str = ""
 
     def to_dict(self) -> dict:
@@ -312,7 +313,8 @@ def _parse_shell(text: str) -> tuple[str, str, int, int]:
     for i, l in enumerate(lines):
         if l.lstrip("@") == owner and i + 1 < len(lines):
             cand = lines[i + 1]
-            if not re.match(r"^(follow|*|\d[\d,.]*\s*(likes?|comments?))$", cand, re.I) and len(cand) > len(caption):
+            if not re.match(r"^(follow|•|\d[\d,.]*\s*(likes?|comments?))$",
+                            cand, re.I) and len(cand) > len(caption):
                 caption = cand
     return caption, owner, likes, comments
 
@@ -385,8 +387,63 @@ def acquire_youtube(url: str) -> Acquired:
     res.posted = str(info.get("upload_date", ""))
     res.caption = (info.get("description") or "")[:8000]
     res.comment_count = info.get("comment_count") or 0
-    res.body_text = res.caption
+    res.duration = int(info.get("duration") or 0)
+
+    # Captions, if the video has them. A description alone makes for a thin
+    # read, and auto-captions are free and instant next to transcribing.
+    res.body_text = _yt_captions(info) or res.caption
     return res
+
+
+def _yt_captions(info: dict) -> str:
+    """Plain text from the best English caption track, or ''."""
+    import urllib.request
+
+    tracks = {}
+    for bucket in ("subtitles", "automatic_captions"):
+        for lang, entries in (info.get(bucket) or {}).items():
+            if lang.startswith("en"):
+                tracks.setdefault(lang, entries)
+    if not tracks:
+        return ""
+    lang = next((l for l in ("en", "en-US", "en-orig") if l in tracks), sorted(tracks)[0])
+    url = ""
+    for want in ("vtt", "srv1", "json3"):
+        for e in tracks[lang]:
+            if e.get("ext") == want and e.get("url"):
+                url = e["url"]
+                break
+        if url:
+            break
+    if not url:
+        return ""
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": UA})
+        with urllib.request.urlopen(req, timeout=40) as r:
+            raw = r.read().decode("utf-8", "replace")
+    except Exception:
+        return ""
+
+    if raw.lstrip().startswith("{"):
+        try:
+            data = json.loads(raw)
+            words = [s.get("utf8", "") for ev in data.get("events", [])
+                     for s in (ev.get("segs") or [])]
+            return " ".join("".join(words).split())[:40000]
+        except Exception:
+            return ""
+    # VTT: drop timing lines and the rolling duplicates auto-captions emit
+    out, prev = [], None
+    for line in raw.splitlines():
+        line = line.strip()
+        if (not line or line == "WEBVTT" or line.isdigit()
+                or "-->" in line or line.startswith(("Kind:", "Language:"))):
+            continue
+        line = re.sub(r"<[^>]+>", "", line).strip()
+        if line and line != prev:
+            out.append(line)
+            prev = line
+    return " ".join(out)[:40000]
 
 
 def acquire_web(url: str) -> Acquired:

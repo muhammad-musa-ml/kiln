@@ -52,22 +52,71 @@ def normalise_topics(topics: list[str]) -> list[str]:
     return out[:8]
 
 
-def derive_action(note: dict, user_do: str = "") -> str:
+_ACTION_WORDS = {
+    "apply": ("apply", "application", "job", "intern", "position", "hiring"),
+    "install": ("install", "set up", "setup", "try it", "use this"),
+    "learn": ("learn", "understand", "study", "teach me", "course"),
+    "build": ("build", "make", "project", "ship"),
+    "read": ("read", "article"),
+    "watch": ("watch", "video"),
+    "visit": ("visit", "go to", "trip"),
+}
+# "put these in a section called to watch" names the bucket outright.
+_NAMED = re.compile(
+    r"(?:section|folder|list|bucket|group|tag)\s+(?:called|named|for)\s+"
+    r"[\"']?(?:to\s+)?(\w+)", re.I)
+# What the medium implies when nothing else is clear.
+_KIND_BIAS = {"youtube": "watch", "tiktok": "watch", "instagram": "", "web": "read"}
+
+
+def derive_action(note: dict, user_do: str = "", media_kind: str = "") -> str:
+    """Which bucket this belongs in.
+
+    Scored rather than first-match. An instruction like "make a new section
+    called to watch" contains both "make" and "watch"; taking the first hit
+    filed seven videos under build.
+    """
     d = (user_do or "").lower()
-    for a, words in {
-        "apply": ("apply", "application", "job", "intern", "position", "hiring"),
-        "install": ("install", "set up", "setup", "try it", "use this"),
-        "learn": ("learn", "understand", "study", "teach me", "course"),
-        "build": ("build", "make", "project", "ship"),
-        "read": ("read", "article"),
-        "watch": ("watch",),
-        "visit": ("visit", "go to", "trip"),
-    }.items():
-        if any(w in d for w in words):
-            return a
-    a = (note.get("action_hint") or "").lower()
-    if a in store.ACTIONS:
-        return a
+
+    # Some actions simply do not apply to some media. A web page cannot be
+    # watched, so no instruction and no keyword count should file it there.
+    impossible = {"web": {"watch"}, "youtube": {"install", "visit"},
+                  "tiktok": {"install", "visit"}}.get(media_kind, set())
+
+    named = _NAMED.search(d)
+    if named and named.group(1).lower() in store.ACTIONS:
+        want = named.group(1).lower()
+        # An instruction can name one section for a batch that isn't uniform:
+        # "put these in to watch" alongside six videos and one article.
+        if want not in impossible:
+            return want
+        # It named a section this item cannot belong to. The rest of that
+        # sentence is about FILING, not about the item, so its verbs are not
+        # evidence: "make a new section" must not make this a build task.
+        d = ""
+
+    scores = {a: sum(1 for w in words if w in d) for a, words in _ACTION_WORDS.items()}
+    for a in impossible:
+        scores[a] = -1
+    # What the thing IS outweighs a single guess about it: a youtube link
+    # with no instruction is something to watch, even if the model's hint
+    # said learn.
+    bias = _KIND_BIAS.get(media_kind, "")
+    if bias and bias not in impossible:
+        scores[bias] = scores.get(bias, 0) + 2
+    hint = (note.get("action_hint") or "").lower()
+    if hint in store.ACTIONS and hint not in impossible:
+        scores[hint] = scores.get(hint, 0) + 1
+
+    # Explicit tie-break, so the answer never depends on dict ordering.
+    priority = ["apply", "install", "build", "watch", "read", "learn",
+                "visit", "reference"]
+    best = max(scores, key=lambda a: (scores[a], -priority.index(a)
+                                      if a in priority else -99))
+    if scores[best] > 0:
+        return best
+    if hint in store.ACTIONS:
+        return hint
     return _ACTION_FALLBACK.get((note.get("kind") or "").lower(), "reference")
 
 
@@ -158,7 +207,7 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
         rec["cost_usd"] = cost
 
     # ---- tag ---------------------------------------------------------
-    action = derive_action(note, user_do)
+    action = derive_action(note, user_do, media_kind=acq.kind)
     topics = normalise_topics(note.get("topics") or [])
     places = derive_places(user_note, user_do, note.get("summary", ""),
                            " ".join(str(x) for x in (note.get("onscreen_text") or [])[:40]))
