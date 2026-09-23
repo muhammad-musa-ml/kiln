@@ -218,7 +218,13 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
     store.set_tags(conn, iid, "user", [t.lower() for t in (user_tags or [])])
 
     rec["action"] = action
-    rec["status"] = "active" if urgent else "triage"
+    # An item that came back with nothing is not done, it is stuck. Filing it
+    # as triage makes an empty note look processed; one slipped through that
+    # way when every model rung was exhausted and the local fallback was off.
+    empty = not (note.get("sections") or note.get("summary"))
+    rec["status"] = "inbox" if empty else ("active" if urgent else "triage")
+    if empty and not rec.get("error"):
+        rec["error"] = "extraction returned nothing - re-fire when a model is free"
     rec["processed_at"] = time.time()
     store.upsert_item(conn, rec)
 
