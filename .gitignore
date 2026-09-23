@@ -18,6 +18,7 @@ data/local_token.txt
 audit*.out
 pub*.out
 *.out
+*.log
 
 # public/ IS committed: it's the built site Vercel deploys from.
 # It only contains whitelisted fields, checked by scripts/audit_public.py
