@@ -29,11 +29,8 @@ WORKSPACE = Path(os.environ.get("KILN_WORKSPACE", Path.home() / "kiln-builds"))
 TIMEOUT = 3600
 
 # Name, args after the executable, and whether the prompt goes on stdin.
-# codex is first because it is the one that works here. The gemini CLI cannot
-# reach its own endpoint from this machine: it retries fetch failures until it
-# is killed and writes nothing, so it stays as a fallback you can ask for.
-# Sending the prompt on stdin avoids the command line entirely, which matters
-# because a job body is thousands of characters with quotes and newlines in it.
+# codex leads because gemini's CLI cannot reach its endpoint from here. stdin
+# keeps a job body full of quotes and newlines off the command line.
 AGENTS = [
     ("codex", ["exec", "--skip-git-repo-check", "-s", "workspace-write",
                "--color", "never", "-"], True),
