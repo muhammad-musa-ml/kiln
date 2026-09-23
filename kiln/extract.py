@@ -1,15 +1,7 @@
-"""Extraction: turn acquired bytes into a structured note.
+"""Turn acquired media into a structured note.
 
-One multimodal call replaces the old Whisper + OCR + entity stack. Two
-things here are load-bearing and both were measured, not assumed:
-
-  * Extraction is NON-DETERMINISTIC. The same model on the same 11 images
-    returned 3/3 links and 91 lines on one run, 2/3 and 51 on the next.
-    High-value items therefore get a second pass and the two results are
-    UNIONed rather than one being trusted.
-  * THINKING HURTS HERE. Budget spent reasoning is budget not spent
-    transcribing (51 lines -> 18). config.THINKING_BUDGET keeps it at 0
-    for extract and saves it for the judgement calls.
+One multimodal call does speech, on-screen text and entities together.
+Reads vary run to run, so anything important gets read twice and merged.
 """
 from __future__ import annotations
 
@@ -21,11 +13,10 @@ from typing import Any
 from . import config, models
 from .acquire import Acquired
 
-# A creator saying "comment X and I'll send it" means the payload is NOT in
-# the post. Half of a real 121-caption sample did this. Detecting the gate
-# and surfacing the keyword turns a dead end into a one-tap action.
+# "comment X and I'll send it" means the thing isn't in the post at all.
+# Catching the keyword at least tells you what to go and comment.
 GATE_RE = re.compile(
-    r"(?:comment|drop|type|dm|send)\s+(?:me\s+)?[\"'“‘]?([A-Za-z0-9 ]{2,20})[\"'”’]?"
+    r"(?:comment|drop|type|dm|send)\s+(?:me\s+)?[\"'"']?([A-Za-z0-9 ]{2,20})[\"'"']?"
     r"(?:\s+(?:below|down|now|and|to|for|in the comments))",
     re.I,
 )
@@ -188,10 +179,7 @@ def extract_item(acq: Acquired, *, user_note: str = "", deep: bool = False,
 
     # Second independent pass for the kinds where a miss actually costs
     # something, then union. Beats the measured run-to-run variance.
-    # A THIN read is the real signal, not the item's kind. Measured: the same
-    # deck returned 123 on-screen lines on one model and 24 on the fallback,
-    # with code snippets going 5 -> 0. Fewer than ~3 transcribed lines per
-    # slide means the pass skimmed, whatever it claims to have found.
+    # Fewer than ~3 lines per slide means it skimmed, whatever it claims.
     n_media = max(1, len(media))
     lines = len(note.get("onscreen_text") or [])
     thin = lines < 3 * n_media or not note.get("sections")

@@ -1,17 +1,8 @@
-"""Provider adapters, so any model can be added from the UI.
+"""Provider adapters.
 
-Four adapters cover essentially every model worth having, because most of the
-industry settled on OpenAI's wire format:
-
-    gemini              Gemini
-    ollama              local Ollama and Ollama Cloud
-    openai_compatible   OpenAI, Groq, OpenRouter, DeepSeek, xAI, Together,
-                        Fireworks, Mistral, LM Studio, vLLM, llama.cpp
-    anthropic           Claude
-
-Each provider declares what it can actually do. The router uses that to SKIP
-a rung it cannot serve rather than burning a call to discover the failure -
-a text-only model should never be handed a video.
+Four of them cover most things, since nearly everyone speaks OpenAI's wire
+format by now. Each declares what it can handle so the router can skip a
+model that can't do the job instead of wasting a call finding out.
 """
 from __future__ import annotations
 

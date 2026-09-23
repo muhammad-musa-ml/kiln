@@ -1,8 +1,4 @@
-"""Local web server. Standard library only - no framework, no build step.
-
-`python -m kiln.server` and open the page. Deliberately dependency-free so
-the UI starts instantly and keeps working years from now.
-"""
+"""Local web server. Stdlib only, no framework and no build step."""
 from __future__ import annotations
 
 import json

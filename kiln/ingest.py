@@ -1,14 +1,9 @@
-"""Ingest: turn lines of an inbox into work.
+"""Parse the inbox doc into work.
 
-The inbox is a Google Doc you own. Kiln only ever READS it - it never edits
-the doc - and remembers what it has already processed by hashing each line,
-so you can reorder, reformat or annotate freely without causing repeats.
-
-Line grammar (everything after the URL is optional, any order):
+Read only, never writes to the doc, and hashes each line so re-running
+doesn't repeat anything. Grammar, all optional after the url:
 
     <url> | note: ... | do: ... | tag: a,b | by: Oct 14 | !
-
-A line with no URL becomes a plain note.
 """
 from __future__ import annotations
 
@@ -18,9 +13,7 @@ from typing import Any
 from . import store
 
 URL_RE = re.compile(r"https?://[^\s|<>\"')\]]+")
-# Google Docs exports escape markdown; strip the artefacts.
-# Google Docs escapes & and = inside URLs too, which silently corrupts a
-# query string (?img\_index=7\&stkn=...) into a URL that will not resolve.
+# Docs escapes markdown, including & and = inside URLs, which breaks them.
 _ESCAPES = re.compile(r"\\([\\`*_{}\[\]()#+\-.!|>~=&?:/@$%^,;\"'])")
 # A line that is only a date is the timestamp written next to a link, not
 # a note of its own.
@@ -28,7 +21,7 @@ _BARE_DATE = re.compile(
     r"^\s*(?:\d{4}-\d{2}-\d{2}|\d{1,2}[/.\-]\d{1,2}[/.\-]\d{2,4}"
     r"|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+\d{1,2},?\s*\d{0,4})\s*$",
     re.I)
-_BULLET = re.compile(r"^\s*(?:[-*+•●▪]|\d+[.)])\s*")
+_BULLET = re.compile(r"^\s*(?:[-*+\u2022\u25cf\u25aa]|\d+[.)])\s*")
 _BOLD = re.compile(r"\*\*(.*?)\*\*")
 
 

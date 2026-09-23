@@ -1,14 +1,7 @@
-"""Free web search + page fetch, so enrichment never depends on a quota.
+"""Search and fetch, so enrichment doesn't depend on anyone's quota.
 
-Gemini's grounded-search tool is metered separately from plain generation
-and its free tier ran out immediately (measured: HTTP 429 on the very first
-grounded call, on all three tool spellings, while plain calls on the same
-key kept working). Relying on it would make the best feature of Kiln the
-first one to break.
-
-So Kiln does its own retrieval: DuckDuckGo's HTML endpoints need no key and
-no account, trafilatura turns a page into clean text, and the model then
-reasons over real fetched text with real URLs to cite. Unlimited and free.
+Gemini's grounded search has its own tiny quota that ran out immediately,
+so this does its own retrieval instead. No key, no account, no limit.
 """
 from __future__ import annotations
 

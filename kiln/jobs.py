@@ -1,16 +1,10 @@
-"""Build jobs: turning a project brief into something that actually gets built.
+"""Turn a project brief into something buildable.
 
-One artifact serves three routes, which is the whole point - there is only
-ever one description of the job, so the three paths cannot drift apart:
+Same text three ways: copy it into any chat, queue it, or run it here.
+One description so the three can't drift apart.
 
-  1. COPY      paste the text into any chat and the project comes back
-  2. QUEUE     written to data/jobs/pending/ for an assistant session to pick
-               up and run - no API, no webhook, no account
-  3. LOCAL     handed straight to an agent running in a chosen directory
-
-The brief from enrich.py is written for a human to read. A build agent needs
-different things: explicit IN/OUT scope, acceptance criteria per milestone,
-and pinned versions. `build_prompt` does that translation.
+The brief is written for a person to read. This rewrites it for an agent:
+explicit in/out scope, pinned versions, acceptance criteria per step.
 """
 from __future__ import annotations
 
@@ -82,7 +76,7 @@ def build_prompt(item: dict) -> str:
     if proj.get("one_liner"):
         A(clean(proj["one_liner"]))
         A("")
-    A("I want a working repository I can push to GitHub. Build it completely —")
+    A("I want a working repository I can push to GitHub. Build it completely -")
     A("runnable code, tests where they make sense, and a README.")
     A("")
 
@@ -106,14 +100,14 @@ def build_prompt(item: dict) -> str:
 
     stack = proj.get("stack") or []
     if stack:
-        A("## Stack — use these exact versions")
+        A("## Stack - use these exact versions")
         for s in stack:
             A(f"- {clean(s)}")
         A("")
 
     ms = proj.get("milestones") or []
     if ms:
-        A("## Milestones — each must be verifiably done before the next")
+        A("## Milestones - each must be verifiably done before the next")
         for i, m in enumerate(ms, 1):
             A(f"{i}. **{clean(m.get('step',''))}**")
             if m.get("outcome"):
@@ -138,7 +132,7 @@ def build_prompt(item: dict) -> str:
         A(clean(enr["what_it_is"]))
         A("")
     if enr.get("gotchas"):
-        A("## Known traps — handle these, do not rediscover them")
+        A("## Known traps - handle these, do not rediscover them")
         for g in enr["gotchas"]:
             A(f"- {clean(g)}")
         A("")
@@ -157,7 +151,7 @@ def build_prompt(item: dict) -> str:
     A("- A single repository, ready to `git init` and push.")
     A("- Pin every dependency to the versions above.")
     A("- A README that explains what it does and how to run it, written plainly.")
-    A("- No placeholder code and no TODO stubs — if something is out of scope,")
+    A("- No placeholder code and no TODO stubs - if something is out of scope,")
     A("  leave it out rather than stubbing it.")
     A("")
     A(f"Source this came from: {item.get('url','')}")

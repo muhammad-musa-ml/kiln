@@ -1,18 +1,8 @@
-"""Acquisition: get the actual bytes behind a link.
+"""Fetch the media behind a link.
 
-Instagram is the hard one. Measured on 2026-09-23, on a real public post:
-
-  official Graph API .............. closed for arbitrary posts
-  instaloader (anonymous) ......... 401 "please wait a few minutes"
-  instaloader (saved session) ..... 401, session dead
-  yt-dlp (anonymous) .............. login required
-  yt-dlp --cookies-from-browser ... Chrome DB locked / Edge DPAPI failure
-  raw HTML + bot UA ............... OpenGraph + slide 1 only
-  REAL BROWSER .................... 13/13 full-res slides, caption, comments
-
-So Kiln drives a real headless browser. It is the only route that works,
-it needs no login, and it carries no account-ban risk because it is not
-authenticated as anybody.
+Instagram needs a real browser. The API is closed, instaloader and yt-dlp
+both hit login walls, and scraping the HTML only gets you the first slide.
+A headless browser works, needs no login, and nothing to ban.
 """
 from __future__ import annotations
 
@@ -242,7 +232,7 @@ _OG_RE = re.compile(r'<meta property="og:([a-z_:]+)" content="(.*?)"\s*/?>')
 # og:description looks like:
 #   985 likes, 810 comments - techyy_bandaa on September 17, 2026: "caption"
 _OG_DESC_RE = re.compile(
-    r"([\d,]+)\s+likes?,\s*([\d,]+)\s+comments?\s*[-–]\s*([\w.]+)\s+on\s+(.+?):\s*(.*)",
+    r"([\d,]+)\s+likes?,\s*([\d,]+)\s+comments?\s*[--]\s*([\w.]+)\s+on\s+(.+?):\s*(.*)",
     re.S,
 )
 
@@ -276,7 +266,7 @@ def fetch_og(url: str) -> dict:
         out["caption"] = m.group(5).strip().strip('"').strip()
     if not out.get("caption"):
         t = tags.get("title", "")
-        mt = re.search(r'on Instagram:\s*[""“](.*)[""”]\s*$', t, re.S)
+        mt = re.search(r'on Instagram:\s*["""](.*)["""]\s*$', t, re.S)
         if mt:
             out["caption"] = mt.group(1).strip()
     if not out.get("owner"):
@@ -322,7 +312,7 @@ def _parse_shell(text: str) -> tuple[str, str, int, int]:
     for i, l in enumerate(lines):
         if l.lstrip("@") == owner and i + 1 < len(lines):
             cand = lines[i + 1]
-            if not re.match(r"^(follow|•|\d[\d,.]*\s*(likes?|comments?))$", cand, re.I) and len(cand) > len(caption):
+            if not re.match(r"^(follow|*|\d[\d,.]*\s*(likes?|comments?))$", cand, re.I) and len(cand) > len(caption):
                 caption = cand
     return caption, owner, likes, comments
 

@@ -1,12 +1,8 @@
-"""The model registry: what exists, what's enabled, and what order it runs in.
+"""What models exist, which are on, and what order they run in.
 
-`kiln/config.py` holds the SEED. Once the UI touches anything it is written to
-`data/models.json` and that file wins from then on, so changing which model
-runs never means editing Python.
-
-A ladder is just an ordered list of model ids. Position 1 is primary, the rest
-are backup. Disabling a model removes it everywhere without deleting what is
-known about it.
+config.py is only the seed. Once the UI touches anything it writes
+data/models.json and that wins, so changing models isn't a code edit.
+A ladder is just an ordered list, first one is primary.
 """
 from __future__ import annotations
 

@@ -1,13 +1,9 @@
 """Build the public site.
 
-The public surface is a WHITELIST, never a blacklist. Fields are named here
-one by one; anything added to the database later is private until someone
-deliberately adds it to this list. A blacklist would leak every new column by
-default, which is exactly how this class of app usually leaks.
+Whitelist, not blacklist. Fields are named one by one, so anything I add to
+the database later stays private until I deliberately list it here.
 
-The output is a folder of static files. There is no database connection, no
-API key, and no write route in it - so there is nothing on the public host to
-misconfigure or steal.
+Output is a folder of static files. No database, no keys, no write routes.
 """
 from __future__ import annotations
 

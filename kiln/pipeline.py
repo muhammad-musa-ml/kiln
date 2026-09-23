@@ -1,10 +1,7 @@
-"""The pipeline: a link goes in, a usable, tagged, enriched item comes out.
+"""A link goes in, a tagged and enriched item comes out.
 
-    acquire  -> extract -> enrich -> tag -> store
-
-Every stage is checkpointed into the DB, so a crash or a rate limit never
-costs work that was already paid for. Re-running is cheap: acquired media
-is cached on disk by shortcode and skipped.
+acquire -> extract -> enrich -> tag -> store. Each stage is checkpointed so
+a crash doesn't cost work you already paid for.
 """
 from __future__ import annotations
 

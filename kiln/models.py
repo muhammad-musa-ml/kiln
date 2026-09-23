@@ -1,17 +1,9 @@
-"""Kiln's model router.
+"""Model router: one call site, several providers, automatic fallback.
 
-One call site, several providers, automatic fallback. The policy lives in
-config.py; this module is the mechanism.
-
-Everything here exists because it was measured on 2026-09-23, not guessed:
-
-  * Gemini free tier 429s without warning, so each model carries a daily
-    request budget and the router steps DOWN the ladder instead of dying.
-  * qwen3-vl is a THINKING model: with format=json the answer lands in the
-    `thinking` field and `response` comes back EMPTY. Both are coalesced.
-  * A local VLM produced a 17,908-character runaway loop on 1 of 11 images,
-    so every JSON parse goes through a repair pass before it is trusted.
-  * Local VLMs cannot read video at all. Video callers must pass frames.
+Policy lives in config.py and the registry, this is just the mechanism.
+A few things it works around: the free tier 429s without warning, qwen3-vl
+puts its answer in `thinking` instead of `response` under format=json, and
+local models sometimes run away and need their JSON repaired.
 """
 from __future__ import annotations
 
@@ -199,12 +191,7 @@ def parse_json_loose(raw: str) -> Any | None:
 # HTTP
 # ---------------------------------------------------------------------------
 def redact(text: str) -> str:
-    """Scrub anything key-shaped out of text before it is stored or shown.
-
-    Upstream errors quote the request, and `error` strings end up in the DB,
-    in the UI, and potentially in an export. Belt and braces: the key is no
-    longer in the URL, and if it ever reappears in a message it dies here.
-    """
+    """Strip anything key-shaped before it gets stored or displayed."""
     if not text:
         return text
     for secret in filter(None, (config.GEMINI_API_KEY,)):
@@ -283,17 +270,12 @@ def _call_gemini(model: str, prompt: str, media: list[Path], *,
     if grounded:
         payload["tools"] = [{"google_search": {}}]
 
-    # The key goes in a HEADER, never the query string. A key in a URL is
-    # copied into access logs, proxy logs, referrer headers and error traces -
-    # and this app puts upstream error text into `error` fields that are
-    # rendered in the UI and could be exported.
+    # Key in a header, not the query string, so it stays out of logs.
     url = f"{config.GEMINI_BASE}/models/{model}:generateContent"
     auth = {"x-goog-api-key": config.GEMINI_API_KEY}
 
     t0 = time.time()
-    # 503 "high demand" is transient and common on the bigger models - it is
-    # not a quota problem and must not cost the rung. 429 IS a quota problem
-    # and must fall through immediately.
+    # 503 is transient, retry it. 429 is quota, drop to the next rung.
     out, err = _post(url, payload, timeout, auth)
     for backoff in (4, 9):
         if out is not None or "HTTP 503" not in err:
@@ -304,10 +286,8 @@ def _call_gemini(model: str, prompt: str, media: list[Path], *,
 
     if out is None:
         if "HTTP 429" in err:
-            # Grounded search is metered SEPARATELY and far more tightly than
-            # plain generation - measured: grounding 429s while plain calls on
-            # the same model and key still succeed. Burning the shared budget
-            # on a grounded 429 would take the working rung down with it.
+            # Grounded search has its own much smaller quota, so don't let a
+            # grounded 429 burn the budget for plain calls on the same model.
             _burn(model + "#grounded" if grounded else model)
         # A rejected mediaResolution is recoverable: retry at default res.
         if "mediaResolution" in err and "HTTP 400" in err:

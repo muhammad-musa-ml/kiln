@@ -153,7 +153,7 @@ a:hover{text-decoration:underline}
 .skel{height:76px;border-radius:9px;background:linear-gradient(100deg,var(--ash-1) 28%,var(--ash-3) 50%,var(--ash-1) 72%);background-size:220% 100%;animation:sweep 1.25s infinite}
 @keyframes sweep{to{background-position:-220% 0}}
 .firing{border-color:var(--ember-deep)!important}
-.firing .body h3::after{content:' · firing';color:var(--ember-hot);font-family:var(--mono);font-size:11px;animation:pulse 1.1s infinite}
+.firing .body h3::after{content:' | firing';color:var(--ember-hot);font-family:var(--mono);font-size:11px;animation:pulse 1.1s infinite}
 @keyframes pulse{50%{opacity:.35}}
 
 /* ---------- drawer ---------- */
@@ -233,10 +233,10 @@ ul.plain li::before{content:'';position:absolute;left:0;top:11px;width:5px;heigh
   <main class="main">
     <div class="topbar">
       <div class="adder">
-        <textarea id="add" rows="1" placeholder="Paste a link…  add  | do: find the job  | by: Oct 14  | !"></textarea>
+        <textarea id="add" rows="1" placeholder="Paste a link...  add  | do: find the job  | by: Oct 14  | !"></textarea>
         <button class="go" id="addBtn">Fire</button>
       </div>
-      <input class="search" id="q" type="search" placeholder="search everything…">
+      <input class="search" id="q" type="search" placeholder="search everything...">
     </div>
     <div class="hd">
       <h2 id="hdTitle">Everything</h2>
@@ -272,9 +272,9 @@ let _cache = null;
 async function api(url, opts){
   opts = opts || {};
   // Published build: everything comes from two JSON files. There is no
-  // server to call, which is the point — nothing to break into.
+  // server to call, which is the point - nothing to break into.
   if(STATIC){
-    if(opts.method && opts.method !== 'GET') throw new Error('This is a published copy — read only.');
+    if(opts.method && opts.method !== 'GET') throw new Error('This is a published copy - read only.');
     if(!_cache) _cache = await (await fetch('data/items.json')).json();
     if(url.startsWith('/api/facets')) return await (await fetch('data/facets.json')).json();
     if(url.startsWith('/api/item/')){
@@ -334,7 +334,7 @@ async function health(){
     $('#meter').innerHTML = `
       <div class="row"><span><span class="dot ${h.gemini?'on':'off'}"></span>gemini</span><b>${h.gemini?'ready':'down'}</b></div>
       <div class="row"><span><span class="dot ${h.ollama?'on':'off'}"></span>ollama</span><b>${(h.models||[]).length} models</b></div>
-      <div class="row"><span>free today</span><b>${lite.left??'–'} / ${lite.budget??'–'}</b></div>
+      <div class="row"><span>free today</span><b>${lite.left??'-'} / ${lite.budget??'-'}</b></div>
       <div class="row"><span>spent today</span><b>$${(q.spend_usd??0).toFixed(4)}</b></div>`;
   }catch{ $('#meter').innerHTML = `<div class="row"><span><span class="dot off"></span>server</span><b>unreachable</b></div>`; }
 }
@@ -383,7 +383,7 @@ function renderShelf(){
   const pending = jobs.filter(([id])=>!known.has(id));
 
   $('#hdCount').textContent = `${state.items.length} item${state.items.length===1?'':'s'}` +
-      (pending.length?` · ${pending.length} firing`:'');
+      (pending.length?` | ${pending.length} firing`:'');
 
   if(!state.items.length && !pending.length){
     const filtered = Object.values(state.filters).some(Boolean) || state.q;
@@ -399,9 +399,9 @@ function renderShelf(){
 
   el.innerHTML =
     pending.map(([id,j])=>`
-      <div class="tile firing"><span class="kind">…</span>
+      <div class="tile firing"><span class="kind">...</span>
         <div class="body"><h3>${esc((j.url||'').slice(0,72))}</h3>
-        <div class="hook">acquiring media, reading slides, researching…</div></div>
+        <div class="hook">acquiring media, reading slides, researching...</div></div>
         <div class="right">just now</div></div>`).join('') +
     state.items.map(tile).join('');
 
@@ -411,7 +411,7 @@ function renderShelf(){
 function tile(i){
   const act = (i.tags?.action||[])[0] || i.action || 'reference';
   const topics = (i.tags?.topic||[]).slice(0,4);
-  const gate = i.gate && i.gate.gated ? `<span class="gate">comment “${esc(i.gate.keyword||'?')}”</span>` : '';
+  const gate = i.gate && i.gate.gated ? `<span class="gate">comment "${esc(i.gate.keyword||'?')}"</span>` : '';
   const dots = i.link_count ? `<span class="linkdots" title="${i.link_count} links, ${i.dead_links} dead">` +
       Array.from({length:Math.min(i.link_count,7)},(_,k)=>`<span class="ld ${k<i.dead_links?'dead':''}"></span>`).join('') + `</span>` : '';
   const job = state.jobs[i.id];
@@ -456,7 +456,7 @@ function detail(it){
   const gateBox = g.gated ? `<div class="sec"><h4>The payload is gated</h4>
     <div class="cmd">${esc(g.advice||'')}</div>
     <p class="warn">Kiln found the ask in the caption. The creator sends the file
-    only after you comment — no scraper can reach it, so this is the real next step.</p></div>` : '';
+    only after you comment - no scraper can reach it, so this is the real next step.</p></div>` : '';
 
   const proj = e.project ? `<div class="sec"><h4>Project you could ship</h4>
     <h3 style="font-size:17px;margin-bottom:5px">${esc(e.project.name||'')}</h3>
@@ -485,8 +485,8 @@ function detail(it){
   const inst = e._install_preview ? `<div class="sec"><h4>Install</h4>
     <div class="cmd">${esc(e._install_preview.command)}</div>
     <dl class="kv">
-      <dt>Touches</dt><dd>${esc(e._install_preview.touches||'—')}</dd>
-      <dt>Undo</dt><dd>${esc(e._install_preview.uninstall||'—')}</dd>
+      <dt>Touches</dt><dd>${esc(e._install_preview.touches||'-')}</dd>
+      <dt>Undo</dt><dd>${esc(e._install_preview.uninstall||'-')}</dd>
     </dl>
     <div style="margin-top:11px;display:flex;gap:8px;align-items:center">
       <button class="btn run" id="runBtn" ${e._install_preview.runnable?'':'disabled'}>Run it</button>
@@ -511,14 +511,14 @@ function detail(it){
       ? `${mbase}${String(k).padStart(2,'0')}${ext}`
       : `${mbase}${esc(dir)}_${String(k).padStart(2,'0')}${ext}`;
 
-  const media = it.slide_count ? `<div class="sec"><h4>${it.slide_count} slides${pdfName?' · bound into a PDF':''}</h4>
+  const media = it.slide_count ? `<div class="sec"><h4>${it.slide_count} slides${pdfName?' | bound into a PDF':''}</h4>
     ${pdfName?`<p style="margin-bottom:10px"><a href="${mbase}${esc(pdfName)}" target="_blank">Open the PDF ↗</a></p>`:''}
     <div class="slides">${Array.from({length:it.slide_count},(_,k)=>{
       const foc = it.focus_slide===k+1 ? 'focus':'';
       const src = slideSrc(k+1);
       return `<a class="${foc}" href="${src}" target="_blank">
         <img loading="lazy" src="${src}" alt="slide ${k+1}">
-        <span class="num">${k+1}${foc?' ◂ you':''}</span></a>`;
+        <span class="num">${k+1}${foc?' < you':''}</span></a>`;
     }).join('')}</div></div>` : '';
 
   const secs = (n.sections||[]).length ? `<div class="sec"><h4>What it actually says</h4>${
@@ -536,31 +536,31 @@ function detail(it){
     </div>` : '';
 
   const verdict = e.is_it_good ? `<div class="sec"><h4>Is it actually good?</h4>
-    <p class="lede"><b style="color:var(--bone)">${esc(e.is_it_good.verdict||'')}</b> · confidence ${esc(e.is_it_good.confidence||'')}</p>
+    <p class="lede"><b style="color:var(--bone)">${esc(e.is_it_good.verdict||'')}</b> | confidence ${esc(e.is_it_good.confidence||'')}</p>
     ${(e.is_it_good.evidence||[]).length?`<ul class="plain">${(e.is_it_good.evidence||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
     ${(e.is_it_good.against||[]).length?`<h4 style="margin-top:12px">Against</h4><ul class="plain">${(e.is_it_good.against||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
     ${e.verdict_for_this_user?`<p class="warn" style="color:var(--bone-dim);margin-top:11px">${esc(e.verdict_for_this_user)}</p>`:''}</div>` : '';
 
   const jobsec = e.posting_urls ? `<div class="sec"><h4>The real posting</h4>
     <dl class="kv">
-      <dt>Role</dt><dd>${esc(e.role||'—')}</dd><dt>Company</dt><dd>${esc(e.company||'—')}</dd>
+      <dt>Role</dt><dd>${esc(e.role||'-')}</dd><dt>Company</dt><dd>${esc(e.company||'-')}</dd>
       <dt>Open?</dt><dd>${esc(e.is_open||'unclear')}</dd><dt>Deadline</dt><dd>${esc(e.deadline||'unknown')}</dd>
       <dt>Sponsors visa</dt><dd>${esc(e.sponsors_visa||'unclear')}</dd>
-      <dt>Next action</dt><dd>${esc(e.next_action||'—')}</dd>
+      <dt>Next action</dt><dd>${esc(e.next_action||'-')}</dd>
     </dl></div>` : '';
 
   const cites = (e._citations||[]).length ? `<div class="sec"><h4>Sources it actually read</h4>${
-    (e._citations||[]).slice(0,10).map(c=>`<div class="linkrow"><span class="pill">${c.n??'·'}</span>
+    (e._citations||[]).slice(0,10).map(c=>`<div class="linkrow"><span class="pill">${c.n??'|'}</span>
       <a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.title||c.url)}</a></div>`).join('')}</div>` : '';
 
   // Which models ran, what it cost me, and the status controls are mine.
   // The published copy gets the source link and nothing else.
   const prov = STATIC ? `<div class="sec"><h4>Source</h4><dl class="kv">
-      <dt>Original</dt><dd><a href="${esc(it.url)}" target="_blank" rel="noopener">open the post ↗</a>${it.owner?' · @'+esc(it.owner):''}</dd>
+      <dt>Original</dt><dd><a href="${esc(it.url)}" target="_blank" rel="noopener">open the post ↗</a>${it.owner?' | @'+esc(it.owner):''}</dd>
       ${it.posted?`<dt>Posted</dt><dd>${esc(it.posted)}</dd>`:''}
     </dl></div>` : `<div class="sec"><h4>How this was made</h4><dl class="kv">
-      <dt>Source</dt><dd><a href="${esc(it.url)}" target="_blank">original post ↗</a> ${it.owner?'· @'+esc(it.owner):''}</dd>
-      <dt>Models</dt><dd>${esc(((n._meta||{}).passes||[]).map(p=>p.model).join(', ')||'—')}${e._meta?', '+esc(e._meta.model||''):''}</dd>
+      <dt>Source</dt><dd><a href="${esc(it.url)}" target="_blank">original post ↗</a> ${it.owner?'| @'+esc(it.owner):''}</dd>
+      <dt>Models</dt><dd>${esc(((n._meta||{}).passes||[]).map(p=>p.model).join(', ')||'-')}${e._meta?', '+esc(e._meta.model||''):''}</dd>
       <dt>Cost</dt><dd>$${(it.cost_usd||0).toFixed(5)}</dd>
       ${it.error?`<dt>Note</dt><dd style="color:var(--ash-red)">${esc(it.error)}</dd>`:''}
     </dl>
@@ -580,7 +580,7 @@ function detail(it){
 /* ---------- build ---------- */
 async function doBuild(id, target){
   const out = document.getElementById('buildOut');
-  out.innerHTML = '<div class="out">preparing…</div>';
+  out.innerHTML = '<div class="out">preparing...</div>';
   try{
     const j = await api('/api/build', {method:'POST', headers:{'Content-Type':'application/json'},
                                        body: JSON.stringify({id, target})});
@@ -606,12 +606,12 @@ Or run:  python -m kiln.jobs pending</div>`;
 
 /* ---------- actions ---------- */
 async function setStatus(id,s){ await api('/api/status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,status:s})}); toast('moved to '+s); close(); load(); }
-async function reprocess(id){ await api('/api/reprocess',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})}); toast('re-firing…'); close(); load(); }
+async function reprocess(id){ await api('/api/reprocess',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})}); toast('re-firing...'); close(); load(); }
 
 document.addEventListener('click', async ev=>{
   if(ev.target.id!=='runBtn') return;
   const btn = ev.target, id = $('.drawer button.x') && location.hash;
-  btn.disabled = true; btn.textContent='running…';
+  btn.disabled = true; btn.textContent='running...';
   const itemId = state.openId;
   try{
     const r = await api('/api/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:itemId})});
@@ -631,11 +631,11 @@ $('#addBtn').onclick = submit;
 
 async function submit(){
   const text = ta.value.trim(); if(!text) return;
-  const btn = $('#addBtn'); btn.disabled=true; btn.textContent='…';
+  const btn = $('#addBtn'); btn.disabled=true; btn.textContent='...';
   try{
     const r = await api('/api/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});
     ta.value=''; ta.style.height='auto';            // only clear on success
-    toast(`firing ${r.queued.length} item${r.queued.length===1?'':'s'}…`);
+    toast(`firing ${r.queued.length} item${r.queued.length===1?'':'s'}...`);
     load();
   }catch(e){ toast(e.message); }                    // input preserved on failure
   btn.disabled=false; btn.textContent='Fire';
@@ -670,7 +670,7 @@ function renderAbout(){
   }
   const built = window.KILN_BUILT || '';
   el.innerHTML = `<b>How this page works</b>
-    I keep the working half of this on my own laptop — the browser that opens each
+    I keep the working half of this on my own laptop - the browser that opens each
     post, the models that read it, and the part that installs and builds things.
     None of that runs on this site, because Instagram blocks requests coming from
     data centres, so the reading has to happen from my own connection.

@@ -1,19 +1,8 @@
-"""Enrichment: the part that makes Kiln worth more than the reel.
+"""The part that goes past what the post said.
 
-A note tells you what the post said. Enrichment answers the question you
-actually had when you saved it:
-
-  learn  -> is this current, what's the real depth, and give me a project
-            I can build AND put on GitHub
-  tool   -> is it actually good, what does it do, should I install it,
-            and what is the exact one-line command
-  repo   -> stars, last commit, maintained or abandoned, what it's for
-  job    -> where is the REAL posting, deadline, sponsorship, how I fit
-  place  -> where, when it's open, how to get there
-
-Every enricher is grounded (live web search) and every factual claim it
-returns carries citations, because an unsourced claim here is worse than
-no claim at all.
+Different questions per kind: is this current and what should I build with
+it, is this tool any good and how do I install it, where's the real job
+posting. Everything is grounded in pages it actually fetched.
 """
 from __future__ import annotations
 
@@ -23,12 +12,7 @@ from typing import Any
 
 from . import config, models
 
-# ---------------------------------------------------------------------------
-# Link health: never show a URL without knowing whether it is alive.
-# Measured on a real carousel: 2 of 3 on-screen links were dead. Two
-# independent models read the same strings, so the OCR was right and the
-# links had simply rotted - which is exactly what this check surfaces.
-# ---------------------------------------------------------------------------
+# Check every link before showing it. Plenty are already dead.
 def resolve_links(links: list[dict | str], timeout: int = 12) -> list[dict]:
     import urllib.request
     import urllib.error

@@ -1,16 +1,8 @@
-"""Storage: SQLite + full-text search.
+"""SQLite plus full text search.
 
-Tagging is FACETED, not a flat bag of words, because a flat tag list stops
-being useful at about eighty items. Every item carries four independent
-axes, so "things to do", "things about AI" and "things in LA" are all just
-different projections of the same table:
-
-  action  what you'd DO with it      apply learn install read watch visit build reference
-  topic   what it's ABOUT            free-form, model-assigned, normalised
-  status  where it is in your flow   inbox triage active done dropped
-  place   where it applies           free-form (LA, Madison, remote, ...)
-
-plus urgency, a deadline, and whatever tags you typed yourself in the doc.
+Tags are faceted rather than one flat list, because a flat list stops being
+useful pretty fast. Four axes: what you'd do with it, what it's about, where
+it is in your flow, and where it applies.
 """
 from __future__ import annotations
 

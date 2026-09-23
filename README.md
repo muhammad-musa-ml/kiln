@@ -1,154 +1,135 @@
 # Kiln
 
-Scroll goes in. Substance comes out.
+I save a lot of reels. Courses I mean to take, repos I mean to look at, job
+posts, resume tips. Then they sit in a folder I never open again.
 
-You drop a link in a Google Doc. Kiln watches the thing, reads every slide,
-pulls out the links, works out what it's *for*, then goes and finds what the
-post left out — and files it where you'll find it again.
+This reads them for me.
 
----
+I paste a link into a Google Doc. Kiln opens the post, goes through every
+slide, pulls the caption and whatever text is on screen, checks if the links
+still work, and then goes and looks up the stuff the post skipped. Everything
+lands in a local UI I can search.
 
-## Start it
+## Running it
 
 ```bash
+pip install -r requirements.txt
+playwright install chromium
 python -m kiln.server
 ```
 
-Open <http://127.0.0.1:7878>. Paste a link in the box and press **Fire**.
+Then open http://127.0.0.1:7878 and paste a link.
 
-Add context inline, in any order:
+You can add context on the same line if you want:
 
 ```
-https://instagram.com/p/ABC/ | do: find the real job posting | by: Oct 14 | !
-https://github.com/x/y       | note: is this worth installing?  | tag: ai
+https://instagram.com/p/ABC/ | do: find the actual job posting | by: Oct 14 | !
+https://github.com/x/y | note: is this worth installing?
 ```
 
-`!` = urgent (jumps the queue and triggers the deeper, more expensive read).
+The `!` means urgent, which bumps it to the better model.
 
-## Feed it from Google Drive
+## Feeding it from Drive
 
-Kiln reads a doc you own and **never edits it** — it hashes each line, so you
-can reorder, annotate and reformat freely without causing repeats.
+I keep a doc in Drive and just paste links there. Kiln reads it and never
+writes to it, so I can reorganise the doc however I want. It remembers what
+it has already done by hashing each line.
 
 ```bash
-python scripts/sync_inbox.py inbox.txt     # or: cat inbox.txt | python scripts/sync_inbox.py
+python scripts/sync_inbox.py inbox.txt
 ```
 
-Re-running is always safe: already-processed lines are skipped, and an item
-that is already done is never paid for twice.
+Safe to run twice, it skips anything it has seen.
 
----
+## Why a browser
 
-## What it does per item
+Instagram's API doesn't give you other people's posts. I tried instaloader
+and yt-dlp and both hit a login wall. Scraping the HTML gets you the first
+slide and nothing else.
 
-| Stage | What happens |
-|---|---|
-| **acquire** | A real headless browser opens the post, rewinds the carousel to slide 1, clicks through every slide, downloads them full-resolution, and binds them into one PDF. |
-| **extract** | One multimodal call reads speech, on-screen text, captions and code in a single pass. Thin reads trigger a second pass whose results are merged. |
-| **enrich** | Searches the live web, fetches the actual pages, and answers the question you had when you saved it — grounded, with citations. |
-| **tag** | Files it on four independent axes so it stays findable at 800 items. |
+A headless browser just works. No login, so there's no account to ban. It
+also has to rewind the carousel first, because a shared link opens on
+whatever slide the person was looking at and if you only click forward you
+silently lose the earlier ones. Took me a while to notice that.
 
-Enrichment is different per kind:
+## The part I actually use
 
-- **learn / tutorial** → what it really is, current version, prerequisites, gotchas,
-  what the post left out, and **a project you could build and put on GitHub** —
-  scoped, staged, with a pinned stack and an hours estimate.
-- **tool / repo** → is it actually good (evidence *and* the case against),
-  maintenance status, alternatives, and an exact install command.
-- **job** → the real posting, whether it's open, deadline, visa sponsorship.
+Two things turned out more useful than I expected.
 
----
+**Comment-gated links.** Loads of posts say "comment PDF and I'll send it".
+The file isn't public so nothing can scrape it. Kiln spots the pattern and
+tells me what word to comment, which at least turns a dead end into a thing
+I can do in five seconds.
 
-## Two things nothing else does
+**Dead links.** It checks every link before showing it. On the first carousel
+I ran, two of three links were already dead. Nice to know up front instead of
+finding out later.
 
-**Gated payloads.** Half of saved posts say *"comment PDF and I'll send it."*
-The file is never public — no scraper, and no competing app, can reach it.
-Kiln detects the gate, extracts the keyword, and tells you exactly what to
-comment. A dead end becomes a one-tap action.
+For anything I want to learn, it also writes a small project brief. Scope,
+stack with versions, milestones. I can copy that prompt into any chat and get
+a repo out of it, or queue it and run it here.
 
-**Link rot.** Every URL is resolved before you're shown it, and marked live or
-dead. Measured on a real carousel: 2 of 3 on-screen links were already dead —
-and two independent models had read the same strings, so the OCR was right and
-the links had simply rotted. You see that instead of discovering it later.
+## Models
 
----
-
-## Tagging
-
-Four independent axes, not a flat tag list:
-
-| Facet | Values |
-|---|---|
-| `action` | apply · learn · install · read · watch · visit · build · reference |
-| `topic` | model-assigned, normalised (langgraph, ai agents, …) |
-| `status` | inbox · triage · active · done · dropped |
-| `place` | LA, Madison, remote, … detected from context |
-
-"Things to do", "things about AI" and "things in LA" are all just projections
-of the same table. Plus your own `tag:` values and full-text search over
-everything — transcripts, on-screen text and enrichment included.
-
----
-
-## Models: free first, quality when it counts
-
-Kiln routes each task down a ladder and takes the first rung that works.
+It tries a list per task and takes the first one that answers. If something
+runs out of quota it drops to the next one instead of failing.
 
 ```
-extract       gemini-3.5-flash-lite → 3.1-flash-lite → qwen3-vl:235b-cloud → local qwen3-vl
-extract_deep  gemini-3.8-flash      → 3.5-flash      → qwen3-vl:235b-cloud
-research      own retrieval + reason ladder
-reason        gemini-3.8-flash      → kimi-k2.5:cloud → gpt-oss:120b-cloud → local qwen3
+extract   gemini flash-lite -> flash-lite older -> ollama cloud -> local qwen3-vl
+reason    gemini flash -> kimi -> gpt-oss -> local qwen3
 ```
 
-A rung that 429s is marked spent for the day and skipped; a 503 is retried.
-Typical item costs **1–3 cents**, and often **$0.00** when a free rung answers.
+You can add any provider from the API (OpenAI, Groq, OpenRouter, DeepSeek,
+Anthropic, xAI, Mistral, Together, or anything OpenAI-compatible). Keys are
+encrypted with DPAPI and nothing is saved until a real test call succeeds.
 
-Everything in that ladder was measured on 2026-09-23, not assumed:
+Most items cost a cent or two. Often nothing, if a free tier picks it up.
 
-- **Thinking makes extraction worse** — 51 transcribed lines → 18, for 63% more
-  money. It is off for `extract` and saved for judgement calls.
-- **Gemini 3.1 Pro is not viable free** — HTTP 429 on the first call.
-- **Extraction is non-deterministic** — the same model on the same input gave
-  3/3 links and 91 lines once, 2/3 and 51 the next time. Hence the second pass.
-- **Local VLMs cannot read video at all**, and run ~11× slower than the cloud
-  rung. They are the always-available fallback, not the default.
-- **Gemini's grounded-search tool 429s immediately** on its own tiny quota, so
-  Kiln does its own retrieval (`kiln/search.py`) and never depends on it.
+A couple of things I found out the hard way:
 
-## Installing things it recommends
+- Turning thinking on made extraction worse, not better. It reasons instead
+  of transcribing and you get less text for more money. It's off for reading
+  and only on for judgement calls.
+- The same model on the same images gives different results run to run, so
+  anything important gets read twice and the results merged.
+- Local vision models can't do video at all, only frames.
 
-One click, with a preview. Kiln shows the exact command, what it touches, and
-how to undo it. The **allow-list is enforced server-side**, not in the UI, so a
-crafted request can't run something the preview never displayed. Anything with
-a pipe, redirect, `sudo`, or `curl`-to-shell is shown but never runnable.
+## Publishing
 
----
+`python -m kiln.publish` builds a static copy into `public/`. It's a
+whitelist, so only named fields get out. My notes, what things cost, and my
+file paths stay here.
+
+`python scripts/audit_public.py` greps the build for anything that shouldn't
+be there and exits non-zero if it finds something. `scripts/publish_and_deploy.sh`
+runs both and won't deploy if the audit fails.
 
 ## Layout
 
 ```
 kiln/
-  config.py     paths, routing policy, allow-lists   (all env-overridable)
-  models.py     the router: fallback, quotas, JSON repair, cost metering
-  search.py     free web search + page fetch (no API key)
-  acquire.py    browser-driven media capture + PDF binding
-  extract.py    multimodal read, union of passes, gate detection
-  enrich.py     per-kind research, link health, install previews
-  ingest.py     inbox line grammar + dedupe
-  pipeline.py   acquire → extract → enrich → tag → store
-  store.py      SQLite + FTS5, faceted tags
-  server.py     stdlib HTTP server, no framework
-web/index.html  the UI, single file, no build step
-data/           db, media, PDFs, quota ledger  (gitignored)
+  config.py     paths and routing policy
+  models.py     the router, quotas, JSON repair
+  providers.py  provider adapters
+  registry.py   which models exist and in what order
+  search.py     web search and page fetch
+  acquire.py    browser capture, PDF building
+  extract.py    the multimodal read
+  enrich.py     research, link checking, install previews
+  jobs.py       build prompts
+  ingest.py     inbox parsing
+  pipeline.py   ties it together
+  store.py      sqlite
+  server.py     stdlib http, no framework
+  publish.py    static export
+web/index.html  the whole UI, one file
 ```
 
-## Requirements
+No build step, no node_modules. It starts instantly and I'd like it to still
+work in five years.
 
-Python 3.11+, `playwright` + `playwright install chromium`, and one of:
-a `GEMINI_API_KEY` (free tier is plenty), or Ollama running locally.
-`Pillow` for PDF binding, `trafilatura` for article text, `yt-dlp` for YouTube.
+## Needs
 
-Ollama port is auto-detected — a stray `OLLAMA_MODELS` pointing at another
-project makes the default-port server report zero models, so Kiln prefers
-whichever port actually serves them.
+Python 3.11+, playwright, Pillow, trafilatura, yt-dlp. A `GEMINI_API_KEY`
+(the free tier is plenty) or Ollama running locally. Ollama's port gets
+auto-detected because mine was on a non-standard one.

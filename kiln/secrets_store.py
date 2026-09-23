@@ -1,13 +1,8 @@
-"""Credential storage for provider API keys.
+"""API keys, encrypted at rest with DPAPI.
 
-Keys are encrypted at rest with Windows DPAPI, scoped to this user account on
-this machine - a copied file is useless elsewhere, and another user on the
-same box cannot decrypt it. Where DPAPI is unavailable the store falls back
-to an obfuscated file and says so loudly, because a silent downgrade to
-plaintext is worse than no encryption at all.
-
-Nothing here is ever exported. The publisher whitelists fields by name, so a
-credential cannot reach the public site even if this module changes shape.
+Scoped to this user on this machine, so a copied file is useless. If DPAPI
+isn't available it falls back to obfuscation and says so rather than
+quietly storing plaintext.
 """
 from __future__ import annotations
 
@@ -145,7 +140,7 @@ def mask(value: str) -> str:
         return ""
     if len(value) <= 10:
         return "*" * len(value)
-    return f"{value[:4]}…{value[-4:]} ({len(value)} chars)"
+    return f"{value[:4]}...{value[-4:]} ({len(value)} chars)"
 
 
 def status() -> dict:

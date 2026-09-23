@@ -1,10 +1,7 @@
 """Refuse to publish anything that leaks.
 
-Run before every deploy. Exits non-zero on any finding, so CI can gate on it.
-The checks are deliberately blunt: grep the built output for the things that
-must never be there, and assert the exported keys match the whitelist exactly.
-
-    python scripts/audit_public.py
+Greps the build for things that shouldn't be there and checks the exported
+keys against the whitelist. Exits non-zero so the deploy script can stop.
 """
 from __future__ import annotations
 
@@ -82,7 +79,7 @@ def main() -> int:
         for p in text_files:
             m = rx.search(p.read_text(encoding="utf-8", errors="replace"))
             if m:
-                fail(f"{label} found in {p.name}: {m.group(0)[:28]}…")
+                fail(f"{label} found in {p.name}: {m.group(0)[:28]}...")
                 break
         else:
             ok(f"no {label}")
@@ -132,16 +129,16 @@ def main() -> int:
     checks += 1
     html = (OUT / "index.html").read_text(encoding="utf-8", errors="replace")
     if "window.KILN_STATIC=true" not in html.replace(" ", ""):
-        fail("index.html is not marked static — it may try to call a server")
+        fail("index.html is not marked static - it may try to call a server")
     else:
         ok("index.html is in static read-only mode")
 
     print()
     if failures:
-        print(f"AUDIT FAILED — {len(failures)} finding(s) across {checks} checks.")
+        print(f"AUDIT FAILED - {len(failures)} finding(s) across {checks} checks.")
         print("Do not deploy.")
         return 1
-    print(f"AUDIT PASSED — {checks} checks, no findings.")
+    print(f"AUDIT PASSED - {checks} checks, no findings.")
     return 0
 
 
