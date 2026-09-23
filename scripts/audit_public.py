@@ -125,7 +125,34 @@ def main() -> int:
     else:
         ok("nested note/enrich keys within the whitelist")
 
-    # 6. no write surface shipped
+    # 6. every built file is actually committable.
+    #    A broad ignore rule (data/ matches at any depth) silently dropped
+    #    public/data once, which ships a site with no content at all.
+    checks += 1
+    import subprocess
+    ignored = []
+    for f in files:
+        rel = f.relative_to(ROOT).as_posix()
+        r = subprocess.run(["git", "check-ignore", rel], cwd=ROOT,
+                           capture_output=True, text=True)
+        if r.returncode == 0:
+            ignored.append(rel)
+    if ignored:
+        fail(f"git ignores {len(ignored)} built file(s), the deploy would be "
+             f"incomplete: {ignored[:3]}")
+    else:
+        ok(f"all {len(files)} built files are committable")
+
+    # 7. the site has content
+    checks += 1
+    need = [OUT / "index.html", OUT / "data" / "items.json", OUT / "data" / "facets.json"]
+    missing = [p.name for p in need if not p.exists()]
+    if missing:
+        fail(f"build is missing {missing}")
+    else:
+        ok("index.html, items.json and facets.json all present")
+
+    # 8. no write surface shipped
     checks += 1
     html = (OUT / "index.html").read_text(encoding="utf-8", errors="replace")
     if "window.KILN_STATIC=true" not in html.replace(" ", ""):
