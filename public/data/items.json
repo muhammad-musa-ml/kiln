@@ -1,6 +1,191 @@
 {
  "items": [
   {
+   "id": "4091b1ffc3d48ceb",
+   "url": "https://www.youtube.com/watch?v=CcrC5zSv1iA",
+   "kind": "course",
+   "action": "watch",
+   "title": "Complete LLM Fine-Tuning: From Foundations to Advanced Alignment",
+   "hook": "Master the modern LLM ecosystem by learning to tailor massive models to specific tasks.",
+   "summary": "This comprehensive deep dive guides you through the entire LLM training pipeline, starting from core supervised fine-tuning to advanced alignment techniques like RLHF and DPO. You will gain hands-on experience with the Hugging Face ecosystem and high-performance tools like Unsloth and Axolotl. The course covers parameter-efficient strategies like LoRA and QLoRA, ensuring your models are both capable and helpful. It also explores domain adaptation, multimodal AI, and enterprise-level fine-tuning via OpenAI and Google Cloud Vertex AI.",
+   "owner": "freeCodeCamp.org",
+   "posted": "20260310",
+   "slide_count": 0,
+   "links_checked": "23 Sep 2026",
+   "note": {
+    "sections": [
+     {
+      "heading": "Introduction & Training Pipeline",
+      "detail": "Covers the three stages of LLM training: unsupervised pre-training, supervised fine-tuning (SFT), and preference-based alignment."
+     },
+     {
+      "heading": "Parameter-Level Fine-Tuning",
+      "detail": "Explains full vs. partial fine-tuning, including old-school layer freezing and modern Parameter Efficient Fine-Tuning (PEFT) methods like LoRA, QLoRA, DoRA, IA3, and BitFit."
+     },
+     {
+      "heading": "Data-Level Fine-Tuning",
+      "detail": "Distinguishes between non-instructional (domain adaptation) and instructional fine-tuning for chatbot creation."
+     },
+     {
+      "heading": "Preference Alignment",
+      "detail": "Deep dive into RLHF and DPO for aligning model responses with human feedback."
+     },
+     {
+      "heading": "Practical Implementation",
+      "detail": "Hands-on walkthroughs using Llama Factory, Unsloth for 2x faster training, and enterprise deployment via OpenAI API and Google Cloud Vertex AI."
+     },
+     {
+      "heading": "Advanced Topics",
+      "detail": "Covers embedding fine-tuning, multimodal AI (image, video, audio), and Vision Transformer (ViT) architecture."
+     }
+    ],
+    "onscreen_text": [
+     "Learn how to tailor massive models to specific tasks with this comprehensive, deep dive into the modern LLM ecosystem.",
+     "You will progress from the core foundations of supervised fine-tuning to advanced alignment techniques like RLHF and DPO, ensuring your models are both capable and helpful.",
+     "Through hands-on practice with the Hugging Face ecosystem and high-performance tools like Unsloth and Axolotl, you’ll gain the technical edge needed to implement parameter-efficient strategies like LoRA and QLoRA.",
+     "Code: https://github.com/sunnysavita10/Complete-LLM-Finetuning",
+     "Course developed by @sunnysavita10",
+     "Support for this channel comes from our friends at Scrimba – the coding platform that's reinvented interactive learning: https://scrimba.com/freecodecamp",
+     "Chapters",
+     "00:00:00 Introduction & Course Syllabus",
+     "00:03:42 LLM Training Pipeline Overview",
+     "00:05:01 Parameter Level Fine-Tuning: Full vs. Partial",
+     "00:07:22 Partial Fine-Tuning: Old School vs. Advanced Methods",
+     "00:10:07 Parameter Efficient Fine-Tuning (PEFT): LoRa & QLoRa",
+     "00:13:01 Advanced PEFT Techniques: DoRA, IA3, & BitFit",
+     "00:17:34 Data Level Fine-Tuning: Instructional vs. Non-Instructional",
+     "00:19:55 Preference Based Learning: RLHF & DPO",
+     "00:24:25 Deep Dive: Unsupervised Pre-training (Self-Supervised Learning)",
+     "00:30:45 Deep Dive: Non-Instructional Fine-Tuning & Domain Adaptation",
+     "00:40:48 Data Preparation for Non-Instructional Fine-Tuning",
+     "00:42:51 Deep Dive: Instructional Fine-Tuning & Chatbot Creation",
+     "00:47:57 Deep Dive: Preference Alignment with Human Feedback",
+     "00:50:38 Family-wise LLM Breakdown: Llama, GPT, Gemini, & DeepSeek",
+     "00:55:23 Practical Setup: Essential Libraries & GPU Connection",
+     "01:08:56 Working with Pre-built vs. Custom Custom Data Sets",
+     "01:21:02 Model Selection, Tokenization, & Padding Explained",
+     "01:26:11 Defining Training Arguments: Epochs, Learning Rate, & Batch Size",
+     "01:32:38 Executing Fine-Tuning with LoRa",
+     "01:42:35 Post-Training: Model Prediction & Inferencing",
+     "01:45:15 Part 2: Comprehensive Guide to Instructional Fine-Tuning",
+     "02:16:32 Loading & Unzipping Previous Training Checkpoints",
+     "02:30:13 Masking Labels for Improved Instructional Responses",
+     "02:40:02 Part 3: Preference Alignment & DPO Training",
+     "02:56:07 Preference Optimization Techniques: RLHF, RL AIF, & DPO",
+     "03:02:40 DPO Intuition: Understanding the Training Loss Formula",
+     "03:07:44 Practical DPO Implementation & Avoiding LoRa Stacking",
+     "03:37:30 Introduction to the Llama Factory Project",
+     "03:51:09 Setup & Setting up Llama Factory via GitHub",
+     "04:03:19 Using Llama Factory Web UI: Selecting Models & Data",
+     "04:29:44 Training via CLI: Configuration via YAML Files",
+     "04:37:55 Unsloth Framework: Achieving 2x Faster Training",
+     "04:57:33 Inside Unsloth: Custom Kernels & Memory Efficiency",
+     "05:14:14 Practical Walkthrough: Fine-Tuning with Unsloth",
+     "05:32:08 Enterprise Fine-Tuning via OpenAI API",
+     "05:48:06 Preparing & Validating JSONL Data for OpenAI",
+     "06:21:55 Creating and Monitoring OpenAI Fine-Tuning Jobs",
+     "06:52:20 Google Cloud Vertex AI: Fine-Tuning Gemini Models",
+     "07:22:41 Data Management in Google Cloud Storage Buckets",
+     "08:31:01 Embedding Fine-Tuning Masterclass",
+     "08:38:40 Multimodal AI: Image, Video, & Audio Modalities",
+     "09:13:48 Vision Transformer (ViT) Architecture Deep Dive",
+     "09:58:48 Keyword Search vs. Semantic Similarity",
+     "11:24:45 Step-by-Step: The Modern Text Embedding Process",
+     "Thanks to our Champion and Sponsor supporters:",
+     "Learn to code for free and get a developer job: https://www.freecodecamp.org",
+     "Read hundreds of articles on programming: https://freecodecamp.org/news"
+    ],
+    "entities": [
+     {
+      "name": "Hugging Face",
+      "type": "library",
+      "why": "Primary ecosystem for model training and data management."
+     },
+     {
+      "name": "Unsloth",
+      "type": "tool",
+      "why": "Framework used for achieving 2x faster training and memory efficiency."
+     },
+     {
+      "name": "Axolotl",
+      "type": "tool",
+      "why": "High-performance tool for fine-tuning."
+     },
+     {
+      "name": "Llama Factory",
+      "type": "tool",
+      "why": "Project used for simplified fine-tuning via Web UI and CLI."
+     },
+     {
+      "name": "Sunnysavita10",
+      "type": "person",
+      "why": "Course developer and instructor."
+     },
+     {
+      "name": "OpenAI",
+      "type": "company",
+      "why": "Platform for enterprise fine-tuning via API."
+     },
+     {
+      "name": "Google Cloud Vertex AI",
+      "type": "product",
+      "why": "Platform for fine-tuning Gemini models."
+     }
+    ],
+    "topics": [
+     "llm",
+     "finetuning",
+     "ai",
+     "machine learning",
+     "data science"
+    ],
+    "spoken_transcript": "Learn to tailor massive models to specific tasks with this comprehensive deep dive into the modern LLM ecosystem. You will progress from the core foundations of supervised fine-tuning to advanced alignment techniques like RLHF and DPO, ensuring your models are both capable and helpful. Through hands-on practice with the hugging face ecosystem and high performance tools like unsloth and axelottle, you'll gain the technical edge needed to implement parameter efficient strategies like Laura and Qura. Sunonny Sevita developed this course. >> LLM fine-tuning is a very important part of the generative AI...",
+    "open_questions": [
+     "What are the specific hardware requirements for running these fine-tuning scripts locally?",
+     "How do the costs of fine-tuning on Google Cloud Vertex AI compare to using local GPU resources?"
+    ]
+   },
+   "enrich": {},
+   "tags": {
+    "action": [
+     "watch"
+    ],
+    "topic": [
+     "ai",
+     "data science",
+     "finetuning",
+     "llm",
+     "machine learning"
+    ]
+   },
+   "links": [
+    {
+     "url": "https://freecodecamp.org/news",
+     "label": "freeCodeCamp articles",
+     "alive": true,
+     "page_title": "freeCodeCamp Programming Tutorials: Python, JavaScript, Git & More"
+    },
+    {
+     "url": "https://github.com/sunnysavita10/Complete-LLM-Finetuning",
+     "label": "GitHub repository for course code",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://scrimba.com/freecodecamp",
+     "label": "Scrimba interactive learning platform",
+     "alive": true,
+     "page_title": "Learn to code with Scrimba"
+    },
+    {
+     "url": "https://www.freecodecamp.org",
+     "label": "freeCodeCamp main site",
+     "alive": true,
+     "page_title": ""
+    }
+   ]
+  },
+  {
    "id": "9d3aadf6a3f54689",
    "url": "https://www.youtube.com/watch?v=gh2_PhgZGsM",
    "kind": "course",
@@ -174,25 +359,6 @@
      "page_title": ""
     }
    ]
-  },
-  {
-   "id": "4091b1ffc3d48ceb",
-   "url": "https://www.youtube.com/watch?v=CcrC5zSv1iA",
-   "kind": "other",
-   "action": "watch",
-   "title": "LLM Fine-Tuning Course – From Supervised FT to RLHF, LoRA, and Multimodal",
-   "owner": "freeCodeCamp.org",
-   "posted": "20260310",
-   "slide_count": 0,
-   "links_checked": "23 Sep 2026",
-   "note": {},
-   "enrich": {},
-   "tags": {
-    "action": [
-     "watch"
-    ]
-   },
-   "links": []
   },
   {
    "id": "af2a35ea434953c0",
