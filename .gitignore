@@ -1,0 +1,21 @@
+data/
+*.pyc
+__pycache__/
+acq*.json
+note.json
+enriched.json
+pipe.out
+server.log
+.env
+.env.*
+!.env.example
+*.db
+data/secrets.json
+data/local_token.txt
+.audit/
+public/
+
+# my own scratch output from test runs
+audit*.out
+pub*.out
+*.out
