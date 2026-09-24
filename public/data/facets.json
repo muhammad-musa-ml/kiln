@@ -1,20 +1,21 @@
 {
- "total": 10,
+ "total": 12,
  "by_action": {
+  "learn": 2,
   "watch": 7,
-  "read": 2,
-  "learn": 1
+  "read": 2
  },
  "by_topic": {
-  "ai": 5,
+  "ai": 6,
+  "claude": 2,
+  "coding": 2,
+  "productivity": 2,
+  "web development": 1,
   "data science": 2,
   "finetuning": 1,
   "llm": 5,
   "machine learning": 7,
-  "claude": 1,
-  "coding": 1,
   "development": 1,
-  "productivity": 1,
   "ai agents": 2,
   "automation": 1,
   "programming": 1,
@@ -43,6 +44,6 @@
  "by_place": {},
  "by_status": {},
  "gated": 1,
- "dead_links": 2,
+ "dead_links": 14,
  "spend": 0
 }

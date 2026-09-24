@@ -1,6 +1,345 @@
 {
  "items": [
   {
+   "id": "4a4f9e2c6f9530d9",
+   "url": "https://www.instagram.com/reel/DdnRJ7Jxlll/?stkn=YWxqYjdqbHlyY3Nr",
+   "kind": "instagram",
+   "owner": "bengusberg",
+   "posted": "September 22, 2026",
+   "slide_count": 0,
+   "note": {},
+   "enrich": {},
+   "tags": {},
+   "links": [],
+   "slide_ext": ".webp"
+  },
+  {
+   "id": "2c2a8864f72ad461",
+   "url": "https://www.instagram.com/p/DdcDA1sN8eS/?stkn=eW01N3A0ZWM3bDds",
+   "kind": "listicle",
+   "action": "learn",
+   "title": "Curated List of Awesome Claude AI Skills and Resources",
+   "hook": "Access a collection of specialized Claude AI skills and development resources.",
+   "summary": "This post provides a curated list of twelve distinct skills and resources related to Claude AI. Each item is linked to a specific resource, covering topics ranging from general superpowers and UI/UX to technical workflows like TDD and deployment. It serves as a quick-reference directory for developers looking to enhance their Claude-related capabilities.",
+   "owner": "leadgenman",
+   "slide_count": 1,
+   "links_checked": "23 Sep 2026",
+   "note": {
+    "sections": [
+     {
+      "heading": "Awesome Claude Skills List",
+      "detail": "The list includes 12 items: 1. Superpowers, 2. Matt Pocock Skills, 3. UI/UX Pro Max, 4. Caveman, 5. Humanizer, 6. Find Skills, 7. Deploy to Vercel, 8. Brainstorming, 9. TDD, 10. Excalidraw, 11. Remotion, and 12. Web Quality. Each item is paired with a shortened LinkedIn-based URL."
+     }
+    ],
+    "onscreen_text": [
+     "AWESOME-CLAUDE-SKILLS",
+     "1. Superpowers: https://lnkd.in/dKp8VwQa",
+     "2. Matt Pocock Skills: https://lnkd.in/dR3n-Tzb",
+     "3. UI/UX Pro Max: https://lnkd.in/dW9cYmFv",
+     "4. Caveman: https://lnkd.in/dh6SgUeq",
+     "5. Humanizer: https://lnkd.in/dN2xLrPk",
+     "6. Find Skills: https://lnkd.in/dZ4bHjWm",
+     "7. Deploy to Vercel: https://lnkd.in/dC7tQaNs",
+     "8. Brainstorming: https://lnkd.in/dJ5_PvXr",
+     "9. TDD: https://lnkd.in/dB8mKdTy",
+     "10. Excalidraw: https://lnkd.in/dY1fRcHu",
+     "11. Remotion: https://lnkd.in/dS6wNbGe",
+     "12. Web Quality: https://lnkd.in/dEOzMqLj"
+    ],
+    "entities": [
+     {
+      "name": "Claude",
+      "type": "product",
+      "why": "The AI model for which these skills and resources are designed."
+     },
+     {
+      "name": "Matt Pocock",
+      "type": "person",
+      "why": "Mentioned as a source for specific skills."
+     },
+     {
+      "name": "Vercel",
+      "type": "company",
+      "why": "Mentioned as a deployment target."
+     },
+     {
+      "name": "Excalidraw",
+      "type": "tool",
+      "why": "Listed as a specific skill/resource category."
+     },
+     {
+      "name": "Remotion",
+      "type": "tool",
+      "why": "Listed as a specific skill/resource category."
+     }
+    ],
+    "topics": [
+     "ai",
+     "claude",
+     "web development",
+     "productivity",
+     "coding"
+    ],
+    "open_questions": [
+     "What specific content is behind each of these shortened links?",
+     "Are these prompts, tutorials, or code repositories?"
+    ]
+   },
+   "enrich": {
+    "what_it_is": "Excalidraw is an open‑source, web‑based whiteboard that lets you draw hand‑sketch‑style diagrams on an infinite canvas. It ships as a React component (npm package @excalidraw/excalidraw) that can be embedded in any web app or run as a self‑hosted instance.",
+    "current_state": {
+     "latest_stable_version": "2.0.0",
+     "release_date": "2024‑09‑10",
+     "content_still_accurate": true,
+     "sources": [
+      "[3] – GitHub repository (package.json shows version 2.0.0) ",
+      "[3] – GitHub releases page lists 2.0.0 published 2024‑09‑10"
+     ]
+    },
+    "why_it_matters": "Unlike generic drawing tools, Excalidraw stores diagrams as JSON, enabling programmatic generation, version‑control, and easy export to PNG/SVG. Its hand‑drawn aesthetic is built‑in, so you get a “sketchy” look without extra styling, and the component can be dropped into any React app for real‑time collaboration, something most diagram‑DSLs (Mermaid, PlantUML) cannot do out‑of‑the‑box.",
+    "prerequisites": [
+     "Basic JavaScript/TypeScript",
+     "Familiarity with React (hooks, JSX)",
+     "Node.js ≥ 18 and npm or yarn"
+    ],
+    "time_to_useful": 8,
+    "gotchas": [
+     "Every element must include the required fields (type, id, x, y, width, height) – missing any throws at export time (source [4]).",
+     "Arrow bindings require both startBinding/endBinding **and** the target shape’s boundElements array to be kept in sync (source [4]).",
+     "Do not use custom hex colours; only colours listed in color‑palette.md are accepted (source [4]).",
+     "Roughness > 0 gives a hand‑drawn look but can cause blurry edges; set roughness = 0 for technical diagrams (source [4]).",
+     "Exporting via the CLI launches Chromium; non‑finite numbers (NaN, Infinity) or stringified numbers break the renderer (source [4])."
+    ],
+    "beyond_the_post": [
+     "Self‑hosting Excalidraw+ (enterprise) and configuring the MCP server for AI‑driven diagram editing (source [2]).",
+     "Using the Excalidraw SDK to create custom shape libraries and plugins (not covered in the Claude‑skill list).",
+     "Deploying a collaborative instance on Vercel or Cloudflare Workers for production use.",
+     "Programmatic export with the `excalidraw-brute-export-cli` tool for headless PNG/SVG generation (source [5]).",
+     "Integrating Excalidraw with other AI tools via the REST API (scene CRUD, collections, workspaces)."
+    ],
+    "official_docs": [
+     {
+      "title": "Excalidraw Developer Docs",
+      "url": "https://docs.excalidraw.com/",
+      "why": "Step‑by‑step guide for embedding the component, customizing tools, and exporting."
+     },
+     {
+      "title": "Excalidraw+ Documentation (API & MCP)",
+      "url": "https://plus.excalidraw.com/docs",
+      "why": "Covers the enterprise API, self‑hosting, and the MCP protocol for AI integration."
+     },
+     {
+      "title": "GitHub Repository",
+      "url": "https://github.com/excalidraw/excalidraw",
+      "why": "Source code, release notes, and the npm package readme."
+     }
+    ],
+    "best_free_resources": [
+     {
+      "title": "FreeCodeCamp – “Build a Sketch‑like Whiteboard with Excalidraw”",
+      "url": "https://www.freecodecamp.org/news/build-an-open-source-whiteboard-with-excalidraw/",
+      "why": "Walk‑through video + code that shows a minimal React app and explains the JSON format."
+     },
+     {
+      "title": "YouTube – “Excalidraw Deep Dive” by The Net Ninja",
+      "url": "https://www.youtube.com/watch?v=KXbZcV6YV8U",
+      "why": "Covers component props, theming, and real‑time collaboration in under 30 min."
+     },
+     {
+      "title": "EdoardoB90 – Excalidraw Gotchas",
+      "url": "https://github.com/edoardob90/excalidraw-skills/blob/main/excalidraw/gotchas.md",
+      "why": "A concise checklist of common JSON‑format mistakes that break rendering. (source [4])"
+     }
+    ],
+    "project": {
+     "name": "excalidraw‑quick‑diagram",
+     "one_liner": "A tiny React app that turns a plain‑text description into an Excalidraw diagram and lets you download PNG/SVG.",
+     "why_portfolio_worthy": "Shows end‑to‑end mastery: parsing natural language, generating valid Excalidraw JSON, embedding the editor, and exporting assets – a full‑stack product rather than a static tutorial clone.",
+     "scope": {
+      "in": [
+       "React front‑end with @excalidraw/excalidraw component",
+       "Simple parser that maps keywords (flow, decision, start, end) to shapes",
+       "Export buttons for PNG and SVG using the built‑in `exportToBlob` API",
+       "Deployable on Vercel (no server‑side code)"
+      ],
+      "out": [
+       "No authentication or multi‑user collaboration",
+       "No custom shape libraries beyond the built‑in set",
+       "No enterprise Excalidraw+ features"
+      ]
+     },
+     "stack": [
+      "React 18",
+      "TypeScript",
+      "Vite",
+      "@excalidraw/excalidraw",
+      "TailwindCSS (optional)"
+     ],
+     "milestones": [
+      {
+       "step": "Setup project & embed editor",
+       "outcome": "Running React app with an empty Excalidraw canvas."
+      },
+      {
+       "step": "Implement text‑to‑JSON parser",
+       "outcome": "User can type a line like \"start → process → end\" and see corresponding shapes appear."
+      },
+      {
+       "step": "Add export buttons",
+       "outcome": "Canvas can be saved as PNG or SVG with a single click."
+      },
+      {
+       "step": "Deploy to Vercel",
+       "outcome": "Public URL that works offline (PWA support)."
+      }
+     ],
+     "stretch": [
+      "Add MCP integration so Claude can edit the diagram via API.",
+      "Support custom colour palettes and roughness toggles.",
+      "Persist diagrams in localStorage and allow sharing via read‑only links."
+     ],
+     "readme_outline": [
+      "Project Overview",
+      "Demo Screenshot / Live URL",
+      "Tech Stack",
+      "Installation (npm install, dev server)",
+      "Usage (how to type descriptions, export options)",
+      "Architecture (parser → JSON → Excalidraw component)",
+      "Deployment (Vercel steps)",
+      "Future Work (MCP, plugins)",
+      "License"
+     ],
+     "est_hours": 12
+    }
+   },
+   "tags": {
+    "action": [
+     "learn"
+    ],
+    "topic": [
+     "ai",
+     "claude",
+     "coding",
+     "productivity",
+     "web development"
+    ]
+   },
+   "links": [
+    {
+     "url": "https://docs.excalidraw.com/",
+     "label": "",
+     "alive": true,
+     "page_title": "Excalidraw developer docs"
+    },
+    {
+     "url": "https://github.com/edoardob90/excalidraw-skills/blob/main/excalidraw/gotchas.md",
+     "label": "",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/excalidraw/excalidraw",
+     "label": "",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://lnkd.in/dB8mKdTy",
+     "label": "TDD resource",
+     "alive": false,
+     "page_title": ""
+    },
+    {
+     "url": "https://lnkd.in/dC7tQaNs",
+     "label": "Deploy to Vercel resource",
+     "alive": false,
+     "page_title": ""
+    },
+    {
+     "url": "https://lnkd.in/dEOzMqLj",
+     "label": "Web Quality resource",
+     "alive": false,
+     "page_title": ""
+    },
+    {
+     "url": "https://lnkd.in/dJ5_PvXr",
+     "label": "Brainstorming resource",
+     "alive": false,
+     "page_title": ""
+    },
+    {
+     "url": "https://lnkd.in/dKp8VwQa",
+     "label": "Superpowers resource",
+     "alive": false,
+     "page_title": ""
+    },
+    {
+     "url": "https://lnkd.in/dN2xLrPk",
+     "label": "Humanizer resource",
+     "alive": false,
+     "page_title": ""
+    },
+    {
+     "url": "https://lnkd.in/dR3n-Tzb",
+     "label": "Matt Pocock Skills resource",
+     "alive": false,
+     "page_title": ""
+    },
+    {
+     "url": "https://lnkd.in/dS6wNbGe",
+     "label": "Remotion resource",
+     "alive": false,
+     "page_title": ""
+    },
+    {
+     "url": "https://lnkd.in/dW9cYmFv",
+     "label": "UI/UX Pro Max resource",
+     "alive": true,
+     "page_title": "LinkedIn Talent Solutions"
+    },
+    {
+     "url": "https://lnkd.in/dY1fRcHu",
+     "label": "Excalidraw resource",
+     "alive": false,
+     "page_title": ""
+    },
+    {
+     "url": "https://lnkd.in/dZ4bHjWm",
+     "label": "Find Skills resource",
+     "alive": false,
+     "page_title": ""
+    },
+    {
+     "url": "https://lnkd.in/dh6SgUeq",
+     "label": "Caveman resource",
+     "alive": false,
+     "page_title": ""
+    },
+    {
+     "url": "https://plus.excalidraw.com/docs",
+     "label": "",
+     "alive": true,
+     "page_title": "Excalidraw documentation | Excalidraw+ | Online whiteboard collaboration made easy"
+    },
+    {
+     "url": "https://www.freecodecamp.org/news/build-an-open-source-whiteboard-with-excalidraw/",
+     "label": "",
+     "alive": false,
+     "page_title": ""
+    },
+    {
+     "url": "https://www.youtube.com/watch?v=KXbZcV6YV8U",
+     "label": "",
+     "alive": true,
+     "page_title": ""
+    }
+   ],
+   "media_id": "2c2a8864f72ad461",
+   "pdf_file": "doc.pdf",
+   "build_prompt": "# Build: excalidraw‑quick‑diagram\n\nA tiny React app that turns a plain‑text description into an Excalidraw diagram and lets you download PNG/SVG.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Why this matters\nShows end‑to‑end mastery: parsing natural language, generating valid Excalidraw JSON, embedding the editor, and exporting assets – a full‑stack product rather than a static tutorial clone.\n\n## Scope\nBuild these:\n- React front‑end with @excalidraw/excalidraw component\n- Simple parser that maps keywords (flow, decision, start, end) to shapes\n- Export buttons for PNG and SVG using the built‑in `exportToBlob` API\n- Deployable on Vercel (no server‑side code)\n\nExplicitly do NOT build these:\n- No authentication or multi‑user collaboration\n- No custom shape libraries beyond the built‑in set\n- No enterprise Excalidraw+ features\n\n## Stack - use these exact versions\n- React 18\n- TypeScript\n- Vite\n- @excalidraw/excalidraw\n- TailwindCSS (optional)\n\n## Milestones - each must be verifiably done before the next\n1. **Setup project & embed editor**\n   - Done when: Running React app with an empty Excalidraw canvas.\n2. **Implement text‑to‑JSON parser**\n   - Done when: User can type a line like \"start → process → end\" and see corresponding shapes appear.\n3. **Add export buttons**\n   - Done when: Canvas can be saved as PNG or SVG with a single click.\n4. **Deploy to Vercel**\n   - Done when: Public URL that works offline (PWA support).\n\n## README must cover\n- Project Overview\n- Demo Screenshot / Live URL\n- Tech Stack\n- Installation (npm install, dev server)\n- Usage (how to type descriptions, export options)\n- Architecture (parser → JSON → Excalidraw component)\n- Deployment (Vercel steps)\n- Future Work (MCP, plugins)\n- License\n\n## Only after everything above works\n- Add MCP integration so Claude can edit the diagram via API.\n- Support custom colour palettes and roughness toggles.\n- Persist diagrams in localStorage and allow sharing via read‑only links.\n\n## Background\nExcalidraw is an open‑source, web‑based whiteboard that lets you draw hand‑sketch‑style diagrams on an infinite canvas. It ships as a React component (npm package @excalidraw/excalidraw) that can be embedded in any web app or run as a self‑hosted instance.\n\n## Known traps - handle these, do not rediscover them\n- Every element must include the required fields (type, id, x, y, width, height) – missing any throws at export time (source).\n- Arrow bindings require both startBinding/endBinding **and** the target shape’s boundElements array to be kept in sync (source).\n- Do not use custom hex colours; only colours listed in color‑palette.md are accepted (source).\n- Roughness > 0 gives a hand‑drawn look but can cause blurry edges; set roughness = 0 for technical diagrams (source).\n- Exporting via the CLI launches Chromium; non‑finite numbers (NaN, Infinity) or stringified numbers break the renderer (source).\n\n## Reference (checked and reachable)\n- Excalidraw Developer Docs: https://docs.excalidraw.com/\n- Excalidraw+ Documentation (API & MCP): https://plus.excalidraw.com/docs\n- GitHub Repository: https://github.com/excalidraw/excalidraw\n- Excalidraw developer docs: https://docs.excalidraw.com/\n- https://github.com/edoardob90/excalidraw-skills/blob/main/excalidraw/gotchas.md: https://github.com/edoardob90/excalidraw-skills/blob/main/excalidraw/gotchas.md\n- https://github.com/excalidraw/excalidraw: https://github.com/excalidraw/excalidraw\n- LinkedIn Talent Solutions: https://lnkd.in/dW9cYmFv\n- Excalidraw documentation | Excalidraw+ | Online whiteboard collaboration made easy: https://plus.excalidraw.com/docs\n- https://www.youtube.com/watch?v=KXbZcV6YV8U: https://www.youtube.com/watch?v=KXbZcV6YV8U\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\nSource this came from: https://www.instagram.com/p/DdcDA1sN8eS/?stkn=eW01N3A0ZWM3bDds\nRough size: about 12 hours of work.",
+   "slide_ext": ".jpg"
+  },
+  {
    "id": "4091b1ffc3d48ceb",
    "url": "https://www.youtube.com/watch?v=CcrC5zSv1iA",
    "kind": "course",
