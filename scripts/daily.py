@@ -40,7 +40,7 @@ def is_morning() -> bool:
 
 
 def stage_inbox(text: str) -> tuple[int, int, float]:
-    """Read the inbox and process whatever is new. Returns added, total, spend."""
+    """Read the inbox and process what is new. Returns added, total, estimate."""
     conn = store.connect()
     before = store.counts(conn)
     pending = ingest.new_items(text, conn)
@@ -56,7 +56,7 @@ def stage_inbox(text: str) -> tuple[int, int, float]:
     conn.close()
     added = after["total"] - before["total"]
     print(f"      done in {time.time()-t0:.0f}s, {added} added, "
-          f"spend ${after['spend']:.4f} total", flush=True)
+          f"est ${after['spend']:.4f} at paid rates", flush=True)
     return added, after["total"], after["spend"]
 
 
@@ -174,7 +174,8 @@ def main() -> int:
         print(f"[4/4] publish: {ready} ready, held for the morning run")
 
     print("\n" + "-" * 60)
-    print("items %d (+%d)   spend $%.4f   site %s" % (total, added, spend, site))
+    print("items %d (+%d)   est $%.4f at paid rates   site %s"
+          % (total, added, spend, site))
     if built:
         done = sum(1 for b in built if b.get("state") == "done")
         print("built %d of %d attempted" % (done, len(built)))

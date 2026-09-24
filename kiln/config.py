@@ -167,7 +167,13 @@ elif POLICY == "quality_first":
     LADDERS["extract"].insert(0, ("gemini", "gemini-3.8-flash"))
     LADDERS["classify"].insert(0, ("gemini", "gemini-3.8-flash"))
 
-# Per 1M tokens. Only used for the cost meter.
+# Per 1M tokens, typed in by hand off the published price list. Only used for
+# the cost meter, which is an estimate and not a bill: nothing here reads an
+# invoice. Note what it does NOT do. A call that lands inside a free tier is
+# priced at the paid rate like any other, because FREE_TIER_RPD below is only
+# consulted to drop a rung before a 429, never to zero a cost. So the meter
+# answers "what would today have cost at these rates", which on a key with no
+# billing attached is not the same as what was actually charged.
 PRICES: dict[str, tuple[float, float]] = {
     "gemini-3.8-flash": (0.75, 3.75),
     "gemini-3.7-flash": (0.75, 3.75),
