@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "kiln",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "kiln.server"],
+      "port": 7878
+    }
+  ]
+}

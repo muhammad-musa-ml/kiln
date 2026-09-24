@@ -163,11 +163,49 @@ def build_prompt(item: dict) -> str:
 # ---------------------------------------------------------------------------
 # The queue
 # ---------------------------------------------------------------------------
-def existing(job_id: str) -> dict:
-    """Where a job already lives, if it does."""
+def _head(f: Path) -> dict:
+    """The front matter of a job file, or nothing if it has none."""
+    head: dict[str, str] = {}
+    try:
+        txt = f.read_text(encoding="utf-8")
+    except Exception:
+        return head
+    if txt.startswith("---"):
+        for line in txt.split("---", 2)[1].strip().splitlines():
+            if ":" in line:
+                k, v = line.split(":", 1)
+                head[k.strip()] = v.strip()
+    return head
+
+
+def head_of(path: str) -> dict:
+    """Front matter of one job file by path."""
+    return _head(Path(path))
+
+
+def all_jobs() -> list[dict]:
+    """Every job on disk, pending and done, with its front matter."""
+    out = []
     for folder, state in ((PENDING, "pending"), (DONE, "done")):
-        for f in sorted(folder.glob(f"{job_id}*.md")):
-            return {"file": str(f), "job_state": state}
+        for f in sorted(folder.glob("*.md")):
+            out.append({"file": str(f), "name": f.name,
+                        "job_state": state, **_head(f)})
+    return out
+
+
+def existing(job_id: str = "", item_id: str = "") -> dict:
+    """Where a job for this item already lives, if it does.
+
+    Matched on item_id rather than on the file name. The id scheme changed
+    once already, and the two schemes left two files for one project that no
+    name match could see. The item is the thing that must not be built twice.
+    """
+    for j in all_jobs():
+        same_item = item_id and j.get("item_id") == item_id
+        same_name = job_id and Path(j["file"]).stem.startswith(job_id)
+        if same_item or same_name:
+            return {"file": j["file"], "job_state": j["job_state"],
+                    "job_id": j.get("job_id") or Path(j["file"]).stem}
     return {}
 
 
@@ -201,9 +239,12 @@ def create(item_id: str, *, target: str = "copy", repo_name: str = "",
     }
 
     if target in ("local", "actions"):
-        prior = existing(jid)
+        prior = existing(jid, item_id=item_id)
         if prior:
             job.update(prior)
+            # Answer with the id of the job that is really there. Reporting
+            # the id we would have used points at a file that does not exist.
+            job["id"] = prior["job_id"]
             job["already"] = True
             return job
         path = PENDING / f"{jid}.md"
@@ -230,20 +271,8 @@ def _job_file(job: dict) -> str:
 
 
 def pending() -> list[dict]:
-    out = []
-    for f in sorted(PENDING.glob("*.md")):
-        head: dict[str, str] = {}
-        try:
-            txt = f.read_text(encoding="utf-8")
-            if txt.startswith("---"):
-                for line in txt.split("---", 2)[1].strip().splitlines():
-                    if ":" in line:
-                        k, v = line.split(":", 1)
-                        head[k.strip()] = v.strip()
-        except Exception:
-            pass
-        out.append({"file": str(f), "name": f.name, **head})
-    return out
+    return [{"file": str(f), "name": f.name, **_head(f)}
+            for f in sorted(PENDING.glob("*.md"))]
 
 
 def complete(job_id: str, note: str = "") -> bool:

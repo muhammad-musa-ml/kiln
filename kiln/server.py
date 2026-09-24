@@ -148,6 +148,12 @@ class Handler(BaseHTTPRequestHandler):
                 from . import jobs
                 return self._json({"pending": jobs.pending()})
 
+            if p == "/api/questions":
+                if not config.IS_LOCAL:
+                    return self._json({"error": "not found"}, 404)
+                from . import questions
+                return self._json({"open": questions.open_questions()})
+
             return self._json({"error": "not found"}, 404)
         except Exception as e:
             return self._json({"error": f"{type(e).__name__}: {e}",
@@ -247,6 +253,12 @@ class Handler(BaseHTTPRequestHandler):
                 from . import jobs
                 return self._json({"ok": jobs.complete(b.get("job_id", ""),
                                                        b.get("note", ""))})
+
+            if p == "/api/questions/answer":
+                from . import questions
+                r = questions.answer(b.get("id", ""), b.get("choice", ""),
+                                     b.get("note", ""))
+                return self._json(r, 404 if r.get("error") else 200)
 
             # ---- model management ---------------------------------------
             if p.startswith("/api/models/"):
