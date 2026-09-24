@@ -438,6 +438,11 @@ def needs_ship() -> list[dict]:
             continue
         if not Path(d.get("directory") or "").is_dir():
             continue
+        # Already being reviewed somewhere else. Two of these running on one
+        # project means two agents editing the same files and two attempts
+        # to create the same repository.
+        if time.time() - float(d.get("shipping") or 0) < 3 * 3600:
+            continue
         out.append(d)
     return out
 
@@ -470,12 +475,13 @@ def _ship_one(d: dict, public: bool, results: list, lock) -> None:
     job = jobs.head_of(found["file"]) if found else {}
     job.setdefault("repo_name", d.get("repo") or workdir.name)
 
+    _write_state(jid, shipping=time.time())
     r = ship.ship(workdir, job, public=public)
     url = (r.get("publish") or {}).get("url", "")
     attempts = int(d.get("ship_attempts") or 0) + 1
     _write_state(jid, shipped=bool(r.get("ok")), ship_stage=r.get("stage", ""),
                  ship_why=r.get("why", ""), ship_attempts=attempts,
-                 shipped_at=time.time(), repo_url=url)
+                 shipped_at=time.time(), repo_url=url, shipping=0)
 
     if r.get("ok"):
         questions.clear(jid, "ship_failed")
