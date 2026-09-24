@@ -341,7 +341,7 @@ async function health(){
       <div class="row"><span><span class="dot ${h.gemini?'on':'off'}"></span>gemini</span><b>${h.gemini?'ready':'down'}</b></div>
       <div class="row"><span><span class="dot ${h.ollama?'on':'off'}"></span>ollama</span><b>${(h.models||[]).length} models</b></div>
       <div class="row"><span>free today</span><b>${lite.left??'-'} / ${lite.budget??'-'}</b></div>
-      <div class="row"><span>spent today</span><b>$${(q.spend_usd??0).toFixed(4)}</b></div>`;
+      <div class="row" title="Worked out here from token counts times the published paid price list. Calls inside the free tier are counted at the paid rate too, so this is what today would have cost if none of it were free. It is not a bill and nothing here reads one."><span>est. at paid rates</span><b>$${(q.spend_usd??0).toFixed(4)}</b></div>`;
   }catch{ $('#meter').innerHTML = `<div class="row"><span><span class="dot off"></span>server</span><b>unreachable</b></div>`; }
 }
 
@@ -562,7 +562,7 @@ function detail(it){
     (e._citations||[]).slice(0,10).map(c=>`<div class="linkrow"><span class="pill">${c.n??'|'}</span>
       <a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.title||c.url)}</a></div>`).join('')}</div>` : '';
 
-  // Which models ran, what it cost me, and the status controls are mine.
+  // Which models ran, what it would have cost, and the status controls are mine.
   // The published copy gets the source link and nothing else.
   const prov = STATIC ? `<div class="sec"><h4>Source</h4><dl class="kv">
       <dt>Original</dt><dd><a href="${esc(it.url)}" target="_blank" rel="noopener">open the post ↗</a>${it.owner?' | @'+esc(it.owner):''}</dd>
@@ -570,7 +570,7 @@ function detail(it){
     </dl></div>` : `<div class="sec"><h4>How this was made</h4><dl class="kv">
       <dt>Source</dt><dd><a href="${esc(it.url)}" target="_blank">original post ↗</a> ${it.owner?'| @'+esc(it.owner):''}</dd>
       <dt>Models</dt><dd>${esc(((n._meta||{}).passes||[]).map(p=>p.model).join(', ')||'-')}${e._meta?', '+esc(e._meta.model||''):''}</dd>
-      <dt>Cost</dt><dd>$${(it.cost_usd||0).toFixed(5)}</dd>
+      <dt title="Token counts times the paid price list. The free tier is not subtracted.">Est. at paid rates</dt><dd>$${(it.cost_usd||0).toFixed(5)}</dd>
       ${it.error?`<dt>Note</dt><dd style="color:var(--ash-red)">${esc(it.error)}</dd>`:''}
     </dl>
     <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
@@ -781,7 +781,8 @@ function renderAbout(){
     <br><br>
     What you're looking at is a copy I publish after I've processed something.
     You can read everything and follow every link. Nothing here can be edited,
-    and my notes, what each one cost me, and my file paths stay on my machine.
+    and my notes, what each one would have cost, and my file paths stay on my
+    machine.
     ${built ? `<br><br>Last rebuilt <code>${esc(built)}</code>.` : ''}`;
 }
 

@@ -14,6 +14,6 @@ for r in ingest.ingest_text(text, source="gdoc", conn=conn):
     print("  [%5.0fs] %-58s %s" % (time.time()-t0, (r.get("url") or r.get("note_only",""))[:58],
                                    (r.get("title") or r.get("status",""))[:58]), flush=True)
 c = store.counts(conn)
-print("\ntotal items: %d | spend: $%.4f" % (c["total"], c["spend"]))
+print("\ntotal items: %d | est at paid rates: $%.4f" % (c["total"], c["spend"]))
 print("by action:", c["by_action"])
 conn.close()
