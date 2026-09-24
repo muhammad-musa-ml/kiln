@@ -1,6 +1,157 @@
 {
  "items": [
   {
+   "id": "9dac1181c6aae799",
+   "url": "https://www.instagram.com/reel/DdphNPwqFbl/?stkn=MWpvcjd4NGpvdGx6bg==",
+   "kind": "instagram",
+   "action": "redo",
+   "title": "https://www.instagram.com/reel/DdphNPwqFbl/?stkn=MWpvcjd4NGpvdGx6bg==",
+   "summary": "Nothing could be read from this link. browser loaded the page but found no media",
+   "slide_count": 0,
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "slide_ext": ".webp"
+  },
+  {
+   "id": "4cad66124c14b023",
+   "url": "https://www.instagram.com/reel/DcE9yTCjt8H/?stkn=d2VtZmgxN252Nncy",
+   "kind": "instagram",
+   "action": "redo",
+   "title": "https://www.instagram.com/reel/DcE9yTCjt8H/?stkn=d2VtZmgxN252Nncy",
+   "summary": "Nothing could be read from this link. browser loaded the page but found no media",
+   "owner": "freetools848",
+   "posted": "August 15, 2026",
+   "slide_count": 0,
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "slide_ext": ".webp"
+  },
+  {
+   "id": "0bcb16be366c6c1b",
+   "url": "https://www.instagram.com/p/DdoxQvSmFQW/?stkn=MXhsNmV0d3Z0YWZmbQ==",
+   "kind": "listicle",
+   "action": "reference",
+   "title": "11 AI Startup Job Postings: Companies to Make You a Millionaire",
+   "hook": "Get direct links to job openings and company details for high-growth AI startups.",
+   "summary": "This Instagram carousel details 11 AI-focused companies with their funding rounds, job openings, and key roles. Each slide shows the company name, their mission, funding details, and specific hiring needs. The creator emphasizes finding these websites and job applications to build a career path. It's a curated list of opportunities in AI, from solar-powered compute to healthcare budgets. The post",
+   "owner": "stephthefounder",
+   "slide_count": 11,
+   "links_checked": "24 Sep 2026",
+   "note": {},
+   "enrich": {
+    "what_it_is": "An Instagram carousel titled “11 AI Startup Job Postings: Companies to Make You a Millionaire” that lists eleven AI‑focused startups, their recent funding rounds, mission statements, and specific hiring needs. The creator’s caption asks followers to “Sign Up” and the saver requested a PDF containing each company’s website, job‑application link, and a brief description of what they do.",
+    "current_state": "The specific carousel is still viewable on Instagram (public account) as of 2026‑09‑24, but the post does not include direct URLs or up‑to‑date job pages. Independent job‑board aggregators show that the AI‑startup hiring landscape is still very active: workatai.org lists 33,005 open roles across 1,091 companies as of 2026‑09‑23 [2]; topstartups.io reports 5,354 AI‑startup jobs [1]; and Vinit Shahdeo’s 2026 Substack lists 160+ funded AI‑first startups with hiring signals [5]. Therefore the overall premise (many AI startups hiring) remains accurate, but the exact status of the eleven companies’ openings must be verified individually.",
+    "why_it_matters": "AI talent is in high demand and many early‑stage companies are hiring aggressively after fresh funding rounds. A curated list of vetted startups with clear hiring signals can save job‑seekers weeks of research and help them target roles that could lead to high‑equity compensation (“make you a millionaire”).",
+    "beyond_the_post": [
+     "The carousel does not list the actual company names, URLs, or job‑application links, so those details must be sourced manually.",
+     "No information is provided about the geographic location of each role (remote vs on‑site) or visa sponsorship policies.",
+     "Compensation ranges, equity structures, and benefit packages are omitted, which are critical for evaluating “millionaire” potential.",
+     "The post’s claim of “make you a millionaire” is anecdotal and not backed by any salary or equity data.",
+     "There is no guidance on how to prioritize the eleven companies (e.g., by funding stage, market risk, or technology stack)."
+    ],
+    "useful_links": [
+     {
+      "title": "WorkAtAI – Live AI Startup Job Index",
+      "url": "https://workatai.org/",
+      "why": "Aggregates 33,005 open roles from 1,091 AI companies directly from each company’s applicant‑tracking system, with funding‑round data to indicate hiring momentum [2]."
+     },
+     {
+      "title": "TopStartups.io – AI Startup Jobs 2026",
+      "url": "https://topstartups.io/jobs/?startup__markets=Artificial%20Intelligence",
+      "why": "Provides a searchable list of 5,354 AI‑startup positions, including company HQ, size, and funding details [1]."
+     },
+     {
+      "title": "Vinit Shahdeo’s “Awesome AI Startups Hiring in 2026” (GitHub)",
+      "url": "https://github.com/vinitshahdeo/awesome-ai-startups-2026",
+      "why": "Open‑source spreadsheet of 160+ funded AI‑first startups with columns for product focus, raise amount, lead investor, and hiring status [5]."
+     },
+     {
+      "title": "AI Startup Jobs – Free Job Board",
+      "url": "https://aistartupjobs.com/",
+      "why": "Tracks 34,175 recorded listings across 1,898 pre‑IPO AI startups, each linking directly to the company’s own application page [4]."
+     },
+     {
+      "title": "FastAIJobs – Curated AI Startup Roles",
+      "url": "https://www.fastaijobs.com/",
+      "why": "Offers a filtered view of high‑growth AI startup openings, useful for quickly finding senior‑level or founding‑engineer positions [3]."
+     }
+    ],
+    "next_action": "Visit the Instagram post, copy the exact names of the 11 startups, then use the job‑board links above (especially WorkAtAI and the Vinit Shahdeo GitHub list) to locate each company’s careers page, capture the URL, and compile the information into a PDF."
+   },
+   "tags": {
+    "action": [
+     "reference"
+    ]
+   },
+   "links": [
+    {
+     "url": "https://aistartupjobs.com/",
+     "label": "",
+     "alive": false,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/vinitshahdeo/awesome-ai-startups-2026",
+     "label": "",
+     "alive": false,
+     "page_title": ""
+    },
+    {
+     "url": "https://topstartups.io/jobs/?startup__markets=Artificial%20Intelligence",
+     "label": "",
+     "alive": true,
+     "page_title": "AI Startup Jobs 2026 | Funded by Sequoia, YC, A16Z"
+    },
+    {
+     "url": "https://workatai.org/",
+     "label": "",
+     "alive": true,
+     "page_title": "AI Startup Jobs — 33,005 open roles at 1,091 AI companies | workatai.org"
+    },
+    {
+     "url": "https://www.fastaijobs.com/",
+     "label": "",
+     "alive": true,
+     "page_title": "AI Startup Jobs at Fast-Growing AI Companies | Fast AI Jobs"
+    }
+   ],
+   "media_id": "0bcb16be366c6c1b",
+   "pdf_file": "doc.pdf",
+   "slide_ext": ".jpg"
+  },
+  {
+   "id": "f171983c28a2ffc4",
+   "url": "https://www.instagram.com/reel/Ddp3KenxxqY/?stkn=NGNsajgyYXlxbXly",
+   "kind": "instagram",
+   "action": "redo",
+   "title": "https://www.instagram.com/reel/Ddp3KenxxqY/?stkn=NGNsajgyYXlxbXly",
+   "summary": "Nothing could be read from this link. browser loaded the page but found no media",
+   "owner": "isaaccc.mp4",
+   "posted": "September 23, 2026",
+   "slide_count": 0,
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "slide_ext": ".webp"
+  },
+  {
    "id": "4a4f9e2c6f9530d9",
    "url": "https://www.instagram.com/reel/DdnRJ7Jxlll/?stkn=YWxqYjdqbHlyY3Nr",
    "kind": "instagram",
@@ -2107,5 +2258,5 @@
    "slide_ext": ".webp"
   }
  ],
- "built": "23 Sep 2026"
+ "built": "24 Sep 2026"
 }

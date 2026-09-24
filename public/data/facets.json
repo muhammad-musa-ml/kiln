@@ -1,7 +1,8 @@
 {
- "total": 12,
+ "total": 16,
  "by_action": {
-  "redo": 1,
+  "redo": 4,
+  "reference": 1,
   "learn": 2,
   "watch": 7,
   "read": 2
@@ -45,5 +46,5 @@
  "by_place": {},
  "by_status": {},
  "gated": 1,
- "dead_links": 14
+ "dead_links": 16
 }
