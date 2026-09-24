@@ -15,6 +15,7 @@ import re
 import shutil
 import stat
 import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -23,6 +24,11 @@ from . import slop
 REVIEW_TIMEOUT = 1800
 README_TIMEOUT = 900
 PUSH_TIMEOUT = 600
+TEST_TIMEOUT = 900
+# How long to wait for GitHub to finish the run the push kicked off. The one
+# measured run took 23 seconds; this is generous for a cold cache.
+CI_TIMEOUT = 600
+CI_POLL = 15
 
 # One entry per rule, and they stay whole. These were a single string that
 # got split on whitespace, which turns Bash(python *) into Bash(python and
@@ -108,7 +114,7 @@ REVIEW_PROMPT = """Review this project. It was generated from a brief and nobody
 Do these in order.
 
 1. Read the code and work out whether it does what the brief asked for.
-2. Install what it needs and run its tests if it has any. If you cannot install or cannot reach the network, say so rather than guessing.
+2. Install what it needs and run its tests if it has any. If you cannot install or cannot reach the network, say so rather than guessing. The tests get run again independently after you are done, and a failure there stops the project being published, so there is nothing to be gained by talking them up.
 3. Fix what you can fix safely: broken imports, missing files, wrong paths, failing tests, anything half finished.
 4. Write your verdict to a file called kiln-review.json in the project root. Use exactly this shape and nothing else in the file:
 
@@ -149,27 +155,23 @@ def review(workdir: Path) -> dict:
 
 
 def _readme_prompt(job: dict, verdict: dict) -> str:
-    source = job.get("source") or job.get("source_url") or ""
-    banned = ", ".join(slop.BANNED_PHRASES[:28])
     return """Write the README.md for this project.
 
-You are writing as the person whose repository this is. A graduate student, writing plainly about something they built. First person. Short sentences. No selling.
-
 Cover, in whatever order reads best:
-what it does, what it is built with, how to install and run it, how to run the tests, and what is rough or missing. Say in one line that the idea came from %s, without naming any tool or assistant.
+what it does, what it is built with, how to install and run it, how to run the tests, and what is rough or missing.
+
+Do not say where the idea came from. No credit line, no link back to a post, no note about what prompted it. Start with what the thing is.
 
 Say what is actually true. The reviewer found this: %s
 
-Hard rules. A check rejects the file if you break any of them.
-Plain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly quotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens and straight quotes are fine.
-Never say or imply that any AI tool, model or assistant produced this. No co-author lines. Naming a library the project depends on is fine.
-Do not use any of these words or phrases: %s.
-Do not write "not just X but Y" or "it is not X, it is Y" or "more than just".
-No padding, no marketing, no section that exists only so there is a section.
+The first paragraph is used on its own as the repository description, so make it stand up without the rest of the file.
 
-Write the file and nothing else.""" % (source or "a post I saved",
-                                       verdict.get("summary") or "no summary",
-                                       banned)
+How to write it. A check rejects the file if you break any of this.
+
+%s
+
+Write the file and nothing else.""" % (verdict.get("summary") or "no summary",
+                                       slop.voice_rules())
 
 
 def write_readme(workdir: Path, job: dict, verdict: dict) -> dict:
@@ -200,6 +202,101 @@ def write_readme(workdir: Path, job: dict, verdict: dict) -> dict:
 
     return {"ok": bool(attempts) and attempts[-1]["ok"], "attempts": attempts,
             "path": str(path)}
+
+
+def _venv_python(workdir: Path) -> str:
+    """The interpreter the reviewer installed into, or this one."""
+    for rel in (Path(".venv") / "Scripts" / "python.exe",
+                Path(".venv") / "bin" / "python"):
+        p = workdir / rel
+        if p.exists():
+            return str(p)
+    return sys.executable
+
+
+def run_tests(workdir: Path) -> dict:
+    """Run the project's own tests, here, and report what happened.
+
+    The reviewer is asked whether the tests pass and answers in its own
+    write-up. That is a self-report, and the first project this shipped went
+    out on one: the reviewer could not run a command at all, said so, and
+    the chain read the rest of its answer as a verdict. This runs pytest as
+    a subprocess and reads the exit code, which cannot be talked around.
+    """
+    found = sorted(workdir.glob("tests/test_*.py")) + sorted(workdir.glob("test_*.py"))
+    if not found:
+        return {"found": False, "ran": False, "passed": True,
+                "why": "the project ships no tests", "tail": ""}
+
+    py = _venv_python(workdir)
+    code, out = _run([py, "-m", "pytest", "-q"], workdir, TEST_TIMEOUT)
+    tail = out.strip()[-1500:]
+    low = out.lower()
+
+    if "no module named pytest" in low:
+        return {"found": True, "ran": False, "passed": False,
+                "why": "pytest is not installed, so the tests never ran",
+                "tail": tail, "files": len(found)}
+    if code == 5:
+        # pytest's own code for "collected nothing". Files named like tests
+        # that hold no tests is a problem worth seeing, not a pass.
+        return {"found": True, "ran": True, "passed": False,
+                "why": "there are test files but pytest collected nothing",
+                "tail": tail, "files": len(found)}
+    if code != 0:
+        return {"found": True, "ran": True, "passed": False,
+                "why": "the tests fail", "tail": tail, "files": len(found)}
+    return {"found": True, "ran": True, "passed": True, "why": "",
+            "tail": tail, "files": len(found)}
+
+
+def _repo_slug(url: str) -> str:
+    m = re.search(r"github\.com/([\w.-]+/[\w.-]+?)(?:\.git)?/?$", url or "")
+    return m.group(1) if m else ""
+
+
+def wait_for_ci(repo_url: str, workdir: Path) -> dict:
+    """Wait for the run the push started, if the project has a workflow.
+
+    Publishing already happened by the time this runs, so a red result
+    cannot hold the push back. It is here so a project that only breaks on
+    a clean machine, or on a Python version I do not have, gets said out
+    loud instead of sitting green-looking on GitHub.
+    """
+    if not list(workdir.glob(".github/workflows/*.y*ml")):
+        return {"checked": False, "why": "the project has no workflow"}
+    gh = shutil.which("gh")
+    slug = _repo_slug(repo_url)
+    if not gh or not slug:
+        return {"checked": False, "why": "cannot reach gh for this repo"}
+
+    deadline = time.time() + CI_TIMEOUT
+    last = {}
+    while time.time() < deadline:
+        code, out = _run([gh, "run", "list", "--repo", slug, "--limit", "1",
+                          "--json", "status,conclusion,url,displayTitle"],
+                         workdir, 120)
+        if code != 0:
+            return {"checked": False, "why": "gh run list failed",
+                    "tail": out.strip()[-300:]}
+        try:
+            rows = json.loads(out or "[]")
+        except Exception:
+            rows = []
+        if not rows:
+            time.sleep(CI_POLL)
+            continue
+        last = rows[0]
+        if last.get("status") == "completed":
+            return {"checked": True, "ok": last.get("conclusion") == "success",
+                    "conclusion": last.get("conclusion", ""),
+                    "url": last.get("url", ""),
+                    "title": last.get("displayTitle", "")}
+        time.sleep(CI_POLL)
+
+    return {"checked": True, "ok": False, "conclusion": "timed out",
+            "url": last.get("url", ""),
+            "why": "still running after %d seconds" % CI_TIMEOUT}
 
 
 def _description(workdir: Path) -> str:
@@ -325,6 +422,13 @@ def ship(workdir: Path, job: dict, public: bool = True) -> dict:
         out["why"] = "the reviewer found blocking problems"
         return out
 
+    out["tests"] = run_tests(workdir)
+    if not out["tests"]["passed"]:
+        out["stage"] = "tests"
+        out["ok"] = False
+        out["why"] = out["tests"]["why"]
+        return out
+
     out["readme"] = write_readme(workdir, job, out["review"])
     if not out["readme"]["ok"]:
         out["stage"] = "readme"
@@ -345,5 +449,11 @@ def ship(workdir: Path, job: dict, public: bool = True) -> dict:
     out["stage"] = "publish"
     out["ok"] = out["publish"].get("ok", False)
     out["why"] = "" if out["ok"] else out["publish"].get("error", "push failed")
+
+    # The push is done either way. This is the second opinion: a clean
+    # machine, and whichever Python versions the project's own workflow
+    # names, rather than only the one sitting in .venv here.
+    if out["ok"]:
+        out["ci"] = wait_for_ci(out["publish"].get("url", ""), workdir)
     out["finished"] = time.time()
     return out

@@ -109,12 +109,18 @@ def load_daily(repo: Path, build: str, morning: bool = False):
     runner.run_pending = build_now
     runner.ship_done = ship_now
 
+    health = types.ModuleType("kiln.health")
+    health.check_all = lambda conn=None: []
+    health.render = lambda found: "      nothing out of place"
+    health.raise_questions = lambda found: 0
+    health.beat = lambda mode, added: calls.append(("beat", mode))
+
     kiln = types.ModuleType("kiln")
     kiln.store, kiln.ingest = store, ingest
-    kiln.questions, kiln.runner = questions, runner
+    kiln.questions, kiln.runner, kiln.health = questions, runner, health
     sys.modules.update({"kiln": kiln, "kiln.store": store,
                         "kiln.ingest": ingest, "kiln.questions": questions,
-                        "kiln.runner": runner})
+                        "kiln.runner": runner, "kiln.health": health})
 
     spec = importlib.util.spec_from_file_location("daily_under_test", HERE / "daily.py")
     daily = importlib.util.module_from_spec(spec)
@@ -181,7 +187,10 @@ def main() -> int:
               f"staged: {staged}, unstaged: {unstaged}")
 
         check("evening pass does not build or publish repos",
-              calls == [], f"called: {calls}")
+              [c for c in calls if c[0] in ("build", "ship")] == [],
+              f"called: {calls}")
+        check("every pass leaves a heartbeat so a missed run is noticed",
+              ("beat", "evening") in calls, f"called: {calls}")
 
         print("new item, but the site came out the same")
         repo, origin = make_repo(tmp / "two")
@@ -198,7 +207,10 @@ def main() -> int:
         code, out, calls = sync(repo, inbox, OLD_BUILD, morning=True)
         check("sync returns 0", code == 0, out.strip()[-300:])
         check("morning pass builds the queue and then publishes",
-              calls == [("build", 3), ("ship", 3)], f"called: {calls}")
+              [c for c in calls if c[0] in ("build", "ship")]
+              == [("build", 3), ("ship", 3)], f"called: {calls}")
+        check("and records it as a morning run",
+              ("beat", "morning") in calls, f"called: {calls}")
         check("a site that did not change is still not pushed",
               git(origin, "rev-parse", "master") == head)
 

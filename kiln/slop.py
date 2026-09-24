@@ -86,6 +86,39 @@ SKIP_FILES = {"slop.py", "ship.py"}
 ALLOW = "slop: allow"
 
 
+def voice_rules(limit: int = 28) -> str:
+    """The writing rules as a block to paste into a prompt.
+
+    Two prompts need these: the one that asks for a project to be built, and
+    the one that asks for its readme. They were going to be written out twice,
+    and two copies of a rule drift until the one nobody is reading is the one
+    that reaches a public repository. This is the only copy.
+
+    It is built from the same lists the checker enforces, so a word added to
+    BANNED_PHRASES is a word the writer is told about in the same commit.
+    """
+    return """Write the way I write. A graduate student saying plainly what
+something does. First person where it is natural. Short sentences. No selling.
+
+Plain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly
+quotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens
+and straight quotes are fine.
+
+Never say or imply that any AI tool, model or assistant had a hand in this.
+No co-author lines, no credit, no mention of one anywhere. Naming a library
+the project genuinely depends on is fine.
+
+Do not use any of these words or phrases: %s.
+Do not write "not just X but Y", or "it is not X, it is Y", or "more than just".
+
+Comments explain why something is the way it is, not what the line does. No
+comment blocks five lines long, no banner headers, no restating the function
+name in a docstring. If a comment would only repeat the code, leave it out.
+
+No padding, no marketing, and no section that exists only so there is a
+section.""" % ", ".join(BANNED_PHRASES[:limit])
+
+
 def _finding(path, line, rule, detail, severity, excerpt):
     return {"path": str(path), "line": line, "rule": rule, "detail": detail,
             "severity": severity, "excerpt": excerpt.strip()[:110]}
