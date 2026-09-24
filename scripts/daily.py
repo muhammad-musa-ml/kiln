@@ -39,8 +39,8 @@ def is_morning() -> bool:
     return time.localtime().tm_hour < 12
 
 
-def stage_inbox(text: str) -> tuple[int, int, float]:
-    """Read the inbox and process what is new. Returns added, total, estimate."""
+def stage_inbox(text: str) -> tuple[int, int]:
+    """Read the inbox and process what is new. Returns added and the total."""
     conn = store.connect()
     before = store.counts(conn)
     pending = ingest.new_items(text, conn)
@@ -55,9 +55,8 @@ def stage_inbox(text: str) -> tuple[int, int, float]:
     after = store.counts(conn)
     conn.close()
     added = after["total"] - before["total"]
-    print(f"      done in {time.time()-t0:.0f}s, {added} added, "
-          f"est ${after['spend']:.4f} at paid rates", flush=True)
-    return added, after["total"], after["spend"]
+    print(f"      done in {time.time()-t0:.0f}s, {added} added", flush=True)
+    return added, after["total"]
 
 
 def stage_site() -> tuple[bool, str]:
@@ -156,10 +155,10 @@ def main() -> int:
     text = Path(sys.argv[1]).read_text(encoding="utf-8")
 
     try:
-        added, total, spend = stage_inbox(text)
+        added, total = stage_inbox(text)
     except Exception as e:
         print(f"[1/4] inbox failed: {type(e).__name__}: {e}")
-        added, total, spend = 0, 0, 0.0
+        added, total = 0, 0
 
     ok, site = stage_site()
 
@@ -174,8 +173,7 @@ def main() -> int:
         print(f"[4/4] publish: {ready} ready, held for the morning run")
 
     print("\n" + "-" * 60)
-    print("items %d (+%d)   est $%.4f at paid rates   site %s"
-          % (total, added, spend, site))
+    print("items %d (+%d)   site %s" % (total, added, site))
     if built:
         done = sum(1 for b in built if b.get("state") == "done")
         print("built %d of %d attempted" % (done, len(built)))

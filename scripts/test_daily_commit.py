@@ -82,7 +82,7 @@ def load_daily(repo: Path, build: str, morning: bool = False):
     say whether the morning work was reached rather than guessing from text.
     """
     calls: list[tuple] = []
-    counts = iter([{"total": 0, "spend": 0.0}, {"total": 1, "spend": 0.01}])
+    counts = iter([{"total": 0}, {"total": 1}])
     store = types.ModuleType("kiln.store")
     store.connect = lambda: types.SimpleNamespace(close=lambda: None)
     store.counts = lambda conn: next(counts)

@@ -290,8 +290,6 @@ class Handler(BaseHTTPRequestHandler):
                     m = registry.add_model(
                         prov, model, label=b.get("label", ""),
                         caps=res.get("caps"),
-                        price_in=float(b.get("price_in") or 0),
-                        price_out=float(b.get("price_out") or 0),
                         free_rpd_=int(b.get("free_rpd") or 0), verified=True)
                     return self._json({"added": m, "tested": res})
 

@@ -166,17 +166,16 @@ def extract_item(acq: Acquired, *, user_note: str = "", deep: bool = False,
     task = "extract_deep" if deep else "extract"
     r1 = models.generate(task, prompt, media)
     meta: dict[str, Any] = {
-        "passes": [], "cost_usd": 0.0, "escalated": deep, "media_count": len(media),
+        "passes": [], "escalated": deep, "media_count": len(media),
     }
 
     def log(r):
         meta["passes"].append({
             "model": r.label, "ok": r.ok, "seconds": round(r.seconds, 1),
             "tokens_in": r.tokens_in, "tokens_out": r.tokens_out,
-            "cost_usd": round(r.cost_usd, 5), "error": r.error[:160],
+            "error": r.error[:160],
             "attempts": r.attempts,
         })
-        meta["cost_usd"] = round(meta["cost_usd"] + r.cost_usd, 5)
 
     log(r1)
     note = r1.data if (r1.ok and isinstance(r1.data, dict)) else {}

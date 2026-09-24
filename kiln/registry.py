@@ -15,7 +15,6 @@ from . import config, providers, secrets_store
 STORE = config.DATA / "models.json"
 
 # Measured on 2026-09-23; see config.py for the head-to-head that produced it.
-_SEED_PRICES = config.PRICES
 _SEED_FREE = config.FREE_TIER_RPD
 
 
@@ -28,12 +27,10 @@ def _seed() -> dict:
             if mid in models:
                 continue
             spec = providers.PROVIDER_SPECS.get(provider, {})
-            pin, pout = _SEED_PRICES.get(model, (0.0, 0.0))
             models[mid] = {
                 "id": mid, "provider": provider, "model": model,
                 "label": model, "enabled": True,
                 "caps": list(spec.get("caps") or []),
-                "price_in": pin, "price_out": pout,
                 "free_rpd": _SEED_FREE.get(model, 0),
                 "added_at": time.time(), "verified_at": 0, "notes": "",
             }
@@ -83,14 +80,6 @@ def caps_for(provider: str, model: str) -> list[str]:
     return list((providers.PROVIDER_SPECS.get(provider) or {}).get("caps") or [])
 
 
-def price_for(model: str) -> tuple[float, float]:
-    d = load()
-    for m in d["models"].values():
-        if m["model"] == model:
-            return float(m.get("price_in", 0)), float(m.get("price_out", 0))
-    return _SEED_PRICES.get(model, (0.0, 0.0))
-
-
 def free_rpd() -> dict[str, int]:
     d = load()
     return {m["model"]: int(m.get("free_rpd") or 0)
@@ -105,7 +94,6 @@ def thinking_for(task: str) -> int:
 # Writes used by the UI
 # ---------------------------------------------------------------------------
 def add_model(provider: str, model: str, *, label: str = "", caps: list | None = None,
-              price_in: float = 0.0, price_out: float = 0.0,
               free_rpd_: int = 0, verified: bool = False) -> dict:
     d = load()
     mid = f"{provider}/{model}"
@@ -114,7 +102,7 @@ def add_model(provider: str, model: str, *, label: str = "", caps: list | None =
         "id": mid, "provider": provider, "model": model,
         "label": label or model, "enabled": True,
         "caps": caps if caps is not None else list(spec.get("caps") or []),
-        "price_in": price_in, "price_out": price_out, "free_rpd": free_rpd_,
+        "free_rpd": free_rpd_,
         "added_at": time.time(),
         "verified_at": time.time() if verified else 0,
         "notes": "",
@@ -181,5 +169,4 @@ def overview() -> dict:
         "tasks": list(d["ladders"].keys()),
         "providers": providers.list_providers(),
         "secrets": secrets_store.status(),
-        "spend_today": quota.get("spend_usd", 0.0),
     }

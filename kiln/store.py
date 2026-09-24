@@ -45,7 +45,6 @@ CREATE TABLE IF NOT EXISTS items (
   gate_json     TEXT,                  -- comment/DM gate detection
   note_json     TEXT,                  -- full extraction
   enrich_json   TEXT,                  -- full enrichment
-  cost_usd      REAL DEFAULT 0,
   created_at    REAL,
   updated_at    REAL,
   processed_at  REAL,
@@ -84,7 +83,6 @@ CREATE TABLE IF NOT EXISTS runs (
   ok         INTEGER,
   detail     TEXT,
   seconds    REAL,
-  cost_usd   REAL,
   at         REAL
 );
 
@@ -107,7 +105,23 @@ def connect() -> sqlite3.Connection:
     conn = sqlite3.connect(config.DB_PATH, timeout=30, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     conn.executescript(SCHEMA)
+    _drop_cost_columns(conn)
     return conn
+
+
+def _drop_cost_columns(conn: sqlite3.Connection) -> None:
+    """Old databases still carry the columns the cost meter wrote to.
+
+    The schema above no longer declares them, but CREATE TABLE IF NOT
+    EXISTS leaves an existing file exactly as it was, so without this the
+    column sits there forever holding numbers nothing produces any more.
+    Safe to run on every connect.
+    """
+    for table in ("items", "runs"):
+        have = {r["name"] for r in conn.execute("PRAGMA table_info(%s)" % table)}
+        if "cost_usd" in have:
+            conn.execute("ALTER TABLE %s DROP COLUMN cost_usd" % table)
+    conn.commit()
 
 
 def item_id(url: str) -> str:
@@ -140,7 +154,7 @@ def upsert_item(conn: sqlite3.Connection, rec: dict) -> str:
         "id", "url", "source", "kind", "action", "status", "urgent", "deadline",
         "title", "hook", "summary", "owner", "posted", "user_note", "user_do",
         "slide_count", "focus_slide", "pdf_path", "media_dir", "links_checked", "gate_json",
-        "note_json", "enrich_json", "cost_usd", "created_at", "updated_at",
+        "note_json", "enrich_json", "created_at", "updated_at",
         "processed_at", "error"}]
     placeholders = ",".join("?" for _ in cols)
     updates = ",".join(f"{c}=excluded.{c}" for c in cols if c != "id")
@@ -189,10 +203,10 @@ def index_fts(conn: sqlite3.Connection, iid: str, title: str, hook: str,
     conn.commit()
 
 
-def log_run(conn, iid, stage, ok, detail="", seconds=0.0, cost=0.0) -> None:
-    conn.execute("INSERT INTO runs (item_id,stage,ok,detail,seconds,cost_usd,at)"
-                 " VALUES (?,?,?,?,?,?,?)",
-                 (iid, stage, 1 if ok else 0, str(detail)[:2000], seconds, cost, time.time()))
+def log_run(conn, iid, stage, ok, detail="", seconds=0.0) -> None:
+    conn.execute("INSERT INTO runs (item_id,stage,ok,detail,seconds,at)"
+                 " VALUES (?,?,?,?,?,?)",
+                 (iid, stage, 1 if ok else 0, str(detail)[:2000], seconds, time.time()))
     conn.commit()
 
 
@@ -297,6 +311,4 @@ def counts(conn) -> dict:
     out["gated"] = conn.execute(
         "SELECT COUNT(*) c FROM items WHERE gate_json LIKE '%\"gated\": true%'").fetchone()["c"]
     out["dead_links"] = conn.execute("SELECT COUNT(*) c FROM links WHERE alive=0").fetchone()["c"]
-    out["spend"] = round(conn.execute(
-        "SELECT COALESCE(SUM(cost_usd),0) s FROM items").fetchone()["s"] or 0, 4)
     return out

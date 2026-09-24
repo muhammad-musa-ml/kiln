@@ -171,10 +171,9 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
     t0 = time.time()
     deep = urgent or (acq.kind == "instagram" and (user_do or "").lower().find("job") >= 0)
     note = extract_mod.extract_item(acq, user_note=user_note or user_do, deep=deep)
-    cost = (note.get("_meta") or {}).get("cost_usd", 0.0)
     store.log_run(conn, iid, "extract", not note.get("_error"),
                   note.get("_error", "") or f"{len(note.get('sections') or [])} sections",
-                  time.time() - t0, cost)
+                  time.time() - t0)
 
     rec.update({
         "kind": note.get("kind") or acq.kind,
@@ -183,7 +182,6 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
         "summary": note.get("summary", ""),
         "note_json": json.dumps(note, ensure_ascii=False),
         "gate_json": json.dumps(note.get("_gate") or {}, ensure_ascii=False),
-        "cost_usd": cost,
     })
     store.upsert_item(conn, rec)
 
@@ -195,16 +193,13 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
             enriched = enrich_mod.enrich_note(note, acq, user_note=user_do or user_note)
         except Exception as e:
             enriched = {"_meta": {"ok": False, "error": f"{type(e).__name__}: {e}"}}
-        ecost = (enriched.get("_meta") or {}).get("cost_usd", 0.0)
-        cost += ecost
         store.log_run(conn, iid, "enrich", (enriched.get("_meta") or {}).get("ok", False),
                       (enriched.get("_meta") or {}).get("error", "") or enriched.get("_enricher", ""),
-                      time.time() - t0, ecost)
+                      time.time() - t0)
         preview = enrich_mod.make_install_preview(enriched)
         if preview:
             enriched["_install_preview"] = preview
         rec["enrich_json"] = json.dumps(enriched, ensure_ascii=False)
-        rec["cost_usd"] = cost
 
     # ---- tag ---------------------------------------------------------
     action = derive_action(note, user_do, media_kind=acq.kind)
