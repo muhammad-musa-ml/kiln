@@ -190,6 +190,11 @@ a:hover{text-decoration:underline}
   font-family:var(--mono);font-size:12.5px;background:var(--ash-0);border:1px solid var(--ash-4);
   border-radius:6px;padding:12px 14px;color:var(--ember-hot);word-break:break-all;margin-bottom:9px
 }
+.ask{border:1px solid var(--ember-deep);border-left:3px solid var(--ember);background:var(--ash-2);border-radius:8px;padding:13px 15px;margin:0 0 11px}
+.ask h3{font-size:13.5px;color:var(--bone);margin:0 0 4px}
+.ask .meta{font-size:11.5px;color:var(--bone-faint);margin-bottom:7px}
+.ask pre{font-size:11.5px;color:var(--bone-dim);white-space:pre-wrap;margin:0 0 9px;max-height:150px;overflow:auto}
+.ask .opts{display:flex;gap:7px;flex-wrap:wrap}
 .btn{padding:8px 15px;border-radius:6px;font-size:12.5px;font-weight:600;border:1px solid var(--ash-4);color:var(--bone-dim)}
 .btn:hover{border-color:var(--bone-faint);color:var(--bone)}
 .btn.run{background:linear-gradient(160deg,var(--ember),var(--ember-deep));color:#fff;border:none}
@@ -238,6 +243,7 @@ ul.plain li::before{content:'';position:absolute;left:0;top:11px;width:5px;heigh
       </div>
       <input class="search" id="q" type="search" placeholder="search everything...">
     </div>
+    <div id="asks"></div>
     <div class="hd">
       <h2 id="hdTitle">Everything</h2>
       <span class="count" id="hdCount"></span>
@@ -474,14 +480,14 @@ function detail(it){
     </div>` : '';
 
   // Copy works anywhere, because the prompt is built from data already on
-  // the page. Queue and Run need a machine, so they only show locally.
+  // the page. Queueing needs a machine, so it only shows locally.
   const build = e.project ? `<div class="sec"><h4>Build it</h4>
     <p class="warn" style="margin-top:0">${LOCAL
       ? 'Same prompt either way, so nothing drifts.'
       : 'Copy this into any chat and you get the project back.'}</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin:11px 0">
       <button class="btn run" onclick="doBuild('${it.id}','copy')">Copy the prompt</button>
-      ${LOCAL ? `<button class="btn" onclick="doBuild('${it.id}','local')">Build it on the next run</button>` : ''}
+      ${LOCAL ? `<button class="btn" onclick="doBuild('${it.id}','local')">Build it on the next 9am run</button>` : ''}
     </div>
     <div id="buildOut"></div></div>` : '';
 
@@ -691,7 +697,10 @@ async function doBuildServer(id, target){
       out.innerHTML = `<div class="warn">${again} as <code>${esc(j.id)}</code>.</div>
         <div class="out">${esc(j.file || '')}
 
-It builds on the next scheduled run, gets reviewed, and is pushed to GitHub.
+It builds on the next 9am run, three at a time. Nothing builds at 9pm.
+When it finishes, it gets reviewed, given a readme, and pushed as a
+public repo. Anything I have to decide shows up as a card at the top
+of this page.
 To build it right now instead:
   python -m kiln.runner run <the file above></div>`;
       toast(j.already ? 'already queued' : 'queued');
@@ -776,9 +785,53 @@ function renderAbout(){
     ${built ? `<br><br>Last rebuilt <code>${esc(built)}</code>.` : ''}`;
 }
 
-load(); health(); renderAbout();
+/* ---------- questions the morning run left for me ---------- */
+// The run happens while I'm asleep and cannot stop to ask anything, so it
+// writes the decision down and carries on. This is where I answer it.
+async function asks(){
+  if(!LOCAL) return;
+  const el = $('#asks');
+  if(!el) return;
+  let open = [];
+  try{ open = (await api('/api/questions')).open || []; }
+  catch{ el.innerHTML = ''; return; }
+  if(!open.length){ el.innerHTML = ''; return; }
+
+  el.innerHTML = open.map(q => {
+    const seen = (q.asked_count||1) > 1 ? ` | come up ${q.asked_count} times` : '';
+    return `<div class="ask">
+      <h3>${esc(q.title||q.id)}</h3>
+      <div class="meta">${esc(q.repo||q.job_id||'')}${seen}</div>
+      <pre>${esc(q.detail||'')}</pre>
+      <div class="opts">${(q.options||[]).map(o =>
+        `<button class="btn" data-q="${esc(q.id)}" data-choice="${esc(o)}">${esc(o)}</button>`
+      ).join('')}</div>
+    </div>`;
+  }).join('');
+
+  // Wired here rather than written into an onclick attribute. An answer is
+  // free text with quotes and dashes in it, and dropping that inside an
+  // attribute ends the attribute early: the button still draws, and does
+  // nothing at all when you press it.
+  el.querySelectorAll('.opts button').forEach(b => {
+    b.onclick = () => answerQ(b.dataset.q, b.dataset.choice);
+  });
+}
+
+async function answerQ(id, choice){
+  try{
+    await api('/api/questions/answer', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({id, choice})});
+    toast('answered');
+  }catch(e){ toast(e.message); }
+  asks();
+}
+
+load(); health(); renderAbout(); asks();
 setInterval(()=>{ if(Object.values(state.jobs).some(j=>j.stage==='working'||j.stage==='queued')) load(); }, 3000);
 setInterval(health, 30000);
+setInterval(asks, 60000);
 </script>
 </body>
 </html>

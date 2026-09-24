@@ -80,8 +80,9 @@ EMOJI = re.compile("[%s-%s%s-%s%s]" % (
 CODE_EXT = {".py", ".js", ".ts", ".sh", ".yml", ".yaml", ".toml"}
 SKIP_DIRS = {".git", "__pycache__", "node_modules", ".venv", "venv",
              ".planning", ".agents", ".pytest_cache", ".mypy_cache"}
-# This file is a list of the things it looks for, so it always matches itself.
-SKIP_FILES = {"slop.py"}
+# These two hold the list of things to look for, so they always match
+# themselves. ship.py quotes the rules into the brief it sends the writer.
+SKIP_FILES = {"slop.py", "ship.py"}
 ALLOW = "slop: allow"
 
 

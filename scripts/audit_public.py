@@ -160,6 +160,22 @@ def main() -> int:
     else:
         ok("index.html is in static read-only mode")
 
+    # 9. the published page is the local page, byte for byte.
+    #    public/index.html has been hand edited before. That is how the site
+    #    and the app end up describing the same button two different ways,
+    #    and nothing catches it, because both files look fine on their own.
+    checks += 1
+    local_html = (ROOT / "web" / "index.html").read_text(encoding="utf-8",
+                                                         errors="replace")
+    stripped = re.sub(
+        r'<script>window\.KILN_STATIC=true;window\.KILN_BUILT="[^"]*";</script>',
+        "", html, count=1)
+    if stripped != local_html:
+        fail("public/index.html is not a copy of web/index.html. Rebuild with "
+             "python -m kiln.publish rather than editing the published copy")
+    else:
+        ok("published page matches the local page exactly")
+
     print()
     if failures:
         print(f"AUDIT FAILED - {len(failures)} finding(s) across {checks} checks.")

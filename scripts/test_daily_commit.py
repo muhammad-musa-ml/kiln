@@ -72,12 +72,16 @@ def make_repo(base: Path) -> tuple[Path, Path]:
     return repo, origin
 
 
-def load_daily(repo: Path, build: str):
+def load_daily(repo: Path, build: str, morning: bool = False):
     """Import daily.py with kiln faked out and every command sent to `repo`.
 
     The real kiln package creates data dirs and a token file on import and
     probes the local model ports. None of that is under test here.
+
+    Returns the module and a list the fake builder appends to, so a test can
+    say whether the morning work was reached rather than guessing from text.
     """
+    calls: list[tuple] = []
     counts = iter([{"total": 0, "spend": 0.0}, {"total": 1, "spend": 0.01}])
     store = types.ModuleType("kiln.store")
     store.connect = lambda: types.SimpleNamespace(close=lambda: None)
@@ -86,9 +90,31 @@ def load_daily(repo: Path, build: str):
     ingest.new_items = lambda text, conn: [{"urls": ["https://example.com/a"]}]
     ingest.ingest_text = lambda text, source, conn: iter(
         [{"status": "processed", "url": "https://example.com/a", "title": "a"}])
+
+    questions = types.ModuleType("kiln.questions")
+    questions.open_questions = lambda: []
+    questions.render = lambda qs=None: ""
+
+    def build_now(limit=3):
+        calls.append(("build", limit))
+        return []
+
+    def ship_now(limit=3):
+        calls.append(("ship", limit))
+        return []
+
+    runner = types.ModuleType("kiln.runner")
+    runner.jobs = types.SimpleNamespace(pending=lambda: [{"file": "a.md"}])
+    runner.needs_ship = lambda: [{"job_id": "a"}]
+    runner.run_pending = build_now
+    runner.ship_done = ship_now
+
     kiln = types.ModuleType("kiln")
     kiln.store, kiln.ingest = store, ingest
-    sys.modules.update({"kiln": kiln, "kiln.store": store, "kiln.ingest": ingest})
+    kiln.questions, kiln.runner = questions, runner
+    sys.modules.update({"kiln": kiln, "kiln.store": store,
+                        "kiln.ingest": ingest, "kiln.questions": questions,
+                        "kiln.runner": runner})
 
     spec = importlib.util.spec_from_file_location("daily_under_test", HERE / "daily.py")
     daily = importlib.util.module_from_spec(spec)
@@ -104,17 +130,22 @@ def load_daily(repo: Path, build: str):
             return 0, ""
         if cmd[1:] == ["scripts/audit_public.py"]:
             return 0, "AUDIT PASSED - stubbed"
+        if cmd[1:] == ["scripts/dedupe_jobs.py"]:
+            return 0, "no duplicates"
         raise AssertionError(f"daily.py ran something unexpected: {cmd}")
 
     # Both, so a broken daily.py under test can't commit or push from this
     # checkout: every command goes through run(), which only knows `repo`.
     daily.ROOT = repo
     daily.run = run
-    return daily
+    # Pinned, or the same test passes before noon and fails after it.
+    daily.is_morning = lambda: morning
+    return daily, calls
 
 
-def sync(repo: Path, inbox: Path, build: str) -> tuple[int, str]:
-    daily = load_daily(repo, build)
+def sync(repo: Path, inbox: Path, build: str,
+         morning: bool = False) -> tuple[int, str, list]:
+    daily, calls = load_daily(repo, build, morning)
     argv, sys.argv = sys.argv, ["daily.py", str(inbox)]
     out = io.StringIO()
     try:
@@ -122,7 +153,7 @@ def sync(repo: Path, inbox: Path, build: str) -> tuple[int, str]:
             code = daily.main()
     finally:
         sys.argv = argv
-    return code, out.getvalue()
+    return code, out.getvalue(), calls
 
 
 def main() -> int:
@@ -133,7 +164,7 @@ def main() -> int:
 
         print("new item, site rebuilt")
         repo, origin = make_repo(tmp / "one")
-        code, out = sync(repo, inbox, NEW_BUILD)
+        code, out, calls = sync(repo, inbox, NEW_BUILD)
         check("sync returns 0", code == 0, out.strip()[-300:])
         changed = git(origin, "show", "--name-only", "--format=", "master").split()
         check("pushed commit touches only the built site",
@@ -149,14 +180,43 @@ def main() -> int:
               staged == ["wip.py"] and unstaged == ["notes.py"],
               f"staged: {staged}, unstaged: {unstaged}")
 
+        check("evening pass does not build or publish repos",
+              calls == [], f"called: {calls}")
+
         print("new item, but the site came out the same")
         repo, origin = make_repo(tmp / "two")
         head = git(origin, "rev-parse", "master")
-        code, out = sync(repo, inbox, OLD_BUILD)
+        code, out, calls = sync(repo, inbox, OLD_BUILD)
         check("sync returns 0", code == 0, out.strip()[-300:])
-        check("says there is nothing to commit",
-              "[4/4] nothing to commit" in out, out.strip()[-300:])
+        check("says there is nothing to push",
+              "nothing to push" in out, out.strip()[-300:])
         check("remote unchanged", git(origin, "rev-parse", "master") == head)
+
+        print("morning pass, same repo state")
+        repo, origin = make_repo(tmp / "three")
+        head = git(origin, "rev-parse", "master")
+        code, out, calls = sync(repo, inbox, OLD_BUILD, morning=True)
+        check("sync returns 0", code == 0, out.strip()[-300:])
+        check("morning pass builds the queue and then publishes",
+              calls == [("build", 3), ("ship", 3)], f"called: {calls}")
+        check("a site that did not change is still not pushed",
+              git(origin, "rev-parse", "master") == head)
+
+        print("the site is rebuilt even when the inbox had nothing new")
+        repo, origin = make_repo(tmp / "four")
+        daily, _ = load_daily(repo, NEW_BUILD)
+        daily_calls: list = []
+        real_run = daily.run
+        daily.run = lambda cmd: (daily_calls.append(cmd[1:]), real_run(cmd))[1]
+        argv, sys.argv = sys.argv, ["daily.py", str(inbox)]
+        out2 = io.StringIO()
+        try:
+            with contextlib.redirect_stdout(out2):
+                daily.stage_site()
+        finally:
+            sys.argv = argv
+        check("publish runs unconditionally, not only on new items",
+              ["-m", "kiln.publish"] in daily_calls, f"ran: {daily_calls}")
 
     print()
     print("%d/%d pass" % (sum(results), len(results)))
