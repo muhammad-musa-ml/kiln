@@ -72,7 +72,7 @@ def _save_ledger(d: dict) -> None:
 
 
 def quota_snapshot() -> dict:
-    """What the UI shows in the cost meter."""
+    """Free-tier budget left per model, for the sidebar."""
     with _lock:
         d = _load_ledger()
         used = d["counts"]
