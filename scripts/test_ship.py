@@ -304,8 +304,36 @@ def test_allowlist() -> None:
           str(ship.README_TOOLS))
 
 
+def test_description() -> None:
+    """What GitHub shows beside the repo name comes from the readme."""
+    print("the line GitHub shows beside the repo name")
+    with tempfile.TemporaryDirectory() as t:
+        d = Path(t)
+        (d / "README.md").write_text(
+            "# thing\n\nA small tool that files refunds. It will not let a "
+            "big one through without a person saying yes.\n\n## Install\n",
+            encoding="utf-8")
+        got = ship._description(d)
+        check("it skips the heading and takes the first real line",
+              got.startswith("A small tool"), got)
+        check("and stops before the next heading", "Install" not in got, got)
+
+        long = "word " * 200
+        (d / "README.md").write_text("# t\n\n%s\n" % long, encoding="utf-8")
+        got = ship._description(d)
+        check("a long opening is cut at 250 characters", len(got) <= 250,
+              str(len(got)))
+        check("and never cut through the middle of a word",
+              got.endswith("word") or got.endswith("."), repr(got[-12:]))
+
+        (d / "README.md").unlink()
+        check("no readme is an empty description, not a crash",
+              ship._description(d) == "")
+
+
 def main() -> int:
     test_allowlist()
+    test_description()
     test_agent_blocked()
     test_gate()
     test_dedup()
