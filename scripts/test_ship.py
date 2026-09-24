@@ -282,7 +282,30 @@ def test_failure_routing() -> None:
             runner.RUNS, questions.QUESTIONS = old
 
 
+def test_allowlist() -> None:
+    """A rule with a space in it must reach the CLI as one argument.
+
+    Measured once against the real CLI: passed as two arguments it refuses
+    the rule and the reviewer cannot run a single command, while still
+    writing a verdict. That reads exactly like a project that failed review.
+    """
+    print("the reviewer's allowlist survives a command line")
+    cmd = ship._claude_cmd("claude.exe", "hello", ship.REVIEW_TOOLS)
+    rules = cmd[cmd.index("--allowedTools") + 1:]
+    check("a rule with a space in it stays one argument",
+          "Bash(python *)" in rules, str(rules))
+    check("no half of a rule is left standing on its own",
+          not any(r in ("Bash(python", "*)", "Bash(pip") for r in rules),
+          str(rules))
+    check("the reviewer can run the tests",
+          "Bash(pytest *)" in rules, str(rules))
+    check("the readme writer gets no shell at all",
+          not any(str(r).startswith("Bash") for r in ship.README_TOOLS),
+          str(ship.README_TOOLS))
+
+
 def main() -> int:
+    test_allowlist()
     test_agent_blocked()
     test_gate()
     test_dedup()
