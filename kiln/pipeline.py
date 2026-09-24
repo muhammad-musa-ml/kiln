@@ -30,6 +30,12 @@ _ACTION_FALLBACK = {
     "opinion": "read", "listicle": "read",
 }
 
+# What a link gets tagged when nothing could be read from it. Failures used
+# to land under a guessed bucket or none at all, which is how a dead link
+# ends up untitled at the bottom of the inbox with nothing pointing at it.
+# One filter, and it says what to do rather than only that something broke.
+REDO = "redo"
+
 
 def derive_places(*texts: str) -> list[str]:
     hay = " ".join(t or "" for t in texts).lower()
@@ -160,9 +166,17 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
         "error": acq.error,
     })
     if acq.error and not acq.slides and not acq.video and not acq.body_text:
+        # Nothing came back at all. Keep the link, say why in the open, and
+        # tag it redo. This used to return here without setting a title or a
+        # single tag, so a failed link became a blank untitled row that no
+        # filter matched and nothing ever surfaced again.
         rec["status"] = "inbox"
+        rec["action"] = REDO
+        rec["title"] = acq.title or url
+        rec["summary"] = "Nothing could be read from this link. %s" % acq.error
         rec["processed_at"] = time.time()
         store.upsert_item(conn, rec)
+        store.set_tags(conn, iid, "action", [REDO])
         if own:
             conn.close()
         return store.get_item(conn, iid)
@@ -202,7 +216,12 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
         rec["enrich_json"] = json.dumps(enriched, ensure_ascii=False)
 
     # ---- tag ---------------------------------------------------------
-    action = derive_action(note, user_do, media_kind=acq.kind)
+    # An item that came back with nothing is not done, it is stuck. Working
+    # this out before the tagging rather than after it, because a bucket
+    # derived from an empty note is a guess, and redo is the truth.
+    empty = not (note.get("sections") or note.get("summary"))
+
+    action = REDO if empty else derive_action(note, user_do, media_kind=acq.kind)
     topics = normalise_topics(note.get("topics") or [])
     places = derive_places(user_note, user_do, note.get("summary", ""),
                            " ".join(str(x) for x in (note.get("onscreen_text") or [])[:40]))
@@ -213,13 +232,14 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
     store.set_tags(conn, iid, "user", [t.lower() for t in (user_tags or [])])
 
     rec["action"] = action
-    # An item that came back with nothing is not done, it is stuck. Filing it
-    # as triage makes an empty note look processed; one slipped through that
-    # way when every model rung was exhausted and the local fallback was off.
-    empty = not (note.get("sections") or note.get("summary"))
+    # Filing an empty note as triage makes it look processed; one slipped
+    # through that way when every model rung was exhausted and the local
+    # fallback was off.
     rec["status"] = "inbox" if empty else ("active" if urgent else "triage")
     if empty and not rec.get("error"):
         rec["error"] = "extraction returned nothing - re-fire when a model is free"
+    if empty and not rec.get("title"):
+        rec["title"] = acq.title or url
     rec["processed_at"] = time.time()
     store.upsert_item(conn, rec)
 
@@ -250,7 +270,7 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
                     rec.get("summary", ""), body)
 
     store.log_run(conn, iid, "total", True,
-                  f"action={action} topics={topics}", time.time() - t_start, cost)
+                  f"action={action} topics={topics}", time.time() - t_start)
     out = store.get_item(conn, iid)
     if own:
         conn.close()
