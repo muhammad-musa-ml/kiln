@@ -202,6 +202,33 @@ def write_readme(workdir: Path, job: dict, verdict: dict) -> dict:
             "path": str(path)}
 
 
+def _description(workdir: Path) -> str:
+    """The one line GitHub shows beside the repo name.
+
+    The reviewer's summary used to go straight in here. That summary is
+    written for me, in its own voice, about whether the brief was met, and
+    it gets cut off part way through a word at the length limit. The first
+    paragraph of the readme says the same thing to a stranger, and it has
+    already been through the writing check.
+    """
+    try:
+        text = (workdir / "README.md").read_text(encoding="utf-8",
+                                                 errors="replace")
+    except Exception:
+        return ""
+    for block in text.split("\n\n"):
+        para = " ".join(block.split())
+        if not para or para.startswith("#") or para.startswith("```"):
+            continue
+        if len(para) <= 250:
+            return para
+        head = para[:249]
+        if ". " in head:
+            return head.rsplit(". ", 1)[0] + "."
+        return head.rsplit(" ", 1)[0]
+    return ""
+
+
 def _force_rm(path: Path) -> None:
     """Remove a tree even when git has left files read only."""
     def on_error(func, p, _exc):
@@ -314,8 +341,7 @@ def ship(workdir: Path, job: dict, public: bool = True) -> dict:
         return out
 
     name = job.get("repo_name") or workdir.name
-    out["publish"] = publish(workdir, name,
-                             out["review"].get("summary", ""), public)
+    out["publish"] = publish(workdir, name, _description(workdir), public)
     out["stage"] = "publish"
     out["ok"] = out["publish"].get("ok", False)
     out["why"] = "" if out["ok"] else out["publish"].get("error", "push failed")
