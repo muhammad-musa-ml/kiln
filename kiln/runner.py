@@ -479,9 +479,18 @@ def _ship_one(d: dict, public: bool, results: list, lock) -> None:
     r = ship.ship(workdir, job, public=public)
     url = (r.get("publish") or {}).get("url", "")
     attempts = int(d.get("ship_attempts") or 0) + 1
+    # Keep the verdict. scrub() deletes kiln-review.json before the push, so
+    # without this the only record of why a project was passed or stopped is
+    # gone by the time anyone asks. tests_run is the one worth having: a
+    # reviewer that could not run the suite is not the same as a green one.
+    rv = r.get("review") or {}
     _write_state(jid, shipped=bool(r.get("ok")), ship_stage=r.get("stage", ""),
                  ship_why=r.get("why", ""), ship_attempts=attempts,
-                 shipped_at=time.time(), repo_url=url, shipping=0)
+                 shipped_at=time.time(), repo_url=url, shipping=0,
+                 tests_run=bool(rv.get("tests_run")),
+                 tests_pass=bool(rv.get("tests_pass")),
+                 review_summary=str(rv.get("summary") or "")[:800],
+                 review_blocking=[str(b)[:300] for b in (rv.get("blocking") or [])])
 
     if r.get("ok"):
         questions.clear(jid, "ship_failed")
