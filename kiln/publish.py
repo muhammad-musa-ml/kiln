@@ -151,8 +151,8 @@ def build(out: Path = OUT, copy_media: bool = True) -> dict:
     (out / "data" / "facets.json").write_text(
         json.dumps({"total": len(items), **facets,
                     "by_status": {}, "gated": sum(1 for i in items if i.get("gate")),
-                    "dead_links": sum(1 for i in items for l in i.get("links", []) if not l["alive"]),
-                    "spend": 0}, ensure_ascii=False, indent=1),
+                    "dead_links": sum(1 for i in items for l in i.get("links", []) if not l["alive"])},
+                   ensure_ascii=False, indent=1),
         encoding="utf-8")
 
     # The page, switched to static mode.

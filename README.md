@@ -39,7 +39,6 @@ prompt ships inside the data, so it needs no server.
   heading used to say "just now" and that was wrong, so I changed it.
 - **Model controls.** The panel lists which providers I hold keys for. That's
   information about my setup, so it's local only.
-- **Cost meter.** Nobody needs to know what my week would have cost.
 
 **The reason the whole thing can't just live on Vercel:** Instagram blocks
 requests from data centre IP ranges. The browser trick works *because* it
@@ -58,7 +57,7 @@ Everything that touches a key, a browser, or a shell:
 - Queueing a build, and the morning run that builds and publishes it
 - Install previews with a Run button
 - The Google Drive sync
-- Live model health and the running cost estimate
+- Live model health
 
 I haven't moved these online because each one would mean putting my API keys
 on a host I don't control, and I'd be building auth, rate limiting and
@@ -181,13 +180,11 @@ You can add any provider from the API (OpenAI, Groq, OpenRouter, DeepSeek,
 Anthropic, xAI, Mistral, Together, or anything OpenAI-compatible). Keys are
 encrypted with DPAPI and nothing is saved until a real test call succeeds.
 
-The cost meter is worked out here, not read off anyone's bill. It takes the
-token counts the API hands back and multiplies them by the paid price list in
-`kiln/config.py`. Calls that land inside a free tier are priced at the paid
-rate too, because nothing subtracts them: the free allowance is tracked only
-to drop a rung before hitting a 429. So the number is what a day would have
-cost if none of it had been free, which on a key with no billing attached is
-not what I paid. By that measure most items come out at a cent or two.
+There used to be a running cost figure in the sidebar. It was token counts
+multiplied by a price list I had typed in by hand and never checked against
+anything, and it counted free-tier calls at the paid rate, so it was a guess
+wearing a dollar sign. I took it out. Token counts are still recorded per
+call, which is the part that was ever true.
 
 A couple of things I found out the hard way:
 
@@ -201,8 +198,8 @@ A couple of things I found out the hard way:
 ## Publishing
 
 `python -m kiln.publish` builds a static copy into `public/`. It's a
-whitelist, so only named fields get out. My notes, what things would have
-cost, and my file paths stay here.
+whitelist, so only named fields get out. My notes and my file paths stay
+here.
 
 `python scripts/audit_public.py` greps the build for anything that shouldn't
 be there and exits non-zero if it finds something. `scripts/publish_and_deploy.sh`

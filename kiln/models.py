@@ -37,7 +37,6 @@ class ModelResult:
     tokens_in: int = 0
     tokens_out: int = 0
     thinking_tokens: int = 0
-    cost_usd: float = 0.0
     error: str = ""
     attempts: list[str] = field(default_factory=list)
     citations: list[dict] = field(default_factory=list)
@@ -62,7 +61,7 @@ def _load_ledger() -> dict:
             return d
     except Exception:
         pass
-    return {"day": today, "counts": {}, "spend_usd": 0.0}
+    return {"day": today, "counts": {}}
 
 
 def _save_ledger(d: dict) -> None:
@@ -79,7 +78,6 @@ def quota_snapshot() -> dict:
         used = d["counts"]
         return {
             "day": d["day"],
-            "spend_usd": round(d.get("spend_usd", 0.0), 4),
             "models": [
                 {
                     "model": m,
@@ -100,11 +98,10 @@ def _budget_left(model: str) -> bool:
         return _load_ledger()["counts"].get(model, 0) < budget
 
 
-def _record(model: str, cost: float) -> None:
+def _record(model: str) -> None:
     with _lock:
         d = _load_ledger()
         d["counts"][model] = d["counts"].get(model, 0) + 1
-        d["spend_usd"] = d.get("spend_usd", 0.0) + cost
         _save_ledger(d)
 
 
@@ -302,8 +299,6 @@ def _call_gemini(model: str, prompt: str, media: list[Path], *,
     tin = u.get("promptTokenCount", 0)
     tout = u.get("candidatesTokenCount", 0)
     tthink = u.get("thoughtsTokenCount", 0)
-    ip, op = config.PRICES.get(model, (0.0, 0.0))
-    cost = tin * ip / 1e6 + (tout + tthink) * op / 1e6
 
     text = ""
     citations: list[dict] = []
@@ -321,16 +316,15 @@ def _call_gemini(model: str, prompt: str, media: list[Path], *,
         return ModelResult(False, error="no candidate text", provider="gemini",
                            model=model, seconds=secs, tokens_in=tin, tokens_out=tout)
 
-    _record(model, cost)
+    _record(model)
     data = parse_json_loose(text) if want_json else None
     if want_json and data is None:
         return ModelResult(False, text=text, error="unparseable JSON",
                            provider="gemini", model=model, seconds=secs,
-                           tokens_in=tin, tokens_out=tout, thinking_tokens=tthink,
-                           cost_usd=cost)
+                           tokens_in=tin, tokens_out=tout, thinking_tokens=tthink)
     return ModelResult(True, data=data, text=text, provider="gemini", model=model,
                        seconds=secs, tokens_in=tin, tokens_out=tout,
-                       thinking_tokens=tthink, cost_usd=cost, citations=citations)
+                       thinking_tokens=tthink, citations=citations)
 
 
 def _call_ollama(model: str, prompt: str, media: list[Path], *,
@@ -375,7 +369,7 @@ def _call_ollama(model: str, prompt: str, media: list[Path], *,
                            provider=prov, model=model, seconds=secs,
                            tokens_in=tin, tokens_out=tout)
     return ModelResult(True, data=data, text=text, provider=prov, model=model,
-                       seconds=secs, tokens_in=tin, tokens_out=tout, cost_usd=0.0)
+                       seconds=secs, tokens_in=tin, tokens_out=tout)
 
 
 # ---------------------------------------------------------------------------
@@ -433,20 +427,17 @@ def generate(task: str, prompt: str, media: list[Path] | None = None, *,
             raw = fn(model, prompt, media,
                      base_url=spec.get("base_url", ""), api_key=api_key,
                      want_json=want_json, timeout=timeout)
-            pin, pout = registry.price_for(model)
-            cost = (raw.get("tokens_in", 0) * pin / 1e6
-                    + raw.get("tokens_out", 0) * pout / 1e6)
             data = parse_json_loose(raw.get("text", "")) if want_json else None
             res = ModelResult(
                 ok=bool(raw.get("ok")) and (data is not None or not want_json),
                 data=data, text=raw.get("text", ""), provider=provider, model=model,
                 seconds=raw.get("seconds", 0.0), tokens_in=raw.get("tokens_in", 0),
-                tokens_out=raw.get("tokens_out", 0), cost_usd=cost,
+                tokens_out=raw.get("tokens_out", 0),
                 error=redact(raw.get("error", "") or
                              ("unparseable JSON" if want_json and data is None else "")),
             )
             if res.ok:
-                _record(model, cost)
+                _record(model)
         else:
             attempts.append(f"{provider}:{model} skipped (unknown provider)")
             continue

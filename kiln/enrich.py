@@ -271,7 +271,7 @@ def enrich_note(note: dict, acq: Any = None, *, user_note: str = "",
         "_subject": subject,
         "_meta": {
             "model": r.label, "ok": r.ok, "seconds": round(r.seconds, 1),
-            "cost_usd": round(r.cost_usd, 5), "error": r.error[:200],
+            "error": r.error[:200],
             "attempts": r.attempts,
         },
         "_citations": r.citations or sources,
