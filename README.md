@@ -55,7 +55,7 @@ Everything that touches a key, a browser, or a shell:
 - Adding links and re-processing them
 - Model management: add any provider, reorder the fallback ladder, disable
   one, test a key before it's saved
-- Build jobs: queue one, or run it here in a directory I pick
+- Queueing a build, and the morning run that builds and publishes it
 - Install previews with a Run button
 - The Google Drive sync
 - Live model health and spend
@@ -124,7 +124,48 @@ finding out later.
 
 For anything I want to learn, it also writes a small project brief. Scope,
 stack with versions, milestones. I can copy that prompt into any chat and get
-a repo out of it, or queue it and run it here.
+a repo out of it, or queue it and let the morning run build it.
+
+## From a saved post to a repo
+
+A project brief has one button that does anything on this machine. Pressing
+it puts the project in a queue. Pressing it again finds the job already
+sitting there rather than writing a second copy of it, and that check is on
+the item the brief came from, not on the file name, because the naming
+scheme changed once and left me two files for one project.
+
+At nine in the morning the scheduled run takes up to three off the queue and
+builds them at the same time, each one its own agent in its own directory.
+Nothing builds on the nine at night run. Three builds at up to an hour each,
+plus a review and a readme on every one of them, is not something to start
+at bedtime.
+
+A finished build does not go straight out. A reviewer reads it, installs it,
+runs whatever tests it has, fixes what it can and writes down whether the
+thing actually works. Then a readme gets written and has to pass a check for
+writing that reads like a machine wrote it. Build tooling is stripped and
+the history is started clean. Only then is the repo created and pushed.
+
+Two things stop a push and neither is a judgement call: a banned character,
+and any line crediting a tool for the work. Wording I dislike in a docstring
+is reported and left alone, because holding a working project back over one
+word in a comment helps nobody.
+
+The run happens while I am asleep, so it cannot stop and ask me anything.
+When it reaches something that is mine to decide it writes the question down
+and carries on with the rest of the queue. An agent that was rate limited or
+signed out is not the project failing, so that job stays queued and is tried
+again the next morning. A build that ran and broke twice stops retrying and
+asks what I want to do about it. Open questions show up as cards at the top
+of the local page, and are printed at the top of the next run before it does
+anything else.
+
+```bash
+python -m kiln.runner pending      # build what is queued, now
+python -m kiln.runner ship         # review and publish what is built
+python -m kiln.questions list      # what is waiting on me
+python scripts/dedupe_jobs.py      # one project, one job
+```
 
 ## Models
 
