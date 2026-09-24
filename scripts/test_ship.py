@@ -18,7 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from kiln import jobs, questions, runner, ship  # noqa: E402
+from kiln import jobs, questions, runner, ship, slop  # noqa: E402
 
 results: list[bool] = []
 
@@ -331,9 +331,73 @@ def test_description() -> None:
               ship._description(d) == "")
 
 
+def _project(d: Path, test_body: str) -> None:
+    (d / "tests").mkdir(parents=True, exist_ok=True)
+    (d / "tests" / "test_it.py").write_text(test_body, encoding="utf-8")
+
+
+def test_run_tests() -> None:
+    """The tests are run here, not taken on the reviewer's word for it."""
+    print("running the project's own tests")
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as t:
+        d = Path(t)
+
+        r = ship.run_tests(d)
+        check("a project with no tests is not held up", r["passed"], str(r))
+        check("but it is honest that there were none", not r["found"], str(r))
+
+        _project(d, "def test_ok():\n    assert 1 + 1 == 2\n")
+        r = ship.run_tests(d)
+        check("passing tests pass", r["passed"] and r["ran"], str(r)[:200])
+        check("and it says it found them", r["found"], str(r)[:200])
+
+        _project(d, "def test_no():\n    assert 1 + 1 == 3\n")
+        r = ship.run_tests(d)
+        check("a failing test blocks", not r["passed"], str(r)[:200])
+        check("and says the tests fail", "fail" in r["why"], r["why"])
+
+        # A file named like a test that holds none is not a pass. This is
+        # how a project with the shape of a test suite and none of the
+        # substance would otherwise sail through.
+        _project(d, "x = 1\n")
+        r = ship.run_tests(d)
+        check("test files that collect nothing do not count as passing",
+              not r["passed"], str(r)[:200])
+
+
+def test_ci_helpers() -> None:
+    print("reading the CI result back")
+    check("a repo url becomes owner/name",
+          ship._repo_slug("https://github.com/someone/a-project") == "someone/a-project",
+          ship._repo_slug("https://github.com/someone/a-project"))
+    check("a .git suffix is trimmed",
+          ship._repo_slug("https://github.com/someone/a-project.git") == "someone/a-project")
+    check("junk gives nothing rather than a wrong slug",
+          ship._repo_slug("not a url") == "")
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as t:
+        r = ship.wait_for_ci("https://github.com/x/y", Path(t))
+        check("a project with no workflow is not waited on",
+              r.get("checked") is False, str(r))
+
+
+def test_readme_prompt() -> None:
+    print("what the readme writer is told")
+    p = ship._readme_prompt({"source": "https://example.com/p/ABC?stkn=SECRET"},
+                            {"summary": "it works"})
+    check("the source link never reaches the prompt", "stkn=SECRET" not in p)
+    check("and it is told not to credit one",
+          "Do not say where the idea came from" in p)
+    check("the voice rules come from the one shared copy",
+          slop.voice_rules()[:40] in p)
+    check("no unfilled placeholder is left in it", "%s" not in p, p[-200:])
+
+
 def main() -> int:
     test_allowlist()
     test_description()
+    test_run_tests()
+    test_ci_helpers()
+    test_readme_prompt()
     test_agent_blocked()
     test_gate()
     test_dedup()

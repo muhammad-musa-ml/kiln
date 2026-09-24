@@ -14,7 +14,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from . import config, store
+from . import config, slop, store
 
 JOBS_DIR = config.DATA / "jobs"
 PENDING = JOBS_DIR / "pending"
@@ -150,9 +150,18 @@ def build_prompt(item: dict) -> str:
     A("## How I want it delivered")
     A("- A single repository, ready to `git init` and push.")
     A("- Pin every dependency to the versions above.")
+    A("- Tests that actually run. They get run before any of this is")
+    A("  published, and a failure stops the whole thing.")
     A("- A README that explains what it does and how to run it, written plainly.")
     A("- No placeholder code and no TODO stubs - if something is out of scope,")
     A("  leave it out rather than stubbing it.")
+    A("")
+    # The same rules the readme writer gets. Asking for the voice up front is
+    # cheaper than having the readme pass sand it off one file at a time,
+    # and it is the code comments that never get a second pass at all.
+    A("## How to write it")
+    A("")
+    A(slop.voice_rules())
     A("")
     A(f"Source this came from: {item.get('url','')}")
     if proj.get("est_hours"):

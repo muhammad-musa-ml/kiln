@@ -23,7 +23,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from kiln import ingest, questions, runner, store  # noqa: E402
+from kiln import health, ingest, questions, runner, store  # noqa: E402
 
 # Three at once. Each is its own agent in its own directory, so they do not
 # interfere, and the morning finishes in about the time one of them takes.
@@ -45,7 +45,7 @@ def stage_inbox(text: str) -> tuple[int, int]:
     before = store.counts(conn)
     pending = ingest.new_items(text, conn)
     n_urls = sum(len(p.get("urls") or []) for p in pending)
-    print(f"[1/4] inbox: {len(pending)} new line(s), {n_urls} url(s)", flush=True)
+    print(f"[1/5] inbox: {len(pending)} new line(s), {n_urls} url(s)", flush=True)
 
     t0 = time.time()
     for r in ingest.ingest_text(text, source="gdoc", conn=conn):
@@ -68,7 +68,7 @@ def stage_site() -> tuple[bool, str]:
     kind of drift nobody notices until it matters.
     """
     code, out = run([sys.executable, "-m", "kiln.publish"])
-    print(f"[2/4] site rebuilt, exit={code}")
+    print(f"[2/5] site rebuilt, exit={code}")
     if code != 0:
         print(out[-1500:])
         return False, "publish failed"
@@ -105,7 +105,7 @@ def stage_builds() -> list[dict]:
         print("      " + out.strip().replace("\n", "\n      "))
 
     waiting = len(runner.jobs.pending())
-    print(f"[3/4] queue: {waiting} job(s) waiting, running up to {AT_ONCE} at once",
+    print(f"[3/5] queue: {waiting} job(s) waiting, running up to {AT_ONCE} at once",
           flush=True)
     if not waiting:
         return []
@@ -120,7 +120,7 @@ def stage_builds() -> list[dict]:
 
 def stage_ship() -> list[dict]:
     waiting = runner.needs_ship()
-    print(f"[4/4] publish: {len(waiting)} project(s) ready for review", flush=True)
+    print(f"[4/5] publish: {len(waiting)} project(s) ready for review", flush=True)
     if not waiting:
         return []
 
@@ -157,7 +157,7 @@ def main() -> int:
     try:
         added, total = stage_inbox(text)
     except Exception as e:
-        print(f"[1/4] inbox failed: {type(e).__name__}: {e}")
+        print(f"[1/5] inbox failed: {type(e).__name__}: {e}")
         added, total = 0, 0
 
     ok, site = stage_site()
@@ -169,8 +169,17 @@ def main() -> int:
     else:
         pending = len(runner.jobs.pending())
         ready = len(runner.needs_ship())
-        print(f"[3/4] queue: {pending} waiting, builds are morning only")
-        print(f"[4/4] publish: {ready} ready, held for the morning run")
+        print(f"[3/5] queue: {pending} waiting, builds are morning only")
+        print(f"[4/5] publish: {ready} ready, held for the morning run")
+
+    # Last, so it is checking the state this pass leaves behind rather than
+    # the one it inherited. It reads the previous heartbeat before the new
+    # one is written, which is how a skipped run gets noticed at all.
+    found = health.check_all()
+    print("[5/5] check: %d finding(s)" % len(found), flush=True)
+    print(health.render(found), flush=True)
+    asked = health.raise_questions(found)
+    health.beat("morning" if do_builds else "evening", added)
 
     print("\n" + "-" * 60)
     print("items %d (+%d)   site %s" % (total, added, site))
