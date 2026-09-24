@@ -24,10 +24,15 @@ REVIEW_TIMEOUT = 1800
 README_TIMEOUT = 900
 PUSH_TIMEOUT = 600
 
-REVIEW_TOOLS = ("Read Grep Glob Edit Write "
-                "Bash(python *) Bash(py *) Bash(pytest *) Bash(pip *) "
-                "Bash(ls*) Bash(dir*) Bash(cat*) Bash(type*)")
-README_TOOLS = "Read Grep Glob Edit Write"
+# One entry per rule, and they stay whole. These were a single string that
+# got split on whitespace, which turns Bash(python *) into Bash(python and
+# *) and leaves the reviewer unable to run anything at all. It still wrote a
+# verdict, so the failure looked like a bad project rather than a bad flag.
+REVIEW_TOOLS = ("Read", "Grep", "Glob", "Edit", "Write",
+                "Bash(python *)", "Bash(py *)", "Bash(pytest *)",
+                "Bash(pip *)", "Bash(ls*)", "Bash(dir*)", "Bash(cat*)",
+                "Bash(type*)")
+README_TOOLS = ("Read", "Grep", "Glob", "Edit", "Write")
 
 # Build tooling leaves these behind. None of it belongs in a published repo.
 STRIP = [".planning", ".agents", "kiln-review.json", ".codex", ".gemini"]
@@ -84,14 +89,18 @@ def _run(cmd: list[str], cwd: Path, timeout: int, stdin_text: str = "") -> tuple
         return -1, "[failed to start: %s: %s]" % (type(e).__name__, e)
 
 
-def _claude(prompt: str, workdir: Path, tools: str, timeout: int) -> tuple:
+def _claude_cmd(exe: str, prompt: str, tools) -> list:
+    """The command line, built separately so a test can read it back."""
+    return [exe, "-p", prompt, "--permission-mode", "acceptEdits",
+            "--permission-prompts", "none", "--output-format", "text",
+            "--allowedTools"] + list(tools)
+
+
+def _claude(prompt: str, workdir: Path, tools, timeout: int) -> tuple:
     exe = shutil.which("claude")
     if not exe:
         return -1, "[claude is not on PATH]"
-    cmd = [exe, "-p", prompt, "--permission-mode", "acceptEdits",
-           "--permission-prompts", "none", "--output-format", "text",
-           "--allowedTools"] + tools.split()
-    return _run(cmd, workdir, timeout)
+    return _run(_claude_cmd(exe, prompt, tools), workdir, timeout)
 
 
 REVIEW_PROMPT = """Review this project. It was generated from a brief and nobody has checked it yet.
