@@ -292,7 +292,7 @@ item on it, read six a sync.
 
 ```bash
 python -m kiln.brain sweep        # follow up what is waiting, six at most
-python -m kiln.brain run <id>     # one item, now
+python -m kiln.brain run <id>     # one item, now; reads it too if no free model could
 python -m kiln.brain show <id>    # what it did for that item
 ```
 
