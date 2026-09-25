@@ -41,7 +41,7 @@ def check(label: str, passed: bool, detail: str = "") -> None:
 
 
 def audit(name: str, items: list[dict], notes: list[str],
-          patch: tuple[str, str] | None = None) -> tuple[int, str]:
+          patch: tuple[str, str] | None = None, page_extra: str = "") -> tuple[int, str]:
     """Build the site, seed the notes, run the audit. Returns exit code and output."""
     root = TMP / name
     shutil.copytree(REPO / "kiln", root / "kiln",
@@ -55,7 +55,9 @@ def audit(name: str, items: list[dict], notes: list[str],
     (root / "scripts").mkdir()
     shutil.copy2(HERE / "audit_public.py", root / "scripts" / "audit_public.py")
     (root / "web").mkdir()
-    page = (REPO / "web" / "index.html").read_text(encoding="utf-8")
+    # page_extra goes into both copies, so it is the page that says it and
+    # not a published copy that drifted from the local one.
+    page = (REPO / "web" / "index.html").read_text(encoding="utf-8") + page_extra
     (root / "web" / "index.html").write_text(page, encoding="utf-8")
     pub = root / "public" / "data"
     pub.mkdir(parents=True)
@@ -124,6 +126,14 @@ def main() -> int:
     check("a whitelist that admits a private field fails it",
           code == 1 and "a whitelist admits private fields: ['user_note']" in out,
           out[-400:])
+
+    print("the page names no vendor")
+    code, out = audit("vendor", [item()], [],
+                      page_extra="<!-- read by Gemini, followed up by Claude -->\n")
+    check("a vendor named in the page itself fails it",
+          code == 1 and "names ['claude', 'gemini']" in out, out[-400:])
+    code, out = audit("vendor-item", [item(title="Claude Code in ten minutes")], [])
+    check("while an item about one is fine", code == 0, out[-400:])
 
     print()
     print("%d/%d pass" % (sum(results), len(results)))

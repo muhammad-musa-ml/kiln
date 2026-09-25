@@ -570,6 +570,9 @@ def health() -> dict:
     out: dict[str, Any] = {"gemini": False, "ollama": False, "models": [], "quota": quota_snapshot()}
     if config.GEMINI_API_KEY:
         out["gemini"], out["gemini_detail"] = _gemini_reachable()
+    # What the page reads. The page is the file the site publishes, and the
+    # site names no vendor.
+    out["free"] = out["gemini"]
     try:
         req = urllib.request.Request(f"{config.OLLAMA_HOST}/api/tags")
         with urllib.request.urlopen(req, timeout=8) as r:
