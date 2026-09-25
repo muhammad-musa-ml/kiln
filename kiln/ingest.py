@@ -32,10 +32,20 @@ def _clean(line: str) -> str:
     return line.strip()
 
 
-# Instructions read like orders. Anything else on the line is context.
-_IMPERATIVE = re.compile(
-    r"^\s*(?:see if|make|find|put|extract|check|add|create|group|sort|split|"
-    r"organis|organiz|turn|build|get|pull|list|summari|compare|rank|tag)", re.I)
+# How people introduce an instruction before getting to it. Carrying this
+# into the prompt tells the model nothing and eats the start of the sentence
+# it does care about, so it comes off the front.
+_PREAMBLE = re.compile(
+    r"^\s*(?:with\s+(?:the\s+)?message\s*[:\-]?\s*|"
+    r"message\s*[:\-]\s*|note\s*[:\-]\s*|ask\s*[:\-]\s*)", re.I)
+
+
+def _strip_preamble(text: str) -> str:
+    """Drop a leading "with message :" and any quotes wrapped round it."""
+    out = _PREAMBLE.sub("", text).strip()
+    if len(out) > 1 and out[0] in "\"'" and out[-1] == out[0]:
+        out = out[1:-1].strip()
+    return out or text.strip()
 # Separators people actually use between a link and a comment.
 _SEP = re.compile(r"\s*\|\s*|\s+[—–]\s+|\s+-\s+(?=[A-Za-z])")
 
@@ -90,12 +100,16 @@ def parse_line(raw: str) -> dict[str, Any] | None:
 
     extra = " ".join(leftovers).strip()
     if extra:
-        # An order goes in `do`, so the pipeline treats it as the ask rather
-        # than as background colour.
-        if _IMPERATIVE.match(extra) and not out["do"]:
-            out["do"] = extra
-        else:
-            out["note"] = (out["note"] + " " + extra).strip()
+        # Anything written next to a link is something the owner wants done
+        # with it. This used to require the text to START with one of about
+        # twenty verbs, and the four richest instructions in the real inbox
+        # all began "with message :" instead, so all four were filed as
+        # background colour. `do` is what the pipeline acts on, `note` is
+        # what it merely reads, and guessing between them on the first word
+        # of a sentence was never going to work. Presence decides now. A
+        # genuine aside can still say so with an explicit `note:` prefix.
+        out["do"] = (out["do"] + " " + _strip_preamble(extra)).strip() \
+            if out["do"] else _strip_preamble(extra)
 
     if not out["urls"] and not (out["note"] or out["do"]):
         out["note"] = line

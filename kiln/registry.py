@@ -39,6 +39,35 @@ def _seed() -> dict:
             "thinking": dict(config.THINKING_BUDGET)}
 
 
+def reseed(keep_extra: bool = False) -> dict:
+    """Rebuild from config.LADDERS, dropping anything no longer in them.
+
+    This exists because the file wins over the code. Editing a ladder in
+    config.py and expecting it to take effect is a mistake anyone would
+    make: the seed only runs when the file is missing, so a stale
+    models.json kept routing to five models that had already been dropped
+    for failing the minimum standard, and the code change did nothing at all.
+
+    The old file is kept beside the new one, once, so a bad reseed is
+    recoverable without going to git.
+    """
+    fresh = _seed()
+    if STORE.exists():
+        try:
+            old = json.loads(STORE.read_text(encoding="utf-8"))
+        except Exception:
+            old = {}
+        backup = STORE.with_suffix(".json.replaced")
+        if not backup.exists() and old:
+            backup.write_text(json.dumps(old, indent=2, ensure_ascii=False),
+                              encoding="utf-8")
+        if keep_extra:
+            for mid, m in (old.get("models") or {}).items():
+                fresh["models"].setdefault(mid, m)
+    save(fresh)
+    return fresh
+
+
 def load() -> dict:
     try:
         d = json.loads(STORE.read_text(encoding="utf-8"))

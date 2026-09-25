@@ -37,6 +37,8 @@ class ModelResult:
     tokens_in: int = 0
     tokens_out: int = 0
     thinking_tokens: int = 0
+    # True when every rung was tried and none of them cleared the bar.
+    exhausted: bool = False
     error: str = ""
     attempts: list[str] = field(default_factory=list)
     citations: list[dict] = field(default_factory=list)
@@ -417,11 +419,20 @@ def _call_ollama(model: str, prompt: str, media: list[Path], *,
 # ---------------------------------------------------------------------------
 def generate(task: str, prompt: str, media: list[Path] | None = None, *,
              want_json: bool = True, timeout: int = 600,
-             ladder: list[tuple[str, str]] | None = None) -> ModelResult:
-    """Run `task` down its ladder until something works.
+             ladder: list[tuple[str, str]] | None = None,
+             accept=None) -> ModelResult:
+    """Run `task` down its ladder until something works PROPERLY.
 
     task: one of config.LADDERS ("extract", "extract_deep", "classify",
           "research", "reason"). Unknown tasks fall back to "classify".
+
+    accept: optional callback taking the result and returning "" if it is
+    good enough, or a sentence saying why it is not. A rung that answers
+    below standard is treated as a rung that failed, because the caller
+    cannot tell those apart from the outside and the difference does not
+    matter: both mean keep going. Without this the ladder stopped at the
+    first model that said anything at all, which is how a read with no
+    sections and no on-screen text was accepted and stored.
     """
     from . import providers, registry, secrets_store
 
@@ -482,13 +493,25 @@ def generate(task: str, prompt: str, media: list[Path] | None = None, *,
             attempts.append(f"{provider}:{model} skipped (unknown provider)")
             continue
 
-        attempts.append(f"{provider}:{model} " + ("ok" if res.ok else f"FAIL {res.error[:90]}"))
+        short = "ok" if res.ok else f"FAIL {res.error[:90]}"
+        if res.ok and accept:
+            gripe = accept(res)
+            if gripe:
+                # It answered, but not well enough to keep.
+                res.ok = False
+                res.error = f"below standard: {gripe}"
+                short = f"BELOW STANDARD {gripe[:70]}"
+        attempts.append(f"{provider}:{model} " + short)
         if res.ok:
             res.attempts = attempts
             return res
         last = res
 
     last.attempts = attempts
+    # Nothing on the ladder could do it. That is a real outcome, not an
+    # error to paper over, and the caller is expected to hand the work to
+    # Claude rather than keep whatever the last rung happened to say.
+    last.exhausted = True
     return last
 
 
