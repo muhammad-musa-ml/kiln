@@ -101,6 +101,94 @@ def test_quota_classification() -> None:
               models._daily_quota_gone(err), err)
 
 
+def test_daily_quota_seen_in_full() -> None:
+    """Google says which quota a 429 is about only near the end of its body.
+
+    The body used to be cut to 400 characters before anything looked at it,
+    so a spent day was never recognised: every item then waited through the
+    retries on every model, all day. Run against a throwaway ledger, with
+    the network replaced, so nothing real is touched.
+    """
+    print("a spent day is recognised from the whole 429 body")
+    import io
+    import json as _json
+    import urllib.error
+    from kiln import config, models
+
+    def body_for(quota_id: str) -> str:
+        return _json.dumps({"error": {
+            "code": 429, "status": "RESOURCE_EXHAUSTED",
+            "message": "You exceeded your current quota, please check your plan. "
+                       + "x" * 400,
+            "details": [{"quotaId": quota_id, "quotaValue": "20"}]}})
+
+    sent: list[int] = []
+    slept: list[float] = []
+    reply = {"body": body_for("GenerateRequestsPerDayPerProjectPerModel-FreeTier")}
+
+    def refuse(req, timeout=0):
+        sent.append(1)
+        raise urllib.error.HTTPError("https://example.invalid", 429, "Too Many Requests",
+                                     None, io.BytesIO(reply["body"].encode("utf-8")))
+
+    saved = (models.urllib.request.urlopen, models.time.sleep, models._LEDGER_PATH,
+             config.GEMINI_API_KEY)
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as t:
+        models._LEDGER_PATH = Path(t) / "quota.json"
+        models.urllib.request.urlopen = refuse
+        models.time.sleep = slept.append
+        config.GEMINI_API_KEY = config.GEMINI_API_KEY or "test-key-not-real"
+        try:
+            check("the per-day marker is past what the log keeps",
+                  reply["body"].find("PerDay") > 400)
+            out, err = models._post("https://example.invalid", {}, 5)
+            check("the error still says the day is over",
+                  out is None and models._daily_quota_gone(err), err[:120])
+            check("while keeping only the start of the body", len(err) < 500,
+                  str(len(err)))
+            sent.clear()
+            r = models._call_gemini("gemini-3.8-flash", "hi", [], grounded=False,
+                                    thinking=0, want_json=True, timeout=5)
+            check("a spent day costs one request and no waiting",
+                  not r.ok and len(sent) == 1 and not slept,
+                  "sent %d, slept %s" % (len(sent), slept))
+            left = {m["model"]: m["left"] for m in models.quota_snapshot()["models"]}
+            check("and marks the model out for the day",
+                  left.get("gemini-3.8-flash") == 0, str(left))
+
+            reply["body"] = body_for("GenerateRequestsPerMinutePerProjectPerModel-FreeTier")
+            sent.clear()
+            slept.clear()
+            r = models._call_gemini("gemini-3.7-flash", "hi", [], grounded=False,
+                                    thinking=0, want_json=True, timeout=5)
+            left = {m["model"]: m["left"] for m in models.quota_snapshot()["models"]}
+            check("a busy minute still gets its retries, and burns nothing",
+                  len(sent) == 4 and len(slept) == 3 and left.get("gemini-3.7-flash", 0) > 0,
+                  "sent %d, slept %s, left %s" % (len(sent), slept, left))
+        finally:
+            (models.urllib.request.urlopen, models.time.sleep, models._LEDGER_PATH,
+             config.GEMINI_API_KEY) = saved
+
+    class At(models.datetime):
+        moment = None
+
+        @classmethod
+        def now(cls, tz=None):
+            return cls.moment
+
+    real = models.datetime
+    models.datetime = At
+    try:
+        At.moment = real(2026, 9, 26, 7, 59, tzinfo=models.timezone.utc)
+        before = models._quota_day()
+        At.moment = real(2026, 9, 26, 8, 0, tzinfo=models.timezone.utc)
+        after = models._quota_day()
+    finally:
+        models.datetime = real
+    check("the ledger's day turns over when Google's does, at midnight Pacific",
+          (before, after) == ("2026-09-25", "2026-09-26"), str((before, after)))
+
+
 def main() -> int:
     from kiln.acquire import Acquired
     from kiln.pipeline import REDO
@@ -150,6 +238,7 @@ def main() -> int:
 
     test_empty_read_detection()
     test_quota_classification()
+    test_daily_quota_seen_in_full()
 
     print()
     print("%d/%d pass" % (sum(results), len(results)))

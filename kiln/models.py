@@ -15,7 +15,7 @@ import threading
 import urllib.error
 import urllib.request
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -49,14 +49,26 @@ class ModelResult:
 
 
 # ---------------------------------------------------------------------------
-# Daily quota ledger (survives restarts; resets at local midnight)
+# Daily quota ledger (survives restarts; resets when Google's day does)
 # ---------------------------------------------------------------------------
 _LEDGER_PATH = config.DATA / "quota.json"
 _lock = threading.Lock()
 
 
+def _quota_day() -> str:
+    """The day Google counts free-tier requests in.
+
+    Its daily quotas reset at midnight Pacific time, not at midnight here.
+    Keyed on local midnight, a model marked out for the day at half past
+    midnight stayed out for the whole of the next day. Eight hours behind
+    UTC is Pacific standard time; in summer the real reset is an hour
+    earlier, so this turns over an hour late, never early.
+    """
+    return (datetime.now(timezone.utc) - timedelta(hours=8)).date().isoformat()
+
+
 def _load_ledger() -> dict:
-    today = date.today().isoformat()
+    today = _quota_day()
     try:
         d = json.loads(_LEDGER_PATH.read_text(encoding="utf-8"))
         if d.get("day") == today:
@@ -235,10 +247,14 @@ def _post(url: str, payload: dict, timeout: int,
             return json.loads(r.read().decode("utf-8")), ""
     except urllib.error.HTTPError as e:
         try:
-            body = e.read().decode("utf-8")[:400]
+            body = e.read().decode("utf-8")
         except Exception:
             body = ""
-        return None, redact(f"HTTP {e.code} {body}")
+        # Whether a 429 is this minute or the whole day is only said in the
+        # quotaId near the end of the body, well past what is kept for the
+        # log. Cut first, the check never saw it and no day was ever marked.
+        day = " [quota: per day]" if e.code == 429 and _daily_quota_gone(body) else ""
+        return None, redact(f"HTTP {e.code}{day} {body[:400]}")
     except Exception as e:
         return None, redact(f"{type(e).__name__}: {str(e)[:250]}")
 
@@ -303,6 +319,10 @@ def _call_gemini(model: str, prompt: str, media: list[Path], *,
     out, err = _post(url, payload, timeout, auth)
     for backoff in (4, 9, 20):
         if out is not None or not ("HTTP 503" in err or "HTTP 429" in err):
+            break
+        if "HTTP 429" in err and _daily_quota_gone(err):
+            # The day is over for this model. Waiting 33 seconds and asking
+            # three more times cannot change that, on every rung, per item.
             break
         time.sleep(backoff)
         out, err = _post(url, payload, timeout, auth)
