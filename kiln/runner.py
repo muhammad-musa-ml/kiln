@@ -12,6 +12,7 @@ import json
 import os
 import re
 import shutil
+import statistics
 import subprocess
 import threading
 import time
@@ -32,6 +33,15 @@ FAIL_LIMIT = 2
 WORKSPACE = Path(os.environ.get("KILN_WORKSPACE", Path.home() / "kiln-builds"))
 
 TIMEOUT = 3600
+
+# What an estimate falls back to before anything has been timed here: the
+# hour a build is allowed, and the half hour its reviewer is allowed.
+DEFAULT_BUILD_MIN = TIMEOUT // 60
+DEFAULT_SHIP_MIN = ship.REVIEW_TIMEOUT // 60
+
+# The one card that asks which queued projects to build. It is filed like
+# any other question, under a job id that is not a real job.
+QUEUE_JOB = "build-queue"
 
 # Name, args after the executable, and whether the prompt goes on stdin.
 # codex leads because gemini's CLI cannot reach its endpoint from here. stdin
@@ -229,8 +239,9 @@ def _failed(job_id: str, repo: str, picked: str, log: Path, code: int,
     """Work out whether the agent was down or the build is genuinely bad.
 
     These want opposite things. An agent that was unavailable should be
-    tried again tomorrow and is not the project's fault, so it never counts
-    against the retry limit. A build that runs and breaks is mine to look at.
+    offered again on the next sync and is not the project's fault, so it
+    never counts against the retry limit. A build that runs and breaks is
+    mine to look at.
     """
     tail = _tail(log)
     blocked = ship.agent_blocked(tail)
@@ -244,10 +255,10 @@ def _failed(job_id: str, repo: str, picked: str, log: Path, code: int,
             job_id, "agent_down", repo=repo,
             title="%s could not run %s (%s)" % (picked, repo, blocked),
             detail=("The build did not start properly, so this is not the "
-                    "project failing. It is still queued and will be tried "
-                    "again on the next morning run.\n"
+                    "project failing. It is still queued and will be offered "
+                    "again on the next sync.\n"
                     "Last output:\n  %s" % tail.strip()[-400:]),
-            options=["wait - leave it queued for the next 9am run",
+            options=["wait - leave it queued for the next sync",
                      "claude - build it with claude on this machine",
                      "claude cloud - build it in a cloud session"])
         return d
@@ -369,19 +380,24 @@ def _verdict(job_id: str, kind: str) -> str:
     return ""
 
 
-def run_pending(limit: int = 3) -> list[dict]:
-    """Build everything queued, up to `limit` of them at once.
+def _jid(j: dict) -> str:
+    return j.get("job_id") or Path(j["file"]).stem
 
-    They run together rather than one after another. Each is a separate agent
-    in its own directory with nothing to fight over, so three at a time turns
-    a three hour morning into a one hour one.
 
-    The cap is applied after the skipping, not before. Slicing the queue
-    first means three finished jobs at the front hide everything behind them.
+def _eligible(only: list[str] | None = None) -> list[tuple[dict, str]]:
+    """Queued jobs a build may start on now, each with the agent to use.
+
+    The queue card offers from this and run_pending builds from it, so what
+    I am asked about and what gets built cannot drift apart.
     """
-    chosen: list[tuple] = []
+    if isinstance(only, str):
+        # A lone id as text would otherwise match as a substring.
+        only = [only]
+    chosen: list[tuple[dict, str]] = []
     for j in jobs.pending():
-        jid = j.get("job_id") or Path(j["file"]).stem
+        jid = _jid(j)
+        if only is not None and jid not in only:
+            continue
         st = _settle(read_state(jid))
         if st.get("state") in ("running", "done"):
             continue
@@ -398,8 +414,23 @@ def run_pending(limit: int = 3) -> list[dict]:
             # project, and it comes out worse than either.
             continue
         chosen.append((j, agent))
-        if len(chosen) >= limit:
-            break
+    return chosen
+
+
+def run_pending(limit: int = 3, only: list[str] | None = None) -> list[dict]:
+    """Build everything queued, up to `limit` of them at once.
+
+    They run together rather than one after another. Each is a separate agent
+    in its own directory with nothing to fight over, so three at a time turns
+    three hours of building into one.
+
+    The cap is applied after the skipping, not before. Slicing the queue
+    first means three finished jobs at the front hide everything behind them.
+
+    With `only`, just those job ids are considered, and every rule above
+    still applies to them. Naming a job cannot get it past one.
+    """
+    chosen = _eligible(only)[:max(0, limit)]
 
     results: list[dict] = []
     lock = threading.Lock()
@@ -417,12 +448,213 @@ def run_pending(limit: int = 3) -> list[dict]:
     return results
 
 
+def _minutes(seconds: float) -> int:
+    return max(1, int(round(seconds / 60)))
+
+
+def _hm(minutes: int) -> str:
+    h, m = divmod(int(minutes), 60)
+    if not h:
+        return "%d min" % m
+    return "%d h %d min" % (h, m) if m else "%d h" % h
+
+
+def _timings() -> tuple[list[float], list[float]]:
+    """Seconds each finished build took, and each timed publishing run."""
+    builds: list[float] = []
+    ships: list[float] = []
+    for f in RUNS.glob("*.json"):
+        try:
+            d = json.loads(f.read_text(encoding="utf-8"))
+            took = float(d.get("finished") or 0) - float(d.get("started") or 0)
+            if d.get("state") == "done" and d.get("started") and took > 0:
+                builds.append(took)
+            took = (float(d.get("shipped_at") or 0)
+                    - float(d.get("ship_started") or 0))
+            if d.get("ship_started") and took > 0:
+                ships.append(took)
+        except Exception:
+            continue
+    return builds, ships
+
+
+# The paragraph jobs.build_prompt writes after the one-liner. A brief with no
+# one-liner has this as its next line, and it says nothing about the project.
+_BOILERPLATE = "I want a working repository"
+_SIZE = re.compile(r"Rough size:\s*about\s*(\d+(?:\.\d+)?)\s*hours?\b")
+
+
+def _what(job: dict, text: str) -> str:
+    """One line on what the project is: the brief's name and its one-liner."""
+    lines = [" ".join(line.split()) for line in text.splitlines()]
+    name, line = "", ""
+    for i, row in enumerate(lines):
+        if row.startswith("# Build:"):
+            name = row[len("# Build:"):].strip()
+            after = next((x for x in lines[i + 1:] if x), "")
+            if not after.startswith(("#", _BOILERPLATE)):
+                line = after
+            break
+    name = name or job.get("repo_name") or job.get("job_id") or "project"
+    what = f"{name}: {line}" if line else name
+    if len(what) > 200:
+        what = what[:197].rsplit(" ", 1)[0] + "..."
+    return what
+
+
+def estimate(job: dict) -> dict:
+    """Rough minutes to build and publish one queued job, and their source.
+
+    The times are the median of what past runs actually took here, so every
+    number on the card can be traced to a run record. Until something has
+    been timed the defaults above stand in, and `basis` says which it was.
+    """
+    builds, ships = _timings()
+    if builds:
+        build_min = _minutes(statistics.median(builds))
+        basis = ["Build time is the median of %d past build%s."
+                 % (len(builds), "" if len(builds) == 1 else "s")]
+    else:
+        build_min = DEFAULT_BUILD_MIN
+        basis = ["Build time is a default of %d min, because no build has "
+                 "finished yet." % build_min]
+    if ships:
+        ship_min = _minutes(statistics.median(ships))
+        basis.append("Publishing time is the median of %d past run%s."
+                     % (len(ships), "" if len(ships) == 1 else "s"))
+    else:
+        ship_min = DEFAULT_SHIP_MIN
+        basis.append("Publishing time is a default of %d min, because no "
+                     "publish has been timed yet." % ship_min)
+
+    try:
+        text = Path(job.get("file") or "").read_text(encoding="utf-8")
+    except Exception:
+        text = ""
+    size = _SIZE.search(text)
+    return {"build_min": build_min, "ship_min": ship_min,
+            "total_min": build_min + ship_min, "basis": " ".join(basis),
+            "size_hours": float(size.group(1)) if size else None,
+            "what": _what(job, text)}
+
+
+def _queue_card() -> dict:
+    for q in questions.all_questions():
+        if q.get("job_id") == QUEUE_JOB and q.get("kind") == "queue":
+            return q
+    return {}
+
+
+def offer_queue(at_once: int = 3) -> dict | None:
+    """Ask which queued projects to build, on one card that lists them all.
+
+    Nothing is built until I answer it, and consented() is what reads the
+    answer. Each project gets a rough time, and the card's total allows for
+    `at_once` of them building together, the way run_consented does it.
+    Returns the card as it now stands, or None when nothing can be built.
+    """
+    card = _queue_card()
+    ready = _eligible()
+    if not ready:
+        # Only a card still waiting on me comes down. One I have answered
+        # stays for consented() to read, even with nothing left to build.
+        if card and not card.get("answered_at"):
+            questions.clear(QUEUE_JOB, "queue")
+        return None
+    if card.get("answered_at"):
+        # Answered and not yet read. Asking again would wipe the answer out
+        # before the next sync could act on it.
+        return card
+
+    projects = []
+    basis = ""
+    for n, (j, _agent) in enumerate(ready, 1):
+        est = estimate(j)
+        basis = est["basis"]
+        projects.append({"n": n, "job_id": _jid(j),
+                         "repo": j.get("repo_name") or _jid(j),
+                         "what": est["what"], "minutes": est["total_min"],
+                         "size_hours": est["size_hours"]})
+    at_once = max(1, int(at_once))
+    mins = [p["minutes"] for p in projects]
+    total = sum(max(mins[i:i + at_once]) for i in range(0, len(mins), at_once))
+
+    lines = ["Nothing here is built until you answer. Tick the ones you want "
+             "on the card in the Kiln UI, or answer all or none.", ""]
+    for p in projects:
+        size = ("; the brief puts it at about %g hours of work"
+                % p["size_hours"] if p["size_hours"] else "")
+        lines.append("[%d] %s" % (p["n"], p["what"]))
+        lines.append("    about %s to build and publish%s"
+                     % (_hm(p["minutes"]), size))
+    n = len(projects)
+    lines.append("")
+    if n > 1:
+        lines.append("All of them: about %s, up to %d at a time."
+                     % (_hm(total), at_once))
+    lines += [basis, "The answer is read at the start of the next sync."]
+    return questions.ask(
+        QUEUE_JOB, "queue",
+        title="%d project%s queued to build, about %s%s"
+              % (n, "" if n == 1 else "s", _hm(total),
+                 "" if n == 1 else " for all of them"),
+        detail="\n".join(lines), options=["all", "none"],
+        extra={"projects": projects, "total_min": total})
+
+
+def consented() -> dict:
+    """Read my answer to the queue card, then take the card down.
+
+    all is every project the card listed that can still be built, none is
+    none, and ticked ids (how one and a few arrive) are those of them that
+    can still be built. Taking the card down means the next sync offers
+    whatever is left.
+    """
+    card = _queue_card()
+    if not card.get("answered_at"):
+        return {"answered": False, "choice": "", "job_ids": []}
+    choice = str(card.get("answer") or "").strip()
+    word = (choice.lower().split() or [""])[0]
+    ready = [_jid(j) for j, _agent in _eligible()]
+    listed = [str(p.get("job_id")) for p in card.get("projects") or []
+              if isinstance(p, dict)]
+    picked = card.get("picked") or []
+    picked = {str(x) for x in ([picked] if isinstance(picked, str) else picked)}
+    if word == "none":
+        ids = []
+    elif word == "all":
+        # All means all of what the card showed me. A job queued after it
+        # was asked waits for the next card instead of riding in on this.
+        ids = [jid for jid in ready if jid in listed] if listed else ready
+    else:
+        ids = [jid for jid in ready if jid in picked]
+    questions.clear(QUEUE_JOB, "queue")
+    return {"answered": True, "choice": choice, "job_ids": ids}
+
+
+def run_consented(job_ids: list[str], at_once: int = 3) -> list[dict]:
+    """Build the jobs I said yes to, `at_once` at a time, each of them once.
+
+    Every batch goes through run_pending and is waited for before the next
+    one starts, so its rules are checked again for each batch.
+    """
+    if isinstance(job_ids, str):
+        job_ids = [job_ids]
+    at_once = max(1, int(at_once))
+    todo = list(dict.fromkeys(job_ids))
+    results: list[dict] = []
+    while todo:
+        batch, todo = todo[:at_once], todo[at_once:]
+        results += run_pending(limit=at_once, only=batch)
+    return results
+
+
 def needs_ship() -> list[dict]:
     """Builds that finished and have not been through the review chain.
 
-    The whole run directory is checked every pass, not just what was built
-    this morning, so a project that finished before any of this existed
-    still gets picked up.
+    The whole run directory is checked every pass, not just what the
+    current sync built, so a project that finished before any of this
+    existed still gets picked up.
     """
     out = []
     for f in sorted(RUNS.glob("*.json")):
@@ -475,7 +707,10 @@ def _ship_one(d: dict, public: bool, results: list, lock) -> None:
     job = jobs.head_of(found["file"]) if found else {}
     job.setdefault("repo_name", d.get("repo") or workdir.name)
 
-    _write_state(jid, shipping=time.time())
+    began = time.time()
+    # shipping goes back to 0 when the chain ends, so the start is kept a
+    # second time for estimate() to time the chain by.
+    _write_state(jid, shipping=began, ship_started=began)
     r = ship.ship(workdir, job, public=public)
     url = (r.get("publish") or {}).get("url", "")
     attempts = int(d.get("ship_attempts") or 0) + 1

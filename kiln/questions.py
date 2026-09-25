@@ -1,13 +1,13 @@
-"""Things the nightly run cannot decide on its own.
+"""Things a sync cannot decide on its own.
 
-The run happens at nine in the morning while I am asleep, so it cannot stop
-and ask me anything. When it hits a decision that is mine to make, it writes
-the question down here and carries on with the rest of the queue. The next
-run prints every open question before it does anything else, and the UI shows
-them as cards I can answer by clicking.
+Syncs run twice a day and nobody is at the keyboard while they do, so a sync
+cannot stop and ask me anything. When it hits a decision that is mine to
+make, it writes the question down here and carries on with the rest of the
+queue. The next sync prints every open question before it does anything
+else, and the UI shows them as cards I can answer by clicking.
 
 One question per job per kind. Asking the same thing twice because the agent
-was down two mornings running is noise, not information.
+was down for two syncs running is noise, not information.
 """
 from __future__ import annotations
 
@@ -20,6 +20,12 @@ from . import config
 QUESTIONS = config.DATA / "jobs" / "questions"
 QUESTIONS.mkdir(parents=True, exist_ok=True)
 
+# What every question is made of. A card that carries more, like the build
+# queue's list of projects, puts it beside these and can never replace one.
+# picked is here too because only an answer may set it.
+_OWN = ("id", "job_id", "kind", "repo", "title", "detail", "options",
+        "asked_at", "asked_count", "answered_at", "answer", "note", "picked")
+
 
 def _path(job_id: str, kind: str) -> Path:
     safe = "".join(c if c.isalnum() or c in "._-" else "-" for c in job_id)
@@ -27,8 +33,13 @@ def _path(job_id: str, kind: str) -> Path:
 
 
 def ask(job_id: str, kind: str, title: str, detail: str,
-        options: list[str] | None = None, repo: str = "") -> dict:
-    """Record a question. Re-asking an open one only refreshes its detail."""
+        options: list[str] | None = None, repo: str = "",
+        extra: dict | None = None) -> dict:
+    """Record a question. Re-asking an open one refreshes its detail and extra.
+
+    `extra` is stored at the top level of the question, for a card that needs
+    more than words to be answered.
+    """
     p = _path(job_id, kind)
     now = time.time()
     q = {"id": p.stem, "job_id": job_id, "kind": kind, "repo": repo,
@@ -48,10 +59,15 @@ def ask(job_id: str, kind: str, title: str, detail: str,
             q["asked_at"] = old.get("asked_at", now)
             q["asked_count"] = int(old.get("asked_count") or 0) + 1
             # A repeat that only carries fresh detail must not strip the
-            # choices off the card. Without this the second morning of the
+            # choices off the card. Without this the second sync of the
             # same outage leaves me a question and no way to answer it.
             q["options"] = options or old.get("options") or []
             q["title"] = title or old.get("title") or ""
+            if extra is None:
+                extra = {k: v for k, v in old.items() if k not in _OWN}
+    for k, v in (extra or {}).items():
+        if k not in _OWN:
+            q[k] = v
     p.write_text(json.dumps(q, indent=2), encoding="utf-8")
     return q
 
@@ -70,13 +86,19 @@ def open_questions() -> list[dict]:
     return [q for q in all_questions() if not q.get("answered_at")]
 
 
-def answer(qid: str, choice: str, note: str = "") -> dict:
+def answer(qid: str, choice: str, note: str = "",
+           picked: list[str] | None = None) -> dict:
+    """Record my answer. `picked` holds the ids I ticked, if the card had any."""
     p = QUESTIONS / f"{qid}.json"
     if not p.exists():
         return {"error": "no such question: %s" % qid}
     q = json.loads(p.read_text(encoding="utf-8"))
     q["answer"] = choice
     q["note"] = note
+    # A lone id sent as text would otherwise be split into its letters.
+    if isinstance(picked, str):
+        picked = [picked]
+    q["picked"] = [str(x) for x in picked or []]
     q["answered_at"] = time.time()
     p.write_text(json.dumps(q, indent=2), encoding="utf-8")
     return q
