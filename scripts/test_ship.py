@@ -136,7 +136,7 @@ def test_dedup() -> None:
 
 # --- questions the run parks for me --------------------------------------
 def test_questions() -> None:
-    print("questions the morning run cannot answer on its own")
+    print("questions a sync cannot answer on its own")
     with tempfile.TemporaryDirectory() as t:
         old = questions.QUESTIONS
         questions.QUESTIONS = Path(t) / "questions"
@@ -171,7 +171,7 @@ def test_questions() -> None:
             questions.QUESTIONS = old
 
 
-# --- which jobs the morning run actually picks ---------------------------
+# --- which jobs a build run actually picks --------------------------------
 def _job_file(folder: Path, jid: str, item: str) -> None:
     folder.mkdir(parents=True, exist_ok=True)
     (folder / f"{jid}.md").write_text(
