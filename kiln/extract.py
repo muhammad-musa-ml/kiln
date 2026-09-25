@@ -22,6 +22,11 @@ GATE_RE = re.compile(
 )
 LINKBIO_RE = re.compile(r"link\s+in\s+(?:my\s+)?bio", re.I)
 
+# Slides sent in one read. Instagram allows twenty in a carousel; this was
+# sixteen, while the prompt still told the model to cover all eighteen of
+# an eighteen-slide post.
+MAX_SLIDES = 20
+
 PROMPT = """You are reading a saved social-media post so it can be USED later,
 not just remembered. Be exhaustive: this is the only pass over the pixels.
 
@@ -70,7 +75,11 @@ def _context_block(acq: Acquired, user_note: str = "") -> str:
     if acq.caption:
         bits.append(f'Caption as written by the creator: "{acq.caption}"')
     if acq.slides:
-        bits.append(f"This is a {len(acq.slides)}-slide carousel. Cover every slide.")
+        n, sent = len(acq.slides), min(len(acq.slides), MAX_SLIDES)
+        bits.append(f"This is a {n}-slide carousel. Cover every slide." if sent == n else
+                    f"This is a {n}-slide carousel and you are given the first {sent}. "
+                    f"Cover every one you are given, and say in could_not that the "
+                    f"last {n - sent} were not sent.")
     if acq.focus_slide:
         bits.append(
             f"NOTE: the person saving this linked directly to slide {acq.focus_slide} - "
@@ -104,10 +113,10 @@ def _context_block(acq: Acquired, user_note: str = "") -> str:
     return "\n".join(bits)
 
 
-def _media_for(acq: Acquired, limit: int = 16) -> list[Path]:
+def _media_for(acq: Acquired, limit: int | None = None) -> list[Path]:
     if acq.video:
         return [Path(acq.video)]
-    return [Path(p) for p in acq.slides[:limit]]
+    return [Path(p) for p in acq.slides[:limit or MAX_SLIDES]]
 
 
 def _union(a: dict, b: dict) -> dict:

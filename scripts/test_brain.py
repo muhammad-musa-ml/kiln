@@ -965,6 +965,16 @@ def test_first_pass_reports_and_lessons():
           bool(extract._floor_for(1, video=True)(blank))
           and not extract._floor_for(1, video=True)(spoken))
     check("a page with no media has no floor", extract._floor_for(0) is None)
+    from kiln.acquire import Acquired
+    many = Acquired(url="u", kind="instagram", slides=["s%d.jpg" % i for i in range(23)])
+    ctx = extract._context_block(many)
+    check("a carousel longer than a read holds is told which slides it got",
+          len(extract._media_for(many)) == 20 and "first 20" in ctx and "last 3" in ctx,
+          ctx[:200])
+    eighteen = Acquired(url="u", kind="instagram", slides=["s%d.jpg" % i for i in range(18)])
+    check("and an eighteen-slide one is sent all eighteen",
+          len(extract._media_for(eighteen)) == 18
+          and "Cover every slide." in extract._context_block(eighteen))
 
     print("re-firing and retrying")
     reset_db()
