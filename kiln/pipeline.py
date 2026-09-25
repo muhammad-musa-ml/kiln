@@ -36,6 +36,12 @@ _ACTION_FALLBACK = {
 # One filter, and it says what to do rather than only that something broke.
 REDO = "redo"
 
+# How many times a link that failed gets tried again before it stops
+# asking. The usual cause is something transient at the far end, so a
+# couple of retries recovers most of them without grinding forever on
+# one that is genuinely gone.
+RETRY_READS = 3
+
 
 def derive_places(*texts: str) -> list[str]:
     hay = " ".join(t or "" for t in texts).lower()
@@ -126,6 +132,26 @@ def derive_action(note: dict, user_do: str = "", media_kind: str = "") -> str:
     return _ACTION_FALLBACK.get((note.get("kind") or "").lower(), "reference")
 
 
+def _came_back_empty(note: dict, acq) -> bool:
+    """Did the read actually get anything, or does it only look like it did?
+
+    This used to be `not (sections or summary)`. An eleven slide carousel
+    came back with no sections, no on-screen text, no links and no entities,
+    and one summary clipped mid-sentence because the model ran out of room.
+    The summary satisfied the or, so the item was filed as processed, shown
+    with a title, and never surfaced by anything again.
+
+    A post made of pictures that yields no sections and no on-screen text has
+    not been read, whatever else came back with it.
+    """
+    if not (note.get("sections") or note.get("summary")):
+        return True
+    pictures = len(getattr(acq, "slides", []) or []) + (1 if getattr(acq, "video", "") else 0)
+    if pictures >= 2 and not note.get("sections") and not note.get("onscreen_text"):
+        return True
+    return False
+
+
 def process_url(url: str, *, user_note: str = "", user_do: str = "",
                 user_tags: list[str] | None = None, urgent: bool = False,
                 deadline: str = "", source: str = "manual",
@@ -138,14 +164,22 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
     t_start = time.time()
 
     existing = store.get_item(conn, iid)
+    tried = int((existing or {}).get("attempts") or 0)
     if existing and existing.get("processed_at") and not force:
-        return existing
+        # A read that failed is not a read that is finished. Every reel in
+        # the 2026-09-24 run set processed_at on its way out of the failure
+        # branch, which meant the next run skipped it, and the one after
+        # that, for good. Give a broken one a few more goes before it stops
+        # asking, since the usual cause is something transient at the far end.
+        if not (existing.get("error") and tried < RETRY_READS):
+            return existing
 
     rec: dict[str, Any] = {
         "id": iid, "url": url, "source": source, "status": "triage",
         "user_note": user_note, "user_do": user_do,
         "urgent": 1 if urgent else 0, "deadline": deadline,
         "created_at": (existing or {}).get("created_at") or time.time(),
+        "attempts": tried + 1,
     }
     store.upsert_item(conn, rec)
 
@@ -219,7 +253,7 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
     # An item that came back with nothing is not done, it is stuck. Working
     # this out before the tagging rather than after it, because a bucket
     # derived from an empty note is a guess, and redo is the truth.
-    empty = not (note.get("sections") or note.get("summary"))
+    empty = _came_back_empty(note, acq)
 
     action = REDO if empty else derive_action(note, user_do, media_kind=acq.kind)
     topics = normalise_topics(note.get("topics") or [])

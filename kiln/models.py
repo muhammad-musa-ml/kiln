@@ -105,8 +105,29 @@ def _record(model: str) -> None:
         _save_ledger(d)
 
 
+def _daily_quota_gone(err: str) -> bool:
+    """Is this 429 the day being over, or just this minute being busy?
+
+    Gemini answers both with the same status code, and the difference is
+    worth a whole day of work: a per-minute limit clears in seconds, a daily
+    one does not clear until midnight. The body says which. When it does not
+    say, assume the minute, because retrying costs seconds and burning the
+    rung costs every item that comes after it.
+    """
+    low = (err or "").lower()
+    daily = ("perday", "per day", "per_day", "requests per day",
+             "daily limit", "quota_limit_value", "generate_requests_per_model_per_day")
+    minute = ("perminute", "per minute", "per_minute", "requests per minute",
+              "rate limit")
+    if any(k in low for k in daily):
+        return True
+    if any(k in low for k in minute):
+        return False
+    return False
+
+
 def _burn(model: str) -> None:
-    """Mark a model as exhausted for today after a hard 429."""
+    """Mark a model as out for the rest of the day. Daily quota only."""
     with _lock:
         d = _load_ledger()
         d["counts"][model] = config.FREE_TIER_RPD.get(model, 10**6)
@@ -272,17 +293,21 @@ def _call_gemini(model: str, prompt: str, media: list[Path], *,
     auth = {"x-goog-api-key": config.GEMINI_API_KEY}
 
     t0 = time.time()
-    # 503 is transient, retry it. 429 is quota, drop to the next rung.
+    # 503 is transient. So is most of what comes back as 429: the API uses
+    # the same code for "too many this minute" and "nothing left today", and
+    # treating the first as the second cost a whole day of good reads once.
+    # One blip at nine in the morning wrote the full daily budget into the
+    # ledger and every item after it fell to a weaker rung.
     out, err = _post(url, payload, timeout, auth)
-    for backoff in (4, 9):
-        if out is not None or "HTTP 503" not in err:
+    for backoff in (4, 9, 20):
+        if out is not None or not ("HTTP 503" in err or "HTTP 429" in err):
             break
         time.sleep(backoff)
         out, err = _post(url, payload, timeout, auth)
     secs = time.time() - t0
 
     if out is None:
-        if "HTTP 429" in err:
+        if "HTTP 429" in err and _daily_quota_gone(err):
             # Grounded search has its own much smaller quota, so don't let a
             # grounded 429 burn the budget for plain calls on the same model.
             _burn(model + "#grounded" if grounded else model)
@@ -339,11 +364,14 @@ def _call_ollama(model: str, prompt: str, media: list[Path], *,
             )
         images.append(base64.b64encode(p.read_bytes()).decode())
 
+    # Pictures are expensive in context. 16k left an eleven slide carousel
+    # 130 tokens to answer in, which is a title and nothing else.
+    ctx_window = 65536
     payload: dict[str, Any] = {
         "model": model,
         "prompt": prompt,
         "stream": False,
-        "options": {"temperature": 0.15, "num_ctx": 16384},
+        "options": {"temperature": 0.15, "num_ctx": ctx_window},
     }
     if images:
         payload["images"] = images
@@ -362,6 +390,18 @@ def _call_ollama(model: str, prompt: str, media: list[Path], *,
     text = (out.get("response") or "").strip() or (out.get("thinking") or "").strip()
     tin = out.get("prompt_eval_count", 0) or 0
     tout = out.get("eval_count", 0) or 0
+
+    # An answer that exactly fills the window was cut off, not finished.
+    # Measured on an eleven slide carousel: in=16254 out=130 and in=16264
+    # out=120, both landing on 16384 to the byte. The pictures ate the whole
+    # window and left room for a title and half a sentence, and that half
+    # sentence was stored as if it were the read.
+    if tin and tout and tin + tout >= ctx_window - 4:
+        return ModelResult(
+            False, text=text, provider=prov, model=model, seconds=secs,
+            tokens_in=tin, tokens_out=tout,
+            error=(f"ran out of room: the prompt used {tin} of {ctx_window} "
+                   f"tokens and the answer was cut off after {tout}"))
 
     data = parse_json_loose(text) if want_json else None
     if want_json and data is None:

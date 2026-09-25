@@ -37,25 +37,31 @@ below carry the file and line where each was proven.
 
 ---
 
-## Phase 1 — Unblock. Nothing else matters until these land.
+## Phase 1 — Unblock. COMPLETE.
 
-- [ ] **1.1 Reel download** (`kiln/acquire.py`). Capture `video/mp4` responses
-      via `page.on("response")`, strip `bytestart`/`byteend`, refetch, keep the
-      largest playable file. Proven working by hand against
-      `/reel/DdphNPwqFbl/` (4.2 MB, valid `ftyp`).
-- [ ] **1.2 Stop swallowing acquisition failures** (`acquire.py:209`). The bare
-      `except Exception: pass` around the video download turned a specific
-      protocol error into "found no media". Record the real reason.
-- [ ] **1.3 Failed items must be retryable** (`pipeline.py:177` sets
+- [x] **1.1 Reel download** (`kiln/acquire.py`). DONE. mp4 responses are
+      captured via `page.on("response")`, `bytestart`/`byteend` stripped, the
+      whole asset refetched. Picture and sound arrive as separate renditions
+      and are muxed with ffmpeg. Measured end to end on `/reel/DdphNPwqFbl/`:
+      12.7 MB, vp9 + aac, 37.06s against the 37.07s the page reports.
+      Carousels re-checked and unaffected.
+- [x] **1.2 Stop swallowing acquisition failures** (`acquire.py`). DONE. The
+      real reason is recorded and surfaced instead of one sentence covering
+      three different causes. Found and fixed alongside: OpenGraph serves no
+      tags at all for a `/reel/` url, so every reel also lost its caption,
+      owner and date. Those are read off the open page now, and the caption
+      is where the company names and links live.
+      Pinned by `scripts/test_reel_media.py` (16 checks).
+- [x] **1.3 Failed items must be retryable** (`pipeline.py:177` sets
       `processed_at` on the failure path; `pipeline.py:141` then skips forever).
-- [ ] **1.4 A 429 must not burn the day** (`models.py:285`). Retry with backoff.
+- [x] **1.4 A 429 must not burn the day** (`models.py:285`). Retry with backoff.
       Only burn on a repeated failure or an explicit daily-quota message.
       Measured: one burn wrote `450` into the ledger on a day with 2 real calls.
-- [ ] **1.5 Context-window guard** (`models.py:346`, `num_ctx: 16384`). Measured
+- [x] **1.5 Context-window guard** (`models.py:346`, `num_ctx: 16384`). Measured
       `in=16254 out=130` and `in=16264 out=120`, both exactly 16384. Cap images
       per call, raise the window, and reject any result where in+out equals the
       window.
-- [ ] **1.6 An empty read must not file as a success** (`pipeline.py:222`). A
+- [x] **1.6 An empty read must not file as a success** (`pipeline.py:222`). A
       clipped summary satisfied the `or`, so a 0-section, 0-link, 0-entity read
       of an 11-slide carousel was filed `triage`/`reference` with no error.
 
