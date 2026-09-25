@@ -35,12 +35,24 @@ ENRICH_FIELDS = ("what_it_is", "current_state", "why_it_matters",
                  "deadline_public", "requirements", "how_to_stand_out",
                  "useful_links", "next_action")
 
+# What the follow-up produced that a stranger may see: the answer, the files
+# and where the facts came from. Why it ran, what it could not do, and which
+# models did the work stay here, the same as the read's own provenance.
+FOLLOWUP_FIELDS = ("answer_html", "answered", "artifacts", "sources",
+                   "extra_sections", "next_action")
+ARTIFACT_FIELDS = ("file", "title", "about", "kind", "pages")
+# No HTML among them: a page a model wrote would run its scripts on the
+# site's own origin. When a document's PDF could not be made, it stays local.
+PUBLISH_KINDS = {".pdf", ".md", ".csv", ".txt", ".json"}
+
 # Never exported, for the avoidance of doubt. Enforced by the whitelist
 # above; listed here so the audit can assert their absence.
 NEVER = ("user_note", "user_do", "status", "urgent", "deadline", "cost_usd",
          "error", "media_dir", "pdf_path", "source", "processed_at",
          "created_at", "updated_at", "note_json", "enrich_json", "gate_json",
-         "_meta", "_install_preview", "attempts", "quota", "local_token")
+         "_meta", "_install_preview", "attempts", "quota", "local_token",
+         "claude_json", "claude_state", "claude_attempts", "missing", "run_dir",
+         "unit_items", "asked")
 
 _ABS_PATH = re.compile(r"[A-Za-z]:\\\\?[^\s\"']+|/(?:home|Users)/[^\s\"']+")
 _KEYISH = re.compile(r"AIza[0-9A-Za-z_\-]{10,}|sk-[0-9A-Za-z_\-]{10,}"
@@ -84,7 +96,12 @@ def public_item(full: dict) -> dict:
                      "keyword": gate.get("keyword", "")}
 
     tags = full.get("tags") or {}
-    d["tags"] = {k: v for k, v in tags.items() if k in ("action", "topic", "place")}
+    d["tags"] = {k: v for k, v in tags.items()
+                 if k in ("action", "topic", "place", "section")}
+
+    fu = followup(full)
+    if fu:
+        d["followup"] = fu
 
     d["links"] = [{"url": l.get("url", ""), "label": l.get("label", ""),
                    "alive": bool(l.get("alive")),
@@ -113,6 +130,37 @@ def public_item(full: dict) -> dict:
     return d
 
 
+def followup(full: dict) -> dict:
+    """The part of an item's answer that is safe to publish, or {}.
+
+    The follow-up's answer when there is one, otherwise the first pass's
+    answer to the instruction. Both are stored as Markdown and rendered here,
+    every time, so a fix to the renderer reaches every answer already stored
+    rather than only the next one.
+    """
+    from . import artifacts
+
+    c = full.get("claude") or {}
+    enr = full.get("enrich") or {}
+    out: dict = {}
+    if c.get("answer"):
+        out["answer_html"] = artifacts.markdown(str(c["answer"]))
+        out["answered"] = c.get("answered", "")
+    elif enr.get("answer"):
+        out["answer_html"] = artifacts.markdown(str(enr["answer"]))
+        out["answered"] = enr.get("answered", "")
+    arts = [{k: a[k] for k in ARTIFACT_FIELDS if a.get(k) not in (None, "")}
+            for a in c.get("artifacts") or []
+            if a.get("file") and not a.get("error")
+            and Path(str(a["file"])).suffix.lower() in PUBLISH_KINDS]
+    if arts:
+        out["artifacts"] = arts
+    for k in ("sources", "extra_sections", "next_action"):
+        if c.get(k):
+            out[k] = c[k]
+    return {k: scrub(v) for k, v in out.items() if k in FOLLOWUP_FIELDS}
+
+
 def build(out: Path = OUT, copy_media: bool = True) -> dict:
     conn = store.connect()
     rows = store.list_items(conn, limit=10000)
@@ -121,6 +169,7 @@ def build(out: Path = OUT, copy_media: bool = True) -> dict:
         full = store.get_item(conn, r["id"])
         if full:
             items.append(public_item(full))
+    tree = store.sections(conn)
     conn.close()
 
     # Clear the CONTENTS, never the directory itself. On Windows a process
@@ -145,11 +194,22 @@ def build(out: Path = OUT, copy_media: bool = True) -> dict:
             for v in (it.get("tags") or {}).get(facet, []) or []:
                 facets[key][v] = facets[key].get(v, 0) + 1
 
+    # The section tree, with names and counts only. What a section is for is
+    # written from my instruction, so it stays here like the instruction does.
+    filed = [set((it.get("tags") or {}).get("section") or []) for it in items]
+    sections = []
+    for s in tree:
+        n = sum(1 for f in filed if any(v == s["id"] or v.startswith(s["id"] + "/")
+                                        for v in f))
+        if n:
+            sections.append({"id": s["id"], "name": s["name"],
+                             "parent": s.get("parent") or "", "count": n})
+
     (out / "data" / "items.json").write_text(
         json.dumps({"items": items, "built": built}, ensure_ascii=False, indent=1),
         encoding="utf-8")
     (out / "data" / "facets.json").write_text(
-        json.dumps({"total": len(items), **facets,
+        json.dumps({"total": len(items), **facets, "sections": sections,
                     "by_status": {}, "gated": sum(1 for i in items if i.get("gate")),
                     "dead_links": sum(1 for i in items for l in i.get("links", []) if not l["alive"])},
                    ensure_ascii=False, indent=1),
@@ -195,7 +255,17 @@ def build(out: Path = OUT, copy_media: bool = True) -> dict:
 
     copied = 0
     if copy_media:
+        from . import artifacts
         for it in items:
+            # Documents the follow-up made go under files/, so one called
+            # doc.pdf can never overwrite the carousel's own bound PDF.
+            for a in (it.get("followup") or {}).get("artifacts") or []:
+                f = artifacts.item_dir(it["id"]) / a["file"]
+                if f.is_file() and f.suffix.lower() in PUBLISH_KINDS:
+                    dest = out / "media" / it["id"] / "files"
+                    dest.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(f, dest / f.name)
+                    copied += 1
             src = config.MEDIA / _media_key(it)
             if not src.is_dir():
                 continue

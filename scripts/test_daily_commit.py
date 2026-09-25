@@ -72,14 +72,16 @@ def make_repo(base: Path) -> tuple[Path, Path]:
     return repo, origin
 
 
-def load_daily(repo: Path, build: str, morning: bool = False):
+def load_daily(repo: Path, build: str, morning: bool = False,
+               answer: dict | None = None):
     """Import daily.py with kiln faked out and every command sent to `repo`.
 
     The real kiln package creates data dirs and a token file on import and
     probes the local model ports. None of that is under test here.
 
-    Returns the module and a list the fake builder appends to, so a test can
-    say whether the morning work was reached rather than guessing from text.
+    Returns the module and a list the fakes append to, so a test can say
+    what was reached rather than guessing from text. `answer` is what the
+    queue card says when the pass reads it; None means nobody answered.
     """
     calls: list[tuple] = []
     counts = iter([{"total": 0}, {"total": 1}])
@@ -90,23 +92,41 @@ def load_daily(repo: Path, build: str, morning: bool = False):
     ingest.new_items = lambda text, conn: [{"urls": ["https://example.com/a"]}]
     ingest.ingest_text = lambda text, source, conn: iter(
         [{"status": "processed", "url": "https://example.com/a", "title": "a"}])
+    pipeline = types.ModuleType("kiln.pipeline")
+    pipeline.retry_failed = lambda conn: calls.append(("retry",)) or []
+
+    brain = types.ModuleType("kiln.brain")
+    brain.sweep = lambda: calls.append(("claude",)) or {"units": [], "reads": []}
+    brain.render = lambda result: "      nothing needed"
 
     questions = types.ModuleType("kiln.questions")
     questions.open_questions = lambda: []
     questions.render = lambda qs=None: ""
 
-    def build_now(limit=3):
-        calls.append(("build", limit))
+    def consented():
+        calls.append(("read answer",))
+        if answer is None:
+            return {"answered": False, "choice": "", "job_ids": []}
+        return {"answered": True, **answer}
+
+    def build_now(job_ids, at_once=3):
+        calls.append(("build", tuple(job_ids), at_once))
         return []
+
+    def offer(at_once=3):
+        calls.append(("offer", at_once))
+        return {"projects": [{"job_id": "a"}], "total_min": 90}
 
     def ship_now(limit=3):
         calls.append(("ship", limit))
         return []
 
     runner = types.ModuleType("kiln.runner")
-    runner.jobs = types.SimpleNamespace(pending=lambda: [{"file": "a.md"}])
+    runner.jobs = types.SimpleNamespace(pending=lambda: [{"file": "a.md", "job_id": "a"}])
     runner.needs_ship = lambda: [{"job_id": "a"}]
-    runner.run_pending = build_now
+    runner.consented = consented
+    runner.run_consented = build_now
+    runner.offer_queue = offer
     runner.ship_done = ship_now
 
     health = types.ModuleType("kiln.health")
@@ -116,10 +136,11 @@ def load_daily(repo: Path, build: str, morning: bool = False):
     health.beat = lambda mode, added: calls.append(("beat", mode))
 
     kiln = types.ModuleType("kiln")
-    kiln.store, kiln.ingest = store, ingest
+    kiln.store, kiln.ingest, kiln.pipeline, kiln.brain = store, ingest, pipeline, brain
     kiln.questions, kiln.runner, kiln.health = questions, runner, health
     sys.modules.update({"kiln": kiln, "kiln.store": store,
-                        "kiln.ingest": ingest, "kiln.questions": questions,
+                        "kiln.ingest": ingest, "kiln.pipeline": pipeline,
+                        "kiln.brain": brain, "kiln.questions": questions,
                         "kiln.runner": runner, "kiln.health": health})
 
     spec = importlib.util.spec_from_file_location("daily_under_test", HERE / "daily.py")
@@ -149,10 +170,10 @@ def load_daily(repo: Path, build: str, morning: bool = False):
     return daily, calls
 
 
-def sync(repo: Path, inbox: Path, build: str,
-         morning: bool = False) -> tuple[int, str, list]:
-    daily, calls = load_daily(repo, build, morning)
-    argv, sys.argv = sys.argv, ["daily.py", str(inbox)]
+def sync(repo: Path, inbox: Path, build: str, morning: bool = False,
+         answer: dict | None = None, args: list | None = None) -> tuple[int, str, list]:
+    daily, calls = load_daily(repo, build, morning, answer)
+    argv, sys.argv = sys.argv, ["daily.py", str(inbox)] + (args or [])
     out = io.StringIO()
     try:
         with contextlib.redirect_stdout(out):
@@ -186,9 +207,19 @@ def main() -> int:
               staged == ["wip.py"] and unstaged == ["notes.py"],
               f"staged: {staged}, unstaged: {unstaged}")
 
-        check("evening pass does not build or publish repos",
-              [c for c in calls if c[0] in ("build", "ship")] == [],
-              f"called: {calls}")
+        check("with nobody's answer on the card, nothing is built",
+              [c for c in calls if c[0] == "build"] == [], f"called: {calls}")
+        check("the queue is offered instead, three at a time",
+              ("offer", 3) in calls, f"called: {calls}")
+        check("and the answer is read before the offer is refreshed",
+              calls.index(("read answer",)) < calls.index(("offer", 3)), f"called: {calls}")
+        check("Claude's follow-up runs on every pass",
+              ("claude",) in calls, f"called: {calls}")
+        check("failed reads get their retry on every pass",
+              ("retry",) in calls, f"called: {calls}")
+        stages = [line[:5] for line in out.splitlines() if line[:3] in ("[1/", "[2/", "[3/", "[4/", "[5/", "[6/")]
+        check("all six stages print, in order",
+              stages == ["[%d/6]" % n for n in range(1, 7)], f"stages: {stages}")
         check("every pass leaves a heartbeat so a missed run is noticed",
               ("beat", "evening") in calls, f"called: {calls}")
 
@@ -201,18 +232,41 @@ def main() -> int:
               "nothing to push" in out, out.strip()[-300:])
         check("remote unchanged", git(origin, "rev-parse", "master") == head)
 
-        print("morning pass, same repo state")
+        print("an evening pass after I answered the card")
         repo, origin = make_repo(tmp / "three")
         head = git(origin, "rev-parse", "master")
-        code, out, calls = sync(repo, inbox, OLD_BUILD, morning=True)
+        code, out, calls = sync(repo, inbox, OLD_BUILD, morning=False,
+                                answer={"choice": "all", "job_ids": ["a"]})
         check("sync returns 0", code == 0, out.strip()[-300:])
-        check("morning pass builds the queue and then publishes",
+        check("what I said yes to is built, at any hour, then published",
               [c for c in calls if c[0] in ("build", "ship")]
-              == [("build", 3), ("ship", 3)], f"called: {calls}")
-        check("and records it as a morning run",
-              ("beat", "morning") in calls, f"called: {calls}")
+              == [("build", ("a",), 3), ("ship", 3)], f"called: {calls}")
         check("a site that did not change is still not pushed",
               git(origin, "rev-parse", "master") == head)
+
+        print("a morning pass that I answered none on")
+        repo, origin = make_repo(tmp / "five")
+        code, out, calls = sync(repo, inbox, OLD_BUILD, morning=True,
+                                answer={"choice": "none", "job_ids": []})
+        check("none builds nothing", [c for c in calls if c[0] == "build"] == [],
+              f"called: {calls}")
+        check("and records it as a morning run",
+              ("beat", "morning") in calls, f"called: {calls}")
+
+        print("builds switched off for one run")
+        repo, origin = make_repo(tmp / "six")
+        code, out, calls = sync(repo, inbox, OLD_BUILD, args=["--builds", "no"],
+                                answer={"choice": "all", "job_ids": ["a"]})
+        check("--builds no neither builds nor reads the answer",
+              not [c for c in calls if c[0] in ("build", "read answer", "offer")],
+              f"called: {calls}")
+
+        print("building everything without asking, by hand")
+        repo, origin = make_repo(tmp / "seven")
+        code, out, calls = sync(repo, inbox, OLD_BUILD, args=["--builds", "yes"])
+        check("--builds yes builds the whole queue without reading a card",
+              ("build", ("a",), 3) in calls and ("read answer",) not in calls,
+              f"called: {calls}")
 
         print("the site is rebuilt even when the inbox had nothing new")
         repo, origin = make_repo(tmp / "four")

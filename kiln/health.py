@@ -123,7 +123,8 @@ def check_items(conn) -> list[dict]:
     if redo:
         out.append(_finding("info", "%d link(s) tagged redo" % len(redo),
                             "\n".join(redo[:5]),
-                            "they could not be read; re-fire when you want"))
+                            "they could not be read; each is retried on later "
+                            "syncs up to three times, or re-fire it by hand"))
     if errored:
         out.append(_finding("info", "%d item(s) carry an error" % len(errored),
                             "\n".join(errored[:5])))
@@ -132,6 +133,57 @@ def check_items(conn) -> list[dict]:
             "ask", "%d item(s) stuck in the inbox for over a week" % len(stuck),
             "\n".join(stuck[:5]),
             "re-fire them, or drop them"))
+    return out
+
+
+def check_follow_ups(conn) -> list[dict]:
+    """Was what I asked for actually done?
+
+    Nothing used to ask. An item whose instruction went unanswered looked
+    exactly like one that was answered, and dropped out of every check once
+    it had a title. This reads the follow-up record on every item.
+    """
+    from . import brain
+
+    out = []
+    partial, blocked, gave_up = [], [], []
+    for row in conn.execute(
+            "SELECT id, url, user_do, user_note, claude_state, claude_attempts, "
+            "claude_json FROM items"):
+        d = dict(row)
+        try:
+            c = json.loads(d.get("claude_json") or "{}") or {}
+        except Exception:
+            c = {}
+        asked = (d.get("user_do") or d.get("user_note") or "").strip()
+        st = d.get("claude_state") or ""
+        if st == "blocked":
+            blocked.append("%s  %s" % (d["url"][:54], (c.get("last_error") or "")[:60]))
+        elif st == "failed" and int(d.get("claude_attempts") or 0) >= brain.FAIL_LIMIT:
+            gave_up.append("%s  %s" % (d["url"][:54], (c.get("last_error") or "")[:60]))
+        elif asked and st == "done" and c.get("answered") in ("partly", "no"):
+            partial.append("%s  %s: %s" % (d["url"][:54], c.get("answered"),
+                                           (c.get("missing") or "no reason given")[:80]))
+    waiting = sum(len(u) for u in brain.needs_follow_up(conn))
+
+    if gave_up:
+        out.append(_finding(
+            "ask", "Claude could not finish %d item(s)" % len(gave_up),
+            "\n".join(gave_up[:5]),
+            "python -m kiln.brain run <item id> to try again by hand"))
+    if partial:
+        out.append(_finding(
+            "info", "%d request(s) only partly answered" % len(partial),
+            "\n".join(partial[:5]),
+            "the reason is on the item; the follow-up tries again if it said a "
+            "later try could do better"))
+    if blocked:
+        out.append(_finding(
+            "info", "%d item(s) waiting because Claude could not run" % len(blocked),
+            "\n".join(blocked[:5]), "tried again on the next sync"))
+    if waiting:
+        out.append(_finding("info", "%d item(s) still waiting for Claude's follow-up"
+                            % waiting, "", "done on the next sync, a few at a time"))
     return out
 
 
@@ -176,6 +228,7 @@ def check_all(conn=None) -> list[dict]:
         found = (check_last_run()
                  + check_site_matches_db(conn)
                  + check_items(conn)
+                 + check_follow_ups(conn)
                  + check_jobs())
     finally:
         if own:

@@ -9,8 +9,10 @@ which was then filed as if it were fine.
 Running out of models is allowed. Filing a bad read is not. So the item
 stops here and a handoff is written instead: what was being read, where the
 media is, what the owner asked for, and the exact shape the answer has to
-take. The Claude session that runs the sync picks these up and does the work
-itself, which is the one fallback that is not a downgrade.
+take. The next sync asks me on a card whether Claude should read these, and
+on a yes the follow-up (brain.py) does the read itself, which is the one
+fallback that is not a downgrade. A later read by a free model that works
+clears the brief on its own.
 
     python -m kiln.handoff list          what is waiting
     python -m kiln.handoff show <id>     the brief for one item

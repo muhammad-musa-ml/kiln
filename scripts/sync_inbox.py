@@ -1,7 +1,9 @@
-"""Ingest an inbox document.
+"""Ingest an inbox document, then follow up on what came in.
 
 Kiln never edits your doc - it hashes each line and remembers what it has
-already processed, so re-running is always safe.
+already processed, so re-running is always safe. The follow-up is the same
+one the scheduled sync runs (kiln/brain.py), so a hand-run sync ends up in
+the same place.
 
     python scripts/sync_inbox.py inbox.txt
     cat inbox.txt | python scripts/sync_inbox.py
@@ -12,7 +14,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from kiln import ingest, store
+from kiln import brain, ingest, store
 
 
 def main() -> int:
@@ -34,7 +36,11 @@ def main() -> int:
     results = ingest.ingest_text(text, source="gdoc", conn=conn)
     for r in results:
         print("  ->", json.dumps(r, ensure_ascii=False)[:160])
-    print("\ncounts:", json.dumps(store.counts(conn)))
+    print("\nfollowing up:")
+    print(brain.render(brain.sweep(conn=conn)))
+    counts = store.counts(conn)
+    counts.pop("sections", None)
+    print("\ncounts:", json.dumps(counts))
     conn.close()
     return 0
 

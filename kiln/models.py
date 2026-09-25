@@ -424,7 +424,7 @@ def generate(task: str, prompt: str, media: list[Path] | None = None, *,
     """Run `task` down its ladder until something works PROPERLY.
 
     task: one of config.LADDERS ("extract", "extract_deep", "classify",
-          "research", "reason"). Unknown tasks fall back to "classify".
+          "reason"). Unknown tasks fall back to "classify".
 
     accept: optional callback taking the result and returning "" if it is
     good enough, or a sentence saying why it is not. A rung that answers
@@ -515,19 +515,41 @@ def generate(task: str, prompt: str, media: list[Path] | None = None, *,
     return last
 
 
+_REACH: dict = {"at": 0.0, "ok": False, "detail": ""}
+
+
+def _gemini_reachable() -> tuple[bool, str]:
+    """Is the key good and the first extraction model there?
+
+    Reads the model's metadata, which costs no quota. This used to generate
+    a token from a lite model on every thirty second poll of the page: a
+    request against a daily budget, spent to find out whether there was
+    budget, from a model no ladder uses any more. Cached for five minutes.
+    """
+    from . import registry
+
+    if time.time() - _REACH["at"] < 300:
+        return _REACH["ok"], _REACH["detail"]
+    model = next((m for p, m in registry.ladder_for("extract") if p == "gemini"),
+                 "gemini-3.8-flash")
+    req = urllib.request.Request(f"{config.GEMINI_BASE}/models/{model}",
+                                 headers={"x-goog-api-key": config.GEMINI_API_KEY})
+    try:
+        with urllib.request.urlopen(req, timeout=20) as r:
+            ok, detail = r.status == 200, "ok"
+    except urllib.error.HTTPError as e:
+        ok, detail = False, redact(f"HTTP {e.code} for {model}")
+    except Exception as e:
+        ok, detail = False, redact(f"{type(e).__name__}: {str(e)[:100]}")
+    _REACH.update(at=time.time(), ok=ok, detail=detail)
+    return ok, detail
+
+
 def health() -> dict:
     """Which rungs are actually reachable right now. Shown on the UI status bar."""
     out: dict[str, Any] = {"gemini": False, "ollama": False, "models": [], "quota": quota_snapshot()}
     if config.GEMINI_API_KEY:
-        d, err = _post(
-            f"{config.GEMINI_BASE}/models/gemini-3.5-flash-lite:generateContent",
-            {"contents": [{"parts": [{"text": "ping"}]}],
-             "generationConfig": {"maxOutputTokens": 1}},
-            30,
-            {"x-goog-api-key": config.GEMINI_API_KEY},
-        )
-        out["gemini"] = d is not None or "HTTP 429" in err
-        out["gemini_detail"] = "ok" if d is not None else err[:120]
+        out["gemini"], out["gemini_detail"] = _gemini_reachable()
     try:
         req = urllib.request.Request(f"{config.OLLAMA_HOST}/api/tags")
         with urllib.request.urlopen(req, timeout=8) as r:

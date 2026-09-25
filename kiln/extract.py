@@ -49,7 +49,8 @@ Return ONLY JSON matching this shape exactly:
   "code_snippets": ["any code or commands shown on screen, verbatim"],
   "action_hint": "apply | learn | install | read | watch | visit | build | reference",
   "topics": ["3-6 lowercase topical tags"],
-  "open_questions": ["what a curious reader would still need answered"]
+  "open_questions": ["what a curious reader would still need answered"],
+  "could_not": ["anything you could not read or make out, and where it was"]
 }}
 
 Hard rules:
@@ -128,7 +129,7 @@ def _union(a: dict, b: dict) -> dict:
         return str(x).strip().lower()
 
     for field in ("sections", "onscreen_text", "links", "entities",
-                  "code_snippets", "topics", "open_questions"):
+                  "code_snippets", "topics", "open_questions", "could_not"):
         merged, seen = [], set()
         for item in (a.get(field) or []) + (b.get(field) or []):
             k = key_of(item)

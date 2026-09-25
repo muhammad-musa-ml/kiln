@@ -72,10 +72,32 @@ def load() -> dict:
     try:
         d = json.loads(STORE.read_text(encoding="utf-8"))
         if d.get("models"):
-            return d
+            return _drop_dead_tasks(d)
     except Exception:
         pass
     d = _seed()
+    save(d)
+    return d
+
+
+def _drop_dead_tasks(d: dict) -> dict:
+    """Forget ladders for tasks the code no longer has.
+
+    The file wins over config.py for ORDER, which is the point of it. It
+    cannot win over which tasks exist: a ladder for a task nothing calls is
+    config that shows in the picker and does nothing. Seeded models left in
+    no ladder go with it; anything added by hand from the UI stays.
+    """
+    dead = [t for t in d.get("ladders", {}) if t not in config.LADDERS]
+    if not dead:
+        return d
+    for t in dead:
+        d["ladders"].pop(t, None)
+        (d.get("thinking") or {}).pop(t, None)
+    used = {mid for ids in d["ladders"].values() for mid in ids}
+    for mid, m in list(d["models"].items()):
+        if mid not in used and not m.get("verified_at"):
+            d["models"].pop(mid)
     save(d)
     return d
 

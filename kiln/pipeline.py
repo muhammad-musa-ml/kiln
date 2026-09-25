@@ -174,6 +174,10 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
         # asking, since the usual cause is something transient at the far end.
         if not (existing.get("error") and tried < RETRY_READS):
             return existing
+    if user_tags is None and existing:
+        # A re-fire or a retry passes no tags. Writing none would drop the
+        # group tag that ties a link to the others on its line.
+        user_tags = (existing.get("tags") or {}).get("user") or []
 
     rec: dict[str, Any] = {
         "id": iid, "url": url, "source": source, "status": "triage",
@@ -227,10 +231,16 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
     asked = (user_do or user_note or "").strip()
     deep = bool(urgent or asked)
     note = extract_mod.extract_item(acq, user_note=user_note or user_do, deep=deep)
+    # The caption is where the company names and links usually are, and it
+    # was only ever passed along in memory. Kept so later work can read it.
+    note["_caption"] = (acq.caption or "")[:8000]
+    if not note.get("_error"):
+        # A brief written when every model was out is answered by this read.
+        handoff.clear(iid)
     if (note.get("_meta") or {}).get("exhausted"):
         # Nothing on the ladder could read it. Write the brief and stop,
-        # rather than storing whatever the last rung said. Claude picks
-        # these up on the next run.
+        # rather than storing whatever the last rung said. The next sync
+        # asks whether Claude should read it instead.
         passes = (note.get("_meta") or {}).get("passes") or []
         handoff.write(
             iid, url=url, stage="extract",
@@ -260,8 +270,15 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
     enriched: dict = {}
     if do_enrich and not note.get("_error"):
         t0 = time.time()
+        # What earlier follow-ups learned about items like this one. The
+        # thirteenth reel on a topic should not be searched the same way as
+        # the first.
+        lessons = [l["lesson"] for l in store.lessons_for(
+            conn, kinds=[note.get("kind")], topics=note.get("topics") or [],
+            text=asked, limit=6)]
         try:
-            enriched = enrich_mod.enrich_note(note, acq, user_note=user_do or user_note)
+            enriched = enrich_mod.enrich_note(note, acq, user_note=user_do or user_note,
+                                              lessons=lessons)
         except Exception as e:
             enriched = {"_meta": {"ok": False, "error": f"{type(e).__name__}: {e}"}}
         store.log_run(conn, iid, "enrich", (enriched.get("_meta") or {}).get("ok", False),
@@ -313,24 +330,71 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
     rec["links_checked"] = time.strftime("%d %b %Y", time.localtime())
     store.upsert_item(conn, rec)
 
-    body = "\n".join([
-        note.get("summary", ""),
-        " ".join(str(s.get("heading", "")) + " " + str(s.get("detail", ""))
-                 for s in (note.get("sections") or [])),
-        " ".join(str(x) for x in (note.get("onscreen_text") or [])),
-        " ".join(str(e.get("name", "")) for e in (note.get("entities") or [])),
-        note.get("spoken_transcript", "") or "",
-        json.dumps(enriched, ensure_ascii=False)[:40000] if enriched else "",
-        user_note, user_do,
-    ])
-    store.index_fts(conn, iid, rec.get("title", ""), rec.get("hook", ""),
-                    rec.get("summary", ""), body)
+    index(conn, iid)
 
     store.log_run(conn, iid, "total", True,
                   f"action={action} topics={topics}", time.time() - t_start)
     out = store.get_item(conn, iid)
     if own:
         conn.close()
+    return out
+
+
+def _texts(parts) -> str:
+    return " ".join(str(s.get("heading", "")) + " " + str(s.get("detail", ""))
+                    for s in parts or [] if isinstance(s, dict))
+
+
+def index(conn, iid: str) -> None:
+    """Rebuild one item's search entry from everything stored on it.
+
+    One place, because two things now write to an item: the read and
+    Claude's follow-up. An answer that search cannot find is half lost.
+    """
+    it = store.get_item(conn, iid)
+    if not it:
+        return
+    note = it.get("note") or {}
+    enriched = it.get("enrich") or {}
+    claude = it.get("claude") or {}
+    body = "\n".join([
+        note.get("summary", "") or "",
+        _texts(note.get("sections")),
+        " ".join(str(x) for x in (note.get("onscreen_text") or [])),
+        " ".join(str(e.get("name", "")) for e in (note.get("entities") or [])
+                 if isinstance(e, dict)),
+        note.get("spoken_transcript", "") or "",
+        json.dumps(enriched, ensure_ascii=False)[:40000] if enriched else "",
+        claude.get("answer", "") or "",
+        _texts(claude.get("extra_sections")),
+        it.get("user_note") or "", it.get("user_do") or "",
+    ])
+    store.index_fts(conn, iid, it.get("title", ""), it.get("hook", ""),
+                    it.get("summary", ""), body)
+
+
+def retry_failed(conn, limit: int = 5, gap: float = 6 * 3600) -> list[dict]:
+    """Try the links whose read failed again, a few times, spaced out.
+
+    process_url has been willing to retry a failed read since the reel fix,
+    but nothing ever asked it to: the inbox only hands over lines it has not
+    seen, and a failed line has been seen. So a reel that failed on a bad
+    night stayed failed until somebody pressed re-fire by hand.
+    """
+    rows = conn.execute(
+        "SELECT url, user_note, user_do, urgent, deadline, source, updated_at "
+        "FROM items WHERE COALESCE(error, '') != '' AND COALESCE(attempts, 0) < ? "
+        "ORDER BY created_at", (RETRY_READS,)).fetchall()
+    out = []
+    for r in rows:
+        if len(out) >= limit:
+            break
+        if time.time() - float(r["updated_at"] or 0) < gap:
+            continue
+        out.append(process_url(r["url"], user_note=r["user_note"] or "",
+                               user_do=r["user_do"] or "", urgent=bool(r["urgent"]),
+                               deadline=r["deadline"] or "",
+                               source=r["source"] or "retry", conn=conn))
     return out
 
 
