@@ -257,6 +257,17 @@ def ingest_text(text: str, *, source: str = "gdoc", conn=None,
                             "status": "processed"})
         if process:
             store.mark_seen(conn, p["_hash"], last_id)
+        if process and group:
+            # A link read while it was alone on its line has no group tag.
+            # Once the line has more, it belongs with the rest.
+            tag = f"group:{group[:8]}"
+            for url in urls:
+                iid = store.item_id(url)
+                if not conn.execute("SELECT 1 FROM items WHERE id=?", (iid,)).fetchone():
+                    continue
+                have = store.facets_for(conn, iid).get("user") or []
+                if tag not in have:
+                    store.set_tags(conn, iid, "user", have + [tag])
     if process:
         results += late_instructions(text, conn)
     if own:
