@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS items (
   gate_json     TEXT,                  -- comment/DM gate detection
   note_json     TEXT,                  -- full extraction
   enrich_json   TEXT,                  -- full enrichment
+  attempts      INTEGER DEFAULT 0,     -- reads tried, so a failure can retry
   created_at    REAL,
   updated_at    REAL,
   processed_at  REAL,
@@ -105,8 +106,23 @@ def connect() -> sqlite3.Connection:
     conn = sqlite3.connect(config.DB_PATH, timeout=30, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     conn.executescript(SCHEMA)
-    _drop_cost_columns(conn)
+    _migrate(conn)
     return conn
+
+
+def _migrate(conn: sqlite3.Connection) -> None:
+    """Bring an existing database up to the schema above.
+
+    CREATE TABLE IF NOT EXISTS leaves an existing file exactly as it was,
+    so neither a dropped column nor an added one happens on its own.
+    Safe to run on every connect.
+    """
+    for table, col, decl in (("items", "attempts", "INTEGER DEFAULT 0"),):
+        have = {r["name"] for r in conn.execute("PRAGMA table_info(%s)" % table)}
+        if col not in have:
+            conn.execute("ALTER TABLE %s ADD COLUMN %s %s" % (table, col, decl))
+    _drop_cost_columns(conn)
+    conn.commit()
 
 
 def _drop_cost_columns(conn: sqlite3.Connection) -> None:
@@ -154,7 +170,7 @@ def upsert_item(conn: sqlite3.Connection, rec: dict) -> str:
         "id", "url", "source", "kind", "action", "status", "urgent", "deadline",
         "title", "hook", "summary", "owner", "posted", "user_note", "user_do",
         "slide_count", "focus_slide", "pdf_path", "media_dir", "links_checked", "gate_json",
-        "note_json", "enrich_json", "created_at", "updated_at",
+        "note_json", "enrich_json", "attempts", "created_at", "updated_at",
         "processed_at", "error"}]
     placeholders = ",".join("?" for _ in cols)
     updates = ",".join(f"{c}=excluded.{c}" for c in cols if c != "id")

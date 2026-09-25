@@ -51,6 +51,56 @@ def run_case(acquired, note):
             config.DB_PATH = old_db
 
 
+def test_empty_read_detection() -> None:
+    """A read that got nothing must not pass for one that got something."""
+    print("telling a real read from one that only looks real")
+    from kiln import pipeline
+    from kiln.acquire import Acquired
+
+    carousel = Acquired(url="u", kind="instagram", slides=["a"] * 11)
+    article = Acquired(url="u", kind="web", body_text="words")
+
+    # The exact shape that shipped: no sections, no on-screen text, no links,
+    # and one summary clipped mid-sentence because the window ran out.
+    clipped = {"summary": "...from solar-powered compute to healthcare. The post",
+               "sections": [], "onscreen_text": []}
+    check("a clipped summary over eleven slides counts as empty",
+          pipeline._came_back_empty(clipped, carousel), str(clipped)[:80])
+
+    real = {"summary": "a real summary", "sections": [{"heading": "one"}],
+            "onscreen_text": ["a line"]}
+    check("a genuine read does not", not pipeline._came_back_empty(real, carousel))
+
+    # An article has no pictures, so a summary alone is a legitimate read.
+    check("a text page with a summary and no sections is fine",
+          not pipeline._came_back_empty({"summary": "a summary"}, article))
+    check("nothing at all is still empty",
+          pipeline._came_back_empty({}, article))
+
+
+def test_quota_classification() -> None:
+    """A busy minute is not a spent day."""
+    print("telling a rate limit from an exhausted quota")
+    from kiln import models
+
+    transient = [
+        "HTTP 429: Resource has been exhausted (requests per minute)",
+        "HTTP 429: rate limit exceeded, retry shortly",
+        "HTTP 429: You exceeded your current quota",
+    ]
+    for err in transient:
+        check("retried, not burned: %s" % err[10:48],
+              not models._daily_quota_gone(err), err)
+
+    daily = [
+        "HTTP 429: quota metric generate_requests_per_model_per_day exceeded",
+        "HTTP 429: GenerateRequestsPerDayPerProjectPerModel limit",
+    ]
+    for err in daily:
+        check("burned for the day: %s" % err[10:48],
+              models._daily_quota_gone(err), err)
+
+
 def main() -> int:
     from kiln.acquire import Acquired
     from kiln.pipeline import REDO
@@ -97,6 +147,9 @@ def main() -> int:
     check("keeps its real action", actions and actions[0] != REDO, str(actions))
     check("and is not parked in the inbox", item.get("status") != "inbox",
           str(item.get("status")))
+
+    test_empty_read_detection()
+    test_quota_classification()
 
     print()
     print("%d/%d pass" % (sum(results), len(results)))
