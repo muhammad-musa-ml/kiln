@@ -103,6 +103,15 @@ def test_gate() -> None:
         check("and it still shows up as something to look at",
               any(f["rule"] == "phrase" for f in g["soft"]),
               str(g["soft"])[:200])
+        (d / "wordy.py").unlink()
+
+        # Kiln's own ship.py is exempt because it quotes the rules. A built
+        # project's file of the same name is not.
+        (d / "ship.py").write_text("NOTE = 'done %s shipped'\n" % chr(0x2014),
+                                   encoding="utf-8")
+        g = ship.gate(d)
+        check("a project's own ship.py is checked like any other file", not g["ok"],
+              g["report"])
 
 
 # --- one project, one job ------------------------------------------------
