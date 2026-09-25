@@ -115,7 +115,7 @@ FINAL_SCHEMA = _obj(
         next_action=_S,
         action=_enum([""] + list(store.ACTIONS)),
         set_aside=_B, set_aside_why=_S)),
-    lessons=_arr(_obj(kind=_S, topics=_arr(_S), lesson=_S)))
+    lessons=_arr(_obj(topics=_arr(_S), lesson=_S)))
 
 
 # ---------------------------------------------------------------------------
@@ -265,7 +265,7 @@ FOR EACH ITEM RETURN
 - action: the item's action tag when the first pass got it wrong, one of {actions}; "" keeps the current one.
 - set_aside: true when the first pass's research answered the wrong question for this item, for example it took a setup guide for a job posting and went looking for the job. That research then comes off his page, so the answer has to give him what the item is actually for. set_aside_why: one sentence on what the first pass got wrong; "" when set_aside is false.
 
-LESSONS: up to three short, general lessons about handling items like these next time: what to search for, which kinds of source were reliable, what the first pass tends to miss. No links, no names from the post, nothing true only of this one item. Write one only if it would change what the next planner does; [] is fine.
+LESSONS: up to three short, general lessons about handling items like these next time: what to search for, which kinds of source were reliable, what the first pass tends to miss. No links, no names from the post, nothing true only of this one item. Write one only if it would change what the next planner does; [] is fine. topics: a few words each for what a lesson is about.
 
 HOW TO WRITE
 {voice}
@@ -971,10 +971,23 @@ def _store_final(conn, items: list[dict], plan: dict, final: dict, done: dict,
             keep += [l for l in checked if l["url"].rstrip("/") not in have]
             store.set_links(conn, it["id"], keep)
         pipeline.index(conn, it["id"])
+    kind, topics = _lesson_home(items)
     for lesson in final.get("lessons") or []:
-        store.add_lesson(conn, lesson.get("kind", ""), lesson.get("topics") or [],
+        store.add_lesson(conn, kind, sorted(topics | set(lesson.get("topics") or [])),
                          lesson.get("lesson", ""), source=unit)
     return empty
+
+
+def _lesson_home(items: list[dict]) -> tuple[str, set[str]]:
+    """The kind and topics a lesson from these items is filed under.
+
+    `store.lessons_for` matches the next item by its kind and topic tags, so a
+    lesson goes under the same. The model's own label for a lesson ("pitfall",
+    "tip") never matched an item, and the playbook went unread.
+    """
+    kinds = [it["kind"] for it in items if it.get("kind")]
+    kind = max(kinds, key=kinds.count) if kinds else ""
+    return kind, {t for it in items for t in (it.get("tags") or {}).get("topic") or []}
 
 
 def run_by_hand(item_ids: list[str]) -> dict:
