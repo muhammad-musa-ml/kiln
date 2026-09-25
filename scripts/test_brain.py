@@ -342,6 +342,11 @@ def test_set_aside_wrong_research():
     check("the published copy has no trace of the job research",
           not any(k in (pub.get("enrich") or {}) for k in ("role", "company", "posting_urls"))
           and "TypeSafe" not in json.dumps(pub), json.dumps(pub)[:300])
+    brain._store_final(conn, [store.get_item(conn, "j")], {"why": "again"}, final,
+                       {}, {}, run_dir, fdir, "u2")
+    again = (store.get_item(conn, "j").get("enrich") or {}).get("_set_aside") or {}
+    check("a second set-aside keeps what the first one kept",
+          (again.get("fields") or {}).get("company") == "TypeSafe AI", str(again)[:200])
     conn.close()
 
 

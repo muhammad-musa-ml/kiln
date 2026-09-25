@@ -913,7 +913,10 @@ def _store_final(conn, items: list[dict], plan: dict, final: dict, done: dict,
             enr = dict(it.get("enrich") or {})
             moved = {k: enr.pop(k) for k in list(enr) if not k.startswith("_")}
             why = _plain(r.get("set_aside_why"))
-            enr["_set_aside"] = {"why": why, "at": now, "fields": moved}
+            # A later follow-up that sets it aside again has nothing left to
+            # move; merging keeps what the first one kept.
+            kept = (enr.get("_set_aside") or {}).get("fields") or {}
+            enr["_set_aside"] = {"why": why, "at": now, "fields": {**kept, **moved}}
             rec["enrich_json"] = json.dumps(enr, ensure_ascii=False)
             claude["set_aside"] = why
         action = r.get("action") or ""
