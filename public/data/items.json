@@ -668,10 +668,10 @@
    "id": "03d5b6b18a964e5d",
    "url": "https://www.instagram.com/p/DdpdeD-HPsJ/?img_index=6&stkn=MTNub21mMHk0dWw5OA==",
    "kind": "tutorial",
-   "action": "apply",
+   "action": "build",
    "title": "Build Your Own AI-Powered Jarvis OS 2.0 Workflow",
    "hook": "Learn how to build a unified AI operating system that manages your entire day.",
-   "summary": "This guide introduces Jarvis OS 2.0, a comprehensive AI-driven workflow that integrates Claude Code, Obsidian, and local voice processing. The system uses a new classifier called Jev to route requests efficiently, significantly reducing latency and costs. By following these steps, you can create a centralized dashboard that handles tasks, research, and scheduling using markdown-based memory. It is designed to be a modular, local-first system that keeps your data and audio on your machine.",
+   "summary": "This guide introduces Jarvis OS 2.0, a comprehensive AI-driven workflow that integrates Claude Code, Obsidian, and local voice processing. The system uses a new classifier called Jev to route requests efficiently, significantly reducing latency and costs. The steps describe a centralized dashboard that handles tasks, research, and scheduling using markdown-based memory, but the install repo itself sits inside the creator's paid Chase AI+ community ($99/month). Voice is processed locally, while Jev and the Claude Code or Codex engine are hosted services.",
    "owner": "chase.h.ai",
    "posted": "September 23, 2026",
    "slide_count": 9,
@@ -885,34 +885,10 @@
      "Are there any limitations to the 'skills' that can be created in the .md format?"
     ]
    },
-   "enrich": {
-    "role": "Senior Infrastructure Engineer (AI/ML Systems)",
-    "company": "TypeSafe AI",
-    "location": "San Francisco, California, USA",
-    "remote": "no",
-    "is_open": "open",
-    "requirements": [
-     "Deep experience with Kubernetes in production at scale (networking, storage, scheduling, upgrades)",
-     "Strong background with AWS",
-     "Hands‑on experience with infrastructure‑as‑code (Pulumi, Terraform, or similar)",
-     "Solid Linux networking knowledge",
-     "Track record with high‑traffic production ML systems",
-     "Programming fluency, preferably Python",
-     "Experience with GPU infrastructure, autoscaling, and large‑scale LLM inference (nice‑to‑have)",
-     "Familiarity with service mesh, CNI plugins (Cilium, Istio) (nice‑to‑have)",
-     "Multi‑cloud infrastructure experience (nice‑to‑have)"
-    ],
-    "how_to_stand_out": [
-     "Demonstrate prior work building and operating global‑scale Kubernetes clusters for AI/ML workloads, especially with GPU scheduling or vLLM‑style serving.",
-     "Show concrete examples of reducing inference latency or cost in production (e.g., <200 ms response times for large models).",
-     "Provide open‑source contributions or internal tooling that improved observability, autoscaling, or reliability of ML pipelines.",
-     "Highlight any experience directly integrating structured decision models like TypeSafe’s Jev or similar System‑One models into production services."
-    ],
-    "next_action": "Submit your resume and a brief cover letter through the application link on the job posting (https://jaabz.com/jobs/275349-member-of-technical-staff-infrastructure-kubernetes-specialist)."
-   },
+   "enrich": {},
    "tags": {
     "action": [
-     "apply"
+     "build"
     ],
     "topic": [
      "ai",
@@ -923,88 +899,118 @@
     ]
    },
    "followup": {
-    "answer_html": "<p>Two links were removed from this item: a job posting and a company jobs page for an unrelated &quot;TypeSafe AI&quot; infrastructure hiring listing that had nothing to do with this build guide. In their place: a section confirming that Jev, the classifier the guide is built around, is a real product with pricing and latency matching the slides, and a section on how to actually get the &quot;Agentic OS V2&quot; repo and the rest of the stack running, including a correction that the repo is gated behind a paid community rather than free on comment.</p>\n",
+    "answer_html": "<p><strong>Verdict: the actual Agentic OS V2 repo is not free. Chase AI's own blog says it lives inside the paid Chase AI+ community, which costs $99/month, or $58/month billed annually under a sale said to end 9/25.</strong> Every other part of the build (whisper.cpp, Kokoro, Obsidian, Claude Code or Codex, Jev) can be had separately, and you could put it together yourself.</p>\n<h2>Getting the build, and what &quot;comment JARVIS&quot; leads to</h2>\n<ol>\n<li>No official public repo exists. <a href=\"https://www.chaseai.io/blog/build-claude-code-agentic-os-3-steps\">Chase AI's 3-step agentic OS post</a> says: &quot;The full prompt and my actual production agentic OS are inside the Chase AI+ community.&quot; <a href=\"https://www.chaseai.io\">chaseai.io</a> does not link to GitHub anywhere. The <a href=\"https://www.chaseai.io/blog/voice-driven-agentic-os-claude-code\">voice-driven agentic OS post</a> and <a href=\"https://www.chaseai.io/blog/how-to-build-an-agentic-os-claude-os\">the earlier Claude OS post</a> are gated the same way.</li>\n<li>The <a href=\"https://www.skool.com/chase-ai-community/about\">free Chase AI Community</a> (about 79,000 members) offers Claude Code guides, n8n templates and a prompt library. Its page does not say the repo is included.</li>\n<li><a href=\"https://www.skool.com/chase-ai/about\">Chase AI+</a> (about 1,100 members) lists a &quot;Jev + Claude OS&quot; module, the closest match to this build, along with a Claude Code + Codex masterclass and agent templates. Price: $99/month, or $58/month billed annually. The discount is time-limited, so check the page before paying.</li>\n<li>Commenting JARVIS: not confirmed. The DM flow was not tested. Since the creator's own site puts the build behind the paid community, the DM most likely sends you to the paid community, or to the free one first as a step toward the paid one. That is inference, not something observed.</li>\n<li>Be careful with lookalike repos. A GitHub repo named &quot;agentic-os-starter-v2&quot; under the account &quot;ctskool&quot; has a README install prompt that matches the slide almost word for word. No official Chase AI channel links to it, and the account has no stated identity. A slide that says &quot;clone the repo and set it up&quot; with no URL, plus a matching unverified repo that turns up when you search for that exact phrase, is a known way to trick coding agents into running untrusted code. Don't let an agent clone it. Its code was not inspected.</li>\n<li>No free V1 was found. If you want the same architecture without paying, independent free projects exist, for example <a href=\"https://github.com/officepark010/jarvis\">officepark010/jarvis</a> (local macOS, Whisper + Obsidian + HUD). It is not Chase's build.</li>\n</ol>\n<h2>Is Jev real? Claim by claim</h2>\n<ol>\n<li><strong>&quot;A System One model from TypeSafe.&quot;</strong> True. <a href=\"https://typesafe.ai/\">TypeSafe's homepage</a> calls Jev its &quot;first public System One Model&quot;. The current model is <code>jev-1.13.0</code>.</li>\n<li><strong>&quot;It picks one answer from a fixed list.&quot;</strong> True. It returns typed decisions with calibrated probabilities, not free text (<a href=\"https://typesafe.ai/blog/introducing-system-one-models-and-jev\">launch post</a>).</li>\n<li><strong>&quot;Routing drops from ~5 seconds to under 1.&quot;</strong> The &quot;under 1 second&quot; half is true and conservative: TypeSafe states 70 to 500 ms end to end. The &quot;~5 seconds&quot; baseline is the post's own number. TypeSafe publishes only multipliers (&quot;193.6x faster&quot;), not a baseline in seconds, so that figure is unverified.</li>\n<li><strong>&quot;$0.042 per million input tokens, output free.&quot;</strong> True, an exact match. <a href=\"https://docs.typesafe.ai/models\">TypeSafe's models docs</a> list $0.042/M input ($42 per billion) and say &quot;Output tokens are free.&quot;</li>\n<li><strong>Other limits the post leaves out:</strong> 64k-token context per request (up to 32k for state plus the question). Rate limits are 250,000 tokens/second and 1,200 requests/minute, and TypeSafe says these can change without notice.</li>\n<li><strong>Access is gated, and the post doesn't say so.</strong> TypeSafe says it is &quot;bringing developers off the waitlist as quickly as we can&quot;. Early access goes through the <a href=\"https://console.typesafe.ai/\">TypeSafe console</a>. Neither of its pages shows open signup or free credits. Many third-party &quot;how to get a Jev API key&quot; sites give specific signup steps and &quot;$5 free credit&quot; claims. They are not TypeSafe's domains and look like content farms, so ignore them.</li>\n<li><strong>Using it once you have access:</strong> use the official <a href=\"https://github.com/typesafe-ai/system-one-adapter-python\">Python adapter</a> or plain HTTP. Ask a fixed-choice question (Tier 1, 2 or 3). At personal voice-routing volume the cost is a fraction of a cent a day. <a href=\"https://openrouter.ai/typesafe\">OpenRouter lists TypeSafe as a provider</a>, but the Jev model page there returned 404, so routing through OpenRouter is unconfirmed.</li>\n<li><strong>If the waitlist is slow:</strong> a small model such as <a href=\"https://openrouter.ai/meta-llama/llama-3.1-8b-instruct\">Llama 3.1 8B Instruct on OpenRouter</a> (Groq among its providers) can be prompted to pick one of three labels. It has no waitlist, but it doesn't give Jev's typed output or calibrated probabilities. Check its current price on that page.</li>\n</ol>\n<h2>What running it takes</h2>\n<p><strong>Hardware for the local models (open question 1)</strong></p>\n<ol>\n<li><a href=\"https://github.com/ggml-org/whisper.cpp\">whisper.cpp</a> runs on Windows, macOS and Linux, on CPU only if needed. A GPU is optional. Approximate model sizes: tiny 75 MiB (about 273 MB RAM), base 142 MiB (about 388 MB), small 466 MiB (about 852 MB), medium 1.5 GiB (about 2.1 GB), large 2.9 GiB (about 3.9 GB). For short dictation, base or tiny is enough.</li>\n<li><a href=\"https://huggingface.co/hexgrad/Kokoro-82M\">Kokoro-82M</a> is an 82M-parameter model under the Apache-2.0 license. It runs on CPU, with optional GPU acceleration documented for Apple Silicon. Neither its README nor its model card gives RAM, VRAM or disk size, so its footprint is unconfirmed. At 82M parameters it is small.</li>\n<li>Any ordinary recent laptop should handle both for one user. That is an inference for Kokoro, since its figures are not published.</li>\n</ol>\n<p><strong>Install path</strong></p>\n<ol>\n<li>whisper.cpp: <code>git clone https://github.com/ggml-org/whisper.cpp.git</code>, then <code>sh ./models/download-ggml-model.sh base.en</code>, then <code>cmake -B build &amp;&amp; cmake --build build -j --config Release</code>, then test with <code>./build/bin/whisper-cli -f samples/jfk.wav</code>.</li>\n<li><a href=\"https://github.com/hexgrad/kokoro\">Kokoro</a>: <code>pip install kokoro&gt;=0.9.4 soundfile</code>, plus espeak-ng (<code>apt-get install espeak-ng</code> on Linux, the MSI installer on Windows). In Python: <code>KPipeline(lang_code='a')</code>, then call it with text and <code>voice='af_heart'</code> to get 24 kHz audio.</li>\n<li>Neither project has a one-command installer. What the slide's &quot;one prompt installs it&quot; actually does can't be checked, because the wrapper repo is behind the paywall.</li>\n<li>Codex CLI: <code>npm install -g @openai/codex</code>, <code>brew install --cask codex</code>, or the install script in the <a href=\"https://github.com/openai/codex\">Codex README</a>.</li>\n</ol>\n<p><strong>Credentials and cost for Claude Code and Codex (open question 2)</strong></p>\n<p>How the Agentic OS V2 repo itself handles keys can't be answered without the repo. Here is how the two engines handle credentials on their own:</p>\n<ol>\n<li><a href=\"https://claude.com/product/claude-code\">Claude Code</a> signs in with a Claude Pro, Max, Team or Enterprise plan, or with a Console API key billed per token. Keys can go in <code>~/.claude/settings.json</code> under <code>env.ANTHROPIC_API_KEY</code>. A safer option is an <code>apiKeyHelper</code> script that produces the key on demand instead of storing it in plain text (<a href=\"https://code.claude.com/docs/en/settings-reference\">settings reference</a>).</li>\n<li>Claude cost (<a href=\"https://claude.com/pricing\">pricing</a>): Pro is $20/month, or $17/month billed annually. Max is $100 or $200/month. Per million input/output tokens: Sonnet 5 $2/$10, Opus 5.5 $4/$20, Haiku 4.5 $1/$5.</li>\n<li>Codex signs in with <code>codex login</code> (ChatGPT plan usage) or <code>codex login --with-api-key</code> (per-token billing). Credentials are stored in plain text at <code>~/.codex/auth.json</code> unless you set <code>cli_auth_credentials_store = &quot;keyring&quot;</code>, and OpenAI says to treat that file like a password (<a href=\"https://learn.chatgpt.com/docs/auth\">Codex auth docs</a>).</li>\n<li>Codex API pricing couldn't be confirmed from OpenAI's own page. Third-party trackers put GPT-5-Codex at about $1.25/$10 per million tokens. Treat that as unconfirmed.</li>\n<li>No official source gives a cost per day. Light daily use plausibly fits a $20 plan. Heavy continuous agent work needs Max or API billing, and API cost grows with every token used.</li>\n</ol>\n<p><strong>What SKILL.md files are, and their limits (open question 3)</strong></p>\n<ol>\n<li>A skill is a folder with a required <code>SKILL.md</code> (YAML frontmatter plus markdown instructions), optionally with scripts beside it (<a href=\"https://code.claude.com/docs/en/skills\">Claude Code skills docs</a>). Personal skills go in <code>~/.claude/skills/</code>, project skills in <code>.claude/skills/</code>.</li>\n<li>A skill runs either automatically, when Claude matches its <code>description</code> to the request, or when you type <code>/skill-name</code>. A dashboard button would have to send that command into a running Claude Code session. The docs describe no other way to fire a skill by name from outside.</li>\n<li>Limits: every skill's description is loaded into context on every turn, so each skill you add has an ongoing token cost. Skills loaded during auto-compaction share a 25,000-token budget. Skills synced from claude.ai can't be edited locally. <code>context: fork</code> skills run as isolated subagents that don't see the conversation.</li>\n</ol>\n<p><strong>One correction to &quot;your audio never leaves the machine&quot;:</strong> transcription and speech are local. The text of each request still goes to Jev (hosted), and Tier 2 and Tier 3 work goes to cloud models through Claude Code or Codex.</p>\n",
     "answered": "not asked",
     "sources": [
      {
-      "url": "https://typesafe.ai/",
-      "title": "TypeSafe AI home page"
-     },
-     {
-      "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
-      "title": "Introducing System One Models & Jev - TypeSafe AI Blog"
-     },
-     {
-      "url": "https://docs.typesafe.ai/models",
-      "title": "Models - TypeSafe AI docs"
-     },
-     {
-      "url": "https://docs.typesafe.ai/introduction/quickstart",
-      "title": "TypeSafe AI docs quickstart"
-     },
-     {
-      "url": "https://openrouter.ai/typesafe",
-      "title": "Typesafe API and Models - OpenRouter"
-     },
-     {
       "url": "https://www.chaseai.io/blog/build-claude-code-agentic-os-3-steps",
-      "title": "How to Build a Custom Claude Code Agentic OS in 3 Steps - Chase AI"
+      "title": "Chase AI: Build a Custom Claude Code Agentic OS in 3 Steps"
      },
      {
       "url": "https://www.chaseai.io/blog/voice-driven-agentic-os-claude-code",
-      "title": "How to Build a Voice-Driven Agentic OS on Claude Code - Chase AI"
+      "title": "Chase AI: Voice-Driven Agentic OS on Claude Code"
      },
      {
-      "url": "https://www.skool.com/chase-ai/about",
-      "title": "Chase AI+ (Skool)"
+      "url": "https://www.chaseai.io/blog/how-to-build-an-agentic-os-claude-os",
+      "title": "Chase AI: How to Build an Agentic OS (Claude OS)"
+     },
+     {
+      "url": "https://www.chaseai.io",
+      "title": "Chase AI homepage"
      },
      {
       "url": "https://www.skool.com/chase-ai-community/about",
-      "title": "Chase AI Community (Skool, free tier)"
+      "title": "Chase AI Community (free)"
      },
      {
-      "url": "https://obsidian.md/",
-      "title": "Obsidian"
+      "url": "https://www.skool.com/chase-ai/about",
+      "title": "Chase AI+ (paid)"
      },
      {
-      "url": "https://claude.com/product/claude-code",
-      "title": "Claude Code - Anthropic"
+      "url": "https://typesafe.ai/",
+      "title": "TypeSafe AI homepage"
      },
      {
-      "url": "https://github.com/openai/codex",
-      "title": "GitHub - openai/codex"
+      "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+      "title": "TypeSafe: Introducing System One Models & Jev"
+     },
+     {
+      "url": "https://docs.typesafe.ai/models",
+      "title": "TypeSafe docs: models"
+     },
+     {
+      "url": "https://openrouter.ai/typesafe",
+      "title": "TypeSafe on OpenRouter"
      },
      {
       "url": "https://github.com/ggml-org/whisper.cpp",
-      "title": "GitHub - ggml-org/whisper.cpp"
+      "title": "whisper.cpp README"
      },
      {
       "url": "https://github.com/hexgrad/kokoro",
-      "title": "GitHub - hexgrad/kokoro"
+      "title": "Kokoro README"
      },
      {
       "url": "https://huggingface.co/hexgrad/Kokoro-82M",
-      "title": "hexgrad/Kokoro-82M - Hugging Face"
-     }
-    ],
-    "extra_sections": [
-     {
-      "heading": "Jev: what it actually is",
-      "detail": "Jev is real. It is made by TypeSafe AI, a company distinct from the unrelated same-named infrastructure company whose job listing an earlier pass mistakenly researched (now removed from this item). TypeSafe's blog describes Jev as their first \"System One Model\": you send it unstructured context plus a schema (the fields and fixed set of values each field can take), and it returns a typed answer with a confidence score. It classifies; it does not generate free text, matching the slide's description exactly.\n\nPricing claim holds up: TypeSafe's own site and docs both state $0.042 per million input tokens with output free, an exact match to the post.\n\nLatency claim holds up: TypeSafe publishes 70-500ms end-to-end response time, well under the post's \"under 1 second\" figure, and consistent with the \"5 seconds without Jev\" comparison if the baseline is a frontier model doing the same routing job.\n\nWhat did not fully check out: TypeSafe's bigger marketing numbers (\"238x cheaper,\" \"193.6x faster\") are the company's own figures, not independently benchmarked, so treat those specific multipliers as a claim rather than a confirmed fact even though the base price and latency are confirmed.\n\nAccess: Jev launched September 15, 2026 as early access. Sign-up appears to be a waitlist that TypeSafe is working through progressively rather than fully open self-serve; there is no confirmed free tier. Once you have a key: an API endpoint (api.typesafe.ai/v1/systemone), a console for keys and a no-code playground (console.typesafe.ai), and a Python SDK (`pip install typesafe-sdk`, reads TYPESAFE_API_KEY from the environment). Jev's models (jev-1.13, jev-latest) are also listed on [OpenRouter](https://openrouter.ai/typesafe), which is a second way in if TypeSafe's own waitlist is slow, using an OpenRouter key instead of a TypeSafe one.\n\nIf Jev access is stuck on a waitlist, the cheap alternative for pure tier-routing (not classification with typed schemas) is a small fast general model like Claude Haiku or a similarly small model, which is close to what the guide's own \"Tier 2: small fast model\" fallback already describes."
+      "title": "Kokoro-82M model card"
      },
      {
-      "heading": "Getting started: the repo and the rest of the stack",
-      "detail": "The \"Agentic OS V2\" repo is not public. It lives inside a paid membership community, Chase AI+, on Skool (roughly $98-99/month, or about $58/month billed annually per third-party listings). The creator's own blog posts about this exact build confirm it directly: the full prompt and production system are described as being \"inside the Chase AI+ community.\" A separate free Skool tier exists with some templates and prompts, but not the repo or install prompt itself. The Instagram call to action (\"Comment JARVIS\") funnels into this paid community rather than handing over a free download, so this item should be treated as gated, not open, correcting an earlier read that recorded it as ungated.\n\nThe rest of the stack is public and these are the canonical sources:\n\n1. [Obsidian](https://obsidian.md/) - free note app used as the vault. Downloads for Windows, macOS, Linux, mobile.\n2. [Claude Code](https://claude.com/product/claude-code) - install with `curl -fsSL https://claude.ai/install.sh | bash`, or the VS Code/JetBrains extension. Needs a Claude Pro/Max, Team, or Console account.\n3. [Codex CLI](https://github.com/openai/codex) - install with `curl -fsSL https://chatgpt.com/codex/install.sh | sh` (Mac/Linux), a Windows installer, `npm install -g @openai/codex`, or `brew install --cask codex`. Needs a ChatGPT Plus, Pro, Business, Edu, or Enterprise account.\n4. [whisper.cpp](https://github.com/ggml-org/whisper.cpp) for local speech-to-text - a dependency-free C/C++ build with no required Python/CUDA stack, GPU acceleration optional (CUDA, Vulkan, ROCm, Metal).\n5. [Kokoro](https://github.com/hexgrad/kokoro) for local text-to-speech, weights on [Hugging Face](https://huggingface.co/hexgrad/Kokoro-82M) - install with `pip install kokoro soundfile` plus the espeak-ng system package.\n\nHardware, honestly: whisper.cpp's own docs give memory by model size, from about 273MB (tiny) up to 3.9GB (large); it runs on CPU alone, no GPU required, GPU only makes it faster. For a responsive voice loop, the base or small model (under 1GB) is the realistic laptop choice. Kokoro's docs do not publish RAM or GPU minimums for inference at all, a real gap in their documentation; the only hardware figure they give is training cost, not what you need to run it. Given it is an 82M-parameter model installed with plain pip and GPU offered only as an optional flag, CPU-only operation looks like the normal path, but this is an inference from size and install method, not a documented spec. Overall: running Whisper (base/small) and Kokoro locally alongside Obsidian and a Claude Code or Codex terminal needs a few GB of free RAM beyond your OS and other apps, no dedicated GPU, and any recent Intel/AMD laptop or Apple Silicon Mac handles it; a 16GB machine is comfortable, an 8GB machine is workable but tight."
+      "url": "https://github.com/openai/codex",
+      "title": "Codex CLI README"
+     },
+     {
+      "url": "https://learn.chatgpt.com/docs/auth",
+      "title": "Codex CLI auth docs"
+     },
+     {
+      "url": "https://claude.com/product/claude-code",
+      "title": "Claude Code product page"
+     },
+     {
+      "url": "https://claude.com/pricing",
+      "title": "Claude pricing"
+     },
+     {
+      "url": "https://code.claude.com/docs/en/settings-reference",
+      "title": "Claude Code settings reference"
+     },
+     {
+      "url": "https://code.claude.com/docs/en/skills",
+      "title": "Claude Code skills docs"
      }
     ],
-    "next_action": "If the repo is worth building, joining the paid Chase AI+ Skool community (about $98/month) is the only confirmed way to get it; the free tier and commenting \"JARVIS\" do not hand over the repo itself."
+    "next_action": "Request Jev early access at console.typesafe.ai now, because the waitlist is the slowest step whether you buy the $99/month repo or build the stack yourself."
    },
    "links": [
+    {
+     "url": "https://claude.com/pricing",
+     "label": "Claude plan and API pricing",
+     "alive": true,
+     "page_title": ""
+    },
     {
      "url": "https://claude.com/product/claude-code",
      "label": "Claude Code",
      "alive": true,
      "page_title": "Claude Code by Anthropic | AI Coding Agent, Terminal, IDE"
+    },
+    {
+     "url": "https://code.claude.com/docs/en/settings-reference",
+     "label": "Claude Code settings reference (API keys, apiKeyHelper)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://code.claude.com/docs/en/skills",
+     "label": "Claude Code docs: skills and SKILL.md",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://console.typesafe.ai/",
+     "label": "TypeSafe console (Jev early access)",
+     "alive": false,
+     "page_title": ""
     },
     {
      "url": "https://docs.typesafe.ai/models",
@@ -1025,8 +1031,20 @@
      "page_title": ""
     },
     {
+     "url": "https://github.com/officepark010/jarvis",
+     "label": "officepark010/jarvis: free independent Claude Code + Whisper + Obsidian build",
+     "alive": true,
+     "page_title": ""
+    },
+    {
      "url": "https://github.com/openai/codex",
      "label": "Codex CLI",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/typesafe-ai/system-one-adapter-python",
+     "label": "TypeSafe official Python adapter for Jev",
      "alive": true,
      "page_title": ""
     },
@@ -1037,10 +1055,22 @@
      "page_title": "hexgrad/Kokoro-82M · Hugging Face"
     },
     {
+     "url": "https://learn.chatgpt.com/docs/auth",
+     "label": "Codex CLI sign-in and credential storage",
+     "alive": true,
+     "page_title": "Authentication | ChatGPT Learn"
+    },
+    {
      "url": "https://obsidian.md/",
      "label": "Obsidian",
      "alive": true,
      "page_title": "Obsidian - Sharpen your thinking"
+    },
+    {
+     "url": "https://openrouter.ai/meta-llama/llama-3.1-8b-instruct",
+     "label": "Llama 3.1 8B Instruct on OpenRouter (fallback router if Jev access is slow)",
+     "alive": true,
+     "page_title": ""
     },
     {
      "url": "https://openrouter.ai/typesafe",
@@ -1065,6 +1095,12 @@
      "label": "Chase AI: build the agentic OS in 3 steps (source on repo gating)",
      "alive": true,
      "page_title": "How to Build a Claude Code Agentic OS (3 Steps) - Chase AI"
+    },
+    {
+     "url": "https://www.chaseai.io/blog/how-to-build-an-agentic-os-claude-os",
+     "label": "Chase AI: earlier agentic OS post (same paid gate)",
+     "alive": true,
+     "page_title": "How to Build an Agentic OS (Claude OS) That Works - Chase AI"
     },
     {
      "url": "https://www.chaseai.io/blog/voice-driven-agentic-os-claude-code",
@@ -1723,7 +1759,7 @@
    ],
    "media_id": "2c2a8864f72ad461",
    "pdf_file": "doc.pdf",
-   "build_prompt": "# Build: excalidraw‑quick‑diagram\n\nA tiny React app that turns a plain‑text description into an Excalidraw diagram and lets you download PNG/SVG.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Why this matters\nShows end‑to‑end mastery: parsing natural language, generating valid Excalidraw JSON, embedding the editor, and exporting assets – a full‑stack product rather than a static tutorial clone.\n\n## Scope\nBuild these:\n- React front‑end with @excalidraw/excalidraw component\n- Simple parser that maps keywords (flow, decision, start, end) to shapes\n- Export buttons for PNG and SVG using the built‑in `exportToBlob` API\n- Deployable on Vercel (no server‑side code)\n\nExplicitly do NOT build these:\n- No authentication or multi‑user collaboration\n- No custom shape libraries beyond the built‑in set\n- No enterprise Excalidraw+ features\n\n## Stack - use these exact versions\n- React 18\n- TypeScript\n- Vite\n- @excalidraw/excalidraw\n- TailwindCSS (optional)\n\n## Milestones - each must be verifiably done before the next\n1. **Setup project & embed editor**\n   - Done when: Running React app with an empty Excalidraw canvas.\n2. **Implement text‑to‑JSON parser**\n   - Done when: User can type a line like \"start → process → end\" and see corresponding shapes appear.\n3. **Add export buttons**\n   - Done when: Canvas can be saved as PNG or SVG with a single click.\n4. **Deploy to Vercel**\n   - Done when: Public URL that works offline (PWA support).\n\n## README must cover\n- Project Overview\n- Demo Screenshot / Live URL\n- Tech Stack\n- Installation (npm install, dev server)\n- Usage (how to type descriptions, export options)\n- Architecture (parser → JSON → Excalidraw component)\n- Deployment (Vercel steps)\n- Future Work (MCP, plugins)\n- License\n\n## Only after everything above works\n- Add MCP integration so Claude can edit the diagram via API.\n- Support custom colour palettes and roughness toggles.\n- Persist diagrams in localStorage and allow sharing via read‑only links.\n\n## Background\nExcalidraw is an open‑source, web‑based whiteboard that lets you draw hand‑sketch‑style diagrams on an infinite canvas. It ships as a React component (npm package @excalidraw/excalidraw) that can be embedded in any web app or run as a self‑hosted instance.\n\n## Known traps - handle these, do not rediscover them\n- Every element must include the required fields (type, id, x, y, width, height) – missing any throws at export time (source).\n- Arrow bindings require both startBinding/endBinding **and** the target shape’s boundElements array to be kept in sync (source).\n- Do not use custom hex colours; only colours listed in color‑palette.md are accepted (source).\n- Roughness > 0 gives a hand‑drawn look but can cause blurry edges; set roughness = 0 for technical diagrams (source).\n- Exporting via the CLI launches Chromium; non‑finite numbers (NaN, Infinity) or stringified numbers break the renderer (source).\n\n## Reference (checked and reachable)\n- Excalidraw Developer Docs: https://docs.excalidraw.com/\n- Excalidraw+ Documentation (API & MCP): https://plus.excalidraw.com/docs\n- GitHub Repository: https://github.com/excalidraw/excalidraw\n- Excalidraw developer docs: https://docs.excalidraw.com/\n- https://github.com/edoardob90/excalidraw-skills/blob/main/excalidraw/gotchas.md: https://github.com/edoardob90/excalidraw-skills/blob/main/excalidraw/gotchas.md\n- https://github.com/excalidraw/excalidraw: https://github.com/excalidraw/excalidraw\n- LinkedIn Talent Solutions: https://lnkd.in/dW9cYmFv\n- Excalidraw documentation | Excalidraw+ | Online whiteboard collaboration made easy: https://plus.excalidraw.com/docs\n- https://www.youtube.com/watch?v=KXbZcV6YV8U: https://www.youtube.com/watch?v=KXbZcV6YV8U\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. They get run before any of this is\n  published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the, boasts, in today's, ever-evolving, at its core, robust and scalable, first-class, battle-tested, rock-solid, supercharge, effortlessly, in conclusion, let's explore, we'll explore, whether you're, look no further, the world of.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/p/DdcDA1sN8eS/?stkn=eW01N3A0ZWM3bDds\nRough size: about 12 hours of work.",
+   "build_prompt": "# Build: excalidraw‑quick‑diagram\n\nA tiny React app that turns a plain‑text description into an Excalidraw diagram and lets you download PNG/SVG.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Why this matters\nShows end‑to‑end mastery: parsing natural language, generating valid Excalidraw JSON, embedding the editor, and exporting assets – a full‑stack product rather than a static tutorial clone.\n\n## Scope\nBuild these:\n- React front‑end with @excalidraw/excalidraw component\n- Simple parser that maps keywords (flow, decision, start, end) to shapes\n- Export buttons for PNG and SVG using the built‑in `exportToBlob` API\n- Deployable on Vercel (no server‑side code)\n\nExplicitly do NOT build these:\n- No authentication or multi‑user collaboration\n- No custom shape libraries beyond the built‑in set\n- No enterprise Excalidraw+ features\n\n## Stack - use these exact versions\n- React 18\n- TypeScript\n- Vite\n- @excalidraw/excalidraw\n- TailwindCSS (optional)\n\n## Milestones - each must be verifiably done before the next\n1. **Setup project & embed editor**\n   - Done when: Running React app with an empty Excalidraw canvas.\n2. **Implement text‑to‑JSON parser**\n   - Done when: User can type a line like \"start → process → end\" and see corresponding shapes appear.\n3. **Add export buttons**\n   - Done when: Canvas can be saved as PNG or SVG with a single click.\n4. **Deploy to Vercel**\n   - Done when: Public URL that works offline (PWA support).\n\n## README must cover\n- Project Overview\n- Demo Screenshot / Live URL\n- Tech Stack\n- Installation (npm install, dev server)\n- Usage (how to type descriptions, export options)\n- Architecture (parser → JSON → Excalidraw component)\n- Deployment (Vercel steps)\n- Future Work (MCP, plugins)\n- License\n\n## Only after everything above works\n- Add MCP integration so Claude can edit the diagram via API.\n- Support custom colour palettes and roughness toggles.\n- Persist diagrams in localStorage and allow sharing via read‑only links.\n\n## Background\nExcalidraw is an open‑source, web‑based whiteboard that lets you draw hand‑sketch‑style diagrams on an infinite canvas. It ships as a React component (npm package @excalidraw/excalidraw) that can be embedded in any web app or run as a self‑hosted instance.\n\n## Known traps - handle these, do not rediscover them\n- Every element must include the required fields (type, id, x, y, width, height) – missing any throws at export time (source).\n- Arrow bindings require both startBinding/endBinding **and** the target shape’s boundElements array to be kept in sync (source).\n- Do not use custom hex colours; only colours listed in color‑palette.md are accepted (source).\n- Roughness > 0 gives a hand‑drawn look but can cause blurry edges; set roughness = 0 for technical diagrams (source).\n- Exporting via the CLI launches Chromium; non‑finite numbers (NaN, Infinity) or stringified numbers break the renderer (source).\n\n## Reference (checked and reachable)\n- Excalidraw Developer Docs: https://docs.excalidraw.com/\n- Excalidraw+ Documentation (API & MCP): https://plus.excalidraw.com/docs\n- GitHub Repository: https://github.com/excalidraw/excalidraw\n- Excalidraw developer docs: https://docs.excalidraw.com/\n- https://github.com/edoardob90/excalidraw-skills/blob/main/excalidraw/gotchas.md: https://github.com/edoardob90/excalidraw-skills/blob/main/excalidraw/gotchas.md\n- https://github.com/excalidraw/excalidraw: https://github.com/excalidraw/excalidraw\n- LinkedIn Talent Solutions: https://lnkd.in/dW9cYmFv\n- Excalidraw documentation | Excalidraw+ | Online whiteboard collaboration made easy: https://plus.excalidraw.com/docs\n- https://www.youtube.com/watch?v=KXbZcV6YV8U: https://www.youtube.com/watch?v=KXbZcV6YV8U\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. Python tests are run with pytest before\n  any of this is published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the, boasts, in today's, ever-evolving, at its core, robust and scalable, first-class, battle-tested, rock-solid, supercharge, effortlessly, in conclusion, let's explore, we'll explore, whether you're, look no further, the world of.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/p/DdcDA1sN8eS/?stkn=eW01N3A0ZWM3bDds\nRough size: about 12 hours of work.",
    "slide_ext": ".jpg"
   },
   {
@@ -3758,7 +3794,7 @@
    ],
    "media_id": "0d895b2b9d4ca82d",
    "pdf_file": "doc.pdf",
-   "build_prompt": "# Build: triage-guard-agent\n\nA resilient customer support triage agent with conditional tool execution, state persistence, and human-in-the-loop interrupt approval for refund actions.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Why this matters\nGoes beyond basic ReAct chatbot clones by implementing deterministic guardrail routing, checkpoint-backed state persistence, and explicit human-in-the-loop interrupts for sensitive transactions.\n\n## Scope\nBuild these:\n- TypedDict StateGraph\n- arithmetic/order search tools\n- SQLite checkpointer for session persistence\n- conditional edge routing\n- human-in-the-loop approval interrupt for actions over $50\n\nExplicitly do NOT build these:\n- Custom frontend UI\n- multi-tenant authentication\n- custom model fine-tuning\n\n## Stack - use these exact versions\n- Python 3.11+\n- langgraph>=1.2.12\n- langchain-core\n- langgraph-checkpoint-sqlite\n- langchain-anthropic or langchain-openai\n\n## Milestones - each must be verifiably done before the next\n1. **Define State and Reducers**\n   - Done when: A TypedDict state schema with Annotated[list, operator.add] messages and metadata counters.\n2. **Build Deterministic & Agentic Nodes**\n   - Done when: LLM model node bound with search and calculation tools, plus a tool execution node.\n3. **Add Conditional Routing & Persistence**\n   - Done when: Conditional edges that route to tool nodes or terminate at END, compiled with an in-memory or SQLite checkpointer.\n4. **Implement Human-in-the-Loop Interrupt**\n   - Done when: The graph pauses execution using interrupt() whenever an order refund exceeds a set threshold, awaiting external review.\n\n## README must cover\n- Project Overview & Architecture Diagram (Mermaid graph)\n- Key Engineering Concepts (Pregel cycles, Reducers, Durable State, Interrupts)\n- Prerequisites and Environment Setup\n- Step-by-Step Execution Guide (CLI simulation with human approval demo)\n- Testing & Persistence Validation\n- Future Roadmap\n\n## Only after everything above works\n- Migrate checkpointer backend from SQLite to PostgreSQL using langgraph-checkpoint-postgres.\n- Add subgraphs for modular routing between billing and technical diagnostics.\n- Attach LangSmith tracing to monitor execution super-steps and evaluate latency.\n\n## Background\nLangGraph is a low-level orchestration runtime and framework for building stateful, multi-actor LLM applications using graph architectures. Inspired by Google's Pregel system, it coordinates agents and deterministic code as nodes connected by edges, executing in discrete super-steps with explicit message-passing. It provides native persistence, cyclical execution loops, and first-class human-in-the-loop controls without abstracting away model prompts or code.\n\n## Known traps - handle these, do not rediscover them\n- State overwriting: Failing to use channel reducers like Annotated[list[AnyMessage], operator.add] causes nodes to overwrite the message history instead of appending to it.\n- Missing compilation: Forgetting to call .compile() on the StateGraph builder before attempting to invoke or stream executions.\n- Infinite loops in conditional edges: Not configuring a clean base case or terminal condition routing to END in conditional routing functions.\n- Confusing the Graph API with the Functional API: LangGraph supports both StateGraph (Graph API) and function-based workflows (Functional API); mixing mental models can cause state synchronization bugs.\n\n## Reference (checked and reachable)\n- LangGraph Overview - Docs by LangChain: https://docs.langchain.com/oss/python/langgraph/overview\n- LangGraph Quickstart - Docs by LangChain: https://docs.langchain.com/oss/python/langgraph/quickstart\n- LangGraph Framework Documentation | langchain-ai/docs | DeepWiki: https://deepwiki.com/langchain-ai/docs/2.2-langgraph-framework-documentation\n- https://docs.langchain.com/: https://docs.langchain.com/\n- https://docs.langchain.com/oss/python/langgraph/deploy: https://docs.langchain.com/oss/python/langgraph/deploy\n- https://docs.langchain.com/oss/python/langgraph/graph-api: https://docs.langchain.com/oss/python/langgraph/graph-api\n- https://docs.langchain.com/oss/python/langgraph/interrupts: https://docs.langchain.com/oss/python/langgraph/interrupts\n- https://docs.langchain.com/oss/python/langgraph/overview: https://docs.langchain.com/oss/python/langgraph/overview\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. They get run before any of this is\n  published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the, boasts, in today's, ever-evolving, at its core, robust and scalable, first-class, battle-tested, rock-solid, supercharge, effortlessly, in conclusion, let's explore, we'll explore, whether you're, look no further, the world of.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/p/DdZQsecgKqv/?img_index=7&stkn=ZHkweDQyYWJwNXg=\nRough size: about 8 hours of work.",
+   "build_prompt": "# Build: triage-guard-agent\n\nA resilient customer support triage agent with conditional tool execution, state persistence, and human-in-the-loop interrupt approval for refund actions.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Why this matters\nGoes beyond basic ReAct chatbot clones by implementing deterministic guardrail routing, checkpoint-backed state persistence, and explicit human-in-the-loop interrupts for sensitive transactions.\n\n## Scope\nBuild these:\n- TypedDict StateGraph\n- arithmetic/order search tools\n- SQLite checkpointer for session persistence\n- conditional edge routing\n- human-in-the-loop approval interrupt for actions over $50\n\nExplicitly do NOT build these:\n- Custom frontend UI\n- multi-tenant authentication\n- custom model fine-tuning\n\n## Stack - use these exact versions\n- Python 3.11+\n- langgraph>=1.2.12\n- langchain-core\n- langgraph-checkpoint-sqlite\n- langchain-anthropic or langchain-openai\n\n## Milestones - each must be verifiably done before the next\n1. **Define State and Reducers**\n   - Done when: A TypedDict state schema with Annotated[list, operator.add] messages and metadata counters.\n2. **Build Deterministic & Agentic Nodes**\n   - Done when: LLM model node bound with search and calculation tools, plus a tool execution node.\n3. **Add Conditional Routing & Persistence**\n   - Done when: Conditional edges that route to tool nodes or terminate at END, compiled with an in-memory or SQLite checkpointer.\n4. **Implement Human-in-the-Loop Interrupt**\n   - Done when: The graph pauses execution using interrupt() whenever an order refund exceeds a set threshold, awaiting external review.\n\n## README must cover\n- Project Overview & Architecture Diagram (Mermaid graph)\n- Key Engineering Concepts (Pregel cycles, Reducers, Durable State, Interrupts)\n- Prerequisites and Environment Setup\n- Step-by-Step Execution Guide (CLI simulation with human approval demo)\n- Testing & Persistence Validation\n- Future Roadmap\n\n## Only after everything above works\n- Migrate checkpointer backend from SQLite to PostgreSQL using langgraph-checkpoint-postgres.\n- Add subgraphs for modular routing between billing and technical diagnostics.\n- Attach LangSmith tracing to monitor execution super-steps and evaluate latency.\n\n## Background\nLangGraph is a low-level orchestration runtime and framework for building stateful, multi-actor LLM applications using graph architectures. Inspired by Google's Pregel system, it coordinates agents and deterministic code as nodes connected by edges, executing in discrete super-steps with explicit message-passing. It provides native persistence, cyclical execution loops, and first-class human-in-the-loop controls without abstracting away model prompts or code.\n\n## Known traps - handle these, do not rediscover them\n- State overwriting: Failing to use channel reducers like Annotated[list[AnyMessage], operator.add] causes nodes to overwrite the message history instead of appending to it.\n- Missing compilation: Forgetting to call .compile() on the StateGraph builder before attempting to invoke or stream executions.\n- Infinite loops in conditional edges: Not configuring a clean base case or terminal condition routing to END in conditional routing functions.\n- Confusing the Graph API with the Functional API: LangGraph supports both StateGraph (Graph API) and function-based workflows (Functional API); mixing mental models can cause state synchronization bugs.\n\n## Reference (checked and reachable)\n- LangGraph Overview - Docs by LangChain: https://docs.langchain.com/oss/python/langgraph/overview\n- LangGraph Quickstart - Docs by LangChain: https://docs.langchain.com/oss/python/langgraph/quickstart\n- LangGraph Framework Documentation | langchain-ai/docs | DeepWiki: https://deepwiki.com/langchain-ai/docs/2.2-langgraph-framework-documentation\n- https://docs.langchain.com/: https://docs.langchain.com/\n- https://docs.langchain.com/oss/python/langgraph/deploy: https://docs.langchain.com/oss/python/langgraph/deploy\n- https://docs.langchain.com/oss/python/langgraph/graph-api: https://docs.langchain.com/oss/python/langgraph/graph-api\n- https://docs.langchain.com/oss/python/langgraph/interrupts: https://docs.langchain.com/oss/python/langgraph/interrupts\n- https://docs.langchain.com/oss/python/langgraph/overview: https://docs.langchain.com/oss/python/langgraph/overview\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. Python tests are run with pytest before\n  any of this is published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the, boasts, in today's, ever-evolving, at its core, robust and scalable, first-class, battle-tested, rock-solid, supercharge, effortlessly, in conclusion, let's explore, we'll explore, whether you're, look no further, the world of.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/p/DdZQsecgKqv/?img_index=7&stkn=ZHkweDQyYWJwNXg=\nRough size: about 8 hours of work.",
    "slide_ext": ".webp"
   }
  ],

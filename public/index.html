@@ -131,7 +131,8 @@ a:hover{text-decoration:underline}
 .kind.learn{background:var(--glaze)}
 .kind.install{background:var(--kiln-green)}
 .kind.build{background:#b48ead}
-.body h3{font-size:15.5px;font-weight:600;letter-spacing:-.25px;line-height:1.32;margin-bottom:4px}
+.tile .body{min-width:0}
+.body h3{font-size:15.5px;font-weight:600;letter-spacing:-.25px;line-height:1.32;margin-bottom:4px;overflow-wrap:anywhere}
 .body .hook{font-size:13px;color:var(--bone-dim);line-height:1.45}
 .metaline{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-top:9px}
 .tag{font-family:var(--mono);font-size:10px;color:var(--bone-faint);background:var(--ash-3);padding:2.5px 7px;border-radius:3px}
@@ -165,7 +166,7 @@ a:hover{text-decoration:underline}
 }
 .drawer .x{position:absolute;top:18px;right:22px;font-size:22px;color:var(--bone-faint);line-height:1}
 .drawer .x:hover{color:var(--bone)}
-.drawer h2{font-size:23px;font-weight:800;letter-spacing:-.6px;line-height:1.22;margin:0 40px 8px 0}
+.drawer h2{font-size:23px;font-weight:800;letter-spacing:-.6px;line-height:1.22;margin:0 40px 8px 0;overflow-wrap:anywhere}
 .drawer .lede{color:var(--bone-dim);font-size:14px;margin-bottom:16px}
 .sec{margin-top:24px;border-top:1px solid var(--rule);padding-top:16px}
 .sec > h4{
@@ -326,7 +327,7 @@ async function api(url, opts){
       if(q) out = out.filter(i => JSON.stringify(i).toLowerCase().includes(q));
       return {items: out, jobs: {}};
     }
-    if(url.startsWith('/api/health')) return {gemini:false, ollama:false, models:[], quota:{models:[]}};
+    if(url.startsWith('/api/health')) return {free:false, quota:{models:[]}};
     return {};
   }
   if(opts.method && opts.method !== 'GET'){
@@ -360,16 +361,18 @@ async function load(){
 }
 
 async function health(){
+  // The published copy has no meter, and no server to ask.
+  const meter = $('#meter');
+  if(!meter) return;
   try{
     const h = await api('/api/health');
     const qm = (h.quota||{}).models||[];
     // Every rung in the ladders together: reads left today out of the budget.
     const left = qm.reduce((a,m)=>a+(m.left||0),0), budget = qm.reduce((a,m)=>a+(m.budget||0),0);
-    $('#meter').innerHTML = `
-      <div class="row"><span><span class="dot ${h.gemini?'on':'off'}"></span>gemini</span><b>${h.gemini?'ready':'down'}</b></div>
-      <div class="row"><span><span class="dot ${h.ollama?'on':'off'}"></span>ollama</span><b>${(h.models||[]).length} models</b></div>
+    meter.innerHTML = `
+      <div class="row"><span><span class="dot ${h.free?'on':'off'}"></span>free models</span><b>${h.free?'ready':'down'}</b></div>
       <div class="row"><span>free calls left</span><b>${qm.length?left+' / '+budget:'-'}</b></div>`;
-  }catch{ $('#meter').innerHTML = `<div class="row"><span><span class="dot off"></span>server</span><b>unreachable</b></div>`; }
+  }catch{ meter.innerHTML = `<div class="row"><span><span class="dot off"></span>server</span><b>unreachable</b></div>`; }
 }
 
 /* ---------- render ---------- */
@@ -532,8 +535,9 @@ function detail(it){
       (e.project.stretch||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`:''}
     </div>` : '';
 
-  // Copy works anywhere, because the prompt is built from data already on
-  // the page. Queueing needs a machine, so it only shows locally.
+  // Copy works anywhere, because the prompt comes with the item: the server
+  // sends jobs.build_prompt locally, and the site ships it in the data.
+  // Queueing needs a machine, so it only shows locally.
   const build = e.project ? `<div class="sec"><h4>Build it</h4>
     <p class="warn" style="margin-top:0">${LOCAL
       ? 'Same prompt either way, so nothing drifts.'
@@ -599,6 +603,7 @@ function detail(it){
   const followSec = (fu.answer_html || (fu.artifacts||[]).length || working) ? `<div class="sec"><h4>${working?'Following up on this now':heading}</h4>
     ${fu.answer_html?`<div class="answer">${fu.answer_html}</div>`:''}
     ${!STATIC && c.missing?`<p class="warn">Not done: ${esc(c.missing)}</p>`:''}
+    ${!STATIC && c.set_aside?`<p class="warn">The first read's research was set aside: ${esc(c.set_aside)}</p>`:''}
     ${fu.next_action?`<p class="warn">Next: ${esc(fu.next_action)}</p>`:''}
     ${fuFiles}${fuSources}</div>` : '';
 
@@ -854,9 +859,9 @@ async function answerQ(id, choice, picked){
   asks();
 }
 
-load(); health(); renderAbout(); asks();
+load(); renderAbout(); asks();
+if(!STATIC){ health(); setInterval(health, 30000); }
 setInterval(()=>{ if(Object.values(state.jobs).some(j=>['working','queued','followup'].includes(j.stage))) load(); }, 3000);
-setInterval(health, 30000);
 setInterval(asks, 60000);
 </script>
 </body>
