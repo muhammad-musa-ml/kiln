@@ -837,6 +837,10 @@ def test_inbox_changes():
         got = store.get_item(conn, store.item_id(one))
         check("without the first one being read again", int(got.get("attempts") or 0) == 1,
               str(got.get("attempts")))
+        tags = [(store.get_item(conn, store.item_id(u)).get("tags") or {}).get("user")
+                for u in (one, two)]
+        check("and the two now share a group, the first one included",
+              tags[0] and tags[0] == tags[1] and tags[0][0].startswith("group:"), str(tags))
         conn.execute("UPDATE items SET claude_state='done' WHERE id=?", (store.item_id(one),))
         conn.commit()
         out = ingest.ingest_text(one + " " + two + " | put both in a PDF\n", conn=conn)
