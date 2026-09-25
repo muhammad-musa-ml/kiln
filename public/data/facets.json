@@ -2,8 +2,7 @@
  "total": 25,
  "by_action": {
   "redo": 11,
-  "build": 1,
-  "apply": 1,
+  "build": 2,
   "reference": 1,
   "learn": 2,
   "watch": 7,
@@ -79,5 +78,5 @@
  ],
  "by_status": {},
  "gated": 2,
- "dead_links": 14
+ "dead_links": 15
 }
