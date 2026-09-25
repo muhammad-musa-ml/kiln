@@ -130,6 +130,7 @@ WHEN THERE IS WORK
 - The first pass listed followups or things it could not do, and they are worth doing and possible with the tools below.
 - The read is thin, wrong or missing things it clearly should have: slides not covered, names on screen not captured, a title that is the post's clickbait rather than its subject.
 - The first pass researched the wrong question: it took a setup guide for a job posting, a tool for a course, and so on, so the research on his page is about the wrong thing.
+- An earlier follow-up says it fixed something that is still wrong. earlier_follow_up is only what it said: research is what his page shows now, and research_set_aside is what was actually taken off it.
 - Something he would act on is unverified, or a link he needs is dead and a live one exists.
 
 WHEN THERE IS NOT
@@ -393,6 +394,10 @@ def _view(it: dict, media: list[str], unread: bool = False) -> dict:
     if earlier.get("answer"):
         v["earlier_follow_up"] = {k: earlier.get(k) for k in
                                   ("answer", "answered", "missing")}
+    aside = enr.get("_set_aside") or {}
+    if aside.get("fields"):
+        v["research_set_aside"] = {"why": aside.get("why") or "",
+                                   "fields": sorted(aside["fields"])}
     if unread:
         brief = _pending_brief(it["id"])
         v["unread"] = True
@@ -1055,6 +1060,11 @@ def _follow_up(conn, ids: list[str], allow_read: bool) -> dict:
                                    else enr.get("answered") or "fully"),
                       "unit": unit, "unit_items": ids, "planner": plogs, "at": now,
                       "run_dir": str(run_dir.relative_to(config.DATA))}
+            earlier = it.get("claude") or {}
+            if earlier.get("answer"):
+                # Nothing to add is no reason to drop what an earlier
+                # follow-up gave him. Its answer stays; this look is noted.
+                claude = {**earlier, "state": "done", "checked_again": claude}
             store.upsert_item(conn, {"id": it["id"], "url": it["url"],
                                      "claude_state": "done", "claude_at": now,
                                      "claude_json": json.dumps(claude, ensure_ascii=False)})
