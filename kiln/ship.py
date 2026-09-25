@@ -216,6 +216,11 @@ def _venv_python(workdir: Path) -> str:
     return sys.executable
 
 
+# Folders that hold other people's code, never the project's own tests.
+_NOT_THE_PROJECT = {".venv", "venv", "env", "node_modules", ".git", "site-packages",
+                    "__pycache__", "build", "dist"}
+
+
 def run_tests(workdir: Path) -> dict:
     """Run the project's own tests, here, and report what happened.
 
@@ -225,7 +230,11 @@ def run_tests(workdir: Path) -> dict:
     the chain read the rest of its answer as a verdict. This runs pytest as
     a subprocess and reads the exit code, which cannot be talked around.
     """
-    found = sorted(workdir.glob("tests/test_*.py")) + sorted(workdir.glob("test_*.py"))
+    # Anywhere in the project, the way pytest itself looks. Only the top
+    # level and tests/ were checked, so a suite one folder down counted as
+    # no tests at all and the project went out untested.
+    found = sorted(p for pat in ("test_*.py", "*_test.py") for p in workdir.rglob(pat)
+                   if not set(p.relative_to(workdir).parts) & _NOT_THE_PROJECT)
     if not found:
         return {"found": False, "ran": False, "passed": True,
                 "why": "the project ships no tests", "tail": ""}

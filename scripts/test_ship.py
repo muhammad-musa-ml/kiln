@@ -364,6 +364,22 @@ def test_run_tests() -> None:
         check("test files that collect nothing do not count as passing",
               not r["passed"], str(r)[:200])
 
+    # A suite one folder down, named the other way pytest accepts. Only the
+    # top level and tests/ used to be looked at, so this went out untested.
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as t:
+        d = Path(t)
+        (d / "pkg" / "checks").mkdir(parents=True)
+        (d / "pkg" / "checks" / "maths_test.py").write_text(
+            "def test_no():\n    assert 1 + 1 == 3\n", encoding="utf-8")
+        (d / "node_modules" / "dep").mkdir(parents=True)
+        (d / "node_modules" / "dep" / "test_theirs.py").write_text(
+            "def test_x():\n    assert True\n", encoding="utf-8")
+        r = ship.run_tests(d)
+        check("tests anywhere in the project are found and run",
+              r["found"] and r["ran"] and not r["passed"], str(r)[:200])
+        check("but not the ones inside other people's code",
+              r.get("files") == 1, str(r.get("files")))
+
 
 def test_ci_helpers() -> None:
     print("reading the CI result back")
