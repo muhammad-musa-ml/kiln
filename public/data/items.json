@@ -1,6 +1,300 @@
 {
  "items": [
   {
+   "id": "b979ce52707652aa",
+   "url": "https://www.instagram.com/reel/DcoyY8JD39E/?stkn=MWF5ZnlyYmJhNHEyaQ==",
+   "kind": "instagram",
+   "action": "redo",
+   "title": "https://www.instagram.com/reel/DcoyY8JD39E/?stkn=MWF5ZnlyYmJhNHEyaQ==",
+   "summary": "Nothing could be read from this link. browser loaded the page but found no media",
+   "slide_count": 0,
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "slide_ext": ".webp"
+  },
+  {
+   "id": "03d5b6b18a964e5d",
+   "url": "https://www.instagram.com/p/DdpdeD-HPsJ/?img_index=6&stkn=MTNub21mMHk0dWw5OA==",
+   "kind": "tutorial",
+   "action": "apply",
+   "title": "Build Your Own AI-Powered Jarvis OS 2.0 Workflow",
+   "hook": "Learn how to build a unified AI operating system that manages your entire day.",
+   "summary": "This guide introduces Jarvis OS 2.0, a comprehensive AI-driven workflow that integrates Claude Code, Obsidian, and local voice processing. The system uses a new classifier called Jev to route requests efficiently, significantly reducing latency and costs. By following these steps, you can create a centralized dashboard that handles tasks, research, and scheduling using markdown-based memory. It is designed to be a modular, local-first system that keeps your data and audio on your machine.",
+   "owner": "chase.h.ai",
+   "posted": "September 23, 2026",
+   "slide_count": 9,
+   "focus_slide": 6,
+   "links_checked": "24 Sep 2026",
+   "note": {
+    "sections": [
+     {
+      "heading": "Overview of Jarvis OS 2.0",
+      "detail": "The system architecture consists of five core components: Claude Code/Codex as the engine, Obsidian as the memory vault, local voice processing (Whisper + Kokoro), Jev as the request classifier, and a dual-dashboard interface (Cockpit + HUD)."
+     },
+     {
+      "heading": "Jev: The Intelligent Classifier",
+      "detail": "Jev is a 'System One' model from TypeSafe that acts as a router rather than a text generator. It classifies voice requests into three tiers, reducing routing time from 5 seconds to under 1 second. It is highly cost-effective at $0.042 per million input tokens."
+     },
+     {
+      "heading": "How the System Works",
+      "detail": "The workflow follows a simple loop: the user speaks or clicks in Obsidian or the HUD, Jev classifies the request, and the agent (Claude Code or Codex) executes the task, saving the output as markdown in the vault. This ensures a unified experience across different interfaces."
+     },
+     {
+      "heading": "The 5 Essential Parts",
+      "detail": "The system requires: 1. Claude Code/Codex (engine), 2. Obsidian (memory), 3. Whisper + Kokoro (local audio), 4. Jev (classifier), and 5. Cockpit + HUD (interface)."
+     },
+     {
+      "heading": "Step 1: Wire the Brain",
+      "detail": "Users define 'skills' as individual .md files in a folder. Each dashboard button triggers a specific skill, such as 'Plan Today', 'Inbox Brief', or 'Deep Research', allowing for custom, repeatable workflows."
+     },
+     {
+      "heading": "Step 2: Build the Memory",
+      "detail": "The vault structure is critical: /inbox for captures, /projects for WIP, /content for shipped work, and /wiki for knowledge. Every report is saved as markdown, and daily notes track the schedule and top priorities. The system uses a graph-based approach where notes and reports link together for the agent to reference."
+     },
+     {
+      "heading": "Step 3: Add the Voice",
+      "detail": "Users can trigger the system via Ctrl+Alt+J. Local Whisper handles transcription, and Kokoro provides text-to-speech. Requests are routed into three tiers: Tier 1 (rules/data), Tier 2 (fast model), and Tier 3 (real work/terminal access)."
+     },
+     {
+      "heading": "Step 4: Install the Face",
+      "detail": "Installation is performed by cloning the 'Agentic OS V2' repository and running a specific prompt. The dashboard provides a visual interface for usage metrics, task management, and one-click workflows."
+     },
+     {
+      "heading": "Call to Action",
+      "detail": "The creator instructs users to comment 'Jarvis' to receive the repository link and the installation prompt."
+     }
+    ],
+    "onscreen_text": [
+     "THE V2 BUILD",
+     "Build Your JARVIS OS 2.0",
+     "one prompt installs it. it runs your whole day",
+     "NOW ROUTED BY JEV",
+     "CLAUDE CODE + CODEX",
+     "The engine",
+     "OBSIDIAN",
+     "The memory",
+     "LOCAL VOICE",
+     "Ears + mouth",
+     "NEW",
+     "JEV",
+     "The classifier",
+     "TWO DASHBOARDS",
+     "The face",
+     "jev picks the tier",
+     "speak",
+     "route",
+     "remember",
+     "RUNS YOUR WHOLE DAY",
+     "What Jev Actually Does",
+     "IT DOESN'T TALK. IT DECIDES.",
+     "A new \"System One\" model from TypeSafe.",
+     "It doesn't write text. It picks one answer from a fixed list.",
+     "Here it's the classifier: every voice request goes to Tier 1, 2 or 3.",
+     "Routing drops from ~5 seconds to under one.",
+     "$0.042 per million input tokens. Output is free.",
+     "WITHOUT JEV",
+     "your main model routes ~5 s",
+     "WITH JEV",
+     "the classifier routes under 1 s",
+     "How It Works",
+     "1. You: talk or click, in Obsidian or the HUD.",
+     "2. Jev: classifies the request and routes it to the right tier.",
+     "3. Your agent: Claude Code or Codex does the work and saves it to the vault.",
+     "THE ADVANTAGE",
+     "Same buttons in both apps",
+     "Same voice in both apps",
+     "No database",
+     "Just markdown",
+     "Show up with answers. Not open tabs.",
+     "The 5 Parts You Need",
+     "FIVE PARTS. ONE SYSTEM. THAT'S IT.",
+     "Part",
+     "What It Does",
+     "Claude Code / Codex",
+     "The engine. Does the real work. Switch anytime.",
+     "Obsidian vault",
+     "The memory. Every report lands as markdown.",
+     "Whisper + Kokoro",
+     "The ears + mouth. Your audio stays on your machine.",
+     "Jev",
+     "The classifier. Sorts each request into the right tier.",
+     "Cockpit + HUD",
+     "The face. Two views of the same system.",
+     "Focus on wiring. Not busywork.",
+     "DO THIS NOW. IT COMPOUNDS.",
+     "Step 1: Wire the Brain",
+     "SKILLS ARE THE BRAIN CELLS.",
+     "PICK UP TO TEN. BOTH APPS UPDATE.",
+     "What it is:",
+     "Claude Code or Codex + a folder of skills",
+     "each skill = one SKILL.md",
+     "every dashboard button runs one",
+     "Your starter buttons:",
+     "Plan Today — your top 3 + schedule",
+     "Inbox Brief — email, triaged",
+     "Intel Brief — today's AI news",
+     "Deep Research — a report in your vault",
+     "Weekly Review — your week, scored",
+     "The rule:",
+     "every button points to a real, reviewed SKILL.md",
+     "Step 2: Build the Memory",
+     "If it's not in the vault, it didn't happen.",
+     "vault/",
+     "inbox/ — everything captured",
+     "projects/ — work in progress",
+     "content/ — what you shipped",
+     "wiki/ — what you learned",
+     "1 Every report lands as markdown. No database.",
+     "2 Daily notes hold your plan, schedule and top 3.",
+     "3 /harvest turns a finished project into a wiki article.",
+     "4 Both dashboards read the same files.",
+     "Notes, reports and conversations link into one graph. Your agent reads it, and so can you.",
+     "Step 3: Add the Voice",
+     "Your audio never leaves the machine.",
+     "The orb shows every state: listening, working, speaking.",
+     "TIER 1",
+     "Rules + saved data. Instant.",
+     "\"What are my priorities?\"",
+     "TIER 2",
+     "Small fast model.",
+     "\"Summarize today's AI news.\"",
+     "TIER 3",
+     "Real work.",
+     "Opens a Claude Code or Codex terminal.",
+     "Press Ctrl+Alt+J from any app",
+     "Speak, then pause. Local Whisper transcribes.",
+     "Kokoro answers out loud.",
+     "MEET JEV",
+     "It doesn't write answers.",
+     "It picks the tier.",
+     "Without it: ~5 seconds per route.",
+     "Step 4: Install the Face",
+     "ONE PROMPT. TWO DASHBOARDS.",
+     "Open Claude Code or Codex. Paste this:",
+     "Clone the Agentic OS V2 repo into ~/agentic-os",
+     "and set it up for me.",
+     "It installs what's missing.",
+     "Pick your buttons.",
+     "Something breaks? \"Run the doctor.\"",
+     "The Obsidian cockpit: usage, metrics, one-click workflows and today's plan, all read from your vault.",
+     "Chase AI",
+     "AI workflows • agents • Claude Code",
+     "Follow",
+     "Message",
+     "Comment \"JARVIS\"",
+     "To get the repo + install prompt",
+     "Save for later"
+    ],
+    "entities": [
+     {
+      "name": "Claude Code",
+      "type": "tool",
+      "why": "The engine used for executing tasks and real work."
+     },
+     {
+      "name": "Obsidian",
+      "type": "tool",
+      "why": "The memory vault where all reports and notes are stored as markdown."
+     },
+     {
+      "name": "Jev",
+      "type": "tool",
+      "why": "A new classifier model from TypeSafe that routes requests to the appropriate tier."
+     },
+     {
+      "name": "Whisper",
+      "type": "tool",
+      "why": "Used for local speech-to-text transcription."
+     },
+     {
+      "name": "Kokoro",
+      "type": "tool",
+      "why": "Used for local text-to-speech output."
+     },
+     {
+      "name": "TypeSafe",
+      "type": "company",
+      "why": "The creator of the Jev classifier model."
+     }
+    ],
+    "topics": [
+     "ai",
+     "automation",
+     "productivity",
+     "obsidian",
+     "workflow"
+    ],
+    "code_snippets": [
+     "Clone the Agentic OS V2 repo into ~/agentic-os\nand set it up for me."
+    ],
+    "open_questions": [
+     "What are the specific hardware requirements to run these local models?",
+     "How does the 'Agentic OS V2' repository handle API key management for Claude/Codex?",
+     "Are there any limitations to the 'skills' that can be created in the .md format?"
+    ]
+   },
+   "enrich": {
+    "role": "Senior Infrastructure Engineer (AI/ML Systems)",
+    "company": "TypeSafe AI",
+    "location": "San Francisco, California, USA",
+    "remote": "no",
+    "is_open": "open",
+    "requirements": [
+     "Deep experience with Kubernetes in production at scale (networking, storage, scheduling, upgrades)",
+     "Strong background with AWS",
+     "Hands‑on experience with infrastructure‑as‑code (Pulumi, Terraform, or similar)",
+     "Solid Linux networking knowledge",
+     "Track record with high‑traffic production ML systems",
+     "Programming fluency, preferably Python",
+     "Experience with GPU infrastructure, autoscaling, and large‑scale LLM inference (nice‑to‑have)",
+     "Familiarity with service mesh, CNI plugins (Cilium, Istio) (nice‑to‑have)",
+     "Multi‑cloud infrastructure experience (nice‑to‑have)"
+    ],
+    "how_to_stand_out": [
+     "Demonstrate prior work building and operating global‑scale Kubernetes clusters for AI/ML workloads, especially with GPU scheduling or vLLM‑style serving.",
+     "Show concrete examples of reducing inference latency or cost in production (e.g., <200 ms response times for large models).",
+     "Provide open‑source contributions or internal tooling that improved observability, autoscaling, or reliability of ML pipelines.",
+     "Highlight any experience directly integrating structured decision models like TypeSafe’s Jev or similar System‑One models into production services."
+    ],
+    "next_action": "Submit your resume and a brief cover letter through the application link on the job posting (https://jaabz.com/jobs/275349-member-of-technical-staff-infrastructure-kubernetes-specialist)."
+   },
+   "tags": {
+    "action": [
+     "apply"
+    ],
+    "topic": [
+     "ai",
+     "automation",
+     "obsidian",
+     "productivity",
+     "workflow"
+    ]
+   },
+   "links": [
+    {
+     "url": "https://jaabz.com/jobs/275349-member-of-technical-staff-infrastructure-kubernetes-specialist",
+     "label": "",
+     "alive": true,
+     "page_title": "Senior Infrastructure Engineer (AI/ML Systems) at typesafe ai - United State | Visa Sponsorship Jobs"
+    },
+    {
+     "url": "https://simplify.jobs/c/TypeSafe-AI",
+     "label": "",
+     "alive": true,
+     "page_title": "Jobs and Employment at TypeSafe AI | Simplify Jobs"
+    }
+   ],
+   "media_id": "03d5b6b18a964e5d",
+   "pdf_file": "doc.pdf",
+   "slide_ext": ".jpg"
+  },
+  {
    "id": "9dac1181c6aae799",
    "url": "https://www.instagram.com/reel/DdphNPwqFbl/?stkn=MWpvcjd4NGpvdGx6bg==",
    "kind": "instagram",
