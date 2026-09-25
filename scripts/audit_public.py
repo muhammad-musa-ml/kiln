@@ -37,6 +37,30 @@ failures: list[str] = []
 checks = 0
 
 
+def _words(text) -> list[str]:
+    """Lowercase words with tags and punctuation gone, so a quote survives reflow."""
+    t = re.sub(r"<[^>]+>", " ", str(text or "").lower())
+    return re.sub(r"[^a-z0-9]+", " ", t).split()
+
+
+def _grams(words: list[str], n: int = 8) -> set[str]:
+    # A text shorter than n words is its own run, if it is long enough to
+    # mean anything on its own.
+    if len(words) < n:
+        return {" ".join(words)} if len(words) >= 5 else set()
+    return {" ".join(words[i:i + n]) for i in range(len(words) - n + 1)}
+
+
+def _strings(value) -> list[str]:
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, list):
+        return [s for v in value for s in _strings(v)]
+    if isinstance(value, dict):
+        return [s for v in value.values() for s in _strings(v)]
+    return []
+
+
 def fail(msg: str) -> None:
     failures.append(msg)
     print(f"  FAIL  {msg}")
@@ -54,7 +78,8 @@ def main() -> int:
 
     files = [p for p in OUT.rglob("*") if p.is_file()]
     text_files = [p for p in files
-                  if p.suffix.lower() in (".json", ".html", ".js", ".css", ".txt", ".md")]
+                  if p.suffix.lower() in (".json", ".html", ".js", ".css", ".txt", ".md",
+                                          ".csv")]
     print(f"auditing {len(files)} files ({len(text_files)} text) in {OUT}\n")
 
     # 1. Private field NAMES, checked in DATA files only.
@@ -104,7 +129,7 @@ def main() -> int:
     data = json.loads((OUT / "data" / "items.json").read_text(encoding="utf-8"))
     allowed = set(publish.ITEM_FIELDS) | {
         "note", "enrich", "tags", "links", "gate",
-        "media_id", "pdf_file", "slide_ext", "build_prompt"}
+        "media_id", "pdf_file", "slide_ext", "build_prompt", "followup"}
     extra: set[str] = set()
     for it in data.get("items", []):
         extra |= set(it.keys()) - allowed
@@ -113,17 +138,87 @@ def main() -> int:
     else:
         ok(f"all item keys within the whitelist ({len(data.get('items', []))} items)")
 
-    # 5. nested note/enrich keys are whitelisted too
+    # 5. nested note/enrich/followup keys are whitelisted too
     checks += 1
     n_allowed, e_allowed = set(publish.NOTE_FIELDS), set(publish.ENRICH_FIELDS)
+    f_allowed, a_allowed = set(publish.FOLLOWUP_FIELDS), set(publish.ARTIFACT_FIELDS)
     bad: set[str] = set()
     for it in data.get("items", []):
         bad |= set((it.get("note") or {}).keys()) - n_allowed
         bad |= set((it.get("enrich") or {}).keys()) - e_allowed
+        fu = it.get("followup") or {}
+        bad |= set(fu.keys()) - f_allowed
+        for a in fu.get("artifacts") or []:
+            bad |= set(a.keys()) - a_allowed
     if bad:
         fail(f"nested keys outside the whitelist: {sorted(bad)}")
     else:
-        ok("nested note/enrich keys within the whitelist")
+        ok("nested note/enrich/followup keys within the whitelist")
+
+    # 5b. the text inside every published PDF. A PDF compresses its text, so
+    #     the byte scan above cannot see into one; a document Claude wrote is
+    #     text I did not read before it went out, so it gets read here.
+    checks += 1
+    from kiln import artifacts
+    pdfs = [p for p in files if p.suffix.lower() == ".pdf"]
+    pdf_texts = {p: artifacts.pdf_text(p) for p in pdfs}
+    hit = ""
+    for p, text in pdf_texts.items():
+        for pat, label in FORBIDDEN_PATTERNS:
+            if re.search(pat, text):
+                hit = f"{label} inside {p.relative_to(OUT)}"
+                break
+        if hit:
+            break
+    if hit:
+        fail(hit)
+    else:
+        ok(f"read the text of {len(pdfs)} PDF(s), "
+           f"{sum(1 for t in pdf_texts.values() if t.strip())} with text; no keys or paths")
+
+    # 5c. what I wrote next to a link never goes out, not even quoted back.
+    #     The fields are never exported (check 1), but an answer written from
+    #     an instruction could repeat it. Compared as runs of eight words over
+    #     the text a reader would see: JSON is parsed first, because in the
+    #     raw file a quote inside the instruction is stored as \" and a
+    #     straight text search walks right past it.
+    checks += 1
+    from kiln import store
+    conn = store.connect()
+    asks: set[str] = set()
+    for r in conn.execute("SELECT user_do, user_note FROM items"):
+        for t in (r["user_do"], r["user_note"]):
+            asks |= _grams(_words(t))
+    conn.close()
+    shown: set[str] = set()
+    for p in text_files:
+        raw = p.read_text(encoding="utf-8", errors="replace")
+        if p.suffix == ".json":
+            try:
+                raw = " ".join(_strings(json.loads(raw)))
+            except ValueError:
+                pass
+        shown |= _grams(_words(raw))
+    for text in pdf_texts.values():
+        shown |= _grams(_words(text))
+    leaked_ask = sorted(asks & shown)
+    if leaked_ask:
+        fail(f"{len(leaked_ask)} run(s) of eight words from a private instruction "
+             f"appear in the build, e.g. '{leaked_ask[0]}'")
+    else:
+        ok(f"none of {len(asks)} eight-word runs from my instructions appear in "
+           f"the build")
+
+    # 5d. the only page on the site is the site. Any other HTML file, like a
+    #     document a model wrote, would run its scripts on the site's origin.
+    checks += 1
+    pages = [p.relative_to(OUT).as_posix() for p in files
+             if p.suffix.lower() in (".html", ".htm", ".svg", ".xhtml")
+             and p != OUT / "index.html"]
+    if pages:
+        fail(f"{len(pages)} page(s) besides index.html in the build: {pages[:3]}")
+    else:
+        ok("index.html is the only page in the build")
 
     # 6. every built file is actually committable.
     #    A broad ignore rule (data/ matches at any depth) silently dropped

@@ -121,18 +121,15 @@ LADDERS: dict[str, list[tuple[str, str]]] = {
         ("gemini", "gemini-3.7-flash"),
         ("gemini", "gemini-3.6-flash"),
     ],
-    # Structured text work: tagging, normalising, dedupe decisions.
+    # Structured text work: tagging, normalising, writing search queries.
     "classify": [
         ("gemini", "gemini-3.5-flash"),
         ("gemini", "gemini-3.6-flash"),
         ("gemini", "gemini-3.7-flash"),
     ],
-    # Research that needs live web grounding.
-    "research": [
-        ("gemini_grounded", "gemini-3.8-flash"),
-        ("gemini_grounded", "gemini-3.7-flash"),
-        ("gemini_grounded", "gemini-3.5-flash"),
-    ],
+    # There was a "research" ladder here on Gemini's grounded search. Nothing
+    # ever called it, and on this key it cannot answer: see MIN_STANDARD.
+    # Research is Kiln's own search and fetch (search.py), then Claude.
     # Hard reasoning and judgement calls.
     "reason": [
         ("gemini", "gemini-3.8-flash"),
@@ -160,7 +157,13 @@ Dropped for failing this, with the evidence:
                             a lite rung
   ollama:qwen3:4b, llama3.2:3b, kimi-k2.5, gpt-oss:120b
                             text-only, never measured against the standard
-When no rung is left, the item is handed to Claude rather than filed thin."""
+  gemini_grounded (3.8, 3.7 and 3.5 flash)
+                            the first grounded call of the day came back 429
+                            on all three while a plain call on the same key
+                            answered (2026-09-25). Grounding needs billing,
+                            which needs a payment method, so it stays off.
+When no rung is left, the item is not filed thin: the next sync asks whether
+Claude should read it (kiln/brain.py)."""
 
 # Thinking budget per task. Off for extraction - it reasons instead of
 # transcribing and you get less text for more money.
@@ -168,9 +171,14 @@ THINKING_BUDGET: dict[str, int] = {
     "extract": 0,
     "extract_deep": 0,
     "classify": 0,
-    "research": 1024,
     "reason": 4096,
 }
+
+# Claude's follow-up on what the free models produced (kiln/brain.py). Off
+# only to debug; the owner's rule is that it always runs. The cap is units
+# per sync, so one busy day cannot turn into hours of Claude work.
+BRAIN_ON = os.environ.get("KILN_BRAIN", "1") == "1"
+BRAIN_UNITS = int(os.environ.get("KILN_BRAIN_UNITS", "6"))
 
 # Any of these bumps extract -> extract_deep. Data so the UI can show why.
 ESCALATE_WHEN = {

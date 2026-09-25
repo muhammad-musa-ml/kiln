@@ -16,6 +16,10 @@ from . import config, models, pipeline, store
 
 # item_id -> {"stage":..., "started":..., "error":...}
 JOBS: dict[str, dict] = {}
+
+# File types a browser will run script from when opened directly.
+_SCRIPTABLE = {"text/html", "application/xhtml+xml", "image/svg+xml",
+               "text/xml", "application/xml"}
 _jobs_lock = threading.Lock()
 
 
@@ -24,21 +28,42 @@ def _set_job(iid: str, **kw) -> None:
         JOBS.setdefault(iid, {}).update(kw)
 
 
-def _process_async(url: str, **kw) -> str:
-    iid = store.item_id(url)
-    _set_job(iid, stage="queued", started=time.time(), url=url, error="")
+def _process_async(urls: list[str], **kw) -> list[str]:
+    """Read every link on one line, then have Claude follow up on them together.
+
+    One thread per line rather than per link, because an instruction on a
+    line of several links is about the set, and the follow-up has to see
+    all of them at once. What Claude adds lands on the item the same way it
+    does in the scheduled sync, so localhost shows it without waiting.
+    """
+    from . import brain
+
+    ids = [store.item_id(u) for u in urls]
+    for iid, url in zip(ids, urls):
+        _set_job(iid, stage="queued", started=time.time(), url=url, error="")
 
     def run():
+        done = []
+        for iid, url in zip(ids, urls):
+            try:
+                _set_job(iid, stage="working")
+                pipeline.process_url(url, **kw)
+                done.append(iid)
+            except Exception as e:
+                _set_job(iid, stage="error", error=f"{type(e).__name__}: {e}",
+                         trace=traceback.format_exc()[-1500:], finished=time.time())
+        if not done:
+            return
+        for iid in done:
+            _set_job(iid, stage="followup")
         try:
-            _set_job(iid, stage="working")
-            pipeline.process_url(url, **kw)
-            _set_job(iid, stage="done", finished=time.time())
-        except Exception as e:
-            _set_job(iid, stage="error", error=f"{type(e).__name__}: {e}",
-                     trace=traceback.format_exc()[-1500:], finished=time.time())
+            brain.follow_up(done)
+        finally:
+            for iid in done:
+                _set_job(iid, stage="done", finished=time.time())
 
     threading.Thread(target=run, daemon=True).start()
-    return iid
+    return ids
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -97,15 +122,28 @@ class Handler(BaseHTTPRequestHandler):
             if p.startswith("/media/"):
                 rel = urllib.parse.unquote(p[len("/media/"):])
                 target = (config.MEDIA / rel).resolve()
-                if not str(target).startswith(str(config.MEDIA.resolve())):
+                # Segments, not text: a prefix test lets data/media-anything
+                # pass as if it were inside data/media.
+                if not target.is_relative_to(config.MEDIA.resolve()):
                     return self._json({"error": "forbidden"}, 403)
-                return self._file(target)
+                return self._file(target, untrusted=True)
+            if p.startswith("/artifacts/"):
+                # Documents the follow-up made for an item. Same containment
+                # rule as media: compare resolved paths, never the text.
+                from . import artifacts
+                rel = urllib.parse.unquote(p[len("/artifacts/"):])
+                root = artifacts.ARTIFACTS.resolve()
+                target = (root / rel).resolve()
+                if target == root or not target.is_relative_to(root):
+                    return self._json({"error": "forbidden"}, 403)
+                return self._file(target, untrusted=True)
 
             if p == "/api/items":
                 conn = store.connect()
                 items = store.list_items(
                     conn, status=q.get("status", ""), action=q.get("action", ""),
                     topic=q.get("topic", ""), place=q.get("place", ""),
+                    section=q.get("section", ""),
                     q=q.get("q", ""), urgent=q.get("urgent") == "1",
                     limit=int(q.get("limit", 200)))
                 conn.close()
@@ -117,6 +155,18 @@ class Handler(BaseHTTPRequestHandler):
                 conn = store.connect()
                 it = store.get_item(conn, p.rsplit("/", 1)[-1])
                 conn.close()
+                if it:
+                    # Built by the publisher's own function, so the page shows
+                    # the answer the same way here and on the site.
+                    from . import publish
+                    it["followup"] = publish.followup(it)
+                    # How it was made, for the local page only. Neutral names,
+                    # because the page is the same file the site publishes.
+                    c = it.get("claude") or {}
+                    it["fu_local"] = {"state": it.get("claude_state") or "",
+                                      **{k: c.get(k) for k in (
+                                          "verdict", "why", "missing", "planner",
+                                          "tasks", "final", "last_error")}}
                 return self._json(it or {"error": "not found"}, 200 if it else 404)
 
             if p == "/api/facets":
@@ -195,13 +245,16 @@ class Handler(BaseHTTPRequestHandler):
                     parsed = parse_line(line)
                     if not parsed or not parsed.get("url"):
                         continue
-                    iid = _process_async(
-                        parsed["url"], user_note=parsed.get("note", "") or b.get("note", ""),
+                    urls = parsed.get("urls") or [parsed["url"]]
+                    # Same grouping as the inbox: several links on one line
+                    # share a group tag, so the follow-up treats them as a set.
+                    group = ["group:" + store.line_hash(line)[:8]] if len(urls) > 1 else []
+                    added += _process_async(
+                        urls, user_note=parsed.get("note", "") or b.get("note", ""),
                         user_do=parsed.get("do", "") or b.get("do", ""),
-                        user_tags=parsed.get("tags") or [],
+                        user_tags=(parsed.get("tags") or []) + group,
                         urgent=parsed.get("urgent", False) or bool(b.get("urgent")),
                         deadline=parsed.get("by", ""), source="manual")
-                    added.append(iid)
                 if not added:
                     return self._json({"error": "no link found in that text"}, 400)
                 return self._json({"queued": added})
@@ -230,7 +283,7 @@ class Handler(BaseHTTPRequestHandler):
                 conn.close()
                 if not it:
                     return self._json({"error": "not found"}, 404)
-                _process_async(it["url"], user_note=it.get("user_note") or "",
+                _process_async([it["url"]], user_note=it.get("user_note") or "",
                                user_do=it.get("user_do") or "",
                                urgent=bool(it.get("urgent")), force=True,
                                source=it.get("source") or "manual")
@@ -256,8 +309,9 @@ class Handler(BaseHTTPRequestHandler):
 
             if p == "/api/questions/answer":
                 from . import questions
+                picked = [str(x) for x in (b.get("picked") or []) if str(x).strip()]
                 r = questions.answer(b.get("id", ""), b.get("choice", ""),
-                                     b.get("note", ""))
+                                     b.get("note", ""), picked=picked)
                 return self._json(r, 404 if r.get("error") else 200)
 
             # ---- model management ---------------------------------------
@@ -378,11 +432,22 @@ class Handler(BaseHTTPRequestHandler):
         conn.close()
         return self._json({"exit_code": code, "output": out, "command": cmd})
 
-    def _file(self, path: Path):
+    def _file(self, path: Path, untrusted: bool = False):
         if not path.exists() or not path.is_file():
             return self._json({"error": f"missing {path.name}"}, 404)
         ctype = mimetypes.guess_type(str(path))[0] or "application/octet-stream"
-        self._send(200, path.read_bytes(), ctype)
+        extra = {}
+        if untrusted:
+            # A saved post's media, or a document a model wrote after reading
+            # one. An HTML file among them would otherwise run its scripts on
+            # this origin, where the page carries the write token. Sandboxed,
+            # it gets an origin of its own and no scripts. Only the kinds that
+            # can carry a script get the sandbox: Chrome will not show a PDF
+            # under one, and a PDF cannot touch this page anyway.
+            extra = {"X-Content-Type-Options": "nosniff"}
+            if ctype in _SCRIPTABLE:
+                extra["Content-Security-Policy"] = "sandbox"
+        self._send(200, path.read_bytes(), ctype, extra)
 
 
 def serve():

@@ -191,7 +191,27 @@ Rules for it:
 - If you could not answer, set "answered" to "no" and say in "answer" what
   is missing and where it would have to come from. That is a useful result.
 - Do not claim the post did not contain something unless you actually looked
-  at the post and it did not."""
+  at the post and it did not.
+- Write the answer so it stands on its own. Do not repeat the request back."""
+
+# Appended to every enrichment, asked or not. Whatever is listed here is
+# picked up and finished by Claude afterwards (kiln/brain.py), so a model
+# that is honest about its limits gets its work completed rather than
+# silently left half done.
+SELF_REPORT = """
+
+WHAT YOU COULD NOT DO. Add these two keys as well:
+
+  "followups": [{"do": "a concrete next step that would finish the job",
+                 "why": "what it would give",
+                 "blocked_by": "why you could not do it yourself here"}],
+  "could_not": ["anything you were asked or expected to do and could not, and why"]
+
+Be honest in both. If you suggest something you cannot do yourself (make a
+document or a PDF, check a page you were not given, compare prices, verify a
+claim you have no source for, find a link that is not in the sources), put it
+in followups: it gets picked up and done after you. Use [] when there is
+nothing."""
 
 # note.kind / action_hint -> enricher
 _KIND_MAP = {
@@ -239,15 +259,15 @@ def _context(note: dict, acq: Any = None, user_note: str = "") -> str:
     return "\n".join(parts)
 
 
-ASK_QUERIES = """Someone saved a post and asked for something to be done with it.
-Write the web searches that would actually answer them.
+ASK_QUERIES = """Someone saved a post and wants something out of it.
+Write the web searches that would actually get it.
 
 What they asked for:
 {ask}
 
 What the post turned out to contain:
 {context}
-
+{lessons}
 Return ONLY JSON: {{"queries": ["...", "..."]}}
 Up to 6 searches. Rules that matter:
 - Search for the THINGS in the post, by name. If it names eleven companies,
@@ -257,8 +277,14 @@ Up to 6 searches. Rules that matter:
 - If they asked whether something is real, free, or worth it, search for
   that specifically: pricing, reviews, whether it still exists."""
 
+_LESSONS = """
+What earlier work on posts like this one learned. Follow it:
+{0}
+"""
 
-def _queries_from_ask(ask: str, note: dict, context: str) -> list[str]:
+
+def _queries_from_ask(ask: str, note: dict, context: str,
+                      lessons: list[str] | None = None) -> list[str]:
     """Turn the owner's instruction into searches, using what the post holds.
 
     The templates below search for a subject picked out of the note, which
@@ -267,12 +293,18 @@ def _queries_from_ask(ask: str, note: dict, context: str) -> list[str]:
     websites and application links, was searched three times for
     "11 AI Startup Job Postings: Companies to Make You a Millionaire" and
     never once for a company.
+
+    With no instruction this still runs when there are lessons for items of
+    this kind, so what was learned last time changes the searches this time.
     """
-    if not ask:
+    if not ask and not lessons:
         return []
     try:
         r = models.generate("classify", ASK_QUERIES.format(
-            ask=ask[:800], context=context[:2500]), want_json=True)
+            ask=(ask or "nothing specific; what the post is plainly for")[:800],
+            context=context[:2500],
+            lessons=_LESSONS.format("\n".join("- " + l for l in lessons))
+            if lessons else ""), want_json=True)
         qs = (r.data or {}).get("queries") if isinstance(r.data, dict) else None
         out = [str(q).strip() for q in (qs or []) if str(q).strip()][:6]
         return out
@@ -302,7 +334,7 @@ def _queries_for(which: str, subject: str, note: dict) -> list[str]:
 
 
 def enrich_note(note: dict, acq: Any = None, *, user_note: str = "",
-                today: str = "") -> dict:
+                today: str = "", lessons: list[str] | None = None) -> dict:
     """Run the right enricher and attach link health. Never raises.
 
     Grounding is done by Kiln's own retrieval (search.py), not by Gemini's
@@ -319,7 +351,7 @@ def enrich_note(note: dict, acq: Any = None, *, user_note: str = "",
     ctx = _context(note, acq, user_note)
     # What they asked for comes first, because that is the thing that has to
     # be answered. The template searches stay behind it as a floor.
-    queries = _queries_from_ask(user_note, note, ctx)
+    queries = _queries_from_ask(user_note, note, ctx, lessons)
     queries += [q for q in _queries_for(which, subject, note) if q not in queries]
     queries = queries[:8]
     try:
@@ -336,6 +368,9 @@ def enrich_note(note: dict, acq: Any = None, *, user_note: str = "",
         # these came back conceding it could not list the companies, which
         # was true of the read it was given and false of the post.
         prompt += ANSWER_BLOCK.format(ask=user_note[:1200])
+    prompt += SELF_REPORT
+    if lessons:
+        prompt += _LESSONS.format("\n".join("- " + l for l in lessons))
     if web_context:
         prompt += (
             "\n\nLIVE SOURCES fetched just now. Ground every factual claim in "
