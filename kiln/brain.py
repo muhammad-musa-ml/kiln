@@ -458,12 +458,21 @@ def _stage_media(items: list[dict], dest: Path) -> dict[str, list[str]]:
             name = f"{it['id']}-{n:02d}{p.suffix.lower()}"
             _copy(p, dest / name)
             names.append(name)
-        vids = [p for p in files if p.suffix.lower() in VIDEO]
-        if vids and not imgs:
+        # A reel is kept as the picture, the sound and the two together. The
+        # sound alone has no frames, and it sorts first by name, so it was the
+        # one picked and a reel came out with nothing to look at.
+        vids = sorted((p for p in files if p.suffix.lower() in VIDEO
+                       and not p.stem.endswith("_audio")),
+                      key=lambda p: (not p.stem.endswith("_av"),
+                                     not p.stem.endswith("_video"), p.name))
+        for v in vids if not imgs else []:
             try:
-                names += _frames(vids[0], dest, it["id"])
-            except Exception:
-                pass
+                got = _frames(v, dest, it["id"])
+            except (OSError, subprocess.SubprocessError):
+                got = []
+            if got:
+                names += got
+                break
         out[it["id"]] = names
     return out
 
