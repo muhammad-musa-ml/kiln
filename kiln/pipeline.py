@@ -367,7 +367,9 @@ def index(conn, iid: str) -> None:
     if not it:
         return
     note = it.get("note") or {}
-    enriched = it.get("enrich") or {}
+    # Research the follow-up set aside answered the wrong question; finding
+    # the item by it would be finding it by a mistake.
+    enriched = {k: v for k, v in (it.get("enrich") or {}).items() if k != "_set_aside"}
     claude = it.get("claude") or {}
     body = "\n".join([
         note.get("summary", "") or "",
