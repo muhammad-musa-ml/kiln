@@ -549,6 +549,19 @@ def test_consent() -> None:
           got["job_ids"] == ["b-two"], str(got))
 
 
+def test_terminal_answers() -> None:
+    print("answering a card from a terminal")
+    _asked("a-one", "b-two")
+    text = questions.render()
+    check("the printed card shows the id to answer with", "id: %s" % QID in text,
+          text[:300])
+    check("a number means the option printed with it",
+          questions.option_for(QID, "1") == "all", questions.option_for(QID, "1"))
+    check("text passes through, and a number past the list stays as typed",
+          questions.option_for(QID, "none") == "none"
+          and questions.option_for(QID, "9") == "9")
+
+
 def test_skip_wins() -> None:
     print("skip means skip, whatever an older card said")
     fresh()
@@ -732,7 +745,8 @@ def main() -> int:
     for test in (test_ask_extra, test_answer_picked, test_estimate_defaults,
                  test_estimate_history, test_estimate_what, test_ship_is_timed,
                  test_offer, test_offer_same_rules, test_offer_answered_waits,
-                 test_offer_empty, test_consent, test_skip_wins, test_ci_line,
+                 test_offer_empty, test_consent, test_terminal_answers,
+                 test_skip_wins, test_ci_line,
                  test_run_pending_only,
                  test_run_consented, test_wording, test_flow):
         run(test)
