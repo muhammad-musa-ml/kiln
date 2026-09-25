@@ -985,6 +985,18 @@ def test_frames_cover_the_video():
         r, g, b = Image.open(d / names[-1]).convert("RGB").getpixel((32, 32))
         check("and the last one is from the end", b > 150 and r < 100, str((r, g, b)))
 
+    # A reel as it is downloaded: the picture, the sound, and the two
+    # together. The sound alone sorts first and has no frames.
+    reel = Path(TMP) / "reelmedia"
+    reel.mkdir(exist_ok=True)
+    subprocess.run([ff, "-hide_banner", "-loglevel", "error", "-y", "-f", "lavfi",
+                    "-i", "sine=frequency=440:duration=3", "-c:a", "aac",
+                    str(reel / "abc_audio.mp4")], capture_output=True, timeout=120)
+    shutil.copy2(video, reel / "abc_video.mp4")
+    staged = brain._stage_media([{"id": "rl", "media_dir": str(reel)}], d / "staged")
+    check("a reel's frames come from the picture, not the sound",
+          len(staged.get("rl") or []) == 16, str(staged.get("rl"))[:120])
+
 
 def test_site_check_reads_the_push():
     print("the site check looks at what was pushed, not only what was built")
