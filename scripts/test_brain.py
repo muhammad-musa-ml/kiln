@@ -755,18 +755,24 @@ def test_one_yes_covers_the_list():
     reset_db()
     conn = store.connect()
     ids = ["ra", "rb", "rc"]
+    raw = 'HTTP 503 {\n  "error": {\n    "code": 503,\n    "message": "overloaded"}}'
     for iid in ids:
         make_item(conn, iid, note=False, media=1, kind="instagram")
         conn.execute("UPDATE items SET summary='', action='redo' WHERE id=?", (iid,))
         store.set_tags(conn, iid, "action", ["redo"])
         handoff.write(iid, url="https://example.com/p/" + iid, stage="extract",
-                      why="every rung out of quota", media=[])
+                      why=raw, media=[],
+                      tried=["gemini:gemini-3.8-flash FAIL HTTP 429 {quota}", "gemini:x FAIL " + raw])
     conn.commit()
     brain.sweep(conn=conn, limit=2)
     q = [x for x in questions.open_questions() if x.get("job_id") == brain.READ_ASK]
     check("the card lists all three and says how many a sync reads",
           len(q) == 1 and sorted(q[0].get("items") or []) == ids
           and "reads up to" in q[0].get("detail", ""), json.dumps(q)[:300])
+    detail = (q[0].get("detail") if q else "") or ""
+    check("each item's reason is one plain line, not the raw error",
+          "free models were out of quota for the day, or were overloaded" in detail
+          and '"error"' not in detail and "{" not in detail, detail[:400])
 
     def read_plan(iid):
         plan = good_plan([iid], filing=[], new_sections=[])
