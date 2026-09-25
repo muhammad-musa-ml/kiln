@@ -327,7 +327,7 @@ async function api(url, opts){
       if(q) out = out.filter(i => JSON.stringify(i).toLowerCase().includes(q));
       return {items: out, jobs: {}};
     }
-    if(url.startsWith('/api/health')) return {gemini:false, ollama:false, models:[], quota:{models:[]}};
+    if(url.startsWith('/api/health')) return {free:false, quota:{models:[]}};
     return {};
   }
   if(opts.method && opts.method !== 'GET'){
@@ -361,16 +361,18 @@ async function load(){
 }
 
 async function health(){
+  // The published copy has no meter, and no server to ask.
+  const meter = $('#meter');
+  if(!meter) return;
   try{
     const h = await api('/api/health');
     const qm = (h.quota||{}).models||[];
     // Every rung in the ladders together: reads left today out of the budget.
     const left = qm.reduce((a,m)=>a+(m.left||0),0), budget = qm.reduce((a,m)=>a+(m.budget||0),0);
-    $('#meter').innerHTML = `
-      <div class="row"><span><span class="dot ${h.gemini?'on':'off'}"></span>gemini</span><b>${h.gemini?'ready':'down'}</b></div>
-      <div class="row"><span><span class="dot ${h.ollama?'on':'off'}"></span>ollama</span><b>${(h.models||[]).length} models</b></div>
+    meter.innerHTML = `
+      <div class="row"><span><span class="dot ${h.free?'on':'off'}"></span>free models</span><b>${h.free?'ready':'down'}</b></div>
       <div class="row"><span>free calls left</span><b>${qm.length?left+' / '+budget:'-'}</b></div>`;
-  }catch{ $('#meter').innerHTML = `<div class="row"><span><span class="dot off"></span>server</span><b>unreachable</b></div>`; }
+  }catch{ meter.innerHTML = `<div class="row"><span><span class="dot off"></span>server</span><b>unreachable</b></div>`; }
 }
 
 /* ---------- render ---------- */
@@ -856,9 +858,9 @@ async function answerQ(id, choice, picked){
   asks();
 }
 
-load(); health(); renderAbout(); asks();
+load(); renderAbout(); asks();
+if(!STATIC){ health(); setInterval(health, 30000); }
 setInterval(()=>{ if(Object.values(state.jobs).some(j=>['working','queued','followup'].includes(j.stage))) load(); }, 3000);
-setInterval(health, 30000);
 setInterval(asks, 60000);
 </script>
 </body>

@@ -34,6 +34,9 @@ FORBIDDEN_PATTERNS = [
     (r"/(?:home|Users)/[A-Za-z0-9_.\-]+/", "POSIX home path"),
 ]
 
+VENDOR_WORDS = re.compile(
+    r"\b(gemini|ollama|claude|anthropic|openai|codex|opus|sonnet|haiku|gpt)\b", re.I)
+
 failures: list[str] = []
 checks = 0
 
@@ -297,6 +300,15 @@ def main() -> int:
              "python -m kiln.publish rather than editing the published copy")
     else:
         ok("published page matches the local page exactly")
+
+    # 10. the page itself names no AI vendor or model. The items may: a post
+    #     can be about one. The page is the owner's, and says "the follow-up".
+    checks += 1
+    named = sorted(set(m.lower() for m in VENDOR_WORDS.findall(html)))
+    if named:
+        fail(f"the published page names {named}; it should name no vendor")
+    else:
+        ok("the published page names no AI vendor or model")
 
     print()
     if failures:
