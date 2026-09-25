@@ -8,7 +8,10 @@ from __future__ import annotations
 
 import json
 import re
+import shutil
+import subprocess
 import time
+import urllib.parse
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 
@@ -41,6 +44,9 @@ class Acquired:
     focus_slide: int | None = None   # from ?img_index=N - the slide THEY meant
     duration: int = 0
     error: str = ""
+    # Things that went wrong without the whole acquisition failing, so
+    # a half-result says what is missing instead of looking complete.
+    notes: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -139,6 +145,109 @@ async () => {
 """
 
 
+def _full_asset(u: str) -> str:
+    """The whole file, not the slice the player happened to ask for.
+
+    Instagram streams a reel in ranges through bytestart/byteend. Fetching a
+    url with those still on it returns a fragment: it starts with moof and
+    carries no ftyp box, so nothing will open it. Drop them and the CDN
+    hands over the complete asset.
+    """
+    p = urllib.parse.urlparse(u)
+    q = urllib.parse.parse_qs(p.query)
+    if not any(k in q for k in ("bytestart", "byteend")):
+        return u
+    for k in ("bytestart", "byteend"):
+        q.pop(k, None)
+    return urllib.parse.urlunparse(
+        p._replace(query=urllib.parse.urlencode(q, doseq=True)))
+
+
+def _mp4_tracks(data: bytes) -> tuple[bool, bool]:
+    """(has_video, has_audio), read off the hdlr boxes.
+
+    The handler type sits twelve bytes past the box name, so it is read from
+    there rather than by looking for "vide" anywhere in the file. Twelve
+    megabytes of video contains those four bytes by chance more than once.
+    """
+    has_v = has_a = False
+    at = data.find(b"hdlr")
+    while at != -1:
+        kind = data[at + 12:at + 16]
+        has_v = has_v or kind == b"vide"
+        has_a = has_a or kind == b"soun"
+        if has_v and has_a:
+            break
+        at = data.find(b"hdlr", at + 4)
+    return has_v, has_a
+
+
+def _save_video(ctx, dom_videos: list[str], seen_mp4: list[str],
+                out_dir: Path, sc: str, timeout_ms: int) -> tuple[str, str]:
+    """Save the reel. Returns (path, "") or ("", why it could not).
+
+    Instagram serves the picture and the sound as separate renditions, so the
+    biggest single file is usually silent. Both are kept and muxed when
+    ffmpeg is around, because half of a reel is the person talking.
+    """
+    cands: list[str] = []
+    for u in list(seen_mp4) + [v for v in dom_videos if v.startswith("http")]:
+        full = _full_asset(u)
+        if full not in cands:
+            cands.append(full)
+    if not cands:
+        blobs = [v for v in dom_videos if v.startswith("blob:")]
+        if blobs:
+            return "", ("the player held the video in memory and the network "
+                        "carried no mp4, so there was nothing to copy")
+        return "", "no video on the page"
+
+    best_v: tuple[int, bytes] = (0, b"")
+    best_a: tuple[int, bytes] = (0, b"")
+    refused = []
+    for u in cands:
+        try:
+            body = ctx.request.get(u, timeout=timeout_ms).body()
+        except Exception as e:
+            refused.append(f"{type(e).__name__}")
+            continue
+        if b"ftyp" not in body[:64]:
+            continue                      # a fragment, not a file
+        has_v, has_a = _mp4_tracks(body)
+        if has_v and len(body) > best_v[0]:
+            best_v = (len(body), body)
+        if has_a and not has_v and len(body) > best_a[0]:
+            best_a = (len(body), body)
+
+    if not best_v[0] and not best_a[0]:
+        why = "every video url returned a fragment rather than a whole file"
+        if refused:
+            why = "could not fetch the video: " + ", ".join(sorted(set(refused))[:3])
+        return "", why
+
+    vid = out_dir / f"{sc}_video.mp4"
+    if not best_v[0]:
+        vid.write_bytes(best_a[1])
+        return str(vid), "only the audio track came back, there is no picture"
+
+    vid.write_bytes(best_v[1])
+    if not best_a[0]:
+        return str(vid), ""
+
+    ff = shutil.which("ffmpeg")
+    if not ff:
+        return str(vid), "kept the picture without sound, ffmpeg is not installed"
+    aud = out_dir / f"{sc}_audio.mp4"
+    aud.write_bytes(best_a[1])
+    merged = out_dir / f"{sc}_av.mp4"
+    p = subprocess.run([ff, "-y", "-loglevel", "error", "-i", str(vid),
+                        "-i", str(aud), "-c", "copy", "-shortest", str(merged)],
+                       capture_output=True, timeout=180)
+    if p.returncode == 0 and merged.exists() and merged.stat().st_size > 0:
+        return str(merged), ""
+    return str(vid), "kept the picture without sound, muxing failed"
+
+
 def acquire_instagram(url: str, *, want_comments: bool = True,
                       headless: bool = True, timeout_ms: int = 45000) -> Acquired:
     m = SHORTCODE_RE.search(url)
@@ -158,12 +267,27 @@ def acquire_instagram(url: str, *, want_comments: bool = True,
         return res
 
     out_dir = _media_dir(sc)
+    # Every mp4 the player fetches, in the order it asked for them. A reel's
+    # <video> element carries a blob: url that nothing outside the page can
+    # open, so the element is the wrong place to look. The network is the
+    # right one: the real file goes past here on its way to the decoder.
+    seen_mp4: list[str] = []
+
+    def _watch(resp) -> None:
+        try:
+            if "video/mp4" in (resp.headers.get("content-type") or ""):
+                if resp.url not in seen_mp4:
+                    seen_mp4.append(resp.url)
+        except Exception:
+            pass
+
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=headless, args=["--disable-blink-features=AutomationControlled"])
             ctx = browser.new_context(user_agent=UA, viewport={"width": 1280, "height": 1400},
                                       locale="en-US")
             page = ctx.new_page()
+            page.on("response", _watch)
             page.goto(url, wait_until="domcontentloaded", timeout=timeout_ms)
             page.wait_for_timeout(3500)
             _dismiss(page)
@@ -173,8 +297,12 @@ def acquire_instagram(url: str, *, want_comments: bool = True,
             text: str = data.get("text", "")
             videos: list[str] = data.get("videos", [])
 
-            # Metadata: OpenGraph first (reliable, login-free), DOM as fallback.
+            # Metadata: OpenGraph first (reliable, login-free), then the same
+            # tags off the open page, which is the only place they exist for
+            # a reel, then the DOM shell.
             og = fetch_og(url)
+            if not og.get("caption"):
+                og = og_from_page(page) or og
             if og.get("caption"):
                 res.caption = og["caption"]
                 res.owner = og.get("owner", "")
@@ -201,13 +329,24 @@ def acquire_instagram(url: str, *, want_comments: bool = True,
                 except Exception:
                     pass
 
-            for j, v in enumerate(videos[:1], 1):
+            # A reel has no slides, so if there is a video it has to be played
+            # before the network hands over anything worth keeping.
+            if not srcs:
                 try:
-                    dest = out_dir / f"{sc}_video{j}.mp4"
-                    dest.write_bytes(ctx.request.get(v, timeout=timeout_ms).body())
-                    res.video = str(dest)
-                except Exception:
-                    pass
+                    page.evaluate("() => { const v = document.querySelector('video');"
+                                  " if (v) { v.muted = true; v.play(); } }")
+                    page.wait_for_timeout(6000)
+                except Exception as e:
+                    res.notes.append(f"could not start the video: {type(e).__name__}")
+
+            got, why = _save_video(ctx, videos, seen_mp4, out_dir, sc, timeout_ms)
+            if got:
+                res.video = got
+                if why:
+                    res.notes.append(why)
+            elif why and not res.slides:
+                # A carousel having no video is not a problem worth recording.
+                res.notes.append(why)
 
             if want_comments:
                 try:
@@ -224,7 +363,12 @@ def acquire_instagram(url: str, *, want_comments: bool = True,
     if res.slides:
         res.pdf = build_pdf(res.slides, out_dir / f"{sc}.pdf")
     if not res.slides and not res.video and not res.error:
-        res.error = "browser loaded the page but found no media"
+        # Say which way it failed. "found no media" covered a blob url the
+        # fetcher refuses, a fragment with no ftyp box, and a genuinely
+        # empty page, and told them apart for nobody.
+        res.error = ("could not get the media: " + "; ".join(res.notes)
+                     if res.notes else
+                     "browser loaded the page but found no media")
     return res
 
 
@@ -257,6 +401,31 @@ def fetch_og(url: str) -> dict:
     except Exception:
         return out
     tags = {m.group(1): _html.unescape(m.group(2)) for m in _OG_RE.finditer(doc)}
+    return _og_fields(tags)
+
+
+def og_from_page(page) -> dict:
+    """The same tags, read out of the browser page that is already open.
+
+    Instagram serves og: tags to a crawler UA for a /p/ post and serves none
+    at all for a /reel/, so fetch_og comes back empty and the caption, the
+    owner and the date go missing. The tags are sitting in the DOM either
+    way, so read them from there rather than giving up on all three.
+    """
+    try:
+        tags = page.evaluate(
+            """() => Object.fromEntries(
+                 [...document.querySelectorAll('meta[property^="og:"]')]
+                   .map(m => [m.getAttribute('property').slice(3),
+                              m.getAttribute('content') || '']))""")
+    except Exception:
+        return {}
+    return _og_fields(tags or {})
+
+
+def _og_fields(tags: dict) -> dict:
+    """Pull the fields worth keeping out of a bag of og: tags."""
+    out: dict = {}
     desc = tags.get("description", "")
     m = _OG_DESC_RE.search(desc)
     if m:
