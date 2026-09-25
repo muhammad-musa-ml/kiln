@@ -804,6 +804,7 @@ def test_one_yes_covers_the_list():
     detail = (q[0].get("detail") if q else "") or ""
     check("each item's reason is one plain line, not the raw error",
           "free models were out of quota for the day, or were overloaded" in detail
+          and "out of quota, overloaded, or gave a read below the floor" in detail
           and '"error"' not in detail and "{" not in detail, detail[:400])
 
     def read_plan(iid):

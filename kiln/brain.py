@@ -1240,8 +1240,8 @@ def ask_to_read(briefs: list[dict]) -> dict:
     return questions.ask(
         READ_ASK, READ_KIND,
         "%d item%s no free model could read" % (len(briefs), "" if len(briefs) == 1 else "s"),
-        "Every free model was out of quota or gave a read below the floor, so "
-        "these were not filed. Claude can read the pictures (it cannot hear a "
+        "Every free model was out of quota, overloaded, or gave a read below "
+        "the floor, so these were not filed. Claude can read the pictures (it cannot hear a "
         "video's sound). A yes covers every item listed here, and Claude reads "
         "up to %d a sync, so a longer list takes more than one. Otherwise the "
         "free models try again on the next sync.\n" % config.BRAIN_UNITS

@@ -271,7 +271,8 @@ on its own, without asking.
 
 A planner on Opus 5 at max effort reads each new item next to whatever I
 wrote with it and decides whether anything is left to do. For an item I
-wrote nothing on, the answer is usually no. When there is work, it splits
+wrote nothing on, the answer is usually no, and a later look that finds
+nothing to add leaves the earlier answer as it was. When there is work, it splits
 it into tasks and picks a model and an effort level for each one: Opus 5,
 Opus 5.5, Sonnet or Haiku, anywhere from low to max. Never Fable, and that
 is checked in code before anything runs rather than left to the prompt. The
