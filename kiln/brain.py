@@ -983,11 +983,17 @@ def _lesson_home(items: list[dict]) -> tuple[str, set[str]]:
 
     `store.lessons_for` matches the next item by its kind and topic tags, so a
     lesson goes under the same. The model's own label for a lesson ("pitfall",
-    "tip") never matched an item, and the playbook went unread.
+    "tip") never matched an item, and the playbook went unread. A group brings
+    its eight most common topics: seven videos brought twenty-five between
+    them, enough to match almost any item about AI.
     """
     kinds = [it["kind"] for it in items if it.get("kind")]
     kind = max(kinds, key=kinds.count) if kinds else ""
-    return kind, {t for it in items for t in (it.get("tags") or {}).get("topic") or []}
+    counts: dict[str, int] = {}
+    for it in items:
+        for t in set((it.get("tags") or {}).get("topic") or []):
+            counts[t] = counts.get(t, 0) + 1
+    return kind, set(sorted(counts, key=lambda t: (-counts[t], t))[:8])
 
 
 def run_by_hand(item_ids: list[str]) -> dict:

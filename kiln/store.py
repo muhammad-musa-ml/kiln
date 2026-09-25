@@ -467,8 +467,12 @@ def add_lesson(conn, kind: str, topics: list[str], lesson: str,
     for r in conn.execute("SELECT lesson FROM playbook"):
         if _norm_lesson(r["lesson"]) == norm:
             return False
-    tops = ",".join(sorted({str(t).strip().lower() for t in (topics or [])
-                            if str(t).strip()}))[:300]
+    # Whole topics only. Cutting the joined text at 300 left a broken last
+    # topic that could never match anything.
+    tops = ""
+    for t in sorted({str(t).strip().lower() for t in (topics or []) if str(t).strip()}):
+        if len(tops) + len(t) + 1 <= 300:
+            tops = tops + "," + t if tops else t
     conn.execute("INSERT INTO playbook (kind, topics, lesson, source, created_at)"
                  " VALUES (?,?,?,?,?)",
                  ((kind or "").strip().lower()[:40], tops, lesson, source, time.time()))
