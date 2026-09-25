@@ -196,9 +196,9 @@ def final_for(ids, artifact="inputs/t2/out/companies.md"):
                           "drop_links": [{"url": WRONG, "why": "misread id"}] if first else [],
                           "next_action": "apply to Acme"})
         return {"items": items,
-                "lessons": [{"kind": "listicle", "topics": ["jobs"],
+                "lessons": [{"topics": ["jobs"],
                              "lesson": "For hiring carousels, search each company by name with careers."},
-                            {"kind": "listicle", "topics": [], "lesson": "check acme.com first"}]}
+                            {"topics": [], "lesson": "check acme.com first"}]}
     return build
 
 
@@ -639,6 +639,37 @@ def test_nothing_to_do_and_selection():
           {"new-plain", "stale", "refired", "partial"} <= set(want), str(want))
     check("done, running, redo and final partial ones are not",
           not ({"e", "working", "redo", "partial-final"} & set(want)), str(want))
+    conn.close()
+
+
+def test_lessons_filed_under_the_item():
+    print("a lesson is filed under the kind and topics of the items it came from")
+    reset_db()
+    conn = store.connect()
+    make_item(conn, "t", kind="tutorial", topics=("ai", "obsidian"))
+    run_dir = Path(config.DATA) / "brain" / "lessons"
+    fdir = run_dir / "final"
+    (fdir / "out").mkdir(parents=True, exist_ok=True)
+    final = {"items": [{"id": "t", "answer": "The build.", "answered": "not asked",
+                        "missing": "", "retry_later": False, "title": "", "hook": "",
+                        "summary": "", "artifacts": [], "sources": [], "extra_sections": [],
+                        "extra_links": [], "drop_links": [], "next_action": "",
+                        "action": "", "set_aside": False, "set_aside_why": ""}],
+             "lessons": [{"kind": "pitfall", "topics": ["Comment Gates"],
+                          "lesson": "Check the creator's own site for a paywall "
+                                    "before searching for the repo."}]}
+    brain._store_final(conn, [store.get_item(conn, "t")], {"why": "x"}, final,
+                       {}, {}, run_dir, fdir, "i-t")
+    got = store.lessons_for(conn, kinds=["tutorial"], topics=[], text="")
+    check("the next tutorial finds it with nothing asked",
+          [l["lesson"][:9] for l in got] == ["Check the"], str(got)[:200])
+    got = store.lessons_for(conn, kinds=["reel"], topics=["obsidian"], text="")
+    check("and so does another kind of post on one of its topics", len(got) == 1,
+          str(got)[:200])
+    row = dict(conn.execute("SELECT kind, topics FROM playbook").fetchone())
+    check("its own topics are kept beside the item's",
+          row["kind"] == "tutorial"
+          and set(row["topics"].split(",")) == {"ai", "obsidian", "comment gates"}, str(row))
     conn.close()
 
 
@@ -1152,6 +1183,7 @@ def main() -> int:
     test_refused_then_fixed()
     test_blocked_and_failed()
     test_nothing_to_do_and_selection()
+    test_lessons_filed_under_the_item()
     test_nothing_to_do_keeps_the_answer()
     test_unread_asks_first()
     test_gate_keyword()
