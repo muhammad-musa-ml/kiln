@@ -897,7 +897,12 @@ def follow_up(item_ids: list[str], *, conn=None, allow_read: bool = False) -> di
         return _follow_up(conn, list(item_ids), allow_read)
     except Exception as e:
         err = "%s: %s" % (type(e).__name__, e)
-        _mark(conn, list(item_ids), "failed", error=err, attempt=True)
+        try:
+            _mark(conn, list(item_ids), "failed", error=err, attempt=True)
+        except Exception:
+            # The database itself is the problem. The item stays "working"
+            # and needs_follow_up picks it up again once that goes stale.
+            pass
         return {"items": list(item_ids), "state": "failed", "error": err}
     finally:
         if own:
@@ -1099,16 +1104,22 @@ def sweep(limit: int | None = None, *, conn=None) -> dict:
     limit = config.BRAIN_UNITS if limit is None else limit
     own = conn is None
     conn = conn or store.connect()
+    out: dict[str, Any] = {"off": False, "units": [], "reads": [], "asked": False,
+                           "waiting": 0}
     try:
-        out: dict[str, Any] = {"off": False, "units": [], "reads": [], "asked": False}
         briefs = unread(conn)
+        blocked = False
         if briefs:
             consent = read_consent()
             if consent == "yes":
                 questions.clear(READ_ASK, READ_KIND)
                 for b in briefs[:limit]:
-                    out["reads"].append(follow_up([b["item_id"]], conn=conn,
-                                                  allow_read=True))
+                    r = follow_up([b["item_id"]], conn=conn, allow_read=True)
+                    out["reads"].append(r)
+                    if r.get("state") == "blocked":
+                        # Out of usage: every later call would hit the same wall.
+                        blocked = True
+                        break
             elif consent == "no":
                 # Wait was the answer. Ask again next time if they are still stuck.
                 questions.clear(READ_ASK, READ_KIND)
@@ -1117,15 +1128,18 @@ def sweep(limit: int | None = None, *, conn=None) -> dict:
                 out["asked"] = True
         todo = needs_follow_up(conn)
         out["waiting"] = len(todo)
-        for u in todo[:max(0, limit - len(out["reads"]))]:
+        for u in [] if blocked else todo[:max(0, limit - len(out["reads"]))]:
             r = follow_up(u, conn=conn)
             out["units"].append(r)
             if r.get("state") == "blocked":
                 break
-        return out
+    except Exception as e:
+        # The sync and the local server both call this and must carry on.
+        out["error"] = "%s: %s" % (type(e).__name__, e)
     finally:
         if own:
             conn.close()
+    return out
 
 
 def render(result: dict) -> str:
@@ -1133,6 +1147,8 @@ def render(result: dict) -> str:
     if result.get("off"):
         return "      off (KILN_BRAIN=0)"
     lines = []
+    if result.get("error"):
+        lines.append("      stopped early: %s" % str(result["error"])[:160])
     for r in result.get("reads", []) + result.get("units", []):
         what = ", ".join(r.get("items") or [])[:60]
         if r.get("state") == "done" and r.get("verdict") == "work":
