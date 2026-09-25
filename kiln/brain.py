@@ -17,7 +17,8 @@ The one case that still asks first is an item no free model could read at
 all. That is a question card, and Claude reads it only after a yes.
 
     python -m kiln.brain sweep            follow up what needs it, KILN_BRAIN_UNITS at most
-    python -m kiln.brain run <id> [...]   follow up these items now, as one unit
+    python -m kiln.brain run <id> [...]   follow up these items now, as one unit,
+                                          reading any no free model could
     python -m kiln.brain show <id>        what Claude did for one item
 """
 from __future__ import annotations
@@ -971,6 +972,16 @@ def _store_final(conn, items: list[dict], plan: dict, final: dict, done: dict,
     return empty
 
 
+def run_by_hand(item_ids: list[str]) -> dict:
+    """`python -m kiln.brain run`: follow these items up now.
+
+    An item no free model could read is read too. Typing the command is the
+    yes the card would otherwise wait for; without this the health check's
+    own advice to run it came back "nothing has been read yet".
+    """
+    return follow_up(item_ids, allow_read=True)
+
+
 def follow_up(item_ids: list[str], *, conn=None, allow_read: bool = False) -> dict:
     """Plan and do the follow-up for one unit of items. Never raises."""
     own = conn is None
@@ -1305,7 +1316,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "sweep":
         print(render(sweep()))
     elif len(sys.argv) > 2 and sys.argv[1] == "run":
-        print(_dump(follow_up(sys.argv[2:])))
+        print(_dump(run_by_hand(sys.argv[2:])))
     elif len(sys.argv) > 2 and sys.argv[1] == "show":
         c = store.connect()
         it = store.get_item(c, sys.argv[2]) or {}

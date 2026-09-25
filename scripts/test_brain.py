@@ -797,6 +797,19 @@ def test_one_yes_covers_the_list():
           json.dumps(out)[:300])
     check("and forgets the yes once every item on it is read",
           brain._read_ok() == set(), str(brain._read_ok()))
+
+    # By hand: no card, no yes on file. Typing the command is the yes.
+    make_item(conn, "rh", note=False, media=1, kind="instagram")
+    conn.execute("UPDATE items SET summary='', action='redo' WHERE id='rh'")
+    store.set_tags(conn, "rh", "action", ["redo"])
+    conn.commit()
+    handoff.write("rh", url="https://example.com/p/rh", stage="extract",
+                  why="every rung out of quota", media=[])
+    STUB.plans = [read_plan("rh")]
+    out = brain.run_by_hand(["rh"])
+    check("running it by hand reads an item no free model could",
+          out.get("state") == "done" and (store.get_item(conn, "rh").get("note") or {}).get("title"),
+          json.dumps(out)[:300])
     conn.close()
 
 
