@@ -549,6 +549,22 @@ def test_consent() -> None:
           got["job_ids"] == ["b-two"], str(got))
 
 
+def test_skip_wins() -> None:
+    print("skip means skip, whatever an older card said")
+    fresh()
+    queue("s-one", "item0")
+    questions.ask("s-one", "agent_down", "codex was down", "x",
+                  options=["wait", "claude - build it with claude on this machine"])
+    questions.answer("s-one.agent_down", "claude - build it with claude on this machine")
+    check("an answered claude sends the job to claude",
+          [a for _, a in runner._eligible()] == ["claude"], str(runner._eligible()))
+    questions.ask("s-one", "build_failed", "it keeps failing", "x",
+                  options=["skip - stop trying this one", "retry - try it again"])
+    questions.answer("s-one.build_failed", "skip - stop trying this one")
+    check("and a later skip takes it out of the queue",
+          runner._eligible() == [], str(runner._eligible()))
+
+
 def test_ci_line() -> None:
     print("what CI said after a push")
     check("a red run says so", runner.ci_line(
@@ -716,7 +732,8 @@ def main() -> int:
     for test in (test_ask_extra, test_answer_picked, test_estimate_defaults,
                  test_estimate_history, test_estimate_what, test_ship_is_timed,
                  test_offer, test_offer_same_rules, test_offer_answered_waits,
-                 test_offer_empty, test_consent, test_ci_line, test_run_pending_only,
+                 test_offer_empty, test_consent, test_skip_wins, test_ci_line,
+                 test_run_pending_only,
                  test_run_consented, test_wording, test_flow):
         run(test)
     print()
