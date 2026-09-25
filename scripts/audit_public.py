@@ -23,6 +23,7 @@ FORBIDDEN_STRINGS = [
     "user_note", "user_do", "cost_usd", "media_dir", "pdf_path",
     "local_token", "secrets.json", "KILN_TOKEN=",
     "enrich_json", "note_json", "processed_at",
+    "claude_json", "claude_state", "claude_attempts", "run_dir",
 ]
 FORBIDDEN_PATTERNS = [
     (r"AIza[0-9A-Za-z_\-]{20,}", "Google API key"),

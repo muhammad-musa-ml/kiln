@@ -598,6 +598,43 @@ def test_unread_asks_first():
     conn.close()
 
 
+def test_sweep_stops_and_survives():
+    print("a sweep stops at the first wall, and never takes the sync down with it")
+    reset_db()
+    conn = store.connect()
+    for iid in ("u1", "u2"):
+        make_item(conn, iid, do="list them", note=False, media=1, kind="instagram")
+        conn.execute("UPDATE items SET summary='' WHERE id=?", (iid,))
+        handoff.write(iid, url="https://example.com/p/" + iid, stage="extract",
+                      why="out of quota", media=[], instruction="list them")
+    make_item(conn, "fine")
+    conn.commit()
+    brain.ask_to_read(brain.unread(conn))
+    q = [x for x in questions.open_questions() if x.get("job_id") == brain.READ_ASK][0]
+    questions.answer(q["id"], q["options"][0])
+    STUB.block_at = "planner"
+    out = brain.sweep(conn=conn)
+    planners = [c for c in STUB.calls if c["who"] == "planner"]
+    check("out of usage on the first read, nothing else is started",
+          len(planners) == 1 and not out["units"], "%d planner calls, %d units"
+          % (len(planners), len(out["units"])))
+
+    STUB.__init__()
+    real = brain.needs_follow_up
+    brain.needs_follow_up = lambda conn, now=None: 1 / 0
+    try:
+        out = brain.sweep(conn=conn)
+        check("an error inside the sweep comes back instead of raising",
+              "ZeroDivisionError" in out.get("error", ""), json.dumps(out)[:200])
+        check("and is printed", "stopped early" in brain.render(out))
+    except Exception as e:
+        check("an error inside the sweep comes back instead of raising", False,
+              "%s: %s" % (type(e).__name__, e))
+    finally:
+        brain.needs_follow_up = real
+    conn.close()
+
+
 def test_first_pass_reports_and_lessons():
     print("the free models say what they could not do, and read the playbook")
     from kiln import enrich, extract, models, pipeline, search
@@ -690,6 +727,7 @@ def main() -> int:
     test_blocked_and_failed()
     test_nothing_to_do_and_selection()
     test_unread_asks_first()
+    test_sweep_stops_and_survives()
     print()
     print("%d/%d pass" % (sum(results), len(results)))
     return 0 if all(results) else 1

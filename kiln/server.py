@@ -99,8 +99,23 @@ class Handler(BaseHTTPRequestHandler):
         except Exception:
             return {}
 
+    def _host_ok(self) -> bool:
+        """Only answer to this machine's own names for itself.
+
+        The page at / carries the write token. A web page elsewhere cannot
+        read it across origins, unless its domain is made to resolve to
+        127.0.0.1, and then the browser calls it the same origin. The Host
+        header still names that other domain, so it is refused here.
+        """
+        host = (self.headers.get("Host") or "").strip().lower()
+        allowed = {f"{h}:{config.PORT}" for h in ("127.0.0.1", "localhost", "[::1]")}
+        allowed.add(f"{config.HOST}:{config.PORT}".lower())
+        return host in allowed
+
     # -- routes --------------------------------------------------------
     def do_GET(self):
+        if not self._host_ok():
+            return self._json({"error": "unknown host"}, 421)
         u = urllib.parse.urlparse(self.path)
         q = {k: v[0] for k, v in urllib.parse.parse_qs(u.query).items()}
         p = u.path
@@ -229,6 +244,8 @@ class Handler(BaseHTTPRequestHandler):
 
         if not config.IS_LOCAL:
             return self._json({"error": "this deployment is read-only"}, 405)
+        if not self._host_ok():
+            return self._json({"error": "unknown host"}, 421)
         if not self._authorised():
             # 404, not 401 - do not confirm the route exists.
             return self._json({"error": "not found"}, 404)
