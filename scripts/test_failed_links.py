@@ -101,6 +101,37 @@ def test_quota_classification() -> None:
               models._daily_quota_gone(err), err)
 
 
+def test_spent_day_keeps_the_try() -> None:
+    """A read turned away by every model's spent day was never really tried."""
+    print("a spent day does not use up one of a link's tries")
+    from kiln import handoff
+    from kiln.acquire import Acquired
+
+    def exhausted(*attempts):
+        return {"_error": "every model failed", "_meta": {
+            "exhausted": True, "passes": [{"attempts": list(attempts)}]}}
+
+    reel = Acquired(url="https://example.com/broken", kind="instagram", video="clip.mp4")
+    real_pending = handoff.PENDING
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as t:
+        # The exhausted path writes a brief; keep it out of the real data.
+        handoff.PENDING = Path(t) / "handoff"
+        handoff.PENDING.mkdir()
+        try:
+            spent = run_case(reel, exhausted(
+                "gemini:gemini-3.8-flash FAIL daily free-tier budget spent",
+                "gemini:gemini-3.7-flash FAIL HTTP 429 [quota: per day] {..."))
+            busy = run_case(reel, exhausted(
+                "gemini:gemini-3.8-flash FAIL daily free-tier budget spent",
+                "gemini:gemini-3.7-flash FAIL HTTP 503 {model overloaded}"))
+        finally:
+            handoff.PENDING = real_pending
+    check("every model's day was spent, so the try is given back",
+          int(spent.get("attempts") or 0) == 0, str(spent.get("attempts")))
+    check("one model really ran and failed, so it counts",
+          int(busy.get("attempts") or 0) == 1, str(busy.get("attempts")))
+
+
 def test_daily_quota_seen_in_full() -> None:
     """Google says which quota a 429 is about only near the end of its body.
 
@@ -239,6 +270,7 @@ def main() -> int:
     test_empty_read_detection()
     test_quota_classification()
     test_daily_quota_seen_in_full()
+    test_spent_day_keeps_the_try()
 
     print()
     print("%d/%d pass" % (sum(results), len(results)))

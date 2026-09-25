@@ -229,7 +229,8 @@ past that is Claude's job (next section).
 
 When every model on a list is out of quota or under the floor, the item is
 not filed thin. It waits, and the next sync asks me whether Claude should
-read it instead.
+read it instead. A read turned away only because every model had used up
+its free day does not count as one of the link's three tries.
 
 You can add any provider through the local `/api/models` routes (OpenAI,
 Groq, OpenRouter, DeepSeek, Anthropic, xAI, Mistral, Together, or anything
