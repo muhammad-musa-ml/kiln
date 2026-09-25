@@ -194,8 +194,9 @@ queued and is offered again on the next sync. A build that ran and broke
 twice stops retrying and asks what I want to do about it. Open questions
 show up as cards at the top of the local page. A run prints them before it
 does anything else, and prints the ones it raised itself at the end.
-After a push the run waits for the project's own CI and prints whether it
-passed. A red run is reported; the push has already happened by then.
+After a push the run waits up to ten minutes for the project's own CI and
+prints whether it passed, failed, or was still going when the wait ran
+out. A red run is reported; the push has already happened by then.
 
 ```bash
 python -m kiln.runner pending      # build up to three queued projects now, without asking
