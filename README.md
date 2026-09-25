@@ -175,8 +175,10 @@ next sync.
 
 A finished build does not go straight out. A reviewer reads it, installs it,
 runs whatever tests it has, fixes what it can and writes down whether the
-thing actually works. Kiln then runs the tests itself and reads the exit
-code, because the reviewer saying they pass is not the same as them passing.
+thing actually works. Kiln then runs the project's Python tests itself with
+pytest, wherever in the project they are, and reads the exit code, because
+the reviewer saying they pass is not the same as them passing. Tests in
+another language are only run by the reviewer.
 Then a readme gets written and has to pass a check for writing that reads
 like a machine wrote it. Build tooling is stripped and the history is
 started clean. Only then is the repo created and pushed.
