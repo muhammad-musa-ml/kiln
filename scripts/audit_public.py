@@ -194,15 +194,25 @@ def main() -> int:
     #     the text a reader would see: JSON is parsed first, because in the
     #     raw file a quote inside the instruction is stored as \" and a
     #     straight text search walks right past it.
+    #     A note of five to seven words is looked for whole, as a run of
+    #     words; as a single short run it could never equal an eight-word
+    #     one. Under five words is not checked, because that few words turn
+    #     up in ordinary text.
     checks += 1
     from kiln import store
     conn = store.connect()
     asks: set[str] = set()
+    short: set[str] = set()
     for r in conn.execute("SELECT user_do, user_note FROM items"):
         for t in (r["user_do"], r["user_note"]):
-            asks |= _grams(_words(t))
+            w = _words(t)
+            if len(w) >= 8:
+                asks |= _grams(w)
+            elif len(w) >= 5:
+                short.add(" ".join(w))
     conn.close()
     shown: set[str] = set()
+    streams: list[str] = []
     for p in text_files:
         raw = p.read_text(encoding="utf-8", errors="replace")
         if p.suffix == ".json":
@@ -210,16 +220,21 @@ def main() -> int:
                 raw = " ".join(_strings(json.loads(raw)))
             except ValueError:
                 pass
-        shown |= _grams(_words(raw))
+        words = _words(raw)
+        shown |= _grams(words)
+        streams.append(" %s " % " ".join(words))
     for text in pdf_texts.values():
-        shown |= _grams(_words(text))
-    leaked_ask = sorted(asks & shown)
+        words = _words(text)
+        shown |= _grams(words)
+        streams.append(" %s " % " ".join(words))
+    leaked_ask = sorted(asks & shown) + sorted(
+        s for s in short if any(" %s " % s in st for st in streams))
     if leaked_ask:
-        fail(f"{len(leaked_ask)} run(s) of eight words from a private instruction "
+        fail(f"{len(leaked_ask)} run(s) of words from a private instruction "
              f"appear in the build, e.g. '{leaked_ask[0]}'")
     else:
-        ok(f"none of {len(asks)} eight-word runs from my instructions appear in "
-           f"the build")
+        ok(f"none of {len(asks)} eight-word runs and {len(short)} short notes "
+           f"from my instructions appear in the build")
 
     # 5d. the only page on the site is the site. Any other HTML file, like a
     #     document a model wrote, would run its scripts on the site's origin.

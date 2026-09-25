@@ -664,6 +664,29 @@ def test_wording() -> None:
           and "next sync" in q.get("detail", ""), words[:400])
     check("and no longer talks about a morning schedule",
           "9am" not in words and "morning" not in words.lower(), words[:400])
+    # Every choice has to do something different. "claude cloud" built on
+    # this machine like "claude", so it is gone.
+    check("the choices are wait or claude here, nothing that promises a cloud",
+          [o.split(" - ")[0] for o in q.get("options") or []] == ["wait", "claude"]
+          and "cloud" not in words.lower(), str(q.get("options")))
+
+    # "look" counted as retry, so the chain ran again whether or not anything
+    # had been fixed. A publish that keeps failing offers skip or retry.
+    real = runner.ship.ship
+    runner.ship.ship = lambda workdir, job, public=True: {
+        "ok": False, "stage": "review", "why": "blocking",
+        "review": {"summary": "no", "blocking": ["x"]}}
+    try:
+        d = {"job_id": "s-one", "directory": str(DATA / "builds" / "s-one"),
+             "ship_attempts": runner.FAIL_LIMIT - 1}
+        Path(d["directory"]).mkdir(parents=True, exist_ok=True)
+        runner._ship_one(d, True, [], threading.Lock())
+    finally:
+        runner.ship.ship = real
+    sq = next((x for x in questions.all_questions() if x.get("kind") == "ship_failed"), {})
+    check("a publish that keeps failing offers skip or retry, and no look",
+          [o.split(" - ")[0] for o in sq.get("options") or []] == ["skip", "retry"]
+          and "fix it" in sq.get("detail", ""), str(sq)[:300])
 
 
 def test_flow() -> None:
