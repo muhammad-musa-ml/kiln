@@ -1,17 +1,21 @@
 {
- "total": 16,
+ "total": 18,
  "by_action": {
-  "redo": 4,
+  "redo": 5,
+  "apply": 1,
   "reference": 1,
   "learn": 2,
   "watch": 7,
   "read": 2
  },
  "by_topic": {
-  "ai": 6,
+  "ai": 7,
+  "automation": 2,
+  "obsidian": 1,
+  "productivity": 3,
+  "workflow": 1,
   "claude": 2,
   "coding": 2,
-  "productivity": 2,
   "web development": 1,
   "data science": 2,
   "finetuning": 1,
@@ -19,7 +23,6 @@
   "machine learning": 7,
   "development": 1,
   "ai agents": 2,
-  "automation": 1,
   "programming": 1,
   "software architecture": 1,
   "natural language processing": 1,
