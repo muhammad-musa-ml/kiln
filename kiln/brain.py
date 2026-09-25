@@ -1204,10 +1204,27 @@ def _gave_up(conn, iid: str) -> bool:
             and int(it.get("claude_attempts") or 0) >= FAIL_LIMIT)
 
 
+def _why_unread(b: dict) -> str:
+    """One plain line for the card. The raw errors stay in the brief."""
+    tried = " ".join(str(a) for a in b.get("models_tried") or []) + " " + str(b.get("why") or "")
+    low = tried.lower()
+    reasons = []
+    if "HTTP 429" in tried or "budget spent" in low:
+        reasons.append("were out of quota for the day")
+    if "HTTP 503" in tried:
+        reasons.append("were overloaded")
+    if "below standard" in low:
+        reasons.append("gave a read below the floor")
+    if reasons:
+        return "free models " + ", or ".join(reasons)
+    first = str(b.get("why") or "").strip().splitlines()
+    return (first[0] if first else "no free model could read it")[:140]
+
+
 def ask_to_read(briefs: list[dict]) -> dict:
     lines = []
     for b in briefs:
-        lines.append("%s\n  %s" % (b.get("url", b.get("item_id")), b.get("why", "")))
+        lines.append("%s\n  %s" % (b.get("url", b.get("item_id")), _why_unread(b)))
         if b.get("instruction"):
             lines.append("  asked: %s" % b["instruction"][:160])
     return questions.ask(
