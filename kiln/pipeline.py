@@ -45,6 +45,11 @@ REDO = "redo"
 RETRY_READS = 3
 
 
+def _day_spent(attempt: str) -> bool:
+    """Did this model turn the read away because its free day was used up?"""
+    return "budget spent" in attempt or "[quota: per day]" in attempt
+
+
 def derive_places(*texts: str) -> list[str]:
     hay = " ".join(t or "" for t in texts).lower()
     found = []
@@ -243,6 +248,7 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
         # rather than storing whatever the last rung said. The next sync
         # asks whether Claude should read it instead.
         passes = (note.get("_meta") or {}).get("passes") or []
+        models_tried = [a for pss in passes for a in (pss.get("attempts") or [])]
         handoff.write(
             iid, url=url, stage="extract",
             why=note.get("_error") or "no model on the ladder could read this",
@@ -251,7 +257,12 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
             schema=extract_mod.PROMPT.format(
                 context="(the media is listed above)"),
             context=(acq.caption or "")[:2000],
-            tried=[a for pss in passes for a in (pss.get("attempts") or [])])
+            tried=models_tried)
+        if models_tried and all(_day_spent(a) for a in models_tried):
+            # Every model had used up its day before this read started, so
+            # nothing was really tried. Counting it would spend one of the
+            # link's three tries on a day when nothing could have worked.
+            rec["attempts"] = tried
 
     store.log_run(conn, iid, "extract", not note.get("_error"),
                   note.get("_error", "") or f"{len(note.get('sections') or [])} sections",
