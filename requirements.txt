@@ -1,0 +1,6 @@
+playwright>=1.63.0
+Pillow>=12.2.0
+trafilatura>=2.0.0
+yt-dlp>=2026.3.17
+markdown-it-py>=4.0.0
+pypdf>=6.14.2
