@@ -80,7 +80,7 @@ below carry the file and line where each was proven.
 - [x] **2.4 Claude as the final backup.** When every rung fails the floor, hand
       the item to the sync's Claude session rather than storing a thin read.
 
-## Phase 3 — Honour the attached instruction
+## Phase 3 — Honour the attached instruction. COMPLETE.
 
 - [x] **3.1 Route on presence, not phrasing** (`ingest.py:36`). Verified: all
       four `with message :` instructions landed in `user_note`, so `user_do`
@@ -88,13 +88,13 @@ below carry the file and line where each was proven.
 - [x] **3.2 An instruction forces escalation** (`pipeline.py:186` currently
       reads `user_do` only and keyword-matches `"job"`). Verified:
       `extract_deep` has fired 0 times across all 13 items with metadata.
-- [ ] **3.3 The instruction drives the enricher and the search queries**
+- [x] **3.3 The instruction drives the enricher and the search queries**
       (`enrich.py:177`, `enrich.py:214`). Measured: the job carousel was
       searched three times by its own clickbait headline and never once by a
       company name.
-- [ ] **3.4 Add the answer field to all four schemas** (`enrich.py` `_LEARN`,
+- [x] **3.4 Add the answer field to all four schemas** (`enrich.py` `_LEARN`,
       `_TOOL`, `_JOB`, `_GENERIC`).
-- [ ] **3.5 Frame the instruction as a task in both prompts** (`extract.py:83`
+- [x] **3.5 Frame the instruction as a task in both prompts** (`extract.py:83`
       says "What the person saving it said", which is reported speech).
 
 ## Phase 4 — Deliver something
