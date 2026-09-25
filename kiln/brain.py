@@ -1091,10 +1091,13 @@ def _follow_up(conn, ids: list[str], allow_read: bool) -> dict:
         _mark(conn, empty, "failed", attempt=True,
               error="the last step returned nothing for this item")
     answered = sorted({(r.get("answered") or "") for r in final.get("items") or []})
+    # The files as they were kept, so the sync can name them rather than count.
+    files = [a["file"] for iid in ids
+             for a in ((store.get_item(conn, iid) or {}).get("claude") or {}).get("artifacts") or []
+             if a.get("file")]
     return {"items": ids, "unit": unit, "state": "done", "verdict": "work",
             "why": plan["why"], "tasks": len(done), "answered": answered,
-            "artifacts": sum(len(r.get("artifacts") or []) for r in final.get("items") or []),
-            "problems_left": fproblems}
+            "artifacts": len(files), "files": files, "problems_left": fproblems}
 
 
 # ---------------------------------------------------------------------------
@@ -1289,16 +1292,19 @@ def render(result: dict) -> str:
     if result.get("error"):
         lines.append("      stopped early: %s" % str(result["error"])[:160])
     for r in result.get("reads", []) + result.get("units", []):
-        what = ", ".join(r.get("items") or [])[:60]
+        # Every id in full: they were cut to 24 characters, which dropped all
+        # but the first item of a unit, and files were only counted.
+        what = " ".join(r.get("items") or [])
         if r.get("state") == "done" and r.get("verdict") == "work":
-            lines.append("      %-24s did %d task(s), answered %s, %d file(s)"
-                         % (what[:24], r.get("tasks", 0), "/".join(r.get("answered") or []),
-                            r.get("artifacts", 0)))
+            files = r.get("files") or []
+            lines.append("      %s: did %d task(s), answered %s%s"
+                         % (what, r.get("tasks", 0), "/".join(r.get("answered") or []) or "-",
+                            "; files: " + ", ".join(files) if files else "; no files"))
         elif r.get("state") == "done":
-            lines.append("      %-24s nothing to add: %s" % (what[:24], str(r.get("why"))[:70]))
+            lines.append("      %s: nothing to add: %s" % (what, str(r.get("why"))[:100]))
         else:
-            lines.append("      %-24s %s: %s" % (what[:24], r.get("state"),
-                                                  str(r.get("why") or r.get("error"))[:90]))
+            lines.append("      %s: %s: %s" % (what, r.get("state"),
+                                              str(r.get("why") or r.get("error"))[:120]))
     if result.get("asked"):
         lines.append("      asked whether Claude should read the items no free model could")
     if result.get("reads_waiting", 0) > 0:

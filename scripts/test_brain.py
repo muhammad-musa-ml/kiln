@@ -427,6 +427,10 @@ def test_end_to_end():
           str(units))
     out = brain.follow_up(units[0], conn=conn)
     check("the unit finished", out.get("state") == "done", json.dumps(out)[:400])
+    printed = brain.render({"units": [out], "reads": [], "waiting": 1})
+    check("the sync prints every item of the unit and the files by name",
+          all(i in printed for i in out.get("items") or ["?"])
+          and "companies" in printed and out.get("files"), printed)
 
     who = [c["who"] for c in STUB.calls]
     check("planner, two workers, then the final step",
