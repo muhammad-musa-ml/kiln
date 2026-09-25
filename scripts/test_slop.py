@@ -65,7 +65,17 @@ def main() -> int:
         else:
             print("  ok    %-34s -> caught" % label)
 
-    n = len(CASES) + 2
+    # The writers are only told what voice_rules names, so it has to name all.
+    rules = slop.voice_rules()
+    untold = [p for p in slop.BANNED_PHRASES if p not in rules]
+    if untold:
+        bad += 1
+        print("  FAIL  %-34s -> never told: %s" % ("every banned phrase is told", untold))
+    else:
+        print("  ok    %-34s -> %d named" % ("every banned phrase is told",
+                                            len(slop.BANNED_PHRASES)))
+
+    n = len(CASES) + 3
     print()
     print("%d/%d pass" % (n - bad, n))
     return 1 if bad else 0

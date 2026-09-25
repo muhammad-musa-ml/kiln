@@ -47,7 +47,7 @@ def stage_inbox(text: str) -> tuple[int, int]:
     conn = store.connect()
     before = store.counts(conn)
     pending = ingest.new_items(text, conn)
-    n_urls = sum(len(p.get("urls") or []) for p in pending)
+    n_urls = sum(len(p.get("_new", p.get("urls")) or []) for p in pending)
     print(f"[1/{STAGES}] inbox: {len(pending)} new line(s), {n_urls} url(s)", flush=True)
 
     t0 = time.time()
@@ -177,6 +177,7 @@ def stage_ship() -> list[dict]:
         if s.get("ok"):
             print("      %-40s published  %s"
                   % (str(s.get("repo", ""))[:40], s.get("url", "")), flush=True)
+            print("      %-40s %s" % ("", runner.ci_line(s.get("ci") or {})), flush=True)
         else:
             print("      %-40s stopped at %s: %s"
                   % (str(s.get("repo", ""))[:40], s.get("stage"),
@@ -201,6 +202,7 @@ def main() -> int:
     waiting = questions.open_questions()
     if waiting:
         print(questions.render(waiting))
+    shown = {q["id"]: q.get("asked_count") for q in waiting}
 
     text = Path(sys.argv[1]).read_text(encoding="utf-8")
 
@@ -237,13 +239,25 @@ def main() -> int:
         live = [s for s in shipped if s.get("ok")]
         print("published %d of %d attempted" % (len(live), len(shipped)))
         for s in live:
-            print("  %s" % s.get("url", ""))
+            print("  %s  (%s)" % (s.get("url", ""),
+                                  runner.ci_line(s.get("ci") or {}, with_url=False)))
 
+    # The queue card, the unreadable-items card and the health cards are
+    # mostly raised during the pass, after the block at the top was printed.
+    # A card asked again with fresh detail counts as new too.
     still = questions.open_questions()
+    fresh = [q for q in still if shown.get(q["id"]) != q.get("asked_count")]
+    if fresh:
+        print(questions.render(fresh))
     if still:
-        print("\n%d question%s waiting for you - see the top of this output,"
-              % (len(still), "" if len(still) == 1 else "s"))
-        print("or the cards in the Kiln UI.")
+        where = []
+        if len(still) > len(fresh):
+            where.append("%d at the top of this output" % (len(still) - len(fresh)))
+        if fresh:
+            where.append("%d raised during this pass, just above" % len(fresh))
+        print("\n%d question%s waiting for you: %s. Each is also a card in the "
+              "Kiln UI." % (len(still), "" if len(still) == 1 else "s",
+                            ", ".join(where)))
     return 0 if ok else 1
 
 

@@ -32,8 +32,7 @@ sys.path.insert(0, str(ROOT))
 TMP = Path(tempfile.mkdtemp(prefix="kiln-artifacts-")).resolve()
 DATA = TMP / "data"
 os.environ["KILN_DATA"] = str(DATA)
-for _var in ("KILN_DB", "KILN_INBOX_DIR"):
-    os.environ.pop(_var, None)
+os.environ.pop("KILN_DB", None)
 
 import kiln.config as config  # noqa: E402
 

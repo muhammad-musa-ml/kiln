@@ -1,7 +1,8 @@
 """A link goes in, a tagged and enriched item comes out.
 
-acquire -> extract -> enrich -> tag -> store. Each stage is checkpointed so
-a crash doesn't cost work you already paid for.
+acquire -> extract -> enrich -> tag -> store. The item is saved after the
+read and again at the end, so a crash in a later stage still leaves the
+read on the item. A re-run starts again from the link; nothing resumes.
 """
 from __future__ import annotations
 
@@ -37,10 +38,10 @@ _ACTION_FALLBACK = {
 # One filter, and it says what to do rather than only that something broke.
 REDO = "redo"
 
-# How many times a link that failed gets tried again before it stops
-# asking. The usual cause is something transient at the far end, so a
-# couple of retries recovers most of them without grinding forever on
-# one that is genuinely gone.
+# How many reads a link whose read failed gets in all, the first one
+# included, so two retries. The usual cause is something transient at the
+# far end, so a couple of retries recovers most of them without grinding
+# forever on one that is genuinely gone.
 RETRY_READS = 3
 
 
@@ -222,8 +223,8 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
 
     # ---- extract -----------------------------------------------------
     t0 = time.time()
-    # Anything the owner attached a message to gets the better ladder and
-    # room to think. The old rule read user_do only and looked for the word
+    # Anything the owner attached a message to gets the deep ladder and a
+    # second pass. The old rule read user_do only and looked for the word
     # "job" in it, so an instruction saying "get the name of the companies
     # in the video ... links to apply ... deadlines" never triggered, because
     # the parser had filed it under user_note. Across 13 items the deep

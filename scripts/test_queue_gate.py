@@ -538,6 +538,28 @@ def test_consent() -> None:
     check("a pick with nothing ticked builds nothing",
           got["answered"] and got["job_ids"] == [], str(got))
 
+    # Answering from a terminal: the numbers are the ones printed on the card.
+    _asked("a-one", "b-two", "c-three")
+    ticked = questions.pick_ids(QID, ["3", "[1]", "b-two"])
+    check("typed card numbers and ids both become job ids",
+          ticked == ["c-three", "a-one", "b-two"], str(ticked))
+    questions.answer(QID, "some", picked=questions.pick_ids(QID, ["2"]))
+    got = runner.consented()
+    check("and some with them builds just those",
+          got["job_ids"] == ["b-two"], str(got))
+
+
+def test_ci_line() -> None:
+    print("what CI said after a push")
+    check("a red run says so", runner.ci_line(
+        {"checked": True, "ok": False, "conclusion": "failure", "url": "u"})
+        == "CI FAILED (failure) u")
+    check("a green one too", runner.ci_line(
+        {"checked": True, "ok": True, "url": "u"}, with_url=False) == "CI passed")
+    check("and one that was never checked says why", runner.ci_line(
+        {"checked": False, "why": "the project has no workflow"})
+        == "CI not checked: the project has no workflow")
+
 
 # --- building what was agreed ------------------------------------------------
 def test_run_pending_only() -> None:
@@ -671,7 +693,7 @@ def main() -> int:
     for test in (test_ask_extra, test_answer_picked, test_estimate_defaults,
                  test_estimate_history, test_estimate_what, test_ship_is_timed,
                  test_offer, test_offer_same_rules, test_offer_answered_waits,
-                 test_offer_empty, test_consent, test_run_pending_only,
+                 test_offer_empty, test_consent, test_ci_line, test_run_pending_only,
                  test_run_consented, test_wording, test_flow):
         run(test)
     print()

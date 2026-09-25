@@ -16,7 +16,7 @@ learned goes into the playbook so the next item like it starts ahead.
 The one case that still asks first is an item no free model could read at
 all. That is a question card, and Claude reads it only after a yes.
 
-    python -m kiln.brain sweep            follow up everything that needs it
+    python -m kiln.brain sweep            follow up what needs it, KILN_BRAIN_UNITS at most
     python -m kiln.brain run <id> [...]   follow up these items now, as one unit
     python -m kiln.brain show <id>        what Claude did for one item
 """
@@ -135,7 +135,7 @@ ITEMS WITH NO READ
 - An item marked "unread": true has no read at all. No free model could read it and he has agreed to Claude reading it. Plan a task of kind "read" for it (one item per read task). A read task looks at the images in its media folder and returns the full read. Any other task about that item depends on its read task.
 
 WHAT WORKERS HAVE
-- Their own folder, holding items.json (everything the first pass found, per item) and media/ (each item's images, named <item id>-NN.jpg; for a video, frames taken every few seconds). Workers can look at images. They cannot hear audio; the first pass's transcript is in items.json.
+- Their own folder, holding items.json (everything the first pass found, per item) and media/ (each item's images, named <item id>-NN.<ext>; for a video, up to 16 frames spread evenly over it, named <item id>-fNN.jpg). Workers can look at images. They cannot hear audio; the first pass's transcript is in items.json.
 - Tool kit "web": live web search and fetching pages.
 - Tool kit "write": writing files into out/ in their own folder. Documents are written as Markdown or HTML; Kiln turns them into PDFs itself.
 - Nothing else: no shell, no other files on the machine.
@@ -187,7 +187,7 @@ YOUR TASK
 
 WHAT YOU HAVE
 - items.json in this folder: everything a first pass found for item(s) {item_ids}: the title and summary, the text on each slide, the caption, the transcript, and the links with whether they worked. The same data is at the end of this message.
-- media/: the images for those items, named <item id>-NN.<ext>. Look at them if the task needs what is on them.
+- media/: the images for those items, named <item id>-NN.<ext>, or for a video <item id>-fNN.jpg frames spread evenly over it. Look at them if the task needs what is on them.
 {extra}
 RULES
 - Never invent or complete a URL. Give only links you found on a page you fetched, or that appear in the post. If a link is dead, say so.
@@ -204,7 +204,7 @@ THE ITEMS
 >>>
 """
 
-READER = """You are reading a saved post for Kiln, because no free model could. Look at every image in media/ (for a video these are frames taken every few seconds, and you cannot hear its audio). Get everything down: this is the only read the post will get.
+READER = """You are reading a saved post for Kiln, because no free model could. Look at every image in media/ (for a video these are up to 16 frames spread evenly over it, and you cannot hear its audio). Get everything down: this is the only read the post will get.
 
 {brief}
 
@@ -403,20 +403,44 @@ def _copy(src: Path, dst: Path) -> None:
         shutil.copy2(src, dst)
 
 
+def _duration(video: Path) -> float:
+    fp = shutil.which("ffprobe")
+    if not fp:
+        return 0.0
+    try:
+        p = subprocess.run([fp, "-v", "error", "-show_entries", "format=duration",
+                            "-of", "csv=p=0", str(video)],
+                           capture_output=True, text=True, timeout=60)
+        return float((p.stdout or "").strip() or 0)
+    except (OSError, ValueError, subprocess.SubprocessError):
+        return 0.0
+
+
 def _frames(video: Path, dest: Path, iid: str, limit: int = 16) -> list[str]:
-    """A frame every three seconds, so a worker can see what was on screen."""
+    """Up to `limit` frames spread evenly over the whole video.
+
+    One every three seconds stopped at the 48th second, so the end of
+    anything longer was never seen. A short video still gets at most one a
+    second, and one whose length cannot be read falls back to every three.
+    """
     ff = shutil.which("ffmpeg")
     if not ff:
         return []
+    secs = _duration(video)
+    rate = min(1.0, limit / secs) if secs > 0 else 1 / 3
     pattern = dest / f"{iid}-f%02d.jpg"
     subprocess.run([ff, "-hide_banner", "-loglevel", "error", "-y", "-i", str(video),
-                    "-vf", "fps=1/3,scale='min(960,iw)':-2", "-frames:v", str(limit),
-                    str(pattern)], capture_output=True, timeout=300)
+                    "-vf", "fps=%.5f,scale='min(960,iw)':-2" % rate,
+                    "-frames:v", str(limit), str(pattern)],
+                   capture_output=True, timeout=300)
     return sorted(p.name for p in dest.glob(f"{iid}-f*.jpg"))
 
 
 def _stage_media(items: list[dict], dest: Path) -> dict[str, list[str]]:
-    """Each item's pictures, renamed <item id>-NN.ext. A video becomes frames."""
+    """Each item's pictures, renamed <item id>-NN.<ext>.
+
+    A video with no pictures beside it becomes frames, <item id>-fNN.jpg.
+    """
     dest.mkdir(parents=True, exist_ok=True)
     out: dict[str, list[str]] = {}
     for it in items:
@@ -1070,15 +1094,42 @@ READ_ASK = "unreadable"
 READ_KIND = "claude_read"
 
 
+# Items I said yes to that have not been read yet. A yes covers everything
+# the card listed, and a pass only has room for BRAIN_UNITS of them.
+READ_OK = HOME / "read_ok.json"
+
+
+def _read_ok() -> set[str]:
+    try:
+        return set(json.loads(READ_OK.read_text(encoding="utf-8")))
+    except (OSError, ValueError, TypeError):
+        return set()
+
+
+def _save_read_ok(ids: set[str]) -> None:
+    READ_OK.parent.mkdir(parents=True, exist_ok=True)
+    READ_OK.write_text(json.dumps(sorted(ids)), encoding="utf-8")
+
+
+def _read_card() -> dict:
+    for q in questions.all_questions():
+        if q.get("job_id") == READ_ASK and q.get("kind") == READ_KIND:
+            return q
+    return {}
+
+
 def read_consent() -> str:
     """"yes", "no", or "" when the card has not been answered."""
-    for q in questions.all_questions():
-        if q.get("job_id") != READ_ASK or q.get("kind") != READ_KIND:
-            continue
-        if not q.get("answered_at"):
-            return ""
-        return "yes" if (q.get("answer") or "").lower().startswith("claude") else "no"
-    return ""
+    q = _read_card()
+    if not q.get("answered_at"):
+        return ""
+    return "yes" if (q.get("answer") or "").lower().startswith("claude") else "no"
+
+
+def _gave_up(conn, iid: str) -> bool:
+    it = store.get_item(conn, iid) or {}
+    return (it.get("claude_state") == "failed"
+            and int(it.get("claude_attempts") or 0) >= FAIL_LIMIT)
 
 
 def ask_to_read(briefs: list[dict]) -> dict:
@@ -1092,9 +1143,12 @@ def ask_to_read(briefs: list[dict]) -> dict:
         "%d item%s no free model could read" % (len(briefs), "" if len(briefs) == 1 else "s"),
         "Every free model was out of quota or gave a read below the floor, so "
         "these were not filed. Claude can read the pictures (it cannot hear a "
-        "video's sound). Otherwise the free models try again on the next sync.\n"
+        "video's sound). A yes covers every item listed here, and Claude reads "
+        "up to %d a sync, so a longer list takes more than one. Otherwise the "
+        "free models try again on the next sync.\n" % config.BRAIN_UNITS
         + "\n".join(lines),
-        ["claude - have Claude read them", "wait - try the free models again next sync"])
+        ["claude - have Claude read them", "wait - try the free models again next sync"],
+        extra={"items": [b["item_id"] for b in briefs]})
 
 
 def sweep(limit: int | None = None, *, conn=None) -> dict:
@@ -1111,20 +1165,36 @@ def sweep(limit: int | None = None, *, conn=None) -> dict:
         blocked = False
         if briefs:
             consent = read_consent()
+            ok = _read_ok()
             if consent == "yes":
+                # A yes covers every item the card listed, including the ones
+                # this pass has no room for. Those are read on later passes
+                # without asking again.
+                ok |= set(_read_card().get("items") or [b["item_id"] for b in briefs])
                 questions.clear(READ_ASK, READ_KIND)
-                for b in briefs[:limit]:
-                    r = follow_up([b["item_id"]], conn=conn, allow_read=True)
-                    out["reads"].append(r)
-                    if r.get("state") == "blocked":
-                        # Out of usage: every later call would hit the same wall.
-                        blocked = True
-                        break
             elif consent == "no":
-                # Wait was the answer. Ask again next time if they are still stuck.
+                # Wait was the answer, so the free models get fresh tries: a
+                # read that had used its three would otherwise never be tried
+                # again, and this card would come back with nothing changed.
                 questions.clear(READ_ASK, READ_KIND)
-            else:
-                ask_to_read(briefs)
+                for b in briefs:
+                    conn.execute("UPDATE items SET attempts=0 WHERE id=?",
+                                 (b["item_id"],))
+                conn.commit()
+            mine = [b for b in briefs if b["item_id"] in ok
+                    and not _gave_up(conn, b["item_id"])]
+            for b in mine[:limit]:
+                r = follow_up([b["item_id"]], conn=conn, allow_read=True)
+                out["reads"].append(r)
+                if r.get("state") == "blocked":
+                    # Out of usage: every later call would hit the same wall.
+                    blocked = True
+                    break
+            out["reads_waiting"] = len(mine) - len(out["reads"])
+            _save_read_ok(ok & {b["item_id"] for b in unread(conn)})
+            rest = [b for b in briefs if b["item_id"] not in ok]
+            if rest and consent != "no":
+                ask_to_read(rest)
                 out["asked"] = True
         todo = needs_follow_up(conn)
         out["waiting"] = len(todo)
@@ -1162,6 +1232,9 @@ def render(result: dict) -> str:
                                                   str(r.get("why") or r.get("error"))[:90]))
     if result.get("asked"):
         lines.append("      asked whether Claude should read the items no free model could")
+    if result.get("reads_waiting", 0) > 0:
+        lines.append("      %d read(s) you said yes to wait for the next sync"
+                     % result["reads_waiting"])
     left = result.get("waiting", 0) - len(result.get("units", []))
     if left > 0:
         lines.append("      %d more waiting for the next sync" % left)

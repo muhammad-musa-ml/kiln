@@ -1,13 +1,16 @@
 """Parse the inbox doc into work.
 
-Read only, never writes to the doc, and hashes each line so re-running
-doesn't repeat anything. Grammar, all optional after the url:
+Read only, never writes to the doc, and remembers each link it has read so
+re-running doesn't repeat anything. A link added to a line later is still
+read, and an instruction added under a link later still reaches it.
+Grammar, all optional after the url:
 
     <url> | note: ... | do: ... | tag: a,b | by: Oct 14 | !
 """
 from __future__ import annotations
 
 import re
+import time
 from typing import Any
 
 from . import store
@@ -153,20 +156,68 @@ def parse_doc(text: str) -> list[dict]:
     return items
 
 
+def _known(conn, url: str) -> bool:
+    return (store.already_seen(conn, store.line_hash(url))
+            or conn.execute("SELECT 1 FROM items WHERE id=?",
+                            (store.item_id(url),)).fetchone() is not None)
+
+
 def new_items(text: str, conn=None) -> list[dict]:
-    """Only the lines Kiln has not already processed."""
+    """The lines that carry something Kiln has not read yet.
+
+    Decided link by link, not line by line. A line used to be remembered by
+    its first link alone, so a second link added to it later was never read.
+    `_new` holds the links still to read; `_hash` stays the first link's, the
+    key every line seen before this change was stored under.
+    """
     own = conn is None
     conn = conn or store.connect()
     out = []
     for p in parse_doc(text):
-        key = p.get("url") or p.get("note", "")
-        h = store.line_hash(key)
-        if store.already_seen(conn, h):
+        urls = p.get("urls") or []
+        if not urls:
+            h = store.line_hash(p.get("note", ""))
+            if store.already_seen(conn, h):
+                continue
+            p["_hash"], p["_new"] = h, []
+            out.append(p)
             continue
-        p["_hash"] = h
+        new = [u for u in urls if not _known(conn, u)]
+        if not new:
+            continue
+        p["_hash"], p["_new"] = store.line_hash(urls[0]), new
         out.append(p)
     if own:
         conn.close()
+    return out
+
+
+def late_instructions(text: str, conn) -> list[dict]:
+    """An instruction written under a link after the link was already read.
+
+    The line is known, so it was skipped as a whole and the instruction never
+    reached the item. Only an item with no instruction of its own takes one,
+    so nothing I wrote earlier is ever overwritten. The follow-up then plans
+    for it on the next sweep.
+    """
+    from . import pipeline
+    out = []
+    for p in parse_doc(text):
+        do, note = (p.get("do") or "").strip(), (p.get("note") or "").strip()
+        if not (do or note):
+            continue
+        for url in p.get("urls") or []:
+            iid = store.item_id(url)
+            row = conn.execute("SELECT user_do, user_note, processed_at FROM items "
+                               "WHERE id=?", (iid,)).fetchone()
+            if not row or not row["processed_at"] \
+                    or (row["user_do"] or row["user_note"] or "").strip():
+                continue
+            conn.execute("UPDATE items SET user_do=?, user_note=?, claude_state='', "
+                         "updated_at=? WHERE id=?", (do, note, time.time(), iid))
+            conn.commit()
+            pipeline.index(conn, iid)
+            out.append({"url": url, "id": iid, "status": "instruction added"})
     return out
 
 
@@ -186,10 +237,11 @@ def ingest_text(text: str, *, source: str = "gdoc", conn=None,
 
         # One line can carry several links with a single instruction that
         # applies to all of them. Each becomes its own item, and they share
-        # a group id so the instruction can be about the SET.
+        # a group id so the instruction can be about the SET. The group comes
+        # from the whole line, so a link added to it later joins the others.
         group = p["_hash"] if len(urls) > 1 else ""
         last_id = None
-        for url in urls:
+        for url in p.get("_new") or urls:
             if not process:
                 results.append({"url": url, "status": "pending"})
                 continue
@@ -199,11 +251,14 @@ def ingest_text(text: str, *, source: str = "gdoc", conn=None,
                 urgent=bool(p.get("urgent")), deadline=p.get("by", ""),
                 source=source, conn=conn)
             last_id = (item or {}).get("id")
+            store.mark_seen(conn, store.line_hash(url), last_id)
             results.append({"url": url, "id": last_id,
                             "title": ((item or {}).get("title") or "")[:90],
                             "status": "processed"})
         if process:
             store.mark_seen(conn, p["_hash"], last_id)
+    if process:
+        results += late_instructions(text, conn)
     if own:
         conn.close()
     return results

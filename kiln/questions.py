@@ -3,8 +3,9 @@
 Syncs run twice a day and nobody is at the keyboard while they do, so a sync
 cannot stop and ask me anything. When it hits a decision that is mine to
 make, it writes the question down here and carries on with the rest of the
-queue. The next sync prints every open question before it does anything
-else, and the UI shows them as cards I can answer by clicking.
+queue. Every sync prints the open questions before it does anything else,
+and again at its end any that were raised or changed while it ran. The UI
+shows them as cards I can answer by clicking.
 
 One question per job per kind. Asking the same thing twice because the agent
 was down for two syncs running is noise, not information.
@@ -104,6 +105,21 @@ def answer(qid: str, choice: str, note: str = "",
     return q
 
 
+def pick_ids(qid: str, picks: list[str]) -> list[str]:
+    """Turn what I typed after `some` into the ids a card with a list holds.
+
+    A number is the one printed in brackets on the card, anything else is
+    taken as an id. The UI sends ids; this is for answering from a terminal.
+    """
+    p = QUESTIONS / f"{qid}.json"
+    try:
+        listed = json.loads(p.read_text(encoding="utf-8")).get("projects") or []
+    except Exception:
+        listed = []
+    by_n = {str(x.get("n")): str(x.get("job_id")) for x in listed if isinstance(x, dict)}
+    return [by_n.get(s.strip("[],"), s.strip("[],")) for s in picks if s.strip("[],")]
+
+
 def clear(job_id: str, kind: str = "") -> list[str]:
     """Drop questions for a job once whatever they asked about is settled."""
     gone = []
@@ -120,7 +136,7 @@ def clear(job_id: str, kind: str = "") -> list[str]:
 
 
 def render(qs: list[dict] | None = None) -> str:
-    """The block the next run prints before it starts work."""
+    """The block a sync prints: at its start, and at its end for new ones."""
     qs = open_questions() if qs is None else qs
     if not qs:
         return ""
@@ -149,6 +165,9 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1 and sys.argv[1] == "list":
         print(render() or "nothing waiting")
+    elif len(sys.argv) > 4 and sys.argv[1] == "answer" and sys.argv[3] == "some":
+        print(json.dumps(answer(sys.argv[2], "some",
+                                picked=pick_ids(sys.argv[2], sys.argv[4:])), indent=2))
     elif len(sys.argv) > 3 and sys.argv[1] == "answer":
         print(json.dumps(answer(sys.argv[2], sys.argv[3],
                                 " ".join(sys.argv[4:])), indent=2))
@@ -156,3 +175,4 @@ if __name__ == "__main__":
         print(__doc__)
         print("  python -m kiln.questions list")
         print("  python -m kiln.questions answer <id> <choice> [note]")
+        print("  python -m kiln.questions answer <id> some <number or job id> ...")

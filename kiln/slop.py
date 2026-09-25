@@ -86,7 +86,7 @@ SKIP_FILES = {"slop.py", "ship.py"}
 ALLOW = "slop: allow"
 
 
-def voice_rules(limit: int = 28) -> str:
+def voice_rules() -> str:
     """The writing rules as a block to paste into a prompt.
 
     Two prompts need these: the one that asks for a project to be built, and
@@ -116,7 +116,7 @@ comment blocks five lines long, no banner headers, no restating the function
 name in a docstring. If a comment would only repeat the code, leave it out.
 
 No padding, no marketing, and no section that exists only so there is a
-section.""" % ", ".join(BANNED_PHRASES[:limit])
+section.""" % ", ".join(BANNED_PHRASES)
 
 
 def _finding(path, line, rule, detail, severity, excerpt):

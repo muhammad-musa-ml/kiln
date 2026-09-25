@@ -85,16 +85,14 @@ def _find_ollama() -> str:
 
 
 OLLAMA_HOST = _find_ollama()
-OLLAMA_MODELS_DIR = os.environ.get(
-    "KILN_OLLAMA_MODELS", str(Path.home() / ".ollama" / "models")
-)
 
 # ---------------------------------------------------------------------------
 # Routing policy
 # ---------------------------------------------------------------------------
-# Cloud first, local as the always-available fallback. Local VLMs can't read
-# video at all and run much slower, so they're a backstop, not the default.
-POLICY = os.environ.get("KILN_POLICY", "free_first")  # free_first | local_only | quality_first
+# Nothing routes on this any more: the ladders below are the routing, best
+# model first. /api/health still reports it, and local_only is refused
+# further down because no local model is left to fall back to.
+POLICY = os.environ.get("KILN_POLICY", "free_first")
 
 # Task -> ordered ladder of (provider, model). Best first, and every rung
 # has to be good enough to do the job properly.
@@ -113,15 +111,15 @@ LADDERS: dict[str, list[tuple[str, str]]] = {
         ("gemini", "gemini-3.6-flash"),
         ("gemini", "gemini-3.5-flash"),
     ],
-    # The same, with room to think. Used when an instruction is attached, the
-    # item is urgent, or the first pass came back thin.
+    # Used when an instruction is attached or the item is urgent. The pro
+    # model sits second, and a deep read always gets a second pass.
     "extract_deep": [
         ("gemini", "gemini-3.8-flash"),
         ("gemini", "gemini-3.1-pro-preview"),
         ("gemini", "gemini-3.7-flash"),
         ("gemini", "gemini-3.6-flash"),
     ],
-    # Structured text work: tagging, normalising, writing search queries.
+    # Short structured text work. Its one job now is writing search queries.
     "classify": [
         ("gemini", "gemini-3.5-flash"),
         ("gemini", "gemini-3.6-flash"),
@@ -175,19 +173,12 @@ THINKING_BUDGET: dict[str, int] = {
 }
 
 # Claude's follow-up on what the free models produced (kiln/brain.py). Off
-# only to debug; the owner's rule is that it always runs. The cap is units
+# only to debug; the owner's rule is that it always runs. KILN_BRAIN=0 stops
+# it in the sync and when a link is added on the local page, and
+# `python -m kiln.brain run <ids>` still runs it by hand. The cap is units
 # per sync, so one busy day cannot turn into hours of Claude work.
 BRAIN_ON = os.environ.get("KILN_BRAIN", "1") == "1"
 BRAIN_UNITS = int(os.environ.get("KILN_BRAIN_UNITS", "6"))
-
-# Any of these bumps extract -> extract_deep. Data so the UI can show why.
-ESCALATE_WHEN = {
-    "urgent": "you marked it urgent",
-    "job": "job applications are high-stakes",
-    "all_links_dead": "every link from the first pass failed to resolve",
-    "empty_extraction": "the first pass found almost nothing",
-    "user_requested": "you asked for a deeper look",
-}
 
 # These get a second pass, merged with the first. Reads vary run to run.
 DOUBLE_PASS_KINDS = {"job", "tool", "repo"}
@@ -211,22 +202,6 @@ FREE_TIER_RPD: dict[str, int] = {
     "gemini-3.5-flash": 18,
     "gemini-3.1-pro-preview": 18,
 }
-
-# ---------------------------------------------------------------------------
-# Acquisition
-# ---------------------------------------------------------------------------
-KEEP_MEDIA = os.environ.get("KILN_KEEP_MEDIA", "1") == "1"
-IG_USERNAME = os.environ.get("KILN_IG_USERNAME", "")
-MAX_VIDEO_SECONDS = int(os.environ.get("KILN_MAX_VIDEO_SECONDS", "600"))
-
-# ---------------------------------------------------------------------------
-# Ingest
-# ---------------------------------------------------------------------------
-# Google Doc inbox. Kiln only ever READS this - it never edits the doc, and
-# tracks what it has already seen by content hash.
-GDOC_INBOX_ID = os.environ.get("KILN_GDOC_INBOX_ID", "")
-INBOX_DIR = Path(os.environ.get("KILN_INBOX_DIR", DATA / "inbox"))
-INBOX_DIR.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------
 # Actions

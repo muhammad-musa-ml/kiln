@@ -1,8 +1,9 @@
 """What models exist, which are on, and what order they run in.
 
-config.py is only the seed. Once the UI touches anything it writes
-data/models.json and that wins, so changing models isn't a code edit.
-A ladder is just an ordered list, first one is primary.
+config.py is only the seed. The first change made through the local
+/api/models routes writes data/models.json and that wins, so changing
+models isn't a code edit. The page has no panel for these routes; they are
+called directly. A ladder is just an ordered list, first one is primary.
 """
 from __future__ import annotations
 
@@ -14,7 +15,7 @@ from . import config, providers, secrets_store
 
 STORE = config.DATA / "models.json"
 
-# Measured on 2026-09-23; see config.py for the head-to-head that produced it.
+# The free-tier daily budget per model, from config.py.
 _SEED_FREE = config.FREE_TIER_RPD
 
 
@@ -85,8 +86,8 @@ def _drop_dead_tasks(d: dict) -> dict:
 
     The file wins over config.py for ORDER, which is the point of it. It
     cannot win over which tasks exist: a ladder for a task nothing calls is
-    config that shows in the picker and does nothing. Seeded models left in
-    no ladder go with it; anything added by hand from the UI stays.
+    config that shows in /api/models and does nothing. Seeded models left in
+    no ladder go with it; anything added by hand through /api/models stays.
     """
     dead = [t for t in d.get("ladders", {}) if t not in config.LADDERS]
     if not dead:
@@ -142,7 +143,7 @@ def thinking_for(task: str) -> int:
 
 
 # ---------------------------------------------------------------------------
-# Writes used by the UI
+# Writes behind the /api/models routes
 # ---------------------------------------------------------------------------
 def add_model(provider: str, model: str, *, label: str = "", caps: list | None = None,
               free_rpd_: int = 0, verified: bool = False) -> dict:
@@ -191,7 +192,7 @@ def set_thinking(task: str, budget: int) -> None:
 
 
 # ---------------------------------------------------------------------------
-# What the UI renders
+# What GET /api/models returns
 # ---------------------------------------------------------------------------
 def overview() -> dict:
     from . import models as _m

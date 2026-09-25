@@ -59,7 +59,7 @@ def resolve_links(links: list[dict | str], timeout: int = 12) -> list[dict]:
 # Prompts, one per kind
 # ---------------------------------------------------------------------------
 _LEARN = """Someone saved a post about **{subject}** because they want to LEARN it.
-Search the live web. Today is {today}.
+Work from the live sources fetched for you below. Today is {today}.
 
 Return ONLY JSON:
 {{
@@ -94,7 +94,8 @@ Context from the saved post:
 """
 
 _TOOL = """Someone saved a post recommending **{subject}** and wants to know whether
-to actually install it. Search the live web. Today is {today}.
+to actually install it. Work from the live sources fetched for you below.
+Today is {today}.
 
 Return ONLY JSON:
 {{
@@ -124,7 +125,8 @@ Context from the saved post:
 """
 
 _JOB = """Someone saved a post about a JOB or application opportunity. Their goal is
-to actually apply. Find the REAL posting. Search the live web. Today is {today}.
+to actually apply. Find the REAL posting in the live sources fetched for you
+below. Today is {today}.
 
 Return ONLY JSON:
 {{
@@ -146,8 +148,8 @@ Context from the saved post:
 {context}
 """
 
-_GENERIC = """Someone saved this post. Add the context they would want. Search the
-live web. Today is {today}.
+_GENERIC = """Someone saved this post. Add the context they would want, working from
+the live sources fetched for you below. Today is {today}.
 
 Return ONLY JSON:
 {{
@@ -284,7 +286,8 @@ What earlier work on posts like this one learned. Follow it:
 
 
 def _queries_from_ask(ask: str, note: dict, context: str,
-                      lessons: list[str] | None = None) -> list[str]:
+                      lessons: list[str] | None = None,
+                      meta: dict | None = None) -> list[str]:
     """Turn the owner's instruction into searches, using what the post holds.
 
     The templates below search for a subject picked out of the note, which
@@ -296,6 +299,7 @@ def _queries_from_ask(ask: str, note: dict, context: str,
 
     With no instruction this still runs when there are lessons for items of
     this kind, so what was learned last time changes the searches this time.
+    `meta`, when given, is filled with what the call cost.
     """
     if not ask and not lessons:
         return []
@@ -305,6 +309,9 @@ def _queries_from_ask(ask: str, note: dict, context: str,
             context=context[:2500],
             lessons=_LESSONS.format("\n".join("- " + l for l in lessons))
             if lessons else ""), want_json=True)
+        if meta is not None:
+            meta.update({"model": r.label, "ok": r.ok, "seconds": round(r.seconds, 1),
+                         "tokens_in": r.tokens_in, "tokens_out": r.tokens_out})
         qs = (r.data or {}).get("queries") if isinstance(r.data, dict) else None
         out = [str(q).strip() for q in (qs or []) if str(q).strip()][:6]
         return out
@@ -351,7 +358,8 @@ def enrich_note(note: dict, acq: Any = None, *, user_note: str = "",
     ctx = _context(note, acq, user_note)
     # What they asked for comes first, because that is the thing that has to
     # be answered. The template searches stay behind it as a floor.
-    queries = _queries_from_ask(user_note, note, ctx, lessons)
+    qmeta: dict[str, Any] = {}
+    queries = _queries_from_ask(user_note, note, ctx, lessons, meta=qmeta)
     queries += [q for q in _queries_for(which, subject, note) if q not in queries]
     queries = queries[:8]
     try:
@@ -379,6 +387,9 @@ def enrich_note(note: dict, acq: Any = None, *, user_note: str = "",
             "not answer something, say so rather than filling it in from memory."
             f"\n\n{web_context[:60000]}"
         )
+    else:
+        prompt += ("\n\nNo live sources could be fetched this time. Where a field "
+                   "needs one, say so rather than filling it in from memory.")
 
     # Plain generation over fetched text - NOT the grounded-search tool.
     r = models.generate("reason", prompt, want_json=True)
@@ -387,8 +398,10 @@ def enrich_note(note: dict, acq: Any = None, *, user_note: str = "",
         "_subject": subject,
         "_meta": {
             "model": r.label, "ok": r.ok, "seconds": round(r.seconds, 1),
+            "tokens_in": r.tokens_in, "tokens_out": r.tokens_out,
             "error": r.error[:200],
             "attempts": r.attempts,
+            "queries_call": qmeta,
         },
         "_citations": r.citations or sources,
         "_queries": queries,

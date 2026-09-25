@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS items (
 
 CREATE TABLE IF NOT EXISTS tags (
   item_id  TEXT NOT NULL,
-  facet    TEXT NOT NULL,              -- action | topic | place | user | status
+  facet    TEXT NOT NULL,              -- action | topic | place | user | section
   value    TEXT NOT NULL,
   PRIMARY KEY (item_id, facet, value)
 );
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS links (
 );
 
 CREATE TABLE IF NOT EXISTS seen (
-  hash        TEXT PRIMARY KEY,        -- hash of a raw inbox line
+  hash        TEXT PRIMARY KEY,        -- hash of an inbox link, or of a note with none
   first_seen  REAL,
   item_id     TEXT
 );

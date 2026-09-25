@@ -1,8 +1,10 @@
 """Take a finished build, check it, write its readme, put it on GitHub.
 
-Three stages after the builder stops. A reviewer reads the project and
-tries to run it, a readme gets written and has to pass the slop check,
-and then the repo is created and pushed.
+After the builder stops: a reviewer reads the project and tries to run
+it, Kiln runs the project's tests itself, a readme gets written and has to
+pass the slop check, the build tooling is stripped and the files gated,
+and then the repo is created and pushed. Last, it waits for the project's
+own CI, which can report a problem but can no longer stop the push.
 
 The reviewer gets a named list of tools rather than a blanket permission
 bypass, so it can edit the project and run its tests and not much else.
