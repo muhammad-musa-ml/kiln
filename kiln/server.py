@@ -187,7 +187,8 @@ class Handler(BaseHTTPRequestHandler):
                     it["fu_local"] = {"state": it.get("claude_state") or "",
                                       **{k: c.get(k) for k in (
                                           "verdict", "why", "missing", "planner",
-                                          "tasks", "final", "last_error")}}
+                                          "tasks", "final", "last_error",
+                                          "set_aside", "action_was")}}
                 return self._json(it or {"error": "not found"}, 200 if it else 404)
 
             if p == "/api/facets":
