@@ -82,7 +82,9 @@ SKIP_DIRS = {".git", "__pycache__", "node_modules", ".venv", "venv",
              ".planning", ".agents", ".pytest_cache", ".mypy_cache"}
 # These two hold the list of things to look for, so they always match
 # themselves. ship.py quotes the rules into the brief it sends the writer.
-SKIP_FILES = {"slop.py", "ship.py"}
+# Kiln's own two files, by path: matched by name, a built project's own
+# ship.py or slop.py would have gone out unchecked.
+SKIP_FILES = {Path(__file__).resolve(), Path(__file__).resolve().parent / "ship.py"}
 ALLOW = "slop: allow"
 
 
@@ -205,7 +207,7 @@ def check_tree(root: Path, only: list[str] | None = None) -> list[dict]:
             continue
         if any(part in SKIP_DIRS for part in p.parts):
             continue
-        if p.name in SKIP_FILES:
+        if p.resolve() in SKIP_FILES:
             continue
         if only and p.suffix not in only:
             continue
