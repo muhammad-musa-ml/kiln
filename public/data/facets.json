@@ -1,7 +1,8 @@
 {
- "total": 18,
+ "total": 25,
  "by_action": {
-  "redo": 5,
+  "redo": 11,
+  "build": 1,
   "apply": 1,
   "reference": 1,
   "learn": 2,
@@ -9,8 +10,12 @@
   "read": 2
  },
  "by_topic": {
+  "ai agents": 3,
+  "ai tools": 1,
+  "automation": 3,
+  "hermes agent": 1,
+  "jarvis": 1,
   "ai": 7,
-  "automation": 2,
   "obsidian": 1,
   "productivity": 3,
   "workflow": 1,
@@ -22,7 +27,6 @@
   "llm": 5,
   "machine learning": 7,
   "development": 1,
-  "ai agents": 2,
   "programming": 1,
   "software architecture": 1,
   "natural language processing": 1,
@@ -48,6 +52,6 @@
  },
  "by_place": {},
  "by_status": {},
- "gated": 1,
+ "gated": 2,
  "dead_links": 16
 }

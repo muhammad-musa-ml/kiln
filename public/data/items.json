@@ -1,6 +1,325 @@
 {
  "items": [
   {
+   "id": "12c2f711f2c6e894",
+   "url": "https://www.instagram.com/p/Ddm2na9Eo3o/?img_index=1&stkn=cGdndmtyZ2J4Mmkw",
+   "kind": "other",
+   "action": "redo",
+   "title": "Anthropic recently dropped its new model, Claude Opus 5.5. \n\nIt also p",
+   "owner": "artificialintelligenceupdater",
+   "slide_count": 18,
+   "focus_slide": 1,
+   "links_checked": "25 Sep 2026",
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "media_id": "12c2f711f2c6e894",
+   "pdf_file": "doc.pdf",
+   "slide_ext": ".webp"
+  },
+  {
+   "id": "67e7b197f678eac0",
+   "url": "https://www.instagram.com/reel/DdKhqxHvjIP/?stkn=YTBnaTdkcWxyaXUx",
+   "kind": "other",
+   "action": "redo",
+   "title": "Let me know if I missed anything!\n\n#ai #claude #buildinpublic #vibecod",
+   "owner": "millee.md",
+   "posted": "September 11, 2026",
+   "slide_count": 0,
+   "links_checked": "25 Sep 2026",
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "slide_ext": ".webp"
+  },
+  {
+   "id": "97551e7670f4c33a",
+   "url": "https://www.instagram.com/reel/Dba3L3EzeWo/?stkn=dW5ubGxteG1hMHMx",
+   "kind": "other",
+   "action": "redo",
+   "title": "I ranked AI certifications by actual ROI not by hype.\n\nMost people col",
+   "slide_count": 0,
+   "links_checked": "25 Sep 2026",
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "slide_ext": ".webp"
+  },
+  {
+   "id": "c2dc716cd4fa6bc1",
+   "url": "https://www.instagram.com/p/Ddqj0svm6yq/?stkn=aHkyZjlsYmNjeHd2",
+   "kind": "other",
+   "action": "redo",
+   "title": "Comment “LINKS” and I’ll DM you all 4 links, plus how I use each one w",
+   "owner": "nocodealex",
+   "posted": "September 24, 2026",
+   "slide_count": 6,
+   "links_checked": "25 Sep 2026",
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "media_id": "c2dc716cd4fa6bc1",
+   "pdf_file": "doc.pdf",
+   "slide_ext": ".jpg"
+  },
+  {
+   "id": "039f4a972c017ced",
+   "url": "https://www.instagram.com/reel/DdrNk5kFBFv/?stkn=MTNqOW51OWZpajQzNQ==",
+   "kind": "other",
+   "action": "redo",
+   "title": "Comment \"BRAG\" and I'll send you the link.\n\nYour product is done.\n\nThe",
+   "owner": "jackroberts___",
+   "posted": "September 24, 2026",
+   "slide_count": 0,
+   "links_checked": "25 Sep 2026",
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "slide_ext": ".webp"
+  },
+  {
+   "id": "ff608848fd33513a",
+   "url": "https://www.instagram.com/reel/DdrgzwPlF1w/?stkn=MXdyYWJnamFmaTJiMg==",
+   "kind": "other",
+   "action": "redo",
+   "title": "Comment \"VOICE\" to get this tool.\n\nSomeone just open-sourced a free de",
+   "owner": "nathanhodgson.ai",
+   "posted": "September 24, 2026",
+   "slide_count": 0,
+   "links_checked": "25 Sep 2026",
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "slide_ext": ".webp"
+  },
+  {
+   "id": "68178795895c4146",
+   "url": "https://www.instagram.com/reel/DdrQGLcT-3O/?stkn=ZWg2dnJ3ang5NDM=",
+   "kind": "tutorial",
+   "action": "build",
+   "title": "How to Build Your Own Custom AI Jarvis Agent in 9 Steps",
+   "hook": "Learn how to assemble a fully personalized AI assistant that manages your tools and talks back without training your own model.",
+   "summary": "Building your own AI Jarvis doesn't require training a custom AI model from scratch; it's about connecting the right open-source and modular tools. By giving an AI agent a dedicated home server, an agent harness, and persistent long-term memory, you create a system that truly understands your preferences and workflow. You can equip it with specific skills, wire it to your everyday apps like email and calendar, and enable voice communication using realistic text-to-speech. Finally, design a slick custom interface to bring the full movie-style assistant experience to life.",
+   "owner": "mansoorxai",
+   "posted": "September 24, 2026",
+   "slide_count": 0,
+   "links_checked": "25 Sep 2026",
+   "note": {
+    "sections": [
+     {
+      "heading": "Overview: Modular AI Assembly",
+      "detail": "Instead of training a custom LLM, build an AI assistant by connecting modular components: hosting, an agent framework, brain model, context, memory, skills, tools, channels, and a frontend interface."
+     },
+     {
+      "heading": "Step 1: Give It a Home",
+      "detail": "Host your agent on hardware that stays powered on 24/7, such as an old laptop, a Mac mini, or a cheap cloud server."
+     },
+     {
+      "heading": "Step 2: Agent Harness",
+      "detail": "Use Hermes Agent by Nous Research (a free, open-source framework) to turn raw model outputs into actionable agent behavior."
+     },
+     {
+      "heading": "Step 3: Pick the Brain",
+      "detail": "Select an LLM model like Claude, OpenAI Codex, or Gemini. Since the framework is modular, you can swap the underlying model at any time."
+     },
+     {
+      "heading": "Step 4: Teach It Who You Are",
+      "detail": "Provide system prompt context regarding your job, personal goals, and work preferences so responses are tailored specifically to you."
+     },
+     {
+      "heading": "Step 5: Long-Term Memory",
+      "detail": "Integrate a persistent memory layer using Honcho so the agent retains context and learns from past chat conversations."
+     },
+     {
+      "heading": "Step 6: Add Skills",
+      "detail": "Equip the agent with specialized skill modules designed to execute specific routine tasks."
+     },
+     {
+      "heading": "Step 7: Connect Your Tools",
+      "detail": "Connect the agent to daily productivity software, including email, calendar, documents, and web browser automation."
+     },
+     {
+      "heading": "Step 8: Connect Channels & Voice",
+      "detail": "Link communication channels like Slack, Telegram, or iMessage, and synthesize spoken responses using an ElevenLabs voice (a British accent mimics the iconic Marvel Jarvis)."
+     },
+     {
+      "heading": "Step 9: Design the Jarvis Look",
+      "detail": "Create a visual UI using Claude Design, then write custom code to wire up the audio response stream and interface logic."
+     }
+    ],
+    "onscreen_text": [
+     "THE MAP",
+     "BUILD YOUR OWN JARVIS",
+     "EVERYONE WANTS THEIR OWN",
+     "1 HOME",
+     "2 HARNESS",
+     "3 BRAIN",
+     "4 YOU",
+     "5 MEMORY",
+     "6 SKILLS",
+     "7 TOOLS",
+     "8 CHANNELS",
+     "9 LOOK",
+     "SO HERE'S MY FULL NINE-STEP MAP,",
+     "EXACTLY HOW I BUILD",
+     "NO TRAINING",
+     "TRAIN MY OWN MODEL? X",
+     "CONNECT THE PIECES.",
+     "MODEL | MEMORY | TOOLS",
+     "STEP 1 / 9",
+     "STEP 1: GIVE IT A HOME",
+     "OLD LAPTOP",
+     "MAC MINI",
+     "CLOUD SERVER",
+     "ON 24/7",
+     "STEP 2 / 9",
+     "STEP 2: AGENT HARNESS",
+     "HERMES AGENT by Nous Research",
+     "FREE | OPEN SOURCE",
+     "MODEL -> AGENT",
+     "STEP 3 / 9",
+     "STEP 3: PICK THE BRAIN",
+     "BRAIN: Claude | Codex | Gemini",
+     "NOT LOCKED IN",
+     "STEP 4 / 9",
+     "STEP 4: WHO I AM",
+     "MY WORK",
+     "MY GOALS",
+     "HOW I LIKE IT",
+     "STEP 5 / 9",
+     "STEP 5: LONG-TERM MEMORY",
+     "HONCHO",
+     "LEARNS FROM PAST CHATS",
+     "STEP 6 / 9",
+     "STEP 6: ADD SKILLS",
+     "SKILL #1 | SKILL #2 | SKILL #3",
+     "ONE JOB, DONE RIGHT",
+     "STEP 7 / 9",
+     "STEP 7: CONNECT MY TOOLS",
+     "AGENT: EMAIL | CALENDAR | DOCS | BROWSER",
+     "STEP 8 / 9",
+     "STEP 8: MY CHANNELS",
+     "Slack | Telegram | iMessage",
+     "ELEVENLABS VOICE",
+     "TALK TO IT",
+     "BRITISH VOICE = MOVIE FEEL",
+     "STEP 9 / 9",
+     "STEP 9: THE JARVIS LOOK",
+     "CLAUDE DESIGN",
+     "VOICE + A LITTLE CODE",
+     "YOUR JARVIS: THAT'S IT.",
+     "KNOWS ME",
+     "USES MY TOOLS",
+     "TALKS BACK",
+     "TRY IT THIS WEEKEND",
+     "YOUR TURN: FOLLOW @mansoorxai",
+     "COMMENT THE NEXT TOPIC"
+    ],
+    "entities": [
+     {
+      "name": "Hermes Agent",
+      "type": "library",
+      "why": "Free and open-source agent harness created by Nous Research."
+     },
+     {
+      "name": "Nous Research",
+      "type": "company",
+      "why": "Developers of the open-source Hermes Agent framework."
+     },
+     {
+      "name": "Honcho",
+      "type": "tool",
+      "why": "Memory layer tool that allows AI agents to store and learn from past conversations."
+     },
+     {
+      "name": "Claude",
+      "type": "tool",
+      "why": "Suggested LLM brain and design tool provider (Anthropic)."
+     },
+     {
+      "name": "ElevenLabs",
+      "type": "tool",
+      "why": "Voice synthesis provider used to give the agent a realistic spoken voice."
+     }
+    ],
+    "topics": [
+     "ai agents",
+     "jarvis",
+     "automation",
+     "hermes agent",
+     "ai tools"
+    ],
+    "spoken_transcript": "Everyone wants their own Jarvis. So here's my full nine-step map, exactly how I build one. And no, I don't train my own AI model. I just connect the right pieces. Step one: I give it a home: an old laptop, a Mac mini, or a cheap cloud server so it stays on all the time. Step two: I install an agent harness. I use Hermes Agent by Nous Research. It's free, open source, and it turns a model into an agent that can actually do work. Step three: I pick the brain: Claude, Codex, or Gemini. I'm not locked in—I can swap it anytime. Step four: I teach it who I am: my work, my goals, and how I like things done. Step five: I give it long-term memory. A memory layer like Honcho lets it learn from my past conversations. Step six: I add skills so it knows how to handle specific jobs. Step seven: I connect my tools: email, calendar, documents, even my browser. Step eight: I connect my channels: Slack, Telegram, even iMessage. Then I add an ElevenLabs voice so I can literally talk to it. Pick a British voice if you want the movie feel. Step nine: The Jarvis look. I use Claude Design to design my own interface, then wire the agent's voice into it. That last part takes a little code. That's it. An AI agent that knows me, uses my tools, and talks back. Try it this weekend. Follow the account on screen and comment the next topic you want explained.",
+    "open_questions": [
+     "How do you safely grant an LLM agent full access to personal channels like iMessage and email without security risks?",
+     "What exact Python or API code is required to bridge Claude Design UI components with ElevenLabs real-time voice streaming?"
+    ]
+   },
+   "enrich": {},
+   "gate": {
+    "gated": true,
+    "how": "comment",
+    "keyword": "the next"
+   },
+   "tags": {
+    "action": [
+     "build"
+    ],
+    "topic": [
+     "ai agents",
+     "ai tools",
+     "automation",
+     "hermes agent",
+     "jarvis"
+    ]
+   },
+   "links": [
+    {
+     "url": "https://hermes-agent.nousresearch.com",
+     "label": "Hermes Agent Documentation",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://honcho.dev",
+     "label": "Honcho Memory System",
+     "alive": true,
+     "page_title": "Honcho"
+    }
+   ],
+   "slide_ext": ".webp"
+  },
+  {
    "id": "b979ce52707652aa",
    "url": "https://www.instagram.com/reel/DcoyY8JD39E/?stkn=MWF5ZnlyYmJhNHEyaQ==",
    "kind": "instagram",
@@ -2552,5 +2871,5 @@
    "slide_ext": ".webp"
   }
  ],
- "built": "24 Sep 2026"
+ "built": "25 Sep 2026"
 }
