@@ -670,6 +670,17 @@ def test_lessons_filed_under_the_item():
     check("its own topics are kept beside the item's",
           row["kind"] == "tutorial"
           and set(row["topics"].split(",")) == {"ai", "obsidian", "comment gates"}, str(row))
+    many = [{"kind": "course", "tags": {"topic": ["shared topic"] + ["topic %s%d" % (c, n)
+                                                                 for n in range(6)]}}
+            for c in "abc"]
+    kind, tops = brain._lesson_home(many)
+    check("a group brings its most common topics, not every one",
+          kind == "course" and "shared topic" in tops and len(tops) == 8, str(sorted(tops)))
+    long = ["topic number %02d with a long name" % n for n in range(20)]
+    store.add_lesson(conn, "course", long, "A lesson with far too many topics to store.")
+    kept = conn.execute("SELECT topics FROM playbook WHERE kind='course'").fetchone()[0]
+    check("topics are stored whole or not at all",
+          kept and set(kept.split(",")) <= set(long) and len(kept) <= 300, kept)
     conn.close()
 
 
