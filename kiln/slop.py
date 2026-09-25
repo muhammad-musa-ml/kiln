@@ -234,6 +234,53 @@ def report(findings: list[dict], limit: int = 60) -> str:
     return "\n".join(L)
 
 
+# How each kind of banned character is spelled in ASCII, keyed by the names
+# BANNED_CHARS uses, so a new character of a known kind needs no edit here.
+PLAIN_KINDS = {
+    "em dash": " - ", "en dash": "-", "arrow": "->", "middot": "-",
+    "bullet character": "-", "curly quote": '"', "ellipsis character": "...",
+    "non breaking space": " ", "check mark": "yes", "cross mark": "no",
+}
+
+# Kinds with more than one spelling, and emoji that still mean yes or no.
+PLAIN_CHARS = {
+    chr(0x2190): "<-", chr(0x21D2): "=>", chr(0x2018): "'", chr(0x2019): "'",
+    chr(0x2714): "yes", chr(0x2611): "yes",
+    chr(0x2716): "no", chr(0x2718): "no", chr(0x274C): "no", chr(0x2612): "no",
+}
+
+
+def plain(text: str) -> str:
+    """The text with every banned character spelled in ASCII and emoji removed.
+
+    check_text can only say a text is wrong. This is for text that gets
+    written somewhere without passing through it: a title, a note, a document
+    someone asked for. It walks BANNED_CHARS itself, so whatever the checker
+    blocks is exactly what gets replaced. A character of a kind with no
+    spelling is dropped rather than let through, and scripts/test_artifacts.py
+    fails until the kind gets one. The emoji that mean yes and no are spelled
+    out before the rest go, since dropping them would empty the answer column
+    of a comparison table.
+    """
+    for ch, kind in BANNED_CHARS.items():
+        if ch not in text:
+            continue
+        to = PLAIN_CHARS.get(ch, PLAIN_KINDS.get(kind, ""))
+        if kind == "em dash":
+            # Spaces round the dash merge into the spelling's own; indents stay.
+            dash = "(?:%s[ \t]*)+" % re.escape(ch)
+            text = re.sub(r"(?m)^([ \t]*)" + dash, lambda m: m.group(1) + to.lstrip(), text)
+            text = re.sub(r"[ \t]*" + dash, lambda m: to, text)
+        else:
+            text = text.replace(ch, to)
+    for ch, to in PLAIN_CHARS.items():
+        text = text.replace(ch, to)
+    run = "(?:%s)+" % EMOJI.pattern
+    text = re.sub(r"(?m)^([ \t]*)" + run + "[ \t]?", lambda m: m.group(1), text)
+    text = re.sub(r"(?m)[ \t]" + run + r"(?=[ \t\r]|$)", "", text)
+    return re.sub(run, "", text)
+
+
 if __name__ == "__main__":
     target = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
     found = check_tree(target) if target.is_dir() else check_file(target)
