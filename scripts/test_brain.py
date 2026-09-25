@@ -304,16 +304,30 @@ def test_check_final():
 
 def test_set_aside_wrong_research():
     print("research that answered the wrong question comes off the page")
-    from kiln import publish
+    from kiln import pipeline as pipeline_mod, publish
     reset_db()
     conn = store.connect()
     make_item(conn, "j", kind="tutorial")
-    conn.execute("UPDATE items SET action='apply', enrich_json=? WHERE id='j'", (json.dumps({
-        "_enricher": "job", "_subject": "Jarvis", "role": "Senior Infrastructure Engineer",
-        "company": "TypeSafe AI", "posting_urls": [{"url": "https://jobs.example/1"}],
-        "answer": "a job", "followups": []}),))
+    conn.execute("UPDATE items SET action='apply', enrich_json=?, note_json=? WHERE id='j'", (
+        json.dumps({
+            "_enricher": "job", "_subject": "Jarvis", "_meta": {"model": "m"},
+            "role": "Senior Infrastructure Engineer", "company": "TypeSafe AI",
+            "posting_urls": [{"url": "https://jobs.example/1"},
+                             {"url": "https://post.example/a"}],
+            "answer": "a job", "followups": [],
+            "_install_preview": {"command": "pip install jobthing", "runnable": True},
+            "_citations": [{"url": "https://jobs.example/1"}],
+            "_link_health": [{"url": "https://jobs.example/1", "alive": True}]}),
+        json.dumps({"title": "Jarvis", "summary": "a setup guide",
+                    "sections": [{"heading": "one", "detail": "steps"}],
+                    "links": [{"url": "https://post.example/a"}]})))
     store.set_tags(conn, "j", "action", ["apply"])
+    store.set_links(conn, "j", [{"url": "https://post.example/a", "alive": True},
+                                {"url": "https://jobs.example/1", "alive": True}])
+    pipeline_mod.index(conn, "j")
     conn.commit()
+    check("before: search finds the item by the wrong research",
+          [i["id"] for i in store.list_items(conn, q="TypeSafe")] == ["j"])
     run_dir = Path(config.DATA) / "brain" / "setaside"
     fdir = run_dir / "final"
     (fdir / "out").mkdir(parents=True, exist_ok=True)
@@ -333,7 +347,17 @@ def test_set_aside_wrong_research():
     check("but kept on it, whole, with the reason",
           (enr.get("_set_aside") or {}).get("fields", {}).get("company") == "TypeSafe AI"
           and "job posting" in (enr.get("_set_aside") or {}).get("why", ""), str(enr)[:300])
-    check("and how it was made stays", enr.get("_enricher") == "job")
+    check("and how it was made stays", enr.get("_enricher") == "job"
+          and enr.get("_meta") == {"model": "m"})
+    check("its install preview, citations and link checks go with it",
+          not any(k in enr for k in ("_install_preview", "_citations", "_link_health"))
+          and "_install_preview" in (enr.get("_set_aside") or {}).get("fields", {}),
+          str(sorted(enr)))
+    links = sorted(l["url"] for l in it.get("links") or [])
+    check("the research's links come off, the post's own stays",
+          links == ["https://post.example/a"], str(links))
+    check("and search no longer finds it by the wrong research",
+          store.list_items(conn, q="TypeSafe") == [], "still found")
     check("the action tag is corrected, in both places",
           it.get("action") == "learn" and (it.get("tags") or {}).get("action") == ["learn"],
           "%s %s" % (it.get("action"), (it.get("tags") or {}).get("action")))

@@ -841,6 +841,13 @@ def _apply_sections(conn, plan: dict, instruction: str) -> None:
             store.file_item(conn, f["item"], sids)
 
 
+# How a first pass's research was made. It stays in place when the research
+# itself is set aside; everything else in the research moves.
+_HOW_MADE = ("_enricher", "_subject", "_meta")
+# Research fields whose links were added to the item's link list.
+_RESEARCH_LINKS = ("official_docs", "best_free_resources", "useful_links", "posting_urls")
+
+
 def _plain(text: Any) -> str:
     from . import slop
     return slop.plain(str(text or "")).strip()
@@ -906,12 +913,15 @@ def _store_final(conn, items: list[dict], plan: dict, final: dict, done: dict,
                                "claude_at": now}
         for k, v in claude["improved"].items():
             rec[k] = v
+        research_urls: set[str] = set()
         if r.get("set_aside"):
             # Research that answered the wrong question comes off the page but
-            # is kept here, whole, with the reason. The underscored fields are
-            # how it was made and stay where they are.
+            # is kept here, whole, with the reason. Only how the read was made
+            # stays in place; its install preview, citations and link checks
+            # were made from that research, so they move with it.
             enr = dict(it.get("enrich") or {})
-            moved = {k: enr.pop(k) for k in list(enr) if not k.startswith("_")}
+            moved = {k: enr.pop(k) for k in list(enr)
+                     if k not in _HOW_MADE and k != "_set_aside"}
             why = _plain(r.get("set_aside_why"))
             # A later follow-up that sets it aside again has nothing left to
             # move; merging keeps what the first one kept.
@@ -919,6 +929,14 @@ def _store_final(conn, items: list[dict], plan: dict, final: dict, done: dict,
             enr["_set_aside"] = {"why": why, "at": now, "fields": {**kept, **moved}}
             rec["enrich_json"] = json.dumps(enr, ensure_ascii=False)
             claude["set_aside"] = why
+            # The links that research added go too, unless the post has them.
+            own = {str(l.get("url") or "").rstrip("/")
+                   for l in (it.get("note") or {}).get("links") or [] if isinstance(l, dict)}
+            for key in _RESEARCH_LINKS:
+                for x in moved.get(key) or []:
+                    u = str((x or {}).get("url") or "").rstrip("/") if isinstance(x, dict) else ""
+                    if u and u not in own:
+                        research_urls.add(u)
         action = r.get("action") or ""
         if action in store.ACTIONS and action != it.get("action"):
             rec["action"] = action
@@ -926,10 +944,10 @@ def _store_final(conn, items: list[dict], plan: dict, final: dict, done: dict,
             claude["action_was"] = it.get("action") or ""
         rec["claude_json"] = json.dumps(claude, ensure_ascii=False)
         store.upsert_item(conn, rec)
-        if checked or dropped:
+        if checked or dropped or research_urls:
             # Exact match, never lowercased: a YouTube id differs from a wrong
             # one by case alone, which is how a misread link passes for live.
-            gone = {d["url"].rstrip("/") for d in dropped}
+            gone = {d["url"].rstrip("/") for d in dropped} | research_urls
             keep = [{"url": l["url"], "label": l.get("label", ""),
                      "where": l.get("where_found", ""), "alive": l.get("alive"),
                      "status": l.get("status_code"), "page_title": l.get("page_title", "")}
