@@ -16,8 +16,8 @@ from .acquire import Acquired
 # "comment X and I'll send it" means the thing isn't in the post at all.
 # Catching the keyword at least tells you what to go and comment.
 GATE_RE = re.compile(
-    r"(?:comment|drop|type|dm|send)\s+(?:me\s+)?[\"'"']?([A-Za-z0-9 ]{2,20})[\"'"']?"
-    r"(?:\s+(?:below|down|now|and|to|for|in the comments))",
+    r"(?:comment|drop|type|dm|send)\s+(?:me\s+)?[\"'"']?([A-Za-z0-9 ]{2,20}?)[\"'"']?"
+    r"(?:\s+(?:below|down|now|and|to|for|in the comments)\b)",
     re.I,
 )
 LINKBIO_RE = re.compile(r"link\s+in\s+(?:my\s+)?bio", re.I)

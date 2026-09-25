@@ -80,12 +80,13 @@ def clear(item_id: str) -> bool:
 def fill(item_id: str, note: dict) -> dict:
     """Store an answer Claude produced, as if a model had returned it.
 
-    The note goes through the same pipeline stage the model's would have, so
-    nothing downstream needs to know a person did it. What does get recorded
-    is that it happened, because a read done by hand and a read done by a
-    model are not the same evidence and the difference should be visible.
+    The note is stored the way the pipeline stores a model's read: title,
+    action, topics, places, the comment gate, and the links it found, each
+    checked. What does get recorded is that it happened, because a read done
+    by hand and a read done by a model are not the same evidence and the
+    difference should be visible.
     """
-    from . import pipeline, store
+    from . import enrich, extract, pipeline, store
 
     p = _path(item_id)
     if not p.exists():
@@ -104,6 +105,10 @@ def fill(item_id: str, note: dict) -> dict:
             return {"error": f"no item {item_id}"}
         action = pipeline.derive_action(note, item.get("user_do", ""),
                                         media_kind=item.get("kind", ""))
+        # The failed read kept the caption; the gate and later work read it.
+        note.setdefault("_caption", (item.get("note") or {}).get("_caption", ""))
+        onscreen = [str(x) for x in (note.get("onscreen_text") or [])]
+        gate = extract.detect_gate(note["_caption"], onscreen)
         # The action column as well as the tag. Left as redo, the item looked
         # unread to everything that reads the column, and the follow-up never
         # looked at it again after this first time.
@@ -112,11 +117,28 @@ def fill(item_id: str, note: dict) -> dict:
                "hook": note.get("hook", ""), "summary": note.get("summary", ""),
                "kind": note.get("kind") or item.get("kind") or "other",
                "note_json": json.dumps(note, ensure_ascii=False),
+               "gate_json": json.dumps(gate, ensure_ascii=False),
                "action": action, "status": "triage", "processed_at": time.time()}
         store.upsert_item(conn, rec)
         store.set_tags(conn, item_id, "action", [action])
         store.set_tags(conn, item_id, "topic",
                        pipeline.normalise_topics(note.get("topics") or []))
+        store.set_tags(conn, item_id, "place", pipeline.derive_places(
+            item.get("user_note") or "", item.get("user_do") or "",
+            note.get("summary", ""), " ".join(onscreen[:40])))
+        # The links the read found, checked, beside any the item already had.
+        have = {str(l.get("url") or "").rstrip("/") for l in item.get("links") or []}
+        found = [l for l in enrich.resolve_links(note.get("links") or [])
+                 if str(l.get("url") or "").rstrip("/") not in have]
+        if found:
+            keep = [{"url": l["url"], "label": l.get("label", ""),
+                     "where": l.get("where_found", ""), "alive": l.get("alive"),
+                     "status": l.get("status_code"), "page_title": l.get("page_title", "")}
+                    for l in item.get("links") or []]
+            store.set_links(conn, item_id, keep + found)
+            store.upsert_item(conn, {"id": item_id, "url": item["url"],
+                                     "links_checked": time.strftime("%d %b %Y")})
+        pipeline.index(conn, item_id)
         conn.commit()
     finally:
         conn.close()

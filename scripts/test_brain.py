@@ -702,6 +702,50 @@ def test_unread_asks_first():
     conn.close()
 
 
+def test_gate_keyword():
+    print("the word to comment is the word, not the sentence around it")
+    from kiln import extract
+    cases = [("Comment PDF below and I will send the list", "PDF"),
+             ("Comment 'AI TOOLS' below", "AI TOOLS"),
+             ("DM me GUIDE to get it", "GUIDE"),
+             ("Comment GUIDE and I'll send it", "GUIDE")]
+    for caption, word in cases:
+        g = extract.detect_gate(caption)
+        check("%r -> %s" % (caption[:34], word), g.get("keyword") == word, str(g))
+    check("a bare 'comment below' is not a gate",
+          not extract.detect_gate("comment below and tell me").get("gated"))
+
+
+def test_claude_read_stored_in_full():
+    print("a read Claude did is stored the way a model's read is")
+    reset_db()
+    conn = store.connect()
+    make_item(conn, "f", note=False, media=1, kind="instagram")
+    conn.execute("UPDATE items SET note_json=? WHERE id='f'",
+                 (json.dumps({"_caption": "Comment PDF below and I will send the list"}),))
+    conn.commit()
+    conn.close()
+    handoff.write("f", url="https://example.com/p/f", stage="extract", why="out of quota")
+    out = handoff.fill("f", {"title": "Where Acme is hiring", "summary": "Acme hires.",
+                             "kind": "job", "action_hint": "apply", "topics": ["jobs"],
+                             "sections": [{"heading": "Acme", "detail": "hiring"}],
+                             "onscreen_text": ["Acme careers"],
+                             "links": [{"url": "https://acme.example/careers",
+                                        "where": "onscreen", "label": "careers"}]})
+    conn = store.connect()
+    it = store.get_item(conn, "f") or {}
+    check("the read is stored", out.get("ok") and it.get("title") == "Where Acme is hiring",
+          str(out))
+    check("with the links it found, checked",
+          [l["url"] for l in it.get("links") or []] == ["https://acme.example/careers"]
+          and all(l.get("alive") for l in it.get("links") or []), str(it.get("links")))
+    check("the comment gate is found from the caption the failed read kept",
+          (it.get("gate") or {}).get("keyword") == "PDF", str(it.get("gate")))
+    check("and search finds it by what the read found",
+          [i["id"] for i in store.list_items(conn, q="Acme")] == ["f"])
+    conn.close()
+
+
 def test_one_yes_covers_the_list():
     print("one yes covers every item on the card, over as many passes as it takes")
     reset_db()
@@ -1039,6 +1083,8 @@ def main() -> int:
     test_blocked_and_failed()
     test_nothing_to_do_and_selection()
     test_unread_asks_first()
+    test_gate_keyword()
+    test_claude_read_stored_in_full()
     test_one_yes_covers_the_list()
     test_sweep_stops_and_survives()
     test_health_cards_listen()
