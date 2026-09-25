@@ -535,8 +535,9 @@ function detail(it){
       (e.project.stretch||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`:''}
     </div>` : '';
 
-  // Copy works anywhere, because the prompt is built from data already on
-  // the page. Queueing needs a machine, so it only shows locally.
+  // Copy works anywhere, because the prompt comes with the item: the server
+  // sends jobs.build_prompt locally, and the site ships it in the data.
+  // Queueing needs a machine, so it only shows locally.
   const build = e.project ? `<div class="sec"><h4>Build it</h4>
     <p class="warn" style="margin-top:0">${LOCAL
       ? 'Same prompt either way, so nothing drifts.'

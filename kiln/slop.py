@@ -94,7 +94,9 @@ def voice_rules() -> str:
     Two prompts need these: the one that asks for a project to be built, and
     the one that asks for its readme. They were going to be written out twice,
     and two copies of a rule drift until the one nobody is reading is the one
-    that reaches a public repository. This is the only copy.
+    that reaches a public repository. This is the only copy for those two.
+    The follow-up's answers use brain._voice, a shorter version built from
+    the same banned list.
 
     It is built from the same lists the checker enforces, so a word added to
     BANNED_PHRASES is a word the writer is told about in the same commit.

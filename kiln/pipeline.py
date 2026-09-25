@@ -148,8 +148,10 @@ def _came_back_empty(note: dict, acq) -> bool:
     The summary satisfied the or, so the item was filed as processed, shown
     with a title, and never surfaced by anything again.
 
-    A post made of pictures that yields no sections and no on-screen text has
-    not been read, whatever else came back with it.
+    A post of two or more pictures that yields no sections and no on-screen
+    text has not been read, whatever else came back with it. A single picture
+    or a video is held to the same floor earlier, as the read comes back
+    (extract._floor_for).
     """
     if not (note.get("sections") or note.get("summary")):
         return True

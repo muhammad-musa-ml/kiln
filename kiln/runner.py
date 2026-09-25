@@ -4,7 +4,8 @@ Until now "Run here now" only wrote a file and said a local agent would pick
 it up. Nothing picked it up, because nothing existed to. This is that thing.
 
 It shells out to a coding CLI in a directory you choose, streams the output
-to a log, and records state next to the job so the UI can show progress.
+to a log, and records state next to the job, which `python -m kiln.runner
+status` and the sync's own check read.
 """
 from __future__ import annotations
 
@@ -154,7 +155,7 @@ def all_states() -> list[dict]:
             try:
                 size = log.stat().st_size
                 # Seek rather than read the file in. A build log runs to
-                # megabytes, and the UI asks for this on every poll.
+                # megabytes, and every sync's check reads this.
                 with log.open("rb") as fh:
                     fh.seek(max(0, size - 4000))
                     d["tail"] = fh.read().decode("utf-8", "replace")[-1800:]
@@ -323,8 +324,10 @@ def start(job_file: str, *, directory: str = "", agent: str = "",
 
     prompt = body.strip()
     # The agent works in the directory, so tell it where it already is.
-    prompt += (f"\n\nWork in the current directory. It is empty and yours. "
-               f"Create the project here, then stop.")
+    prompt += (f"\n\nWork in the current directory. It is yours. If an earlier "
+               f"attempt left files here, finish or replace them rather than "
+               f"starting a second copy beside them. Create the project here, "
+               f"then stop.")
 
     log = RUNS / f"{job_id}.log"
     cmd = [exe] + [a.replace("{prompt}", prompt) for a in args]
