@@ -43,6 +43,8 @@ models do what they can, and Claude does the rest automatically (D10 below).
 | D12 | The grounded-research ladder is retired rather than wired (was 4.2) | Measured 2026-09-25: the first grounded call of the day on 3.8, 3.7 and 3.5 flash all came back 429, while a plain call on the same key answered. With billing off (D9) nothing makes it answer. Free research stays on Kiln's own search and fetch; research past that is Claude's job under D10. |
 | D13 | Claude workers run headless in safe mode and restricted mode, with no shell | Measured: a plain `claude -p` loads about 183k tokens of this machine's own setup on every call; safe mode brings that to 2k to 5k (about 14k with tools). Restricted mode keeps file writes inside the worker's own folder: a write outside it was refused and no file appeared. |
 | D14 | The planner decides and Python runs the plan | Code checks every plan before anything runs: allowed models and effort levels only, known tool kits, no cycles, a cap on tasks. A prompt can be talked around; a check in code cannot. |
+| D15 | On the queue card, "all" means every project the card listed | A job queued after the card went up waits for the next card rather than riding in on an answer given before it existed. |
+| D16 | The published page names no AI vendor | It named none before this work. The follow-up is called "the follow-up" on the page; the README still names Claude where it is a dependency, as it already named its other providers. |
 
 ---
 
@@ -110,74 +112,120 @@ models do what they can, and Claude does the rest automatically (D10 below).
 
 ## Phase 4: Deliver something
 
-- [ ] **4.1 An artifact writer.** Kiln cannot produce a document. The only PDF
+- [~] **4.1 An artifact writer.** Kiln cannot produce a document. The only PDF
       writer binds carousel images (`acquire.py:510`). Two instructions asked
       for a PDF and neither could ever have worked. Plan: Markdown or HTML in,
       PDF out through the Chromium that Playwright already installs, kept per
-      item under `data/artifacts/<item id>/`.
+      item under `data/artifacts/<item id>/`. Being built by a helper agent
+      (`kiln/artifacts.py`), rendering with JavaScript off and the network
+      blocked, so a document cannot fetch anything while it is printed.
 - [-] **4.2 Wire the grounded-research ladder.** Dropped, see D12. Measured
       unreachable on this key: 429 on the first grounded call of the day on
       every rung while plain calls answer. The dead `research` ladder comes out
       of the config and the picker instead of staying as config nothing can use.
-- [ ] **4.3 Surface artifacts** on the item and in the UI, locally and on the
+- [~] **4.3 Surface artifacts** on the item and in the UI, locally and on the
       published site, and make the leak audit read them. Also found: the
       answer to an attached instruction (3.4) is stored but shown nowhere,
-      not in the UI and not on the site.
-- [ ] **4.4 The free models say what they could not do.** Every enrichment
+      not in the UI and not on the site. Built: one function
+      (`publish.followup`) feeds the item drawer locally and on the site, so
+      the two cannot drift; files download from both; the audit now reads the
+      text inside every PDF and fails if any sentence of an instruction shows
+      up in the build. Not yet looked at in a browser.
+- [~] **4.4 The free models say what they could not do.** Every enrichment
       schema gains `followups` (a next step that would finish the job, and
       what stopped the model doing it) and `could_not`. Owner's words: the
       models should know to check this and return it where possible.
-- [ ] **4.5 One place that runs Claude headless** (`kiln/claude_cli.py`):
+      Built in `enrich.py` (on every enrichment, asked or not) and
+      `extract.py` (`could_not` on the read, kept across both passes).
+- [~] **4.5 One place that runs Claude headless** (`kiln/claude_cli.py`):
       safe and restricted mode, model and effort per call, JSON schema output,
-      timeouts, usage-limit detection, and the Fable refusal (D10, D13).
-- [ ] **4.6 The planner.** `claude-opus-5` at `max` effort reads what the free
+      timeouts, usage-limit detection, and the Fable refusal (D10, D13). Written.
+- [~] **4.6 The planner.** `claude-opus-5` at `max` effort reads what the free
       models produced and the owner's instruction, and returns a verdict
       (nothing to do, or work), the tasks, and the model and effort for each.
-- [ ] **4.7 The executor.** Runs the plan (independent tasks in parallel),
+      Written in `kiln/brain.py`. A refused plan goes back once with the
+      reasons (a Fable model, an unknown item, a circle of dependencies...).
+- [~] **4.7 The executor.** Runs the plan (independent tasks in parallel),
       then a final assembly step, checks the result against the contract,
-      stores it on the item and renders any documents through 4.1.
-- [ ] **4.8 Wiring.** A stage in `daily.py` right after the inbox, the same
+      stores it on the item and renders any documents through 4.1. Written.
+      Running out of Claude usage part way leaves the item "blocked" and it is
+      picked up on the next sync; that does not count as a failure.
+- [~] **4.8 Wiring.** A stage in `daily.py` right after the inbox, the same
       follow-up after a localhost add or re-fire, and a visible "Claude is
-      working on this" state in the UI.
-- [ ] **4.9 The ask rule for unreadable items** (D11). Pending briefs are
+      working on this" state in the UI. Written. The sync is six stages now.
+- [~] **4.9 The ask rule for unreadable items** (D11). Pending briefs are
       printed by the sync, raised as one question card, and read by Claude
-      on a yes.
+      on a yes. Written; "wait" clears the card and the free models retry.
 
 ## Phase 5: Queue consent gate (supersedes the 9am rule)
 
-- [ ] **5.1** Builds are offered on every sync, not on a morning schedule.
-- [ ] **5.2** Estimate the work and rough time per queued project.
-- [ ] **5.3** Question card with all / one / few / none, answered from the UI.
-- [ ] **5.4** Update the routine prompt and `README.md` to match.
+Backend built by a helper agent and re-run here: `test_queue_gate.py` 87/87,
+`test_ship.py` 66/66. `daily.py` rewired and `test_daily_commit.py` re-keyed
+from the old 9am rule to this one: 23/23.
+
+- [~] **5.1** Builds are offered on every sync, not on a morning schedule.
+- [~] **5.2** Estimate the work and rough time per queued project. From the
+      median of past builds (one so far, 37 minutes) and past publishes
+      (none timed yet, so 30 minutes until one is).
+- [~] **5.3** Question card with all / one / few / none, answered from the UI.
+      A tick box per project, plus all and none. Not yet seen in a browser.
+- [~] **5.4** Update the routine prompt and `README.md` to match. README done.
+      The new routine prompt is drafted and goes live at the merge, because
+      until then the scheduled run still has the five-stage script.
 
 ## Phase 6: The brain
 
-- [ ] **6.1 A playbook store that accumulates.** Nothing learns today; the
+- [~] **6.1 A playbook store that accumulates.** Nothing learns today; the
       thirteenth reel on a topic gets the same three template queries as the
       first. Plan: the planner writes short lessons after each piece of work,
       and both the planner and the free tier's search step read the ones that
-      match the next item.
-- [ ] **6.2 A fulfilment check.** Nothing anywhere asks whether the owner's
+      match the next item. Built: a `playbook` table. Lessons carrying a link
+      are refused, so a post cannot plant one that rides into every later
+      prompt.
+- [~] **6.2 A fulfilment check.** Nothing anywhere asks whether the owner's
       request was answered. A processed item with an unanswered instruction
       falls out of every check permanently. Plan: every sync looks at every
       item with an instruction; unanswered or blocked ones go back to Claude,
       and answers that are only partial are named in the check with the reason.
-- [ ] **6.3 Sections with subsections.** The `tags` table is three columns with
+      Built: `brain.needs_follow_up` picks the work each sync (anything with
+      an instruction first), and `health.check_follow_ups` reports partial
+      answers with their reason.
+- [~] **6.3 Sections with subsections.** The `tags` table is three columns with
       no parent or depth, and section names are validated against a closed list
       of eight. "to watch" worked by coincidence. Plan: an open, two-level
       section tree, filed by the planner, shown as a tree in the sidebar.
+      Built: a `sections` table, a `section` tag, filtering that includes
+      subsections, the tree in the sidebar and on the site.
+
+Found while building, and fixed in the same change:
+- A failed read was never retried. `process_url` allowed it, but the inbox
+  only hands over lines it has not seen. `pipeline.retry_failed` now does it
+  each sync, three tries at most, six hours apart.
+- A re-fire wiped the item's own tags, including the group tag that ties a
+  link to the others on its line. That is how `4091b1ffc3d48ceb` fell out of
+  the "to watch" set of seven.
+- Search together with a filter came back empty: the SQL arguments were in
+  the wrong order.
+- The `/media/` route checked containment with a text prefix, which lets a
+  sibling folder pass.
 
 ## Phase 7: Coherence and proof
 
-- [ ] **7.1 Full read-through** for contradictions between code, tests, README,
+- [~] **7.1 Full read-through** for contradictions between code, tests, README,
       the routine prompt and this file. Already found while orienting on
       2026-09-25, to be fixed in this pass:
       - README's "Models" section still describes the lite and local ladders.
+        Fixed.
       - README says `pip install -r requirements.txt` and there is no such file.
-      - The routine prompt never mentions the Claude briefs (see 2.4).
+        Being added with 4.1.
+      - The routine prompt never mentions the Claude briefs (see 2.4). Drafted,
+        live at the merge.
       - The sidebar's "free today" meter reads a retired lite model, and
-        `models.health()` pings that model on every 30 second poll.
-      - `test_daily_commit.py` asserts the old 9am build rule.
+        `models.health()` pings that model on every 30 second poll. Fixed: the
+        meter sums the ladder models, and the health check reads the model's
+        metadata (no quota) at most every five minutes.
+      - `test_daily_commit.py` asserts the old 9am build rule. Re-keyed.
+      The full pass still has to run once everything is in.
 - [ ] **7.2 Re-fire the five stuck reels** and confirm they leave `inbox` with
       real titles and honoured instructions. Also re-fire the 11-slide job
       carousel (`0bcb16be366c6c1b`), whose stored read is empty and which
