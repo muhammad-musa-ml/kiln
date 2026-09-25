@@ -80,7 +80,18 @@ def _context_block(acq: Acquired, user_note: str = "") -> str:
     if getattr(acq, "duration", 0):
         bits.append(f"Runtime: {acq.duration // 60} minutes.")
     if user_note:
-        bits.append(f"What the person saving it said: \"{user_note}\"")
+        # Framed as a job, not as something overheard. This used to read
+        # "What the person saving it said", which is reported speech: the
+        # model was told the sentence existed and never told to serve it.
+        bits.append(
+            "WHAT THIS IS BEING READ FOR. They asked for this:\n"
+            f"    {user_note}\n"
+            "Read with that in mind. Whatever answering it would need out of "
+            "these pixels, get it: every name if they asked about the things "
+            "named, every url if they asked for links, every price, date or "
+            "deadline if they asked about those. Miss nothing they would need. "
+            "You are not answering it here, the next stage does that, but it "
+            "can only use what you pull out now.")
 
     # For a video with captions or an article there are no pixels to send,
     # and the transcript IS the content. Without this the model only ever

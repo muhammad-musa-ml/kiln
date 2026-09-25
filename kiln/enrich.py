@@ -165,6 +165,34 @@ Context from the saved post:
 
 _PROMPTS = {"learn": _LEARN, "tool": _TOOL, "job": _JOB}
 
+# Appended whenever something was asked. The schemas above describe a thing;
+# this is the only place an answer to a question can go.
+ANSWER_BLOCK = """
+
+THE ACTUAL JOB. Everything above is the standing description. This is what
+was asked for, and it is the part that matters:
+
+    {ask}
+
+Add these two keys to the JSON you return, alongside the ones above:
+
+  "answer": "the answer, at whatever length it takes. If they asked for a
+             list, give the whole list. If they asked whether something is
+             real or free, say which and on what evidence. If they asked for
+             links, give the links. Write it out properly, not as a summary
+             of what you would write."
+  "answered": "fully | partly | no",
+
+Rules for it:
+- Answer from the live sources and from what is actually in the post. Never
+  from memory, and never a plausible guess at a url.
+- If the post names things, use their names. The post's own headline is not
+  the subject.
+- If you could not answer, set "answered" to "no" and say in "answer" what
+  is missing and where it would have to come from. That is a useful result.
+- Do not claim the post did not contain something unless you actually looked
+  at the post and it did not."""
+
 # note.kind / action_hint -> enricher
 _KIND_MAP = {
     "tutorial": "learn", "course": "learn", "repo": "tool", "tool": "tool",
@@ -211,6 +239,47 @@ def _context(note: dict, acq: Any = None, user_note: str = "") -> str:
     return "\n".join(parts)
 
 
+ASK_QUERIES = """Someone saved a post and asked for something to be done with it.
+Write the web searches that would actually answer them.
+
+What they asked for:
+{ask}
+
+What the post turned out to contain:
+{context}
+
+Return ONLY JSON: {{"queries": ["...", "..."]}}
+Up to 6 searches. Rules that matter:
+- Search for the THINGS in the post, by name. If it names eleven companies,
+  search for those companies, not for the post's own headline.
+- One search per thing when they asked about several things.
+- Make them searches a person would type, not sentences.
+- If they asked whether something is real, free, or worth it, search for
+  that specifically: pricing, reviews, whether it still exists."""
+
+
+def _queries_from_ask(ask: str, note: dict, context: str) -> list[str]:
+    """Turn the owner's instruction into searches, using what the post holds.
+
+    The templates below search for a subject picked out of the note, which
+    on a listicle is the post's own clickbait headline. Measured: a carousel
+    naming eleven companies, with an instruction asking for those companies'
+    websites and application links, was searched three times for
+    "11 AI Startup Job Postings: Companies to Make You a Millionaire" and
+    never once for a company.
+    """
+    if not ask:
+        return []
+    try:
+        r = models.generate("classify", ASK_QUERIES.format(
+            ask=ask[:800], context=context[:2500]), want_json=True)
+        qs = (r.data or {}).get("queries") if isinstance(r.data, dict) else None
+        out = [str(q).strip() for q in (qs or []) if str(q).strip()][:6]
+        return out
+    except Exception:
+        return []
+
+
 def _queries_for(which: str, subject: str, note: dict) -> list[str]:
     """What to actually go and read before answering."""
     s = subject or note.get("title", "")
@@ -247,14 +316,26 @@ def enrich_note(note: dict, acq: Any = None, *, user_note: str = "",
     which = pick_enricher(note)
     subject = _subject(note) or note.get("title", "")
 
-    queries = _queries_for(which, subject, note)
+    ctx = _context(note, acq, user_note)
+    # What they asked for comes first, because that is the thing that has to
+    # be answered. The template searches stay behind it as a floor.
+    queries = _queries_from_ask(user_note, note, ctx)
+    queries += [q for q in _queries_for(which, subject, note) if q not in queries]
+    queries = queries[:8]
     try:
         web_context, sources = ksearch.research(queries)
     except Exception:
         web_context, sources = "", []
 
     prompt = _PROMPTS.get(which, _GENERIC).format(
-        subject=subject, today=today, context=_context(note, acq, user_note))
+        subject=subject, today=today, context=ctx)
+    if user_note:
+        # The schemas are fixed shapes for describing a thing. None of them
+        # has anywhere to put an answer to a question, so an instruction
+        # could be read, understood, and still have nowhere to land. One of
+        # these came back conceding it could not list the companies, which
+        # was true of the read it was given and false of the post.
+        prompt += ANSWER_BLOCK.format(ask=user_note[:1200])
     if web_context:
         prompt += (
             "\n\nLIVE SOURCES fetched just now. Ground every factual claim in "
