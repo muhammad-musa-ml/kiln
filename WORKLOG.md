@@ -65,27 +65,27 @@ below carry the file and line where each was proven.
       clipped summary satisfied the `or`, so a 0-section, 0-link, 0-entity read
       of an 11-slide carousel was filed `triage`/`reference` with no error.
 
-## Phase 2 — Model policy
+## Phase 2 — Model policy. COMPLETE.
 
-- [ ] **2.1 Best-first ladders.** `gemini-3.8-flash` heads extraction.
+- [x] **2.1 Best-first ladders.** `gemini-3.8-flash` heads extraction.
       Confirmed available on this key alongside 3.7, 3.6, 3.5 and
       `gemini-3.1-pro-preview`.
-- [ ] **2.2 Define and enforce the quality floor.** A read of a multi-slide post
+- [x] **2.2 Define and enforce the quality floor.** A read of a multi-slide post
       that returns no sections, no on-screen text and no links has failed,
       whatever the model said.
-- [ ] **2.3 Remove sub-floor models** from `config.LADDERS`, `data/models.json`
+- [x] **2.3 Remove sub-floor models** from `config.LADDERS`, `data/models.json`
       and the picker UI. Known bad: `ollama:qwen3-vl-nothink` (shipped a
       0-section read), `ollama_cloud:qwen3-vl:235b-cloud` (retired upstream,
       returns HTTP 410).
-- [ ] **2.4 Claude as the final backup.** When every rung fails the floor, hand
+- [x] **2.4 Claude as the final backup.** When every rung fails the floor, hand
       the item to the sync's Claude session rather than storing a thin read.
 
 ## Phase 3 — Honour the attached instruction
 
-- [ ] **3.1 Route on presence, not phrasing** (`ingest.py:36`). Verified: all
+- [x] **3.1 Route on presence, not phrasing** (`ingest.py:36`). Verified: all
       four `with message :` instructions landed in `user_note`, so `user_do`
       was empty and every consumer that acts on an instruction saw nothing.
-- [ ] **3.2 An instruction forces escalation** (`pipeline.py:186` currently
+- [x] **3.2 An instruction forces escalation** (`pipeline.py:186` currently
       reads `user_do` only and keyword-matches `"job"`). Verified:
       `extract_deep` has fired 0 times across all 13 items with metadata.
 - [ ] **3.3 The instruction drives the enricher and the search queries**
@@ -139,8 +139,22 @@ below carry the file and line where each was proven.
 
 ## Open questions for the owner
 
-None right now. Anything that needs a decision gets added here rather than
-guessed at.
+**Q1. The free tier may not be enough for the quality you asked for.**
+Measured today: `gemini-3.1-pro-preview` and every grounded-search rung come
+back `429 ... quota metric generate_content_free_tier_input_token_count`.
+That is a token budget, not a request count, and carousels and video eat it
+fast: one reel alone was ~10k input tokens. The flash rungs still answer, so
+nothing is blocked, but the pro rung and live web research are effectively
+unavailable on a free key. Enabling billing would make the whole ladder real.
+Your call, since it costs money. Nothing is waiting on the answer.
+
+**Q2. Thinking budget for the deep read is still 0.** The comment in
+`config.py` says thinking was measured to make extraction *worse* because the
+model reasons instead of transcribing. That measurement predates the deep
+ladder now also being the one that has to follow an attached instruction,
+which is reasoning rather than transcription. I have not changed it, because
+overriding a recorded measurement on a hunch is how the original problem got
+made. Worth one measured A/B when quota allows.
 
 ---
 

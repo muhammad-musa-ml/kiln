@@ -11,7 +11,8 @@ import time
 from typing import Any
 
 from . import acquire as acq_mod
-from . import config, enrich as enrich_mod, extract as extract_mod, store
+from . import config, enrich as enrich_mod, extract as extract_mod
+from . import handoff, store
 
 # Places worth noticing without asking a model.
 _PLACES = {
@@ -217,8 +218,30 @@ def process_url(url: str, *, user_note: str = "", user_do: str = "",
 
     # ---- extract -----------------------------------------------------
     t0 = time.time()
-    deep = urgent or (acq.kind == "instagram" and (user_do or "").lower().find("job") >= 0)
+    # Anything the owner attached a message to gets the better ladder and
+    # room to think. The old rule read user_do only and looked for the word
+    # "job" in it, so an instruction saying "get the name of the companies
+    # in the video ... links to apply ... deadlines" never triggered, because
+    # the parser had filed it under user_note. Across 13 items the deep
+    # ladder fired zero times.
+    asked = (user_do or user_note or "").strip()
+    deep = bool(urgent or asked)
     note = extract_mod.extract_item(acq, user_note=user_note or user_do, deep=deep)
+    if (note.get("_meta") or {}).get("exhausted"):
+        # Nothing on the ladder could read it. Write the brief and stop,
+        # rather than storing whatever the last rung said. Claude picks
+        # these up on the next run.
+        passes = (note.get("_meta") or {}).get("passes") or []
+        handoff.write(
+            iid, url=url, stage="extract",
+            why=note.get("_error") or "no model on the ladder could read this",
+            media=[str(m) for m in extract_mod._media_for(acq)],
+            instruction=asked,
+            schema=extract_mod.PROMPT.format(
+                context="(the media is listed above)"),
+            context=(acq.caption or "")[:2000],
+            tried=[a for pss in passes for a in (pss.get("attempts") or [])])
+
     store.log_run(conn, iid, "extract", not note.get("_error"),
                   note.get("_error", "") or f"{len(note.get('sections') or [])} sections",
                   time.time() - t0)

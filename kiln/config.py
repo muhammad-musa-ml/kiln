@@ -96,45 +96,71 @@ OLLAMA_MODELS_DIR = os.environ.get(
 # video at all and run much slower, so they're a backstop, not the default.
 POLICY = os.environ.get("KILN_POLICY", "free_first")  # free_first | local_only | quality_first
 
-# Task -> ordered ladder of (provider, model). First healthy one wins.
+# Task -> ordered ladder of (provider, model). Best first, and every rung
+# has to be good enough to do the job properly.
+#
+# This used to start at the cheapest rung and only climb when something
+# tripped a trigger. The result was that the best model never ran once: 13
+# items, 0 escalations, and every thin entry came off a "lite" model. A
+# fallback that produces a worse answer is not a fallback, it is a quiet
+# downgrade, so the weak rungs are gone rather than demoted. Running out of
+# models is an acceptable outcome. Claude picks those up (see MIN_STANDARD).
 LADDERS: dict[str, list[tuple[str, str]]] = {
-    # Default read: fast, generous free tier, good enough for most items.
+    # Reading a post: slides, video, on-screen text. Vision work, best first.
     "extract": [
-        ("gemini", "gemini-3.5-flash-lite"),
-        ("gemini", "gemini-3.1-flash-lite"),
-        ("ollama_cloud", "qwen3-vl:235b-cloud"),
-        ("ollama", "qwen3-vl-nothink:latest"),
-        ("ollama", "qwen3-vl:4b"),
+        ("gemini", "gemini-3.8-flash"),
+        ("gemini", "gemini-3.7-flash"),
+        ("gemini", "gemini-3.6-flash"),
+        ("gemini", "gemini-3.5-flash"),
     ],
-    # Deep read. Escalated to automatically when an item is marked urgent,
-    # is a job application, or when the first pass produced links that all
-    # fail to resolve (a strong signal the read was incomplete).
+    # The same, with room to think. Used when an instruction is attached, the
+    # item is urgent, or the first pass came back thin.
     "extract_deep": [
         ("gemini", "gemini-3.8-flash"),
-        ("gemini", "gemini-3.5-flash"),
-        ("ollama_cloud", "qwen3-vl:235b-cloud"),
-        ("gemini", "gemini-3.5-flash-lite"),
+        ("gemini", "gemini-3.1-pro-preview"),
+        ("gemini", "gemini-3.7-flash"),
+        ("gemini", "gemini-3.6-flash"),
     ],
-    # Cheap structured text work: tagging, normalising, dedupe decisions.
+    # Structured text work: tagging, normalising, dedupe decisions.
     "classify": [
-        ("gemini", "gemini-3.5-flash-lite"),
-        ("ollama", "qwen3:4b-instruct-2507-q4_K_M"),
-        ("ollama", "llama3.2:3b"),
+        ("gemini", "gemini-3.5-flash"),
+        ("gemini", "gemini-3.6-flash"),
+        ("gemini", "gemini-3.7-flash"),
     ],
     # Research that needs live web grounding.
     "research": [
-        ("gemini_grounded", "gemini-3.5-flash-lite"),
-        ("gemini_grounded", "gemini-3.1-flash-lite"),
-        ("ollama_cloud", "gpt-oss:120b-cloud"),
+        ("gemini_grounded", "gemini-3.8-flash"),
+        ("gemini_grounded", "gemini-3.7-flash"),
+        ("gemini_grounded", "gemini-3.5-flash"),
     ],
-    # Hard reasoning / judgement calls.
+    # Hard reasoning and judgement calls.
     "reason": [
         ("gemini", "gemini-3.8-flash"),
-        ("ollama_cloud", "kimi-k2.5:cloud"),
-        ("ollama_cloud", "gpt-oss:120b-cloud"),
-        ("ollama", "qwen3:4b-instruct-2507-q4_K_M"),
+        ("gemini", "gemini-3.1-pro-preview"),
+        ("gemini", "gemini-3.7-flash"),
+        ("gemini", "gemini-3.6-flash"),
     ],
 }
+
+# What every rung has to manage before it is allowed in a ladder above.
+# Written down so the reason a model was dropped is on the record rather
+# than in somebody's memory.
+MIN_STANDARD = """A model belongs in a ladder only if it can:
+  - read a carousel of 10 or more slides and return one section per slide
+  - transcribe on-screen text verbatim rather than describing it
+  - return the links that appear in an image
+  - follow an instruction attached to the item, not just summarise the item
+  - answer in valid JSON matching a given schema
+Dropped for failing this, with the evidence:
+  ollama:qwen3-vl-nothink   returned 0 sections, 0 on-screen text and 0 links
+                            on an 11 slide carousel (2026-09-24)
+  ollama:qwen3-vl:4b        smaller sibling of the above
+  ollama_cloud:qwen3-vl:235b-cloud   retired upstream, answers HTTP 410
+  gemini *-flash-lite       every thin entry in the 2026-09-24 run came off
+                            a lite rung
+  ollama:qwen3:4b, llama3.2:3b, kimi-k2.5, gpt-oss:120b
+                            text-only, never measured against the standard
+When no rung is left, the item is handed to Claude rather than filed thin."""
 
 # Thinking budget per task. Off for extraction - it reasons instead of
 # transcribing and you get less text for more money.
@@ -158,21 +184,24 @@ ESCALATE_WHEN = {
 # These get a second pass, merged with the first. Reads vary run to run.
 DOUBLE_PASS_KINDS = {"job", "tool", "repo"}
 
+# "local_only" used to strip every ladder down to the ollama rungs. Those
+# rungs are gone, because none of them cleared MIN_STANDARD, so the policy
+# would leave every ladder empty and every item unread. It is refused rather
+# than silently producing that.
 if POLICY == "local_only":
-    LADDERS = {
-        k: [step for step in v if step[0] == "ollama"] or [("ollama", "qwen3:4b-instruct-2507-q4_K_M")]
-        for k, v in LADDERS.items()
-    }
-elif POLICY == "quality_first":
-    LADDERS["extract"].insert(0, ("gemini", "gemini-3.8-flash"))
-    LADDERS["classify"].insert(0, ("gemini", "gemini-3.8-flash"))
+    raise SystemExit(
+        "KILN_POLICY=local_only is no longer supported: no local model "
+        "cleared the minimum standard, so there is nothing to fall back to. "
+        "Unset it, or see MIN_STANDARD in kiln/config.py.")
 
 # Daily free-tier budget. Deliberately low so we drop a rung before a 429.
+# Only models that are actually in a ladder belong here.
 FREE_TIER_RPD: dict[str, int] = {
-    "gemini-3.5-flash-lite": 450,
-    "gemini-3.1-flash-lite": 450,
     "gemini-3.8-flash": 18,
+    "gemini-3.7-flash": 18,
+    "gemini-3.6-flash": 18,
     "gemini-3.5-flash": 18,
+    "gemini-3.1-pro-preview": 18,
 }
 
 # ---------------------------------------------------------------------------

@@ -153,6 +153,31 @@ def detect_gate(caption: str, onscreen: list[str] | None = None) -> dict:
     return {"gated": False}
 
 
+def _floor_for(n_media: int):
+    """What a read of this item has to contain before it counts as one.
+
+    Returns a callback for models.generate, or None when there is nothing to
+    hold it to. The bar is deliberately low: it is not a quality score, it
+    is a check that the model looked at the pictures at all. A carousel that
+    comes back with no sections and no on-screen text was not read, and
+    accepting that is how an eleven slide post ended up stored with a title
+    and nothing else behind it.
+    """
+    if n_media < 2:
+        return None
+
+    def check(res) -> str:
+        d = res.data if isinstance(res.data, dict) else {}
+        if not d:
+            return "no JSON came back"
+        if not d.get("sections") and not d.get("onscreen_text"):
+            return ("read %d pieces of media and returned no sections and no "
+                    "on-screen text" % n_media)
+        return ""
+
+    return check
+
+
 def extract_item(acq: Acquired, *, user_note: str = "", deep: bool = False,
                  double_pass: bool | None = None) -> dict:
     """Read an acquired item into a structured note.
@@ -164,7 +189,8 @@ def extract_item(acq: Acquired, *, user_note: str = "", deep: bool = False,
     prompt = PROMPT.format(context=_context_block(acq, user_note))
 
     task = "extract_deep" if deep else "extract"
-    r1 = models.generate(task, prompt, media)
+    check = _floor_for(len(media))
+    r1 = models.generate(task, prompt, media, accept=check)
     meta: dict[str, Any] = {
         "passes": [], "escalated": deep, "media_count": len(media),
     }
@@ -180,6 +206,9 @@ def extract_item(acq: Acquired, *, user_note: str = "", deep: bool = False,
     log(r1)
     note = r1.data if (r1.ok and isinstance(r1.data, dict)) else {}
 
+    # Every rung tried and none of them managed it. The caller hands the
+    # item over rather than keeping whatever the last one happened to say.
+    meta["exhausted"] = bool(getattr(r1, "exhausted", False))
     if not note:
         return {"_meta": meta, "_error": r1.error or "extraction failed",
                 "title": acq.title or acq.caption[:70] or acq.url,
@@ -197,7 +226,8 @@ def extract_item(acq: Acquired, *, user_note: str = "", deep: bool = False,
     meta["thin_first_pass"] = thin
     meta["lines_per_media"] = round(lines / n_media, 1)
     if double_pass:
-        r2 = models.generate(task, prompt + "\n\nBe exhaustive. Prefer completeness over brevity.", media)
+        r2 = models.generate(task, prompt + "\n\nBe exhaustive. Prefer completeness over brevity.",
+                             media, accept=check)
         log(r2)
         if r2.ok and isinstance(r2.data, dict):
             before = len(note.get("onscreen_text") or []), len(note.get("links") or [])
