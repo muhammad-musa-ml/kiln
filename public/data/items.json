@@ -1,6 +1,106 @@
 {
  "items": [
   {
+   "id": "b979ce52707652aa",
+   "url": "https://www.instagram.com/reel/DcoyY8JD39E/?stkn=MWF5ZnlyYmJhNHEyaQ==",
+   "kind": "other",
+   "action": "redo",
+   "title": "RAG Interview Question: Ai Theory vs actual AI engineer\n\nComment \"Inte",
+   "owner": "bashi_fuirkashi",
+   "posted": "August 29, 2026",
+   "slide_count": 0,
+   "links_checked": "25 Sep 2026",
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "slide_ext": ".webp"
+  },
+  {
+   "id": "9dac1181c6aae799",
+   "url": "https://www.instagram.com/reel/DdphNPwqFbl/?stkn=MWpvcjd4NGpvdGx6bg==",
+   "kind": "other",
+   "action": "redo",
+   "title": "🚨 Outlier, Mercor, Alignerr, Surge AI and 25+ other tech companies hav",
+   "owner": "vee_daily19",
+   "posted": "September 23, 2026",
+   "slide_count": 0,
+   "links_checked": "25 Sep 2026",
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "slide_ext": ".webp"
+  },
+  {
+   "id": "4cad66124c14b023",
+   "url": "https://www.instagram.com/reel/DcE9yTCjt8H/?stkn=d2VtZmgxN252Nncy",
+   "kind": "other",
+   "action": "redo",
+   "title": "since wheeee? comment CONNECT to get the workaround #composio #claude ",
+   "owner": "freetools848",
+   "posted": "August 15, 2026",
+   "slide_count": 0,
+   "links_checked": "25 Sep 2026",
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "slide_ext": ".webp"
+  },
+  {
+   "id": "f171983c28a2ffc4",
+   "url": "https://www.instagram.com/reel/Ddp3KenxxqY/?stkn=NGNsajgyYXlxbXly",
+   "kind": "other",
+   "action": "redo",
+   "title": "20 minutes a day and some consistency is all you need 💰#everygenpartne",
+   "owner": "isaaccc.mp4",
+   "posted": "September 23, 2026",
+   "slide_count": 0,
+   "links_checked": "25 Sep 2026",
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "slide_ext": ".webp"
+  },
+  {
+   "id": "4a4f9e2c6f9530d9",
+   "url": "https://www.instagram.com/reel/DdnRJ7Jxlll/?stkn=YWxqYjdqbHlyY3Nr",
+   "kind": "other",
+   "action": "redo",
+   "title": "Boost your resume with this! #jobsearch #claude #ai #founder #startup\"",
+   "owner": "bengusberg",
+   "posted": "September 22, 2026",
+   "slide_count": 0,
+   "links_checked": "25 Sep 2026",
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "slide_ext": ".webp"
+  },
+  {
    "id": "12c2f711f2c6e894",
    "url": "https://www.instagram.com/p/Ddm2na9Eo3o/?img_index=1&stkn=cGdndmtyZ2J4Mmkw",
    "kind": "other",
@@ -289,11 +389,15 @@
    "gate": {
     "gated": true,
     "how": "comment",
-    "keyword": "the next"
+    "keyword": "the next",
+    "advice": "Comment \"the next\" on the post - the creator sends the link/file back."
    },
    "tags": {
     "action": [
      "build"
+    ],
+    "section": [
+     "to-watch/concept-explainers"
     ],
     "topic": [
      "ai agents",
@@ -303,7 +407,206 @@
      "jarvis"
     ]
    },
+   "followup": {
+    "answer_html": "<h2>What checked out, and what needed fixing</h2>\n<ul>\n<li>Hermes Agent and Honcho are both real. The two links already on this post are their genuine official pages, confirmed by fetching them directly. No links needed to come off the list.</li>\n<li>&quot;OpenAI Codex&quot; is not a separate brain you can swap in alongside Claude and Gemini. Codex is OpenAI's coding-agent product (app, CLI, IDE extension); the model actually running underneath it is a GPT model (currently gpt-5.3-codex). If you want an OpenAI option, you're picking a GPT model, not &quot;Codex.&quot;</li>\n<li>The ElevenLabs free tier cannot be used commercially and is capped around 10,000 characters a month (roughly 5-10 minutes of speech). ElevenLabs is also retiring its current Default voice library, British voices included, by December 31, 2026, so whatever voice you pick now will likely need replacing.</li>\n<li>Claude Design is real and current, but it needs a paid Claude plan (Pro, Max, Team or Enterprise). It is not on the free tier, which the reel doesn't mention.</li>\n<li>Honcho's self-hosted version is genuinely free (AGPL-3.0). The managed cloud version is paid per use (ingestion $2 per million tokens, chat queries $0.001-$0.50 depending on reasoning depth). No official free-credit amount could be confirmed; a &quot;$100 free credit&quot; claim floating online is unverified.</li>\n<li>Apple has no iMessage API at all. Any bridge, including the one built into Hermes Agent, means running a spare Mac 24/7 signed into your Apple ID, with full disk access granted to the bridge app.</li>\n</ul>\n<h2>Build order</h2>\n<h3>Phase 1: Backbone (start here)</h3>\n<ol>\n<li><strong>Home</strong> - any machine that stays on: old laptop, Mac mini, or a small cloud server. No product to verify here.</li>\n<li><strong>Harness: <a href=\"https://hermes-agent.nousresearch.com\">Hermes Agent</a></strong> - real, MIT license, free and open source, self-hosted, releases landing most weeks. Install with <code>curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash</code> (Linux/macOS/WSL2) or <code>iex (irm https://hermes-agent.nousresearch.com/install.ps1)</code> (Windows PowerShell), then run <code>hermes model</code> to pick a provider. See the <a href=\"https://hermes-agent.nousresearch.com/docs/getting-started/quickstart/\">quickstart</a>.</li>\n<li><strong>Memory: <a href=\"https://honcho.dev\">Honcho</a></strong> - real, AGPL-3.0, free if self-hosted (<code>honcho start</code> or Docker). The <a href=\"https://plasticlabs.ai/blog/posts/Honcho-3\">hosted version</a> is paid per token/query. See the <a href=\"https://github.com/plastic-labs/honcho\">GitHub repo</a> for the quickstart.</li>\n</ol>\n<h3>Phase 2: Brain</h3>\n<ol start=\"3\">\n<li><strong>Pick a model</strong> - Claude, a GPT model, or Gemini all work as the brain; all are paid APIs. Gemini's Flash-class models have a free tier in Google AI Studio; Gemini Pro, Claude and GPT models do not have a standing free tier. Swapping between them is a matter of an API key in Hermes Agent (<code>hermes model</code>). <a href=\"https://claude.com/pricing\">Claude pricing</a>, <a href=\"https://developers.openai.com/api/docs/pricing\">OpenAI pricing</a>, <a href=\"https://ai.google.dev/gemini-api/docs/pricing\">Gemini pricing</a>.</li>\n<li><strong>You</strong> and 6. <strong>Skills</strong> - no product here to verify. Write a short system prompt covering your work, goals and preferences, then add task-specific skill modules in Hermes Agent's own format.</li>\n</ol>\n<h3>Phase 3: Voice and interface</h3>\n<p>8 (voice half). <strong><a href=\"https://elevenlabs.io/pricing\">ElevenLabs</a></strong> - real. Free tier exists (10,000 credits/month) but is non-commercial only; paid plans with commercial rights start at $6/month. For a live, talking agent use the WebSocket streaming endpoint, not the plain HTTP one, so audio starts as the LLM's text is still being generated; pair it with the Flash v2.5 model for low latency (about 75ms). See the <a href=\"https://elevenlabs.io/docs/eleven-api/guides/how-to/websockets/realtime-tts\">real-time streaming guide</a>.<br />\n9. <strong><a href=\"https://www.anthropic.com/news/claude-design-anthropic-labs\">Claude Design</a></strong> - real, launched by Anthropic Labs in April 2026. Lets you build a working prototype interface by describing it to Claude, then hand off to Claude Code to implement. Needs a paid Claude plan (Pro/Max/Team/Enterprise), not the free tier.</p>\n<h3>Phase 4: Tools and channels (do this last, one connector at a time)</h3>\n<ol start=\"7\">\n<li><strong>Tools</strong> - Gmail, Calendar, Docs/Drive: official Google MCP servers exist and are free, but still labeled Developer Preview (see <a href=\"https://developers.google.com/workspace/guides/configure-mcp-servers\">setup guide</a>). Browser: <a href=\"https://github.com/microsoft/playwright-mcp\">Playwright MCP</a> (Microsoft), free and open source, and its own docs say plainly it is not a security boundary on its own.<br />\n8 (channels half). Slack: the <a href=\"https://www.pulsemcp.com/servers/slack\">official Slack-hosted MCP server</a> is free. Telegram: no official MCP exists, but a maintained community wrapper around the free Bot API works (<a href=\"https://github.com/timoncool/telegram-api-mcp\">telegram-api-mcp</a>). iMessage: no Apple API exists; you need a spare Mac running a bridge like BlueBubbles, which Hermes Agent supports directly - see its <a href=\"https://hermes-agent.nousresearch.com/docs/user-guide/messaging/bluebubbles\">BlueBubbles setup doc</a>.</li>\n</ol>\n<p>Start this phase with the narrowest access: read-only email/calendar scopes, one channel, before adding more.</p>\n<h2>Is it safe to give an agent your email and messages?</h2>\n<ol>\n<li>Request the narrowest scope that works (<code>gmail.readonly</code>, not <code>gmail.modify</code> or full mailbox access), never a broad scope &quot;for later.&quot; Source: <a href=\"https://developers.google.com/workspace/gmail/api/auth/scopes\">Google's Gmail scopes guidance</a>.</li>\n<li>Give the agent its own mailbox or a forwarding address, not your everyday inbox. Sources: <a href=\"https://www.agnic.ai/blog/never-give-gmail-to-ai-agent\">Agnic</a>, <a href=\"https://lobstermail.ai/blog/ai-agent-email-access-security-checklist\">LobsterMail</a>.</li>\n<li>Require a human okay before anything irreversible goes out: an email sent, a Slack post, an iMessage. Anthropic's own guidance says to check before the action, not after. Source: <a href=\"https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool\">Claude computer-use docs</a>.</li>\n<li>Sandbox what the agent can run. Playwright MCP's own documentation states it is not a security boundary; the MCP project's own security guide recommends running any local connector in a container with minimal privileges. Sources: <a href=\"https://github.com/microsoft/playwright-mcp\">Playwright MCP</a>, <a href=\"https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices\">MCP security best practices</a>.</li>\n<li>Treat anything arriving by email, web page or shared document as content that can carry hidden instructions for the agent, not just information for you. Don't let one agent hold private data access, exposure to that kind of untrusted content, and an outbound channel all at once - security researchers call that combination the &quot;lethal trifecta,&quot; and steps 7 and 8 of this build create exactly it. Sources: <a href=\"https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/\">Simon Willison, &quot;The lethal trifecta&quot;</a>, <a href=\"https://genai.owasp.org/llmrisk/llm01-prompt-injection/\">OWASP on prompt injection</a>.</li>\n</ol>\n<h2>Weekend plan</h2>\n<p>Day 1: home machine, Hermes Agent, Honcho, and a brain model. Day 2: voice and interface, then add tools and channels one at a time, narrowest access first, with a human-approval step on anything that sends.</p>\n",
+    "answered": "not asked",
+    "sources": [
+     {
+      "url": "https://hermes-agent.nousresearch.com",
+      "title": "Hermes Agent homepage"
+     },
+     {
+      "url": "https://hermes-agent.nousresearch.com/docs/getting-started/quickstart/",
+      "title": "Hermes Agent Quickstart"
+     },
+     {
+      "url": "https://github.com/NousResearch/hermes-agent",
+      "title": "NousResearch/hermes-agent GitHub repo"
+     },
+     {
+      "url": "https://honcho.dev",
+      "title": "Honcho homepage"
+     },
+     {
+      "url": "https://github.com/plastic-labs/honcho",
+      "title": "plastic-labs/honcho GitHub repo"
+     },
+     {
+      "url": "https://plasticlabs.ai/blog/posts/Honcho-3",
+      "title": "Announcing Honcho 3 (pricing)"
+     },
+     {
+      "url": "https://claude.com/pricing",
+      "title": "Claude pricing"
+     },
+     {
+      "url": "https://developers.openai.com/api/docs/pricing",
+      "title": "OpenAI API pricing"
+     },
+     {
+      "url": "https://developers.openai.com/codex/models",
+      "title": "OpenAI Codex models page"
+     },
+     {
+      "url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "title": "Gemini API pricing"
+     },
+     {
+      "url": "https://elevenlabs.io/pricing",
+      "title": "ElevenLabs pricing"
+     },
+     {
+      "url": "https://elevenlabs.io/docs/eleven-api/guides/how-to/websockets/realtime-tts",
+      "title": "ElevenLabs real-time WebSocket TTS guide"
+     },
+     {
+      "url": "https://elevenlabs.io/docs/overview/models",
+      "title": "ElevenLabs models overview (Flash v2.5)"
+     },
+     {
+      "url": "https://www.anthropic.com/news/claude-design-anthropic-labs",
+      "title": "Anthropic: Introducing Claude Design"
+     },
+     {
+      "url": "https://developers.google.com/workspace/guides/configure-mcp-servers",
+      "title": "Google Workspace MCP servers setup"
+     },
+     {
+      "url": "https://developers.google.com/workspace/calendar/api/guides/configure-mcp-server",
+      "title": "Google Calendar MCP server setup"
+     },
+     {
+      "url": "https://github.com/microsoft/playwright-mcp",
+      "title": "Playwright MCP GitHub repo"
+     },
+     {
+      "url": "https://www.pulsemcp.com/servers/slack",
+      "title": "Official Slack MCP server"
+     },
+     {
+      "url": "https://github.com/timoncool/telegram-api-mcp",
+      "title": "telegram-api-mcp GitHub repo"
+     },
+     {
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/bluebubbles",
+      "title": "Hermes Agent BlueBubbles (iMessage) doc"
+     },
+     {
+      "url": "https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices",
+      "title": "MCP security best practices"
+     },
+     {
+      "url": "https://developers.google.com/workspace/gmail/api/auth/scopes",
+      "title": "Gmail API OAuth scopes"
+     },
+     {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool",
+      "title": "Claude computer-use docs"
+     },
+     {
+      "url": "https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/",
+      "title": "The lethal trifecta for AI agents"
+     },
+     {
+      "url": "https://genai.owasp.org/llmrisk/llm01-prompt-injection/",
+      "title": "OWASP LLM01: Prompt Injection"
+     },
+     {
+      "url": "https://www.agnic.ai/blog/never-give-gmail-to-ai-agent",
+      "title": "Never give your Gmail to an AI agent"
+     },
+     {
+      "url": "https://lobstermail.ai/blog/ai-agent-email-access-security-checklist",
+      "title": "AI agent email access security checklist"
+     }
+    ],
+    "next_action": "Set up Hermes Agent and Honcho on an always-on machine and wire in one brain model before touching any email, calendar or messaging connector."
+   },
    "links": [
+    {
+     "url": "https://ai.google.dev/gemini-api/docs/pricing",
+     "label": "Gemini API pricing",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://claude.com/pricing",
+     "label": "Claude pricing",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://developers.google.com/workspace/calendar/api/guides/configure-mcp-server",
+     "label": "Google Calendar MCP setup",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://developers.google.com/workspace/guides/configure-mcp-servers",
+     "label": "Google Workspace MCP setup (Gmail/Docs/Drive)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://developers.openai.com/api/docs/pricing",
+     "label": "OpenAI API pricing",
+     "alive": true,
+     "page_title": "Pricing | OpenAI API"
+    },
+    {
+     "url": "https://developers.openai.com/codex/models",
+     "label": "What OpenAI Codex actually is",
+     "alive": true,
+     "page_title": "Models | ChatGPT Learn"
+    },
+    {
+     "url": "https://elevenlabs.io/docs/eleven-api/guides/how-to/websockets/realtime-tts",
+     "label": "ElevenLabs real-time streaming (WebSocket) guide",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://elevenlabs.io/docs/overview/models",
+     "label": "ElevenLabs low-latency model (Flash v2.5)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://elevenlabs.io/pricing",
+     "label": "ElevenLabs pricing",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://genai.owasp.org/llmrisk/llm01-prompt-injection/",
+     "label": "OWASP prompt injection reference",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/NousResearch/hermes-agent",
+     "label": "Hermes Agent GitHub repo",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/microsoft/playwright-mcp",
+     "label": "Playwright MCP (browser automation)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/plastic-labs/honcho",
+     "label": "Honcho GitHub repo (self-host quickstart)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/timoncool/telegram-api-mcp",
+     "label": "Telegram Bot API MCP wrapper",
+     "alive": true,
+     "page_title": ""
+    },
     {
      "url": "https://hermes-agent.nousresearch.com",
      "label": "Hermes Agent Documentation",
@@ -311,30 +614,54 @@
      "page_title": ""
     },
     {
+     "url": "https://hermes-agent.nousresearch.com/docs/getting-started/quickstart/",
+     "label": "Hermes Agent quickstart guide",
+     "alive": true,
+     "page_title": "Hermes Agent Quickstart | Hermes Agent"
+    },
+    {
+     "url": "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/bluebubbles",
+     "label": "iMessage bridge setup (BlueBubbles, via Hermes Agent)",
+     "alive": true,
+     "page_title": "BlueBubbles (iMessage) | Hermes Agent"
+    },
+    {
      "url": "https://honcho.dev",
      "label": "Honcho Memory System",
      "alive": true,
      "page_title": "Honcho"
+    },
+    {
+     "url": "https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices",
+     "label": "MCP security best practices",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://plasticlabs.ai/blog/posts/Honcho-3",
+     "label": "Honcho pricing and architecture",
+     "alive": true,
+     "page_title": "Announcing Honcho 3"
+    },
+    {
+     "url": "https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/",
+     "label": "The lethal trifecta for AI agents",
+     "alive": true,
+     "page_title": "The lethal trifecta for AI agents: private data, untrusted content, and external communication"
+    },
+    {
+     "url": "https://www.anthropic.com/news/claude-design-anthropic-labs",
+     "label": "Claude Design announcement",
+     "alive": true,
+     "page_title": "Introducing Claude Design by Anthropic Labs \\ Anthropic"
+    },
+    {
+     "url": "https://www.pulsemcp.com/servers/slack",
+     "label": "Official Slack MCP server",
+     "alive": true,
+     "page_title": "Official Slack MCP Server | PulseMCP"
     }
    ],
-   "slide_ext": ".webp"
-  },
-  {
-   "id": "b979ce52707652aa",
-   "url": "https://www.instagram.com/reel/DcoyY8JD39E/?stkn=MWF5ZnlyYmJhNHEyaQ==",
-   "kind": "instagram",
-   "action": "redo",
-   "title": "https://www.instagram.com/reel/DcoyY8JD39E/?stkn=MWF5ZnlyYmJhNHEyaQ==",
-   "summary": "Nothing could be read from this link. browser loaded the page but found no media",
-   "slide_count": 0,
-   "note": {},
-   "enrich": {},
-   "tags": {
-    "action": [
-     "redo"
-    ]
-   },
-   "links": [],
    "slide_ext": ".webp"
   },
   {
@@ -595,18 +922,167 @@
      "workflow"
     ]
    },
+   "followup": {
+    "answer_html": "<p>Two links were removed from this item: a job posting and a company jobs page for an unrelated &quot;TypeSafe AI&quot; infrastructure hiring listing that had nothing to do with this build guide. In their place: a section confirming that Jev, the classifier the guide is built around, is a real product with pricing and latency matching the slides, and a section on how to actually get the &quot;Agentic OS V2&quot; repo and the rest of the stack running, including a correction that the repo is gated behind a paid community rather than free on comment.</p>\n",
+    "answered": "not asked",
+    "sources": [
+     {
+      "url": "https://typesafe.ai/",
+      "title": "TypeSafe AI home page"
+     },
+     {
+      "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+      "title": "Introducing System One Models & Jev - TypeSafe AI Blog"
+     },
+     {
+      "url": "https://docs.typesafe.ai/models",
+      "title": "Models - TypeSafe AI docs"
+     },
+     {
+      "url": "https://docs.typesafe.ai/introduction/quickstart",
+      "title": "TypeSafe AI docs quickstart"
+     },
+     {
+      "url": "https://openrouter.ai/typesafe",
+      "title": "Typesafe API and Models - OpenRouter"
+     },
+     {
+      "url": "https://www.chaseai.io/blog/build-claude-code-agentic-os-3-steps",
+      "title": "How to Build a Custom Claude Code Agentic OS in 3 Steps - Chase AI"
+     },
+     {
+      "url": "https://www.chaseai.io/blog/voice-driven-agentic-os-claude-code",
+      "title": "How to Build a Voice-Driven Agentic OS on Claude Code - Chase AI"
+     },
+     {
+      "url": "https://www.skool.com/chase-ai/about",
+      "title": "Chase AI+ (Skool)"
+     },
+     {
+      "url": "https://www.skool.com/chase-ai-community/about",
+      "title": "Chase AI Community (Skool, free tier)"
+     },
+     {
+      "url": "https://obsidian.md/",
+      "title": "Obsidian"
+     },
+     {
+      "url": "https://claude.com/product/claude-code",
+      "title": "Claude Code - Anthropic"
+     },
+     {
+      "url": "https://github.com/openai/codex",
+      "title": "GitHub - openai/codex"
+     },
+     {
+      "url": "https://github.com/ggml-org/whisper.cpp",
+      "title": "GitHub - ggml-org/whisper.cpp"
+     },
+     {
+      "url": "https://github.com/hexgrad/kokoro",
+      "title": "GitHub - hexgrad/kokoro"
+     },
+     {
+      "url": "https://huggingface.co/hexgrad/Kokoro-82M",
+      "title": "hexgrad/Kokoro-82M - Hugging Face"
+     }
+    ],
+    "extra_sections": [
+     {
+      "heading": "Jev: what it actually is",
+      "detail": "Jev is real. It is made by TypeSafe AI, a company distinct from the unrelated same-named infrastructure company whose job listing an earlier pass mistakenly researched (now removed from this item). TypeSafe's blog describes Jev as their first \"System One Model\": you send it unstructured context plus a schema (the fields and fixed set of values each field can take), and it returns a typed answer with a confidence score. It classifies; it does not generate free text, matching the slide's description exactly.\n\nPricing claim holds up: TypeSafe's own site and docs both state $0.042 per million input tokens with output free, an exact match to the post.\n\nLatency claim holds up: TypeSafe publishes 70-500ms end-to-end response time, well under the post's \"under 1 second\" figure, and consistent with the \"5 seconds without Jev\" comparison if the baseline is a frontier model doing the same routing job.\n\nWhat did not fully check out: TypeSafe's bigger marketing numbers (\"238x cheaper,\" \"193.6x faster\") are the company's own figures, not independently benchmarked, so treat those specific multipliers as a claim rather than a confirmed fact even though the base price and latency are confirmed.\n\nAccess: Jev launched September 15, 2026 as early access. Sign-up appears to be a waitlist that TypeSafe is working through progressively rather than fully open self-serve; there is no confirmed free tier. Once you have a key: an API endpoint (api.typesafe.ai/v1/systemone), a console for keys and a no-code playground (console.typesafe.ai), and a Python SDK (`pip install typesafe-sdk`, reads TYPESAFE_API_KEY from the environment). Jev's models (jev-1.13, jev-latest) are also listed on [OpenRouter](https://openrouter.ai/typesafe), which is a second way in if TypeSafe's own waitlist is slow, using an OpenRouter key instead of a TypeSafe one.\n\nIf Jev access is stuck on a waitlist, the cheap alternative for pure tier-routing (not classification with typed schemas) is a small fast general model like Claude Haiku or a similarly small model, which is close to what the guide's own \"Tier 2: small fast model\" fallback already describes."
+     },
+     {
+      "heading": "Getting started: the repo and the rest of the stack",
+      "detail": "The \"Agentic OS V2\" repo is not public. It lives inside a paid membership community, Chase AI+, on Skool (roughly $98-99/month, or about $58/month billed annually per third-party listings). The creator's own blog posts about this exact build confirm it directly: the full prompt and production system are described as being \"inside the Chase AI+ community.\" A separate free Skool tier exists with some templates and prompts, but not the repo or install prompt itself. The Instagram call to action (\"Comment JARVIS\") funnels into this paid community rather than handing over a free download, so this item should be treated as gated, not open, correcting an earlier read that recorded it as ungated.\n\nThe rest of the stack is public and these are the canonical sources:\n\n1. [Obsidian](https://obsidian.md/) - free note app used as the vault. Downloads for Windows, macOS, Linux, mobile.\n2. [Claude Code](https://claude.com/product/claude-code) - install with `curl -fsSL https://claude.ai/install.sh | bash`, or the VS Code/JetBrains extension. Needs a Claude Pro/Max, Team, or Console account.\n3. [Codex CLI](https://github.com/openai/codex) - install with `curl -fsSL https://chatgpt.com/codex/install.sh | sh` (Mac/Linux), a Windows installer, `npm install -g @openai/codex`, or `brew install --cask codex`. Needs a ChatGPT Plus, Pro, Business, Edu, or Enterprise account.\n4. [whisper.cpp](https://github.com/ggml-org/whisper.cpp) for local speech-to-text - a dependency-free C/C++ build with no required Python/CUDA stack, GPU acceleration optional (CUDA, Vulkan, ROCm, Metal).\n5. [Kokoro](https://github.com/hexgrad/kokoro) for local text-to-speech, weights on [Hugging Face](https://huggingface.co/hexgrad/Kokoro-82M) - install with `pip install kokoro soundfile` plus the espeak-ng system package.\n\nHardware, honestly: whisper.cpp's own docs give memory by model size, from about 273MB (tiny) up to 3.9GB (large); it runs on CPU alone, no GPU required, GPU only makes it faster. For a responsive voice loop, the base or small model (under 1GB) is the realistic laptop choice. Kokoro's docs do not publish RAM or GPU minimums for inference at all, a real gap in their documentation; the only hardware figure they give is training cost, not what you need to run it. Given it is an 82M-parameter model installed with plain pip and GPU offered only as an optional flag, CPU-only operation looks like the normal path, but this is an inference from size and install method, not a documented spec. Overall: running Whisper (base/small) and Kokoro locally alongside Obsidian and a Claude Code or Codex terminal needs a few GB of free RAM beyond your OS and other apps, no dedicated GPU, and any recent Intel/AMD laptop or Apple Silicon Mac handles it; a 16GB machine is comfortable, an 8GB machine is workable but tight."
+     }
+    ],
+    "next_action": "If the repo is worth building, joining the paid Chase AI+ Skool community (about $98/month) is the only confirmed way to get it; the free tier and commenting \"JARVIS\" do not hand over the repo itself."
+   },
    "links": [
     {
-     "url": "https://jaabz.com/jobs/275349-member-of-technical-staff-infrastructure-kubernetes-specialist",
-     "label": "",
+     "url": "https://claude.com/product/claude-code",
+     "label": "Claude Code",
      "alive": true,
-     "page_title": "Senior Infrastructure Engineer (AI/ML Systems) at typesafe ai - United State | Visa Sponsorship Jobs"
+     "page_title": "Claude Code by Anthropic | AI Coding Agent, Terminal, IDE"
     },
     {
-     "url": "https://simplify.jobs/c/TypeSafe-AI",
-     "label": "",
+     "url": "https://docs.typesafe.ai/models",
+     "label": "TypeSafe docs: Jev pricing and specs",
      "alive": true,
-     "page_title": "Jobs and Employment at TypeSafe AI | Simplify Jobs"
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/ggml-org/whisper.cpp",
+     "label": "whisper.cpp",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/hexgrad/kokoro",
+     "label": "Kokoro TTS",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/openai/codex",
+     "label": "Codex CLI",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://huggingface.co/hexgrad/Kokoro-82M",
+     "label": "Kokoro-82M weights",
+     "alive": true,
+     "page_title": "hexgrad/Kokoro-82M · Hugging Face"
+    },
+    {
+     "url": "https://obsidian.md/",
+     "label": "Obsidian",
+     "alive": true,
+     "page_title": "Obsidian - Sharpen your thinking"
+    },
+    {
+     "url": "https://openrouter.ai/typesafe",
+     "label": "Jev on OpenRouter",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://typesafe.ai/",
+     "label": "TypeSafe AI (Jev's maker)",
+     "alive": true,
+     "page_title": "Home - TypeSafe AI"
+    },
+    {
+     "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+     "label": "TypeSafe: Introducing System One Models & Jev",
+     "alive": true,
+     "page_title": "Introducing System One Models &amp; Jev - TypeSafe AI Blog"
+    },
+    {
+     "url": "https://www.chaseai.io/blog/build-claude-code-agentic-os-3-steps",
+     "label": "Chase AI: build the agentic OS in 3 steps (source on repo gating)",
+     "alive": true,
+     "page_title": "How to Build a Claude Code Agentic OS (3 Steps) - Chase AI"
+    },
+    {
+     "url": "https://www.chaseai.io/blog/voice-driven-agentic-os-claude-code",
+     "label": "Chase AI: voice-driven agentic OS build",
+     "alive": true,
+     "page_title": "Build a Voice-Driven Agentic OS on Claude Code - Chase AI"
+    },
+    {
+     "url": "https://www.skool.com/chase-ai-community/about",
+     "label": "Chase AI free community (templates only, not the repo)",
+     "alive": true,
+     "page_title": "Chase AI Community"
+    },
+    {
+     "url": "https://www.skool.com/chase-ai/about",
+     "label": "Chase AI+ paid community (where the repo lives)",
+     "alive": true,
+     "page_title": "Chase AI+"
     }
    ],
    "media_id": "03d5b6b18a964e5d",
@@ -614,51 +1090,13 @@
    "slide_ext": ".jpg"
   },
   {
-   "id": "9dac1181c6aae799",
-   "url": "https://www.instagram.com/reel/DdphNPwqFbl/?stkn=MWpvcjd4NGpvdGx6bg==",
-   "kind": "instagram",
-   "action": "redo",
-   "title": "https://www.instagram.com/reel/DdphNPwqFbl/?stkn=MWpvcjd4NGpvdGx6bg==",
-   "summary": "Nothing could be read from this link. browser loaded the page but found no media",
-   "slide_count": 0,
-   "note": {},
-   "enrich": {},
-   "tags": {
-    "action": [
-     "redo"
-    ]
-   },
-   "links": [],
-   "slide_ext": ".webp"
-  },
-  {
-   "id": "4cad66124c14b023",
-   "url": "https://www.instagram.com/reel/DcE9yTCjt8H/?stkn=d2VtZmgxN252Nncy",
-   "kind": "instagram",
-   "action": "redo",
-   "title": "https://www.instagram.com/reel/DcE9yTCjt8H/?stkn=d2VtZmgxN252Nncy",
-   "summary": "Nothing could be read from this link. browser loaded the page but found no media",
-   "owner": "freetools848",
-   "posted": "August 15, 2026",
-   "slide_count": 0,
-   "note": {},
-   "enrich": {},
-   "tags": {
-    "action": [
-     "redo"
-    ]
-   },
-   "links": [],
-   "slide_ext": ".webp"
-  },
-  {
    "id": "0bcb16be366c6c1b",
    "url": "https://www.instagram.com/p/DdoxQvSmFQW/?stkn=MXhsNmV0d3Z0YWZmbQ==",
    "kind": "listicle",
    "action": "reference",
-   "title": "11 AI Startup Job Postings: Companies to Make You a Millionaire",
+   "title": "10 Funded AI Startups That Are Hiring: RUNE, Thatch, Crusoe, Temporal, Profound, AIUC, BackOps, Noetive, Magentic, TypeSafe AI",
    "hook": "Get direct links to job openings and company details for high-growth AI startups.",
-   "summary": "This Instagram carousel details 11 AI-focused companies with their funding rounds, job openings, and key roles. Each slide shows the company name, their mission, funding details, and specific hiring needs. The creator emphasizes finding these websites and job applications to build a career path. It's a curated list of opportunities in AI, from solar-powered compute to healthcare budgets. The post",
+   "summary": "A carousel naming ten funded AI startups that are hiring: RUNE (solar-powered AI compute), Thatch (health benefit budgets), Crusoe (AI cloud infrastructure), Temporal (durable AI agent workflows), Profound (AI-search marketing), AIUC (AI agent certification and insurance), BackOps (AI for supply-chain exceptions), Noetive (agent-to-agent communication), Magentic (AI procurement agents), and TypeSafe AI (faster AI inference). Each slide gives the company's mission tagline, funding round and lead investor, and the departments it says it is hiring for.",
    "owner": "stephthefounder",
    "slide_count": 11,
    "links_checked": "24 Sep 2026",
@@ -708,18 +1146,170 @@
      "reference"
     ]
    },
+   "followup": {
+    "answer_html": "<p>The carousel names 10 funded AI startups that are hiring (slide 1 is a cover slide with no company). One line each on what they do and where to apply, in slide order:</p>\n<ol>\n<li><a href=\"https://www.rune.energy/\">RUNE</a> - solar-sited AI compute infrastructure. Apply via <a href=\"https://rune.energy/careers\">careers page</a> (no individual application links available; roles open now skew Operations/Project Management, not the HR or Engineering Operations roles the post claimed).</li>\n<li><a href=\"https://thatch.com\">Thatch</a> - individual, tax-free health budgets replacing group insurance. Apply via <a href=\"https://thatch.com/jobs\">29 open roles</a> across Design, Engineering, Growth, Marketing, Operations, and Product, matching what the post claimed.</li>\n<li><a href=\"https://www.crusoe.ai\">Crusoe</a> - vertically integrated AI cloud infrastructure and data centers. <a href=\"https://www.crusoe.ai/about/careers\">Careers page</a> is live but its listings could not be read (JavaScript-rendered); check it directly in a browser.</li>\n<li><a href=\"https://temporal.io/\">Temporal</a> - durable-execution platform for reliable AI agent workflows. Apply via <a href=\"https://temporal.io/careers\">careers page</a>; all five departments the post claimed (Marketing, Product, Sales, Customer Support, Engineering) are still open.</li>\n<li><a href=\"https://www.tryprofound.com/\">Profound</a> - AI-answer-engine marketing platform. Six live roles found on its <a href=\"https://jobs.ashbyhq.com/profound\">job board</a>, including Marketing Engineer ($135K-$200K) and Head of Talent ($250K-$375K); Data, Design, Customer Success and Finance openings the post claimed could not be individually confirmed.</li>\n<li><a href=\"https://aiuc.com/\">AIUC</a> (Artificial Intelligence Underwriting Company) - certifies and insures AI agents. Roles visible on its <a href=\"https://jobs.ashbyhq.com/aiuc\">job board</a> roughly match the post's claimed departments, but two of the company's own listed job pages are dead (404).</li>\n<li><a href=\"https://backops.com/\">BackOps</a> - AI resolution layer for supply-chain exceptions. 16 open roles on its <a href=\"https://backops.com/careers\">careers page</a>, covering all six departments the post claimed.</li>\n<li><a href=\"https://www.noetive.io\">Noetive</a> - agent-to-agent communication infrastructure. Its <a href=\"https://www.noetive.io/career\">careers page</a> currently lists no open roles at all, despite the post naming three specific ones.</li>\n<li><a href=\"https://www.magentic.com\">Magentic</a> - AI procurement agents. Six live Engineering/Product/Marketing roles on its <a href=\"https://jobs.ashbyhq.com/magentic\">job board</a>; no listing titled &quot;Sales&quot; was found, though the post claimed Sales &amp; Operations hiring. Note: gomagentic.com is an unrelated company with a similar name, not this one.</li>\n<li><a href=\"https://typesafe.ai\">TypeSafe AI</a> - typed, structured AI inference for production systems. Three Member of Technical Staff roles open on its <a href=\"https://jobs.ashbyhq.com/typesafe-ai\">job board</a>, matching the post's claim; Founding Recruiter is the closest match to the &quot;Operations&quot; opening claimed.</li>\n</ol>\n<p>All ten companies' funding round, amount, and lead investor as stated in the post were confirmed to match independent sources exactly. Two of the post's own links are dead: aistartupjobs.com returns a 403 error, and the GitHub list it pointed to (awesome-ai-startups-2026) returns a 404 - that list has moved to <a href=\"https://github.com/vinitshahdeo/awesome-ai-startups-hiring\">awesome-ai-startups-hiring</a>. Three general AI-startup job boards from the post are live and useful for a broader search: <a href=\"https://topstartups.io/jobs/?startup__markets=Artificial%20Intelligence\">TopStartups.io</a>, <a href=\"https://workatai.org/\">WorkAtAI.org</a>, and <a href=\"https://www.fastaijobs.com/\">FastAIJobs.com</a>.</p>\n<p>Full dossier with per-role links, HQ, headcount, and funding detail for each company: out/ai-startup-jobs.md (PDF).</p>\n",
+    "answered": "fully",
+    "artifacts": [
+     {
+      "file": "ai-startup-jobs.pdf",
+      "title": "AI Startup Jobs Dossier",
+      "about": "Website, careers link, open roles, HQ, funding, and a claim-by-claim check for each of the 10 companies named in the carousel.",
+      "kind": "pdf",
+      "pages": 9
+     }
+    ],
+    "sources": [
+     {
+      "url": "https://www.rune.energy/",
+      "title": "Rune Energy homepage"
+     },
+     {
+      "url": "https://rune.energy/careers",
+      "title": "Rune Energy careers"
+     },
+     {
+      "url": "https://thatch.com",
+      "title": "Thatch homepage"
+     },
+     {
+      "url": "https://thatch.com/jobs",
+      "title": "Thatch jobs page"
+     },
+     {
+      "url": "https://www.crusoe.ai",
+      "title": "Crusoe homepage"
+     },
+     {
+      "url": "https://www.crusoe.ai/resources/newsroom/crusoe-announces-series-f-funding",
+      "title": "Crusoe Series F newsroom announcement"
+     },
+     {
+      "url": "https://temporal.io/",
+      "title": "Temporal homepage"
+     },
+     {
+      "url": "https://temporal.io/careers",
+      "title": "Temporal careers page"
+     },
+     {
+      "url": "https://temporal.io/blog/temporal-raises-usd550m-series-e-at-usd12-55b-valuation-ai",
+      "title": "Temporal raises $550M Series E blog post"
+     },
+     {
+      "url": "https://www.tryprofound.com/",
+      "title": "Profound homepage"
+     },
+     {
+      "url": "https://www.tryprofound.com/newsroom/profound-raises-usd180m-series-d-at-usd1-8b-valuation-to-build-the-ai-platform-for-marketing-teams",
+      "title": "Profound Series D newsroom announcement"
+     },
+     {
+      "url": "https://aiuc.com/",
+      "title": "AIUC homepage"
+     },
+     {
+      "url": "https://www.securityweek.com/aiuc-raises-40-million-to-certify-enterprise-ai-agents/",
+      "title": "AIUC raises $40 million to certify enterprise AI agents - SecurityWeek"
+     },
+     {
+      "url": "https://backops.com/",
+      "title": "BackOps homepage"
+     },
+     {
+      "url": "https://www.prnewswire.com/news-releases/backops-raises-42m-series-b-to-scale-its-ai-resolution-layer-for-supply-chain-operations-302879927.html",
+      "title": "BackOps raises $42M Series B - PR Newswire"
+     },
+     {
+      "url": "https://www.noetive.io",
+      "title": "Noetive homepage"
+     },
+     {
+      "url": "https://www.prnewswire.com/news-releases/noetive-emerges-from-stealth-with-41-million-seed-to-build-the-intelligence-of-record-for-the-physical-economy-302879960.html",
+      "title": "Noetive emerges from stealth with $41M seed - PR Newswire"
+     },
+     {
+      "url": "https://www.magentic.com",
+      "title": "Magentic homepage"
+     },
+     {
+      "url": "https://techfundingnews.com/magentic-raises-18m-series-a-felicis-procurement-ai-agents/",
+      "title": "Magentic raises $18M Series A - TechFundingNews"
+     },
+     {
+      "url": "https://typesafe.ai",
+      "title": "TypeSafe AI homepage"
+     },
+     {
+      "url": "https://www.forbes.com/sites/the-prompt/2026/09/15/this-200-million-startup-wants-to-fix-ais-overconfidence-problem/",
+      "title": "TypeSafe AI raises $40M seed - Forbes"
+     },
+     {
+      "url": "https://github.com/vinitshahdeo/awesome-ai-startups-hiring",
+      "title": "awesome-ai-startups-hiring (live replacement repo)"
+     }
+    ],
+    "next_action": "Open the PDF for full detail; for RUNE, Crusoe, Temporal, AIUC and BackOps apply directly on their careers pages since per-role links could not be pulled automatically, and check Noetive's careers page again later since it has no open roles right now."
+   },
    "links": [
     {
-     "url": "https://aistartupjobs.com/",
-     "label": "",
-     "alive": false,
+     "url": "https://aiuc.com/",
+     "label": "AIUC - website",
+     "alive": true,
+     "page_title": "AIUC | AI agent standard &amp; insurance"
+    },
+    {
+     "url": "https://aiuc.com/team",
+     "label": "AIUC - careers",
+     "alive": true,
+     "page_title": "AIUC | Team"
+    },
+    {
+     "url": "https://backops.com/",
+     "label": "BackOps - website",
+     "alive": true,
+     "page_title": "BackOps"
+    },
+    {
+     "url": "https://backops.com/careers",
+     "label": "BackOps - careers",
+     "alive": true,
+     "page_title": "BackOps"
+    },
+    {
+     "url": "https://github.com/vinitshahdeo/awesome-ai-startups-hiring",
+     "label": "awesome-ai-startups-hiring (replacement for dead GitHub list)",
+     "alive": true,
      "page_title": ""
     },
     {
-     "url": "https://github.com/vinitshahdeo/awesome-ai-startups-2026",
-     "label": "",
-     "alive": false,
+     "url": "https://rune.energy/careers",
+     "label": "RUNE - careers",
+     "alive": true,
+     "page_title": "Careers — Sun to Silicon"
+    },
+    {
+     "url": "https://temporal.io/",
+     "label": "Temporal - website",
+     "alive": true,
      "page_title": ""
+    },
+    {
+     "url": "https://temporal.io/careers",
+     "label": "Temporal - careers",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://thatch.com",
+     "label": "Thatch - website",
+     "alive": true,
+     "page_title": "Thatch | Modern Health Benefits Platform"
+    },
+    {
+     "url": "https://thatch.com/jobs",
+     "label": "Thatch - careers",
+     "alive": true,
+     "page_title": "Careers | Thatch"
     },
     {
      "url": "https://topstartups.io/jobs/?startup__markets=Artificial%20Intelligence",
@@ -728,61 +1318,87 @@
      "page_title": "AI Startup Jobs 2026 | Funded by Sequoia, YC, A16Z"
     },
     {
+     "url": "https://typesafe.ai",
+     "label": "TypeSafe AI - website",
+     "alive": true,
+     "page_title": "Home - TypeSafe AI"
+    },
+    {
+     "url": "https://typesafe.ai/careers",
+     "label": "TypeSafe AI - careers",
+     "alive": true,
+     "page_title": "TypeSafe AI Jobs"
+    },
+    {
      "url": "https://workatai.org/",
      "label": "",
      "alive": true,
      "page_title": "AI Startup Jobs — 33,005 open roles at 1,091 AI companies | workatai.org"
     },
     {
+     "url": "https://www.crusoe.ai",
+     "label": "Crusoe - website",
+     "alive": true,
+     "page_title": "Crusoe | The AI factory company"
+    },
+    {
+     "url": "https://www.crusoe.ai/about/careers",
+     "label": "Crusoe - careers",
+     "alive": true,
+     "page_title": "Careers at Crusoe | Build the future of AI infrastructure"
+    },
+    {
      "url": "https://www.fastaijobs.com/",
      "label": "",
      "alive": true,
      "page_title": "AI Startup Jobs at Fast-Growing AI Companies | Fast AI Jobs"
+    },
+    {
+     "url": "https://www.magentic.com",
+     "label": "Magentic - website",
+     "alive": true,
+     "page_title": "Magentic"
+    },
+    {
+     "url": "https://www.magentic.com/careers",
+     "label": "Magentic - careers",
+     "alive": true,
+     "page_title": "Magentic"
+    },
+    {
+     "url": "https://www.noetive.io",
+     "label": "Noetive - website",
+     "alive": true,
+     "page_title": "Noetive, agent-to-agent communication routed by meaning"
+    },
+    {
+     "url": "https://www.noetive.io/career",
+     "label": "Noetive - careers",
+     "alive": true,
+     "page_title": "Careers at Noetive, build the broker for the agent era"
+    },
+    {
+     "url": "https://www.rune.energy/",
+     "label": "RUNE - website",
+     "alive": true,
+     "page_title": "Sun to Silicon"
+    },
+    {
+     "url": "https://www.tryprofound.com/",
+     "label": "Profound - website",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://www.tryprofound.com/careers",
+     "label": "Profound - careers",
+     "alive": true,
+     "page_title": ""
     }
    ],
    "media_id": "0bcb16be366c6c1b",
    "pdf_file": "doc.pdf",
    "slide_ext": ".jpg"
-  },
-  {
-   "id": "f171983c28a2ffc4",
-   "url": "https://www.instagram.com/reel/Ddp3KenxxqY/?stkn=NGNsajgyYXlxbXly",
-   "kind": "instagram",
-   "action": "redo",
-   "title": "https://www.instagram.com/reel/Ddp3KenxxqY/?stkn=NGNsajgyYXlxbXly",
-   "summary": "Nothing could be read from this link. browser loaded the page but found no media",
-   "owner": "isaaccc.mp4",
-   "posted": "September 23, 2026",
-   "slide_count": 0,
-   "note": {},
-   "enrich": {},
-   "tags": {
-    "action": [
-     "redo"
-    ]
-   },
-   "links": [],
-   "slide_ext": ".webp"
-  },
-  {
-   "id": "4a4f9e2c6f9530d9",
-   "url": "https://www.instagram.com/reel/DdnRJ7Jxlll/?stkn=YWxqYjdqbHlyY3Nr",
-   "kind": "instagram",
-   "action": "redo",
-   "title": "https://www.instagram.com/reel/DdnRJ7Jxlll/?stkn=YWxqYjdqbHlyY3Nr",
-   "summary": "Nothing could be read from this link. browser loaded the page but found no media",
-   "owner": "bengusberg",
-   "posted": "September 22, 2026",
-   "slide_count": 0,
-   "note": {},
-   "enrich": {},
-   "tags": {
-    "action": [
-     "redo"
-    ]
-   },
-   "links": [],
-   "slide_ext": ".webp"
   },
   {
    "id": "2c2a8864f72ad461",
@@ -1107,7 +1723,7 @@
    ],
    "media_id": "2c2a8864f72ad461",
    "pdf_file": "doc.pdf",
-   "build_prompt": "# Build: excalidraw‑quick‑diagram\n\nA tiny React app that turns a plain‑text description into an Excalidraw diagram and lets you download PNG/SVG.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Why this matters\nShows end‑to‑end mastery: parsing natural language, generating valid Excalidraw JSON, embedding the editor, and exporting assets – a full‑stack product rather than a static tutorial clone.\n\n## Scope\nBuild these:\n- React front‑end with @excalidraw/excalidraw component\n- Simple parser that maps keywords (flow, decision, start, end) to shapes\n- Export buttons for PNG and SVG using the built‑in `exportToBlob` API\n- Deployable on Vercel (no server‑side code)\n\nExplicitly do NOT build these:\n- No authentication or multi‑user collaboration\n- No custom shape libraries beyond the built‑in set\n- No enterprise Excalidraw+ features\n\n## Stack - use these exact versions\n- React 18\n- TypeScript\n- Vite\n- @excalidraw/excalidraw\n- TailwindCSS (optional)\n\n## Milestones - each must be verifiably done before the next\n1. **Setup project & embed editor**\n   - Done when: Running React app with an empty Excalidraw canvas.\n2. **Implement text‑to‑JSON parser**\n   - Done when: User can type a line like \"start → process → end\" and see corresponding shapes appear.\n3. **Add export buttons**\n   - Done when: Canvas can be saved as PNG or SVG with a single click.\n4. **Deploy to Vercel**\n   - Done when: Public URL that works offline (PWA support).\n\n## README must cover\n- Project Overview\n- Demo Screenshot / Live URL\n- Tech Stack\n- Installation (npm install, dev server)\n- Usage (how to type descriptions, export options)\n- Architecture (parser → JSON → Excalidraw component)\n- Deployment (Vercel steps)\n- Future Work (MCP, plugins)\n- License\n\n## Only after everything above works\n- Add MCP integration so Claude can edit the diagram via API.\n- Support custom colour palettes and roughness toggles.\n- Persist diagrams in localStorage and allow sharing via read‑only links.\n\n## Background\nExcalidraw is an open‑source, web‑based whiteboard that lets you draw hand‑sketch‑style diagrams on an infinite canvas. It ships as a React component (npm package @excalidraw/excalidraw) that can be embedded in any web app or run as a self‑hosted instance.\n\n## Known traps - handle these, do not rediscover them\n- Every element must include the required fields (type, id, x, y, width, height) – missing any throws at export time (source).\n- Arrow bindings require both startBinding/endBinding **and** the target shape’s boundElements array to be kept in sync (source).\n- Do not use custom hex colours; only colours listed in color‑palette.md are accepted (source).\n- Roughness > 0 gives a hand‑drawn look but can cause blurry edges; set roughness = 0 for technical diagrams (source).\n- Exporting via the CLI launches Chromium; non‑finite numbers (NaN, Infinity) or stringified numbers break the renderer (source).\n\n## Reference (checked and reachable)\n- Excalidraw Developer Docs: https://docs.excalidraw.com/\n- Excalidraw+ Documentation (API & MCP): https://plus.excalidraw.com/docs\n- GitHub Repository: https://github.com/excalidraw/excalidraw\n- Excalidraw developer docs: https://docs.excalidraw.com/\n- https://github.com/edoardob90/excalidraw-skills/blob/main/excalidraw/gotchas.md: https://github.com/edoardob90/excalidraw-skills/blob/main/excalidraw/gotchas.md\n- https://github.com/excalidraw/excalidraw: https://github.com/excalidraw/excalidraw\n- LinkedIn Talent Solutions: https://lnkd.in/dW9cYmFv\n- Excalidraw documentation | Excalidraw+ | Online whiteboard collaboration made easy: https://plus.excalidraw.com/docs\n- https://www.youtube.com/watch?v=KXbZcV6YV8U: https://www.youtube.com/watch?v=KXbZcV6YV8U\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. They get run before any of this is\n  published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/p/DdcDA1sN8eS/?stkn=eW01N3A0ZWM3bDds\nRough size: about 12 hours of work.",
+   "build_prompt": "# Build: excalidraw‑quick‑diagram\n\nA tiny React app that turns a plain‑text description into an Excalidraw diagram and lets you download PNG/SVG.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Why this matters\nShows end‑to‑end mastery: parsing natural language, generating valid Excalidraw JSON, embedding the editor, and exporting assets – a full‑stack product rather than a static tutorial clone.\n\n## Scope\nBuild these:\n- React front‑end with @excalidraw/excalidraw component\n- Simple parser that maps keywords (flow, decision, start, end) to shapes\n- Export buttons for PNG and SVG using the built‑in `exportToBlob` API\n- Deployable on Vercel (no server‑side code)\n\nExplicitly do NOT build these:\n- No authentication or multi‑user collaboration\n- No custom shape libraries beyond the built‑in set\n- No enterprise Excalidraw+ features\n\n## Stack - use these exact versions\n- React 18\n- TypeScript\n- Vite\n- @excalidraw/excalidraw\n- TailwindCSS (optional)\n\n## Milestones - each must be verifiably done before the next\n1. **Setup project & embed editor**\n   - Done when: Running React app with an empty Excalidraw canvas.\n2. **Implement text‑to‑JSON parser**\n   - Done when: User can type a line like \"start → process → end\" and see corresponding shapes appear.\n3. **Add export buttons**\n   - Done when: Canvas can be saved as PNG or SVG with a single click.\n4. **Deploy to Vercel**\n   - Done when: Public URL that works offline (PWA support).\n\n## README must cover\n- Project Overview\n- Demo Screenshot / Live URL\n- Tech Stack\n- Installation (npm install, dev server)\n- Usage (how to type descriptions, export options)\n- Architecture (parser → JSON → Excalidraw component)\n- Deployment (Vercel steps)\n- Future Work (MCP, plugins)\n- License\n\n## Only after everything above works\n- Add MCP integration so Claude can edit the diagram via API.\n- Support custom colour palettes and roughness toggles.\n- Persist diagrams in localStorage and allow sharing via read‑only links.\n\n## Background\nExcalidraw is an open‑source, web‑based whiteboard that lets you draw hand‑sketch‑style diagrams on an infinite canvas. It ships as a React component (npm package @excalidraw/excalidraw) that can be embedded in any web app or run as a self‑hosted instance.\n\n## Known traps - handle these, do not rediscover them\n- Every element must include the required fields (type, id, x, y, width, height) – missing any throws at export time (source).\n- Arrow bindings require both startBinding/endBinding **and** the target shape’s boundElements array to be kept in sync (source).\n- Do not use custom hex colours; only colours listed in color‑palette.md are accepted (source).\n- Roughness > 0 gives a hand‑drawn look but can cause blurry edges; set roughness = 0 for technical diagrams (source).\n- Exporting via the CLI launches Chromium; non‑finite numbers (NaN, Infinity) or stringified numbers break the renderer (source).\n\n## Reference (checked and reachable)\n- Excalidraw Developer Docs: https://docs.excalidraw.com/\n- Excalidraw+ Documentation (API & MCP): https://plus.excalidraw.com/docs\n- GitHub Repository: https://github.com/excalidraw/excalidraw\n- Excalidraw developer docs: https://docs.excalidraw.com/\n- https://github.com/edoardob90/excalidraw-skills/blob/main/excalidraw/gotchas.md: https://github.com/edoardob90/excalidraw-skills/blob/main/excalidraw/gotchas.md\n- https://github.com/excalidraw/excalidraw: https://github.com/excalidraw/excalidraw\n- LinkedIn Talent Solutions: https://lnkd.in/dW9cYmFv\n- Excalidraw documentation | Excalidraw+ | Online whiteboard collaboration made easy: https://plus.excalidraw.com/docs\n- https://www.youtube.com/watch?v=KXbZcV6YV8U: https://www.youtube.com/watch?v=KXbZcV6YV8U\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. They get run before any of this is\n  published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the, boasts, in today's, ever-evolving, at its core, robust and scalable, first-class, battle-tested, rock-solid, supercharge, effortlessly, in conclusion, let's explore, we'll explore, whether you're, look no further, the world of.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/p/DdcDA1sN8eS/?stkn=eW01N3A0ZWM3bDds\nRough size: about 12 hours of work.",
    "slide_ext": ".jpg"
   },
   {
@@ -1260,12 +1876,25 @@
     "action": [
      "watch"
     ],
+    "section": [
+     "to-watch/full-courses"
+    ],
     "topic": [
      "ai",
      "data science",
      "finetuning",
      "llm",
      "machine learning"
+    ]
+   },
+   "followup": {
+    "answer_html": "<p>Filed under To Watch &gt; Full Courses. A full pipeline course on fine-tuning LLMs: parameter-efficient methods (LoRA, QLoRA, DoRA), RLHF and DPO alignment, then hands-on work with Llama Factory, Unsloth, the OpenAI fine-tuning API and Vertex AI. This is the longest item in the queue: the last chapter marker sits past 11 hours (11:24:45), so it is a multi-session commitment, not something to fit in one sitting. It covers a subject none of the other courses touch, tuning model weights, as opposed to RAG's retrieval or agents' orchestration, so it is worth the time when there is an actual fine-tuning project to apply it to, but it is the one to schedule rather than start with given the length.</p>\n",
+    "answered": "fully",
+    "sources": [
+     {
+      "url": "https://www.youtube.com/watch?v=CcrC5zSv1iA",
+      "title": "Complete LLM Fine-Tuning: From Foundations to Advanced Alignment"
+     }
     ]
    },
    "links": [
@@ -1429,12 +2058,25 @@
     "action": [
      "watch"
     ],
+    "section": [
+     "to-watch/full-courses"
+    ],
     "topic": [
      "ai",
      "claude",
      "coding",
      "development",
      "productivity"
+    ]
+   },
+   "followup": {
+    "answer_html": "<p>This is filed under To Watch &gt; Full Courses. It is a hands-on walkthrough of the Claude Code tool, taught by Jeremy Morgan: setup, starting a first session, reading an existing codebase, building a Flask app from scratch, then code-quality and SOLID/error-handling audits. Runtime is about 4.5 hours, going by the last chapter marker (4:19:23). Of the four full courses in the queue, this is the odd one out: fine-tuning, RAG and agents each teach a distinct AI subject, while this one teaches a specific tool. Worth watching if Claude Code is part of day-to-day work; otherwise it can wait behind the subject courses.</p>\n",
+    "answered": "fully",
+    "sources": [
+     {
+      "url": "https://www.youtube.com/watch?v=gh2_PhgZGsM",
+      "title": "The Ultimate Guide to Mastering Anthropic's Claude Code"
+     }
     ]
    },
    "links": [
@@ -1475,7 +2117,7 @@
    "url": "https://www.freecodecamp.org/news/ai-agents-for-beginners/",
    "kind": "course",
    "action": "read",
-   "title": "Master AI Agents: From LLM Fundamentals to Multi-Agent Systems",
+   "title": "AI Agents For Beginners",
    "hook": "Learn to build autonomous AI agents and multi-agent systems in this comprehensive hands-on course.",
    "summary": "We just released an in-depth, hands-on video course on the freeCodeCamp.org YouTube channel about AI agents. Led by Mumshad Mannambeth, founder of CodeCloud, this full-length course is designed to take you from the absolute fundamentals of Large Language Models to building specialized, multi-agent systems. You will learn core concepts, the distinction between workflows and agents, and build four distinct agent personalities. We also cover production patterns, security, and a deep dive into the OpenClaw framework.",
    "owner": "Beau Carnes",
@@ -1547,6 +2189,9 @@
     "action": [
      "read"
     ],
+    "section": [
+     "to-watch/full-courses"
+    ],
     "topic": [
      "ai agents",
      "automation",
@@ -1555,7 +2200,35 @@
      "software architecture"
     ]
    },
-   "links": []
+   "followup": {
+    "answer_html": "<p>Filed under To Watch &gt; Full Courses. This is a freeCodeCamp article introducing a full course taught by Mumshad Mannambeth (CodeCloud): LLM fundamentals, the workflows-vs-agents distinction, building four agent personalities, production patterns (structured outputs, guardrails, human-in-the-loop, sandboxing), and a closing case study on the OpenClaw framework. The article states the course itself runs about 3 hours.</p>\n<p>The course video: <a href=\"https://youtu.be/AZDSpS5v57w\">AI Agents For Beginners - OpenClaw Case Study</a>. That is the video's actual title on YouTube, not the more elaborate title this item had been filed under.</p>\n<p>No OpenClaw repository link could be confirmed, either on the article page or in the video's description, so that piece is still missing. Distinct from the other full courses in that it covers agent orchestration specifically, separate from RAG and fine-tuning.</p>\n",
+    "answered": "fully",
+    "sources": [
+     {
+      "url": "https://www.freecodecamp.org/news/ai-agents-for-beginners/",
+      "title": "AI Agents For Beginners (freeCodeCamp News article)"
+     },
+     {
+      "url": "https://www.youtube.com/watch?v=AZDSpS5v57w",
+      "title": "AI Agents For Beginners - OpenClaw Case Study - YouTube"
+     }
+    ],
+    "extra_sections": [
+     {
+      "heading": "Where to start in the queue",
+      "detail": "The two concept explainers (StatQuest on word embeddings, 3Blue1Brown on transformers) are short and worth watching first, since the full courses assume that background. After that, the agents and RAG courses are the fastest full courses, about 3 hours each, and cover separate, practical topics. Fine-tuning is worth doing but is an 11+ hour commitment, so it is better saved for when there is an actual tuning project. The Claude Code course teaches the tool itself rather than an AI subject, so treat it as optional relative to the other three."
+     }
+    ],
+    "next_action": "Open https://youtu.be/AZDSpS5v57w to watch the course, and check its description for an OpenClaw repo link that could not be confirmed here."
+   },
+   "links": [
+    {
+     "url": "https://youtu.be/AZDSpS5v57w",
+     "label": "AI Agents For Beginners - OpenClaw Case Study (course video)",
+     "alive": true,
+     "page_title": ""
+    }
+   ]
   },
   {
    "id": "2152113dedecef67",
@@ -1655,12 +2328,25 @@
     "action": [
      "watch"
     ],
+    "section": [
+     "to-watch/concept-explainers"
+    ],
     "topic": [
      "machine learning",
      "natural language processing",
      "neural networks",
      "word embeddings",
      "word2vec"
+    ]
+   },
+   "followup": {
+    "answer_html": "<p>Filed under To Watch &gt; Concept Explainers. Josh Starmer builds a small neural network on screen to show how word embeddings emerge, then explains word2vec's continuous-bag-of-words and skip-gram strategies, and why negative sampling makes training practical at scale. No chapter timestamps are captured for this one, so treat it as a short explainer rather than a timed course. It gives conceptual grounding for the embedding steps used later in both the fine-tuning and RAG courses, and is short enough to watch before either.</p>\n",
+    "answered": "fully",
+    "sources": [
+     {
+      "url": "https://www.youtube.com/watch?v=viZrOnJclY0",
+      "title": "StatQuest: Understanding Word Embeddings and word2vec"
+     }
     ]
    },
    "links": [
@@ -1848,12 +2534,25 @@
     "action": [
      "watch"
     ],
+    "section": [
+     "to-watch/talks-panels"
+    ],
     "topic": [
      "ai",
      "anthropic",
      "llm",
      "machine learning",
      "prompt engineering"
+    ]
+   },
+   "followup": {
+    "answer_html": "<p>Filed under To Watch &gt; Talks &amp; Panels. A roundtable with four Anthropic practitioners (developer relations, applied AI, alignment, and prompt engineering) discussing how they actually write and refine prompts, covering personas, chain-of-thought, and enterprise versus research prompting. Runs about an hour, going by the last chapter marker (1:04:34). It is a discussion rather than instruction, so it complements the concept explainers and full courses instead of overlapping with them: nothing else in the queue covers prompting practice directly.</p>\n",
+    "answered": "fully",
+    "sources": [
+     {
+      "url": "https://www.youtube.com/watch?v=T9aRN5JkmL8",
+      "title": "Anthropic Experts Discuss the Evolution and Future of Prompt Engineering"
+     }
     ]
    },
    "links": [
@@ -1972,12 +2671,25 @@
     "action": [
      "watch"
     ],
+    "section": [
+     "to-watch/concept-explainers"
+    ],
     "topic": [
      "artificial intelligence",
      "large language models",
      "machine learning",
      "neural networks",
      "transformers"
+    ]
+   },
+   "followup": {
+    "answer_html": "<p>Filed under To Watch &gt; Concept Explainers. A visual, conceptual explanation of how LLMs predict text and how transformers use attention and feed-forward layers to process it in parallel. No timestamps are captured for this one, so it is best treated as a short explainer rather than a timed course. Together with the StatQuest video, this covers the two core concepts, embeddings and transformer architecture, that the longer courses assume are already understood; worth watching first among the seven if the fundamentals feel shaky.</p>\n",
+    "answered": "fully",
+    "sources": [
+     {
+      "url": "https://www.youtube.com/watch?v=LPZh9BOjkQs",
+      "title": "A Light Introduction to Large Language Models and Transformers"
+     }
     ]
    },
    "links": [
@@ -2190,6 +2902,9 @@
     "action": [
      "watch"
     ],
+    "section": [
+     "to-watch/full-courses"
+    ],
     "topic": [
      "ai",
      "artificial intelligence",
@@ -2197,6 +2912,16 @@
      "langchain",
      "llm",
      "rag"
+    ]
+   },
+   "followup": {
+    "answer_html": "<p>Filed under To Watch &gt; Full Courses. An end-to-end RAG walkthrough by Krish Naik: the ingestion pipeline (parsing, chunking, embedding, vector storage), the retrieval pipeline, then a modular LangChain implementation. Krish states in the video itself that it runs &quot;somewhere around 2.5 to 3 hours.&quot; It covers a distinct subject from fine-tuning and agents: grounding an LLM in an external knowledge base rather than tuning weights or building autonomous loops. Along with the agents course, this is one of the shorter full courses and a reasonable place to start if RAG is the immediate need.</p>\n",
+    "answered": "fully",
+    "sources": [
+     {
+      "url": "https://www.youtube.com/watch?v=o126p1QN_RI",
+      "title": "Comprehensive Retrieval-Augmented Generation (RAG) Crash Course and Implementation"
+     }
     ]
    },
    "links": [
@@ -2317,12 +3042,63 @@
     "action": [
      "watch"
     ],
+    "section": [
+     "to-watch"
+    ],
     "topic": [
      "artificial intelligence",
      "career transition",
      "data science",
      "llms",
      "machine learning"
+    ]
+   },
+   "followup": {
+    "answer_html": "<p>Yes. The slide prints a URL under each of the seven steps. Each was read directly off the image and checked against the resource it names. Four came out exactly as already recorded (steps 1, 2, 5, 7). Three had a mis-read character in the YouTube ID and needed correcting (steps 3, 4, 6). All seven are now confirmed; none are unconfirmed.</p>\n<p><strong>The 7 links, verified</strong></p>\n<ol>\n<li><strong>RAG: Complete Crash Course</strong> - <a href=\"https://www.youtube.com/watch?v=o126p1QN_RI\">Complete RAG Crash Course With LangChain In 2 Hours</a>, Krish Naik. About 2 hours 8 minutes. Free, no login. Matches the slide exactly, no correction needed.</li>\n<li><strong>LLMs, Explained Briefly</strong> - <a href=\"https://www.youtube.com/watch?v=LPZh9BOjkQs\">Large Language Models explained briefly</a>, 3Blue1Brown. About 7 minutes. Free, no login. Matches the slide exactly, no correction needed.</li>\n<li><strong>Prompt Engineering Deep Dive</strong> - <a href=\"https://www.youtube.com/watch?v=T9aRN5JkmL8\">AI prompt engineering: A deep dive</a>, Anthropic. About 1.5 hours. Free, no login. Corrected: first pass had ...T9arN5JKmL8..., the real video is ...T9aRN5JkmL8...</li>\n<li><strong>Embeddings &amp; Word2Vec</strong> - <a href=\"https://www.youtube.com/watch?v=viZrOnJclY0\">Word Embedding and Word2Vec, Clearly Explained!!!</a>, StatQuest with Josh Starmer. Duration not confirmed. Free, no login. Corrected: first pass had ...viZRonJCly0..., the real video is ...viZrOnJclY0...</li>\n<li><strong>AI Agents for Beginners</strong> - <a href=\"https://www.freecodecamp.org/news/ai-agents-for-beginners/\">AI Agents For Beginners</a>, Beau Carnes / freeCodeCamp. Article plus a companion video course of about 3 hours. Free, no login. Matches the slide exactly, no correction needed.</li>\n<li><strong>LLM Fine-Tuning Course</strong> - <a href=\"https://www.youtube.com/watch?v=CcrC5zSv1iA\">LLM Fine-Tuning Course, From Supervised FT to RLHF, LoRA, and Multimodal</a>, freeCodeCamp.org. 12 hours. Free, no login. Corrected: first pass had ...Ccrc5ZSv1iA..., the real video is ...CcrC5zSv1iA...</li>\n<li><strong>Claude Code for Beginners</strong> - <a href=\"https://www.youtube.com/watch?v=gh2_PhgZGsM\">Claude Code for Beginners Tutorial [Full Course]</a>, freeCodeCamp.org. About 4 hours. Free, no login. Matches the slide exactly, no correction needed.</li>\n</ol>\n",
+    "answered": "fully",
+    "sources": [
+     {
+      "url": "https://www.freecodecamp.org/news/ai-agents-for-beginners/",
+      "title": "AI Agents For Beginners - freeCodeCamp.org"
+     },
+     {
+      "url": "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=o126p1QN_RI&format=json",
+      "title": "YouTube oEmbed - o126p1QN_RI"
+     },
+     {
+      "url": "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=LPZh9BOjkQs&format=json",
+      "title": "YouTube oEmbed - LPZh9BOjkQs"
+     },
+     {
+      "url": "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=T9aRN5JkmL8&format=json",
+      "title": "YouTube oEmbed - T9aRN5JkmL8"
+     },
+     {
+      "url": "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=viZrOnJclY0&format=json",
+      "title": "YouTube oEmbed - viZrOnJclY0"
+     },
+     {
+      "url": "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=CcrC5zSv1iA&format=json",
+      "title": "YouTube oEmbed - CcrC5zSv1iA"
+     },
+     {
+      "url": "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=gh2_PhgZGsM&format=json",
+      "title": "YouTube oEmbed - gh2_PhgZGsM"
+     },
+     {
+      "url": "https://www.freecodecamp.org/news/learn-how-to-fine-tune-llms-in-12-hours/",
+      "title": "Learn how to fine-tune LLMs in 12 hours - freeCodeCamp.org"
+     },
+     {
+      "url": "https://www.freecodecamp.org/news/claude-code-for-beginners/",
+      "title": "Claude Code for Beginners - freeCodeCamp.org"
+     }
+    ],
+    "extra_sections": [
+     {
+      "heading": "The 7 links, verified",
+      "detail": "1. **RAG: Complete Crash Course** - [Complete RAG Crash Course With LangChain In 2 Hours](https://www.youtube.com/watch?v=o126p1QN_RI), Krish Naik. About 2 hours 8 minutes. Free, no login. Matches the slide exactly, no correction needed.\n2. **LLMs, Explained Briefly** - [Large Language Models explained briefly](https://www.youtube.com/watch?v=LPZh9BOjkQs), 3Blue1Brown. About 7 minutes. Free, no login. Matches the slide exactly, no correction needed.\n3. **Prompt Engineering Deep Dive** - [AI prompt engineering: A deep dive](https://www.youtube.com/watch?v=T9aRN5JkmL8), Anthropic. About 1.5 hours. Free, no login. Corrected: first pass had ...T9arN5JKmL8..., the real video is ...T9aRN5JkmL8...\n4. **Embeddings & Word2Vec** - [Word Embedding and Word2Vec, Clearly Explained!!!](https://www.youtube.com/watch?v=viZrOnJclY0), StatQuest with Josh Starmer. Duration not confirmed. Free, no login. Corrected: first pass had ...viZRonJCly0..., the real video is ...viZrOnJclY0...\n5. **AI Agents for Beginners** - [AI Agents For Beginners](https://www.freecodecamp.org/news/ai-agents-for-beginners/), Beau Carnes / freeCodeCamp. Article plus a companion video course of about 3 hours. Free, no login. Matches the slide exactly, no correction needed.\n6. **LLM Fine-Tuning Course** - [LLM Fine-Tuning Course, From Supervised FT to RLHF, LoRA, and Multimodal](https://www.youtube.com/watch?v=CcrC5zSv1iA), freeCodeCamp.org. 12 hours. Free, no login. Corrected: first pass had ...Ccrc5ZSv1iA..., the real video is ...CcrC5zSv1iA...\n7. **Claude Code for Beginners** - [Claude Code for Beginners Tutorial [Full Course]](https://www.youtube.com/watch?v=gh2_PhgZGsM), freeCodeCamp.org. About 4 hours. Free, no login. Matches the slide exactly, no correction needed."
+     }
     ]
    },
    "links": [
@@ -2333,8 +3109,8 @@
      "page_title": "AI Agents For Beginners"
     },
     {
-     "url": "https://www.youtube.com/watch?v=Ccrc5ZSv1iA",
-     "label": "LLM Fine-Tuning Course",
+     "url": "https://www.youtube.com/watch?v=CcrC5zSv1iA",
+     "label": "LLM Fine-Tuning Course (freeCodeCamp.org)",
      "alive": true,
      "page_title": ""
     },
@@ -2345,8 +3121,8 @@
      "page_title": ""
     },
     {
-     "url": "https://www.youtube.com/watch?v=T9arN5JKmL8",
-     "label": "Prompt Engineering Deep Dive",
+     "url": "https://www.youtube.com/watch?v=T9aRN5JkmL8",
+     "label": "Prompt Engineering Deep Dive (AI prompt engineering: A deep dive, Anthropic)",
      "alive": true,
      "page_title": ""
     },
@@ -2363,8 +3139,8 @@
      "page_title": ""
     },
     {
-     "url": "https://www.youtube.com/watch?v=viZRonJCly0",
-     "label": "Embeddings & Word2Vec",
+     "url": "https://www.youtube.com/watch?v=viZrOnJclY0",
+     "label": "Embeddings & Word2Vec (Word Embedding and Word2Vec, Clearly Explained!!!, StatQuest)",
      "alive": true,
      "page_title": ""
     }
@@ -2555,7 +3331,7 @@
    "action": "learn",
    "title": "Comprehensive Guide to Building Multi-Agent Systems with LangGraph",
    "hook": "Learn how to build stateful, multi-agent LLM applications using LangGraph's core concepts, state management, and tools.",
-   "summary": "This comprehensive 15-page guide covers everything you need to know about LangGraph, a multi-agent framework for LLMs. It starts with an introduction to graphs, nodes, and edges before diving deep into state management, building state graphs, integrating LLMs, and handling memory and persistence. Further sections explore human-in-the-loop workflows, tool calling, multi-agent systems, advanced graph patterns, error handling, and debugging. By the end, you will understand how to build resilient, production-ready AI applications with complex multi-step reasoning.",
+   "summary": "A 15-slide guide to LangGraph covering graphs, nodes, edges, state, building a first graph, wiring in an LLM, memory and persistence, human-in-the-loop, tool calling, multi-agent systems, advanced patterns and error handling. The cover slide's table of contents also lists Production Deployment, Use Cases & Real-world Apps, and Best Practices & Tips as topics 13-15, but the deck itself stops one slide earlier and never covers them.",
    "owner": "techyy_bandaa",
    "posted": "September 17, 2026",
    "slide_count": 15,
@@ -2823,7 +3599,8 @@
    "gate": {
     "gated": true,
     "how": "comment",
-    "keyword": "PDF"
+    "keyword": "PDF",
+    "advice": "Comment \"PDF\" on the post - the creator sends the link/file back."
    },
    "tags": {
     "action": [
@@ -2839,6 +3616,96 @@
      "python"
     ]
    },
+   "followup": {
+    "answer_html": "<p>You now have three things.</p>\n<ol>\n<li>\n<p>A commit-ready GitHub project called <strong>triage-desk</strong>: a customer-support agent built on LangGraph that classifies incoming messages, looks up orders, answers policy questions with a model, and pauses for a human to approve any refund over $50. It has typed state with reducers, a SQLite checkpointer so paused or crashed conversations resume where they left off, retries with backoff, timeouts, an error-handler fallback to a person, and a test suite (about 30 cases) that runs without an API key. <code>out/README.md</code> is the README, meant to be committed at the repository root as-is. <code>out/repo-files.md</code> holds every other file (pyproject.toml, LICENSE, .gitignore, .env.example, all source and test files) under its exact path - copy each block into place. Setup and a first run take under an hour (create a venv, <code>pip install -e &quot;.[dev]&quot;</code>, add an Anthropic key, run <code>pytest -q</code>, then <code>triage-desk chat</code>). Nothing in the repo has actually been run yet, so run the tests first and read the README's &quot;if you learned LangGraph from an older tutorial&quot; table before pushing.</p>\n</li>\n<li>\n<p>A study guide, <code>out/langgraph-study-guide.md</code> (delivered separately as a PDF), that walks through the carousel's own 14 topics in order, each with a short explanation, a verified current-code snippet, and an explicit note wherever the carousel's own code is wrong. It also answers the deck's four open questions from the official docs, adds the three topics the deck's table of contents promised but never covered, and closes with a one-week, day-by-day reading-and-building path. Working through it at an hour or two a day takes about a week; on day 7 you end with a working, traced, persistent, tool-using agent as a base for a real project.</p>\n</li>\n<li>\n<p>A correction to the deck itself: the version numbers in the earlier research note (<code>langgraph</code> 1.2.12, <code>langgraph-sdk</code> 0.4.5, <code>langgraph-checkpoint</code> 4.2.0) were flagged as unverified - they have now been checked directly against PyPI and GitHub releases and are correct, and the repo is pinned to them.</p>\n</li>\n</ol>\n<p>One thing needs you directly: this repo and guide are built from a slide-by-slide read of the carousel, not from the creator's original 15-page PDF. If you want that PDF, comment &quot;PDF&quot; on the post yourself - the creator's automation replies to comments, and nothing else can trigger it on your behalf.</p>\n<h3>What the deck actually covers</h3>\n<p>The carousel's cover slide lists 15 subtopics ending with &quot;13 Production Deployment,&quot; &quot;14 Use Cases &amp; Real-world Apps,&quot; and &quot;15 Best Practices &amp; Tips.&quot; None of those three exist in the deck - it ends at its own &quot;Page 14,&quot; which is topic 9 on its own list (Debugging &amp; Observability). The study guide fills that gap using the official deployment docs, so you're not missing anything by skipping the PDF for learning purposes - only for the creator's original wording and slide design.</p>\n<h3>Official docs used and confirmed reachable</h3>\n<ol>\n<li><a href=\"https://docs.langchain.com/oss/python/langgraph/overview\">LangGraph overview</a></li>\n<li><a href=\"https://docs.langchain.com/oss/python/langgraph/quickstart\">Quickstart</a></li>\n<li><a href=\"https://docs.langchain.com/oss/python/langgraph/graph-api\">Graph API</a></li>\n<li><a href=\"https://docs.langchain.com/oss/python/langgraph/persistence\">Persistence</a></li>\n<li><a href=\"https://docs.langchain.com/oss/python/langgraph/interrupts\">Interrupts</a></li>\n<li><a href=\"https://docs.langchain.com/oss/python/langgraph/workflows-agents\">Workflows and agents</a></li>\n<li><a href=\"https://docs.langchain.com/oss/python/langchain/agents\">Agents (create_agent)</a></li>\n<li><a href=\"https://docs.langchain.com/oss/python/migrate/langgraph-v1\">LangGraph v1 migration guide</a></li>\n<li><a href=\"https://docs.langchain.com/oss/python/langgraph/use-graph-api\">Use the graph API (retries, timeouts, caching)</a></li>\n<li><a href=\"https://docs.langchain.com/oss/python/langgraph/fault-tolerance\">Fault tolerance</a></li>\n<li><a href=\"https://docs.langchain.com/oss/python/langgraph/deploy\">Deployment</a></li>\n<li><a href=\"https://docs.langchain.com/oss/python/langgraph/errors/INVALID_CONCURRENT_GRAPH_UPDATE\">INVALID_CONCURRENT_GRAPH_UPDATE error page</a></li>\n<li><a href=\"https://docs.langchain.com/langsmith/observability-quickstart\">LangSmith observability quickstart</a></li>\n</ol>\n",
+    "answered": "fully",
+    "artifacts": [
+     {
+      "file": "readme.md",
+      "title": "triage-desk README",
+      "about": "Root README for the LangGraph portfolio project: setup, the graph diagram, a walkthrough demo, and an old-tutorial-to-current-API comparison table. Commit as Markdown.",
+      "kind": "md",
+      "pages": 0
+     },
+     {
+      "file": "repo-files.md",
+      "title": "triage-desk source files",
+      "about": "Every other file in the triage-desk repository (pyproject.toml, LICENSE, source and tests) under its exact path. Copy each block into place; keep as Markdown, not a PDF.",
+      "kind": "md",
+      "pages": 0
+     },
+     {
+      "file": "langgraph-study-guide.pdf",
+      "title": "LangGraph Study Guide",
+      "about": "A 14-topic learning path from the carousel's own order through to a working understanding of LangGraph, with corrected code, answered open questions, and a one-week build plan.",
+      "kind": "pdf",
+      "pages": 11
+     }
+    ],
+    "sources": [
+     {
+      "url": "https://docs.langchain.com/oss/python/langgraph/overview",
+      "title": "LangGraph overview - Docs by LangChain"
+     },
+     {
+      "url": "https://docs.langchain.com/oss/python/langgraph/quickstart",
+      "title": "Quickstart - Docs by LangChain"
+     },
+     {
+      "url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+      "title": "Graph API - Docs by LangChain"
+     },
+     {
+      "url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+      "title": "Persistence - Docs by LangChain"
+     },
+     {
+      "url": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+      "title": "Interrupts - Docs by LangChain"
+     },
+     {
+      "url": "https://docs.langchain.com/oss/python/langgraph/workflows-agents",
+      "title": "Workflows and agents - Docs by LangChain"
+     },
+     {
+      "url": "https://docs.langchain.com/oss/python/langchain/agents",
+      "title": "Agents - Docs by LangChain"
+     },
+     {
+      "url": "https://docs.langchain.com/oss/python/migrate/langgraph-v1",
+      "title": "LangGraph v1 migration guide - Docs by LangChain"
+     },
+     {
+      "url": "https://docs.langchain.com/oss/python/langgraph/use-graph-api",
+      "title": "Use the graph API - Docs by LangChain"
+     },
+     {
+      "url": "https://docs.langchain.com/oss/python/langgraph/fault-tolerance",
+      "title": "Fault tolerance - Docs by LangChain"
+     },
+     {
+      "url": "https://docs.langchain.com/oss/python/langgraph/deploy",
+      "title": "Deployment - Docs by LangChain"
+     },
+     {
+      "url": "https://docs.langchain.com/oss/python/langgraph/errors/INVALID_CONCURRENT_GRAPH_UPDATE",
+      "title": "INVALID_CONCURRENT_GRAPH_UPDATE - Docs by LangChain"
+     },
+     {
+      "url": "https://docs.langchain.com/langsmith/observability-quickstart",
+      "title": "LangSmith Observability quickstart - Docs by LangChain"
+     },
+     {
+      "url": "https://pypi.org/project/langgraph/",
+      "title": "langgraph on PyPI"
+     },
+     {
+      "url": "https://github.com/langchain-ai/langgraph/releases",
+      "title": "langchain-ai/langgraph releases"
+     }
+    ],
+    "next_action": "Comment \"PDF\" on the post to get the creator's original 15-page PDF; separately, run `pip install -e \".[dev]\"` and `pytest -q` in the triage-desk repo to confirm it installs and passes before pushing to GitHub."
+   },
    "links": [
     {
      "url": "https://deepwiki.com/langchain-ai/docs/2.2-langgraph-framework-documentation",
@@ -2853,8 +3720,32 @@
      "page_title": ""
     },
     {
+     "url": "https://docs.langchain.com/oss/python/langgraph/deploy",
+     "label": "Deployment",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+     "label": "Graph API",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+     "label": "Interrupts",
+     "alive": true,
+     "page_title": ""
+    },
+    {
      "url": "https://docs.langchain.com/oss/python/langgraph/overview",
      "label": "",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+     "label": "Persistence",
      "alive": true,
      "page_title": ""
     },
@@ -2867,7 +3758,7 @@
    ],
    "media_id": "0d895b2b9d4ca82d",
    "pdf_file": "doc.pdf",
-   "build_prompt": "# Build: triage-guard-agent\n\nA resilient customer support triage agent with conditional tool execution, state persistence, and human-in-the-loop interrupt approval for refund actions.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Why this matters\nGoes beyond basic ReAct chatbot clones by implementing deterministic guardrail routing, checkpoint-backed state persistence, and explicit human-in-the-loop interrupts for sensitive transactions.\n\n## Scope\nBuild these:\n- TypedDict StateGraph\n- arithmetic/order search tools\n- SQLite checkpointer for session persistence\n- conditional edge routing\n- human-in-the-loop approval interrupt for actions over $50\n\nExplicitly do NOT build these:\n- Custom frontend UI\n- multi-tenant authentication\n- custom model fine-tuning\n\n## Stack - use these exact versions\n- Python 3.11+\n- langgraph>=1.2.12\n- langchain-core\n- langgraph-checkpoint-sqlite\n- langchain-anthropic or langchain-openai\n\n## Milestones - each must be verifiably done before the next\n1. **Define State and Reducers**\n   - Done when: A TypedDict state schema with Annotated[list, operator.add] messages and metadata counters.\n2. **Build Deterministic & Agentic Nodes**\n   - Done when: LLM model node bound with search and calculation tools, plus a tool execution node.\n3. **Add Conditional Routing & Persistence**\n   - Done when: Conditional edges that route to tool nodes or terminate at END, compiled with an in-memory or SQLite checkpointer.\n4. **Implement Human-in-the-Loop Interrupt**\n   - Done when: The graph pauses execution using interrupt() whenever an order refund exceeds a set threshold, awaiting external review.\n\n## README must cover\n- Project Overview & Architecture Diagram (Mermaid graph)\n- Key Engineering Concepts (Pregel cycles, Reducers, Durable State, Interrupts)\n- Prerequisites and Environment Setup\n- Step-by-Step Execution Guide (CLI simulation with human approval demo)\n- Testing & Persistence Validation\n- Future Roadmap\n\n## Only after everything above works\n- Migrate checkpointer backend from SQLite to PostgreSQL using langgraph-checkpoint-postgres.\n- Add subgraphs for modular routing between billing and technical diagnostics.\n- Attach LangSmith tracing to monitor execution super-steps and evaluate latency.\n\n## Background\nLangGraph is a low-level orchestration runtime and framework for building stateful, multi-actor LLM applications using graph architectures. Inspired by Google's Pregel system, it coordinates agents and deterministic code as nodes connected by edges, executing in discrete super-steps with explicit message-passing. It provides native persistence, cyclical execution loops, and first-class human-in-the-loop controls without abstracting away model prompts or code.\n\n## Known traps - handle these, do not rediscover them\n- State overwriting: Failing to use channel reducers like Annotated[list[AnyMessage], operator.add] causes nodes to overwrite the message history instead of appending to it.\n- Missing compilation: Forgetting to call .compile() on the StateGraph builder before attempting to invoke or stream executions.\n- Infinite loops in conditional edges: Not configuring a clean base case or terminal condition routing to END in conditional routing functions.\n- Confusing the Graph API with the Functional API: LangGraph supports both StateGraph (Graph API) and function-based workflows (Functional API); mixing mental models can cause state synchronization bugs.\n\n## Reference (checked and reachable)\n- LangGraph Overview - Docs by LangChain: https://docs.langchain.com/oss/python/langgraph/overview\n- LangGraph Quickstart - Docs by LangChain: https://docs.langchain.com/oss/python/langgraph/quickstart\n- LangGraph Framework Documentation | langchain-ai/docs | DeepWiki: https://deepwiki.com/langchain-ai/docs/2.2-langgraph-framework-documentation\n- https://docs.langchain.com/: https://docs.langchain.com/\n- https://docs.langchain.com/oss/python/langgraph/overview: https://docs.langchain.com/oss/python/langgraph/overview\n- https://docs.langchain.com/oss/python/langgraph/quickstart: https://docs.langchain.com/oss/python/langgraph/quickstart\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. They get run before any of this is\n  published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/p/DdZQsecgKqv/?img_index=7&stkn=ZHkweDQyYWJwNXg=\nRough size: about 8 hours of work.",
+   "build_prompt": "# Build: triage-guard-agent\n\nA resilient customer support triage agent with conditional tool execution, state persistence, and human-in-the-loop interrupt approval for refund actions.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Why this matters\nGoes beyond basic ReAct chatbot clones by implementing deterministic guardrail routing, checkpoint-backed state persistence, and explicit human-in-the-loop interrupts for sensitive transactions.\n\n## Scope\nBuild these:\n- TypedDict StateGraph\n- arithmetic/order search tools\n- SQLite checkpointer for session persistence\n- conditional edge routing\n- human-in-the-loop approval interrupt for actions over $50\n\nExplicitly do NOT build these:\n- Custom frontend UI\n- multi-tenant authentication\n- custom model fine-tuning\n\n## Stack - use these exact versions\n- Python 3.11+\n- langgraph>=1.2.12\n- langchain-core\n- langgraph-checkpoint-sqlite\n- langchain-anthropic or langchain-openai\n\n## Milestones - each must be verifiably done before the next\n1. **Define State and Reducers**\n   - Done when: A TypedDict state schema with Annotated[list, operator.add] messages and metadata counters.\n2. **Build Deterministic & Agentic Nodes**\n   - Done when: LLM model node bound with search and calculation tools, plus a tool execution node.\n3. **Add Conditional Routing & Persistence**\n   - Done when: Conditional edges that route to tool nodes or terminate at END, compiled with an in-memory or SQLite checkpointer.\n4. **Implement Human-in-the-Loop Interrupt**\n   - Done when: The graph pauses execution using interrupt() whenever an order refund exceeds a set threshold, awaiting external review.\n\n## README must cover\n- Project Overview & Architecture Diagram (Mermaid graph)\n- Key Engineering Concepts (Pregel cycles, Reducers, Durable State, Interrupts)\n- Prerequisites and Environment Setup\n- Step-by-Step Execution Guide (CLI simulation with human approval demo)\n- Testing & Persistence Validation\n- Future Roadmap\n\n## Only after everything above works\n- Migrate checkpointer backend from SQLite to PostgreSQL using langgraph-checkpoint-postgres.\n- Add subgraphs for modular routing between billing and technical diagnostics.\n- Attach LangSmith tracing to monitor execution super-steps and evaluate latency.\n\n## Background\nLangGraph is a low-level orchestration runtime and framework for building stateful, multi-actor LLM applications using graph architectures. Inspired by Google's Pregel system, it coordinates agents and deterministic code as nodes connected by edges, executing in discrete super-steps with explicit message-passing. It provides native persistence, cyclical execution loops, and first-class human-in-the-loop controls without abstracting away model prompts or code.\n\n## Known traps - handle these, do not rediscover them\n- State overwriting: Failing to use channel reducers like Annotated[list[AnyMessage], operator.add] causes nodes to overwrite the message history instead of appending to it.\n- Missing compilation: Forgetting to call .compile() on the StateGraph builder before attempting to invoke or stream executions.\n- Infinite loops in conditional edges: Not configuring a clean base case or terminal condition routing to END in conditional routing functions.\n- Confusing the Graph API with the Functional API: LangGraph supports both StateGraph (Graph API) and function-based workflows (Functional API); mixing mental models can cause state synchronization bugs.\n\n## Reference (checked and reachable)\n- LangGraph Overview - Docs by LangChain: https://docs.langchain.com/oss/python/langgraph/overview\n- LangGraph Quickstart - Docs by LangChain: https://docs.langchain.com/oss/python/langgraph/quickstart\n- LangGraph Framework Documentation | langchain-ai/docs | DeepWiki: https://deepwiki.com/langchain-ai/docs/2.2-langgraph-framework-documentation\n- https://docs.langchain.com/: https://docs.langchain.com/\n- https://docs.langchain.com/oss/python/langgraph/deploy: https://docs.langchain.com/oss/python/langgraph/deploy\n- https://docs.langchain.com/oss/python/langgraph/graph-api: https://docs.langchain.com/oss/python/langgraph/graph-api\n- https://docs.langchain.com/oss/python/langgraph/interrupts: https://docs.langchain.com/oss/python/langgraph/interrupts\n- https://docs.langchain.com/oss/python/langgraph/overview: https://docs.langchain.com/oss/python/langgraph/overview\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. They get run before any of this is\n  published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the, boasts, in today's, ever-evolving, at its core, robust and scalable, first-class, battle-tested, rock-solid, supercharge, effortlessly, in conclusion, let's explore, we'll explore, whether you're, look no further, the world of.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/p/DdZQsecgKqv/?img_index=7&stkn=ZHkweDQyYWJwNXg=\nRough size: about 8 hours of work.",
    "slide_ext": ".webp"
   }
  ],

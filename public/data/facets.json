@@ -51,7 +51,33 @@
   "python": 1
  },
  "by_place": {},
+ "sections": [
+  {
+   "id": "to-watch",
+   "name": "To Watch",
+   "parent": "",
+   "count": 9
+  },
+  {
+   "id": "to-watch/concept-explainers",
+   "name": "Concept Explainers",
+   "parent": "to-watch",
+   "count": 3
+  },
+  {
+   "id": "to-watch/full-courses",
+   "name": "Full Courses",
+   "parent": "to-watch",
+   "count": 4
+  },
+  {
+   "id": "to-watch/talks-panels",
+   "name": "Talks & Panels",
+   "parent": "to-watch",
+   "count": 1
+  }
+ ],
  "by_status": {},
  "gated": 2,
- "dead_links": 16
+ "dead_links": 14
 }

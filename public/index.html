@@ -212,6 +212,30 @@ ul.plain li::before{content:'';position:absolute;left:0;top:11px;width:5px;heigh
   font-family:var(--mono);font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase}
 .about code{font-family:var(--mono);font-size:11px;color:var(--bone-dim)}
 .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:60;background:var(--ash-3);border:1px solid var(--ash-4);border-radius:7px;padding:11px 18px;font-size:13px;box-shadow:0 12px 32px rgba(0,0,0,.5)}
+/* subsections sit under their section, one step in */
+.chip.sub{padding-left:24px;font-size:12.5px}
+/* what the follow-up produced */
+.badge{font-family:var(--mono);font-size:10px;padding:2.5px 7px;border-radius:3px;background:rgba(75,163,199,.16);color:#8ccbe6}
+.badge.part{background:rgba(255,160,51,.15);color:var(--ember-hot)}
+.badge.busy{background:rgba(255,107,26,.14);color:var(--ember-hot);animation:pulse 1.1s infinite}
+.answer{font-size:14px;color:var(--bone-dim);line-height:1.6}
+.answer p,.answer ul,.answer ol,.answer table,.answer pre{margin:0 0 10px}
+.answer ul,.answer ol{padding-left:20px}
+.answer li{margin:3px 0}
+.answer h1,.answer h2,.answer h3,.answer h4{font-size:14.5px;color:var(--bone);margin:14px 0 6px;font-weight:600}
+.answer strong{color:var(--bone)}
+.answer code{font-family:var(--mono);font-size:12px;background:var(--ash-2);padding:1px 5px;border-radius:3px}
+.answer pre{background:var(--ash-0);border:1px solid var(--rule);border-radius:6px;padding:10px;overflow:auto}
+.answer table{border-collapse:collapse;width:100%;font-size:12.5px;display:block;overflow-x:auto}
+.answer th,.answer td{border:1px solid var(--rule);padding:6px 8px;text-align:left;vertical-align:top}
+.answer th{color:var(--bone);background:var(--ash-2)}
+.file{display:flex;gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--rule);font-size:13.5px}
+.file:last-child{border-bottom:none}
+.file .what{font-size:12px;color:var(--bone-faint)}
+.pick{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:var(--bone-dim);padding:5px 0}
+.pick input{margin-top:3px;accent-color:var(--ember)}
+.pick b{color:var(--bone);font-weight:600}
+.pick span.n{font-family:var(--mono);font-size:11px;color:var(--bone-faint);white-space:nowrap}
 @media(max-width:840px){
   .shell{grid-template-columns:1fr}
   .rail{position:static;height:auto;border-right:none;border-bottom:1px solid var(--rule)}
@@ -295,6 +319,9 @@ async function api(url, opts){
       for(const f of ['action','topic','place']){
         const v = p.get(f); if(v) out = out.filter(i => ((i.tags||{})[f]||[]).includes(v));
       }
+      // A section includes everything filed under its subsections.
+      const sec = p.get('section');
+      if(sec) out = out.filter(i => ((i.tags||{}).section||[]).some(v => v===sec || v.startsWith(sec+'/')));
       const q = (p.get('q')||'').toLowerCase().trim();
       if(q) out = out.filter(i => JSON.stringify(i).toLowerCase().includes(q));
       return {items: out, jobs: {}};
@@ -335,12 +362,13 @@ async function load(){
 async function health(){
   try{
     const h = await api('/api/health');
-    const q = h.quota||{};
-    const lite = (q.models||[]).find(m=>m.model.includes('3.5-flash-lite'))||{};
+    const qm = (h.quota||{}).models||[];
+    // Every rung in the ladders together: reads left today out of the budget.
+    const left = qm.reduce((a,m)=>a+(m.left||0),0), budget = qm.reduce((a,m)=>a+(m.budget||0),0);
     $('#meter').innerHTML = `
       <div class="row"><span><span class="dot ${h.gemini?'on':'off'}"></span>gemini</span><b>${h.gemini?'ready':'down'}</b></div>
       <div class="row"><span><span class="dot ${h.ollama?'on':'off'}"></span>ollama</span><b>${(h.models||[]).length} models</b></div>
-      <div class="row"><span>free today</span><b>${lite.left??'-'} / ${lite.budget??'-'}</b></div>`;
+      <div class="row"><span>free calls left</span><b>${qm.length?left+' / '+budget:'-'}</b></div>`;
   }catch{ $('#meter').innerHTML = `<div class="row"><span><span class="dot off"></span>server</span><b>unreachable</b></div>`; }
 }
 
@@ -362,7 +390,14 @@ function renderFacets(){
         <span class="swatch"></span><span>${esc(k)}</span><span class="n">${v}</span>
       </button>`).join('') + `</div>`;
   };
-  $('#facets').innerHTML =
+  // Sections are the ones I name myself, with their subsections under them.
+  const tree = f.sections||[];
+  const sections = tree.length ? `<div class="facet"><h2>Sections</h2>` + tree.map(s=>`
+      <button class="chip ${s.parent?'sub':''}" data-facet="section" data-val="${esc(s.id)}"
+        aria-pressed="${state.filters.section===s.id}">
+        <span class="swatch"></span><span>${esc(s.name)}</span><span class="n">${s.count}</span>
+      </button>`).join('') + `</div>` : '';
+  $('#facets').innerHTML = sections +
     group('Do what', 'action', f.by_action) +
     group('Stage', 'status', f.by_status, 6) +
     group('About', 'topic', f.by_topic, 16) +
@@ -416,17 +451,31 @@ function renderShelf(){
 function tile(i){
   const act = (i.tags?.action||[])[0] || i.action || 'reference';
   const topics = (i.tags?.topic||[]).slice(0,4);
-  const gate = i.gate && i.gate.gated ? `<span class="gate">comment "${esc(i.gate.keyword||'?')}"</span>` : '';
+  const gate = !(i.gate && i.gate.gated) ? ''
+    : i.gate.how === 'link_in_bio' ? `<span class="gate">link in bio</span>`
+    : `<span class="gate">comment "${esc(i.gate.keyword||'?')}"</span>`;
   const dots = i.link_count ? `<span class="linkdots" title="${i.link_count} links, ${i.dead_links} dead">` +
       Array.from({length:Math.min(i.link_count,7)},(_,k)=>`<span class="ld ${k<i.dead_links?'dead':''}"></span>`).join('') + `</span>` : '';
   const job = state.jobs[i.id];
   const firing = job && (job.stage==='working'||job.stage==='queued');
+  // Locally the list carries a summary of the follow-up; the published copy
+  // carries the follow-up itself. Either says whether the ask was answered.
+  const c = i.fu || {}, fu = i.followup || {};
+  const answered = c.answered || fu.answered || '';
+  const nfiles = c.artifacts || (fu.artifacts||[]).length || 0;
+  const busy = (job && job.stage==='followup') || c.state==='working';
+  const badge = busy ? `<span class="badge busy">following up</span>`
+    : answered==='fully' ? `<span class="badge">answered</span>`
+    : answered==='partly' ? `<span class="badge part">partly answered</span>`
+    : answered==='no' ? `<span class="badge part">not answered</span>` : '';
+  const files = nfiles ? `<span class="badge">${nfiles} file${nfiles===1?'':'s'}</span>` : '';
   return `<button class="tile ${i.urgent?'hot':''} ${firing?'firing':''}" data-id="${i.id}">
     <span class="kind ${esc(act)}">${esc(act)}</span>
     <div class="body">
       <h3>${esc(i.title || i.url)}</h3>
       ${i.hook?`<div class="hook">${esc(i.hook)}</div>`:''}
       <div class="metaline">
+        ${badge}${files}
         ${gate}
         ${topics.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}
         ${i.slide_count?`<span class="tag">${i.slide_count} slides</span>`:''}
@@ -446,6 +495,8 @@ async function open(id){
   catch(e){ $('.drawer').innerHTML = `<button class="x" onclick="close()">✕</button>
       <div class="state err"><h3>Could not load</h3><p>${esc(e.message)}</p></div>`; return; }
   $('.drawer').innerHTML = detail(it);
+  // Links inside an answer open beside the page rather than replacing it.
+  document.querySelectorAll('.drawer .answer a').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; });
   document.addEventListener('keydown', escClose);
 }
 function escClose(e){ if(e.key==='Escape') close(); }
@@ -458,10 +509,13 @@ function detail(it){
   const slides = (n._slides||[]);
   const S = (t,b) => b ? `<div class="sec"><h4>${t}</h4>${b}</div>` : '';
 
-  const gateBox = g.gated ? `<div class="sec"><h4>The payload is gated</h4>
-    <div class="cmd">${esc(g.advice||'')}</div>
-    <p class="warn">Kiln found the ask in the caption. The creator sends the file
-    only after you comment - no scraper can reach it, so this is the real next step.</p></div>` : '';
+  const bio = g.how === 'link_in_bio';
+  const gateBox = !g.gated ? '' : `<div class="sec"><h4>The payload is gated</h4>
+    <div class="cmd">${esc(g.advice || (bio ? "The payload is in the creator's bio link, not the post."
+                                            : 'Comment "' + (g.keyword||'?') + '" on the post.'))}</div>
+    <p class="warn">${bio
+      ? "The post points to a link in the creator's profile. Kiln reads the post only, so the profile is the next step."
+      : 'The creator sends the file only after you comment. No scraper can reach it, so this is the real next step.'}</p></div>`;
 
   const proj = e.project ? `<div class="sec"><h4>Project you could ship</h4>
     <h3 style="font-size:17px;margin-bottom:5px">${esc(e.project.name||'')}</h3>
@@ -486,7 +540,7 @@ function detail(it){
       : 'Copy this into any chat and you get the project back.'}</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin:11px 0">
       <button class="btn run" onclick="doBuild('${it.id}','copy')">Copy the prompt</button>
-      ${LOCAL ? `<button class="btn" onclick="doBuild('${it.id}','local')">Build it on the next 9am run</button>` : ''}
+      ${LOCAL ? `<button class="btn" onclick="doBuild('${it.id}','local')">Queue it</button>` : ''}
     </div>
     <div id="buildOut"></div></div>` : '';
 
@@ -529,8 +583,28 @@ function detail(it){
         <span class="num">${k+1}${foc?' < you':''}</span></a>`;
     }).join('')}</div></div>` : '';
 
-  const secs = (n.sections||[]).length ? `<div class="sec"><h4>What it actually says</h4>${
-    (n.sections||[]).map(s=>`<div class="step"><b>${esc(s.heading||'')}</b><span>${esc(s.detail||'')}</span></div>`).join('')}</div>` : '';
+  // What the follow-up produced. The same shape locally and on the site,
+  // because the server builds it with the publisher's own function.
+  const fu = it.followup || {}, c = it.fu_local || {};
+  const fileHref = f => STATIC ? `media/${esc(it.id)}/files/${esc(f)}` : `/artifacts/${esc(it.id)}/${esc(f)}`;
+  const heading = {fully:'The answer', partly:'The answer, in part', no:'Not answered'}[fu.answered] || 'What the follow-up added';
+  const fuFiles = (fu.artifacts||[]).length ? `<h4 style="margin-top:14px">Files</h4>${
+    fu.artifacts.map(a=>`<div class="file"><span class="pill">${esc(a.kind||'file')}</span>
+      <span><a href="${fileHref(a.file)}" target="_blank" rel="noopener">${esc(a.title||a.file)}</a>
+      ${a.pages?` <span class="what">${a.pages} page${a.pages===1?'':'s'}</span>`:''}
+      ${a.about?`<br><span class="what">${esc(a.about)}</span>`:''}</span></div>`).join('')}` : '';
+  const fuSources = (fu.sources||[]).length ? `<h4 style="margin-top:14px">Where this came from</h4>${
+    fu.sources.slice(0,14).map(s=>`<div class="linkrow"><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title||s.url)}</a></div>`).join('')}` : '';
+  const working = !STATIC && (c.state==='working' || (state.jobs[it.id]||{}).stage==='followup');
+  const followSec = (fu.answer_html || (fu.artifacts||[]).length || working) ? `<div class="sec"><h4>${working?'Following up on this now':heading}</h4>
+    ${fu.answer_html?`<div class="answer">${fu.answer_html}</div>`:''}
+    ${!STATIC && c.missing?`<p class="warn">Not done: ${esc(c.missing)}</p>`:''}
+    ${fu.next_action?`<p class="warn">Next: ${esc(fu.next_action)}</p>`:''}
+    ${fuFiles}${fuSources}</div>` : '';
+
+  const allSecs = (n.sections||[]).concat(fu.extra_sections||[]);
+  const secs = allSecs.length ? `<div class="sec"><h4>What it actually says</h4>${
+    allSecs.map(s=>`<div class="step"><b>${esc(s.heading||'')}</b><span>${esc(s.detail||'')}</span></div>`).join('')}</div>` : '';
 
   const more = e.what_it_is ? `<div class="sec"><h4>Beyond the post</h4>
     <dl class="kv">
@@ -569,6 +643,13 @@ function detail(it){
     </dl></div>` : `<div class="sec"><h4>How this was made</h4><dl class="kv">
       <dt>Source</dt><dd><a href="${esc(it.url)}" target="_blank">original post ↗</a> ${it.owner?'| @'+esc(it.owner):''}</dd>
       <dt>Models</dt><dd>${esc(((n._meta||{}).passes||[]).map(p=>p.model).join(', ')||'-')}${e._meta?', '+esc(e._meta.model||''):''}</dd>
+      ${c.state?`<dt>Follow-up</dt><dd>${esc(c.state)}${c.verdict==='nothing_to_do'?', nothing to add':''}${c.why?': '+esc(c.why):''}</dd>`:''}
+      ${(c.tasks||[]).length?`<dt>It ran</dt><dd>${[
+          ...(c.planner||[]).slice(-1).map(p=>`planner ${esc(p.model)} ${esc(p.effort)}`),
+          ...c.tasks.map(t=>`${esc(t.id)} ${esc(t.model||'')} ${esc(t.effort||'')}${t.ok===false?' (failed)':''}: ${esc(t.goal||'')}`),
+          ...(c.final||[]).slice(-1).map(p=>`final ${esc(p.model)} ${esc(p.effort)}`)
+        ].join('<br>')}</dd>`:''}
+      ${c.last_error?`<dt>Last problem</dt><dd style="color:var(--ash-red)">${esc(c.last_error)}</dd>`:''}
       ${it.error?`<dt>Note</dt><dd style="color:var(--ash-red)">${esc(it.error)}</dd>`:''}
     </dl>
     <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
@@ -577,99 +658,24 @@ function detail(it){
       <button class="btn" onclick="reprocess('${it.id}')">re-fire</button>
     </div></div>`;
 
+  const asked = it.user_do || it.user_note;
   return `<button class="x" onclick="close()" aria-label="Close">✕</button>
     <h2>${esc(it.title||it.url)}</h2>
     <p class="lede">${esc(it.hook||'')}</p>
-    ${it.user_do?`<p class="pill">you asked: ${esc(it.user_do)}</p>`:''}
-    ${gateBox}${jobsec}${verdict}${proj}${build}${inst}${more}${secs}${links}${media}${cites}${prov}`;
+    ${asked?`<p class="pill">you asked: ${esc(asked)}</p>`:''}
+    ${gateBox}${followSec}${jobsec}${verdict}${proj}${build}${inst}${more}${secs}${links}${media}${cites}${prov}`;
 }
 
 /* ---------- build ---------- */
-// Mirrors kiln/jobs.py build_prompt. Duplicated deliberately: the published
-// page has no server, and a copy button that only works on localhost is
-// useless when you are on your phone looking at the site.
-const cleanTxt = s => String(s == null ? '' : s)
-  .replace(/\s*(?:\[\d+\])+/g, '').replace(/^\s*\d+[.)]\s*/, '').trim();
-
-function splitScope(scope){
-  if(scope && typeof scope === 'object')
-    return [scope.in || [], scope.out || []];
-  const text = String(scope || '');
-  if(!text.trim()) return [[], []];
-  const m = text.split(/\bOUT\s*[:\-]/i);
-  const head = m[0].replace(/^\s*IN\s*[:\-]\s*/i, '');
-  const items = c => c.split(/[;\n]|,(?![^(]*\))/)
-      .map(x => x.replace(/^[\s.]+|[\s.]+$/g, '')).filter(x => x.length > 2);
-  return [items(head), items(m[1] || '')];
-}
-
-function buildPromptJS(it){
-  const e = it.enrich || {}, p = e.project || {};
-  const [sin, sout] = splitScope(p.scope);
-  const L = [];
-  L.push(`# Build: ${p.name || it.title || 'project'}`, '');
-  if(p.one_liner) L.push(cleanTxt(p.one_liner), '');
-  L.push('I want a working repository I can push to GitHub. Build it completely,',
-         'runnable code, tests where they make sense, and a README.', '');
-  if(p.why_portfolio_worthy) L.push('## Why this matters', cleanTxt(p.why_portfolio_worthy), '');
-  if(sin.length || sout.length){
-    L.push('## Scope');
-    if(sin.length){ L.push('Build these:'); sin.forEach(x => L.push(`- ${cleanTxt(x)}`)); }
-    if(sout.length){ L.push('', 'Explicitly do NOT build these:');
-                     sout.forEach(x => L.push(`- ${cleanTxt(x)}`)); }
-    L.push('');
-  }
-  if((p.stack||[]).length){
-    L.push('## Stack, use these exact versions');
-    p.stack.forEach(s => L.push(`- ${cleanTxt(s)}`)); L.push('');
-  }
-  if((p.milestones||[]).length){
-    L.push('## Milestones, each must be verifiably done before the next');
-    p.milestones.forEach((m, i) => {
-      L.push(`${i+1}. **${cleanTxt(m.step)}**`);
-      if(m.outcome) L.push(`   - Done when: ${cleanTxt(m.outcome)}`);
-    });
-    L.push('');
-  }
-  if((p.readme_outline||[]).length){
-    L.push('## README must cover');
-    p.readme_outline.forEach(s => L.push(`- ${cleanTxt(s)}`)); L.push('');
-  }
-  if((p.stretch||[]).length){
-    L.push('## Only after everything above works');
-    p.stretch.forEach(s => L.push(`- ${cleanTxt(s)}`)); L.push('');
-  }
-  if(e.what_it_is) L.push('## Background', cleanTxt(e.what_it_is), '');
-  if((e.gotchas||[]).length){
-    L.push('## Known traps, handle these rather than rediscovering them');
-    e.gotchas.forEach(g => L.push(`- ${cleanTxt(g)}`)); L.push('');
-  }
-  const live = (it.links||[]).filter(l => l.alive);
-  const docs = (e.official_docs||[]).filter(d => d && d.url);
-  if(live.length || docs.length){
-    L.push('## Reference');
-    docs.slice(0,6).forEach(d => L.push(`- ${d.title || 'doc'}: ${d.url}`));
-    live.slice(0,6).forEach(l => L.push(`- ${l.page_title || l.url}: ${l.url}`));
-    L.push('');
-  }
-  L.push('## How I want it delivered',
-         '- A single repository, ready to git init and push.',
-         '- Pin every dependency to the versions above.',
-         '- A README that explains what it does and how to run it, written plainly.',
-         '- No placeholder code and no TODO stubs. If something is out of scope,',
-         '  leave it out rather than stubbing it.', '');
-  L.push(`Source this came from: ${it.url || ''}`);
-  if(p.est_hours) L.push(`Rough size: about ${p.est_hours} hours of work.`);
-  return L.join('\n');
-}
-
+// The prompt comes with the item, written by kiln/jobs.py: the server
+// adds it locally and the publisher ships it with the site. The page
+// used to keep its own copy of the builder, and the two had drifted.
 async function doBuild(id, target){
   const out = document.getElementById('buildOut');
   if(STATIC || target === 'copy'){
     const it = STATIC ? (_cache.items||[]).find(x => x.id === id) : await api('/api/item/'+id);
-    // The publisher ships the prompt, so there is one source of truth.
-    // buildPromptJS is only a fallback for items published before that.
-    const prompt = it.build_prompt || buildPromptJS(it);
+    const prompt = it.build_prompt || '';
+    if(!prompt){ toast('no build prompt on this item'); return; }
     try{ await navigator.clipboard.writeText(prompt); toast('prompt copied'); }
     catch{ toast('select the text below and copy'); }
     out.innerHTML = `<div class="warn">Paste this into any chat. It stands on its own.</div>
@@ -695,10 +701,10 @@ async function doBuildServer(id, target){
       out.innerHTML = `<div class="warn">${again} as <code>${esc(j.id)}</code>.</div>
         <div class="out">${esc(j.file || '')}
 
-It builds on the next 9am run, three at a time. Nothing builds at 9pm.
-When it finishes, it gets reviewed, given a readme, and pushed as a
-public repo. Anything I have to decide shows up as a card at the top
-of this page.
+Nothing builds until I say so. The next sync puts a card at the top of
+this page listing what is queued and roughly how long each one takes,
+and builds whichever I pick on the sync after. A finished build gets
+reviewed, given a readme, and pushed as a public repo.
 To build it right now instead:
   python -m kiln.runner run <the file above></div>`;
       toast(j.already ? 'already queued' : 'queued');
@@ -783,9 +789,10 @@ function renderAbout(){
     ${built ? `<br><br>Last rebuilt <code>${esc(built)}</code>.` : ''}`;
 }
 
-/* ---------- questions the morning run left for me ---------- */
-// The run happens while I'm asleep and cannot stop to ask anything, so it
-// writes the decision down and carries on. This is where I answer it.
+/* ---------- questions a sync left for me ---------- */
+// Nobody is at the keyboard while a sync runs, so it cannot stop to ask
+// anything. It writes the decision down and carries on; this is where I
+// answer it.
 async function asks(){
   if(!LOCAL) return;
   const el = $('#asks');
@@ -797,6 +804,22 @@ async function asks(){
 
   el.innerHTML = open.map(q => {
     const seen = (q.asked_count||1) > 1 ? ` | come up ${q.asked_count} times` : '';
+    if(q.kind === 'queue' && (q.projects||[]).length){
+      // All, one, a few or none: tick the ones to build, or take all or none.
+      return `<div class="ask" data-card="${esc(q.id)}">
+        <h3>${esc(q.title||'Build the queue?')}</h3>
+        <div class="meta">about ${esc(q.total_min||'?')} min if all of them run, three at a time${seen}</div>
+        ${q.projects.map(p => `<label class="pick"><input type="checkbox" value="${esc(p.job_id)}">
+          <span><b>${esc(p.n)}.</b> ${esc(p.what||p.repo||p.job_id)}</span>
+          <span class="n">about ${esc(p.minutes)} min</span></label>`).join('')}
+        <div class="opts" style="margin-top:8px">
+          <button class="btn run" data-q="${esc(q.id)}" data-choice="all">Build all</button>
+          <button class="btn" data-q="${esc(q.id)}" data-choice="some">Build the ticked ones</button>
+          <button class="btn" data-q="${esc(q.id)}" data-choice="none">None this time</button>
+        </div>
+        <p class="warn">Whatever I pick gets built on the next sync.</p>
+      </div>`;
+    }
     return `<div class="ask">
       <h3>${esc(q.title||q.id)}</h3>
       <div class="meta">${esc(q.repo||q.job_id||'')}${seen}</div>
@@ -812,22 +835,27 @@ async function asks(){
   // attribute ends the attribute early: the button still draws, and does
   // nothing at all when you press it.
   el.querySelectorAll('.opts button').forEach(b => {
-    b.onclick = () => answerQ(b.dataset.q, b.dataset.choice);
+    b.onclick = () => {
+      const card = b.closest('[data-card]');
+      const picked = card ? [...card.querySelectorAll('input:checked')].map(x => x.value) : [];
+      if(b.dataset.choice === 'some' && !picked.length){ toast('tick at least one first'); return; }
+      answerQ(b.dataset.q, b.dataset.choice, b.dataset.choice === 'some' ? picked : []);
+    };
   });
 }
 
-async function answerQ(id, choice){
+async function answerQ(id, choice, picked){
   try{
     await api('/api/questions/answer', {method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({id, choice})});
+      body: JSON.stringify({id, choice, picked: picked||[]})});
     toast('answered');
   }catch(e){ toast(e.message); }
   asks();
 }
 
 load(); health(); renderAbout(); asks();
-setInterval(()=>{ if(Object.values(state.jobs).some(j=>j.stage==='working'||j.stage==='queued')) load(); }, 3000);
+setInterval(()=>{ if(Object.values(state.jobs).some(j=>['working','queued','followup'].includes(j.stage))) load(); }, 3000);
 setInterval(health, 30000);
 setInterval(asks, 60000);
 </script>
