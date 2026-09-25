@@ -105,6 +105,23 @@ def answer(qid: str, choice: str, note: str = "",
     return q
 
 
+def option_for(qid: str, choice: str) -> str:
+    """A number typed at a terminal means the option printed with it.
+
+    Stored as typed, "1" read as no choice at all: on the queue card it
+    built nothing and used the card up.
+    """
+    p = QUESTIONS / f"{qid}.json"
+    try:
+        options = json.loads(p.read_text(encoding="utf-8")).get("options") or []
+    except Exception:
+        options = []
+    c = choice.strip().strip(".")
+    if c.isdigit() and 1 <= int(c) <= len(options):
+        return options[int(c) - 1]
+    return choice
+
+
 def pick_ids(qid: str, picks: list[str]) -> list[str]:
     """Turn what I typed after `some` into the ids a card with a list holds.
 
@@ -148,8 +165,8 @@ def render(qs: list[dict] | None = None) -> str:
         age = "today" if days < 1 else "%d days ago" % int(days)
         lines.append("")
         lines.append("  %s" % q.get("title", q["id"]))
-        lines.append("  job: %s   first asked %s   seen %d time(s)"
-                     % (q.get("job_id", ""), age, q.get("asked_count") or 1))
+        lines.append("  id: %s   first asked %s   seen %d time(s)"
+                     % (q["id"], age, q.get("asked_count") or 1))
         for line in (q.get("detail") or "").strip().splitlines():
             lines.append("    " + line)
         for i, opt in enumerate(q.get("options") or [], 1):
@@ -169,10 +186,11 @@ if __name__ == "__main__":
         print(json.dumps(answer(sys.argv[2], "some",
                                 picked=pick_ids(sys.argv[2], sys.argv[4:])), indent=2))
     elif len(sys.argv) > 3 and sys.argv[1] == "answer":
-        print(json.dumps(answer(sys.argv[2], sys.argv[3],
+        print(json.dumps(answer(sys.argv[2], option_for(sys.argv[2], sys.argv[3]),
                                 " ".join(sys.argv[4:])), indent=2))
     else:
         print(__doc__)
         print("  python -m kiln.questions list")
-        print("  python -m kiln.questions answer <id> <choice> [note]")
-        print("  python -m kiln.questions answer <id> some <number or job id> ...")
+        print("  python -m kiln.questions answer <id> <option number or text> [note]")
+        print("  python -m kiln.questions answer <id> some <project number or job id> ...")
+        print("  <id> is the one printed on the card's id line.")
