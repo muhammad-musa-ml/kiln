@@ -282,3 +282,37 @@ edited in the main checkout, so it is always current where it is read.
   max` and `--json-schema` both work, and a sandboxed worker searched the web,
   read a slide image, wrote inside its folder and was refused outside it.
 - Grounded search measured dead on this key (D12).
+- Two live follow-ups on a copy of the data, with real Claude calls:
+  - The roadmap image ("extract the links inside the image"). The planner
+    (Opus 5, max) saw on its own that "alive" proves nothing for YouTube:
+    a watch page answers 200 for any id, and ids are case sensitive. It sent
+    two Sonnet workers to re-read the image and check each link. They found
+    three of the seven ids misread by the free model (for example
+    `T9arN5JKmL8` for `T9aRN5JkmL8`), proved it with YouTube's oEmbed (the
+    misread id is a 404), and the answer lists all seven with title,
+    channel and length. About four and a half minutes in all. It also
+    wrote its first playbook lesson, about checking video ids that way.
+  - The seven "to watch" videos. The planner made "To watch" with four
+    types (Explainers, Hands-on courses, Tool deep dives, Talks and
+    panels), filed all seven, and sent one Haiku worker to find the video
+    an article pointed at without linking it.
+- What those runs showed, and what changed because of them:
+  - The wrong links stayed on the item marked live: the last step could add
+    a link but not take one off, and the old merge compared links
+    lowercased, so the corrected id counted as a duplicate of the wrong
+    one. Added `drop_links`, and links are now compared exactly.
+  - The answer's single line breaks ran together on the page and bare
+    links were not clickable. The last step is now told to write Markdown
+    links, and the page renders the stored Markdown each time it is shown
+    rather than storing HTML once.
+  - The seven videos came back "not asked", although I had asked. The
+    last step is now told what filing the plan already did, and code sends
+    back a "not asked" when there was an instruction.
+- The two new audit checks were made to fail on purpose before being
+  trusted. A planted Windows path inside a PDF was caught. A planted
+  instruction was NOT caught at first, because in the raw JSON a quote is
+  stored as `\"`; the check now compares parsed text in runs of eight
+  words, and catches it.
+- Tests: `test_brain.py` 101/101, `test_queue_gate.py` 87/87,
+  `test_daily_commit.py` 23/23. Twelve deliberate breakages of the new code
+  were each caught by the test meant to catch them.
