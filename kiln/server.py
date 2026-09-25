@@ -54,10 +54,12 @@ def _process_async(urls: list[str], **kw) -> list[str]:
                          trace=traceback.format_exc()[-1500:], finished=time.time())
         if not done:
             return
-        for iid in done:
-            _set_job(iid, stage="followup")
         try:
-            brain.follow_up(done)
+            # KILN_BRAIN=0 turns the follow-up off here as well as in the sync.
+            if config.BRAIN_ON:
+                for iid in done:
+                    _set_job(iid, stage="followup")
+                brain.follow_up(done)
         finally:
             for iid in done:
                 _set_job(iid, stage="done", finished=time.time())
@@ -173,8 +175,12 @@ class Handler(BaseHTTPRequestHandler):
                 if it:
                     # Built by the publisher's own function, so the page shows
                     # the answer the same way here and on the site.
-                    from . import publish
+                    from . import jobs, publish
                     it["followup"] = publish.followup(it)
+                    # The same prompt Queue it writes. Without it the page fell
+                    # back to its own copy of the builder, which had drifted.
+                    if ((it.get("enrich") or {}).get("project") or {}).get("name"):
+                        it["build_prompt"] = jobs.build_prompt(it)
                     # How it was made, for the local page only. Neutral names,
                     # because the page is the same file the site publishes.
                     c = it.get("claude") or {}

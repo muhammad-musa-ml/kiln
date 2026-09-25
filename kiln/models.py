@@ -437,8 +437,8 @@ def generate(task: str, prompt: str, media: list[Path] | None = None, *,
     from . import providers, registry, secrets_store
 
     media = [Path(m) for m in (media or [])]
-    # The registry is the source of truth: the UI's ordering IS the priority,
-    # and config.LADDERS is only the seed it was built from.
+    # The registry is the source of truth: its ordering IS the priority, and
+    # config.LADDERS is only the seed it was built from.
     steps = ladder or registry.ladder_for(task) or config.LADDERS.get(task) \
         or config.LADDERS["classify"]
     thinking = registry.thinking_for(task)

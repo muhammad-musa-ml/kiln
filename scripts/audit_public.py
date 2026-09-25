@@ -143,10 +143,12 @@ def main() -> int:
     checks += 1
     n_allowed, e_allowed = set(publish.NOTE_FIELDS), set(publish.ENRICH_FIELDS)
     f_allowed, a_allowed = set(publish.FOLLOWUP_FIELDS), set(publish.ARTIFACT_FIELDS)
+    g_allowed = set(publish.GATE_FIELDS)
     bad: set[str] = set()
     for it in data.get("items", []):
         bad |= set((it.get("note") or {}).keys()) - n_allowed
         bad |= set((it.get("enrich") or {}).keys()) - e_allowed
+        bad |= set((it.get("gate") or {}).keys()) - g_allowed
         fu = it.get("followup") or {}
         bad |= set(fu.keys()) - f_allowed
         for a in fu.get("artifacts") or []:
@@ -154,7 +156,16 @@ def main() -> int:
     if bad:
         fail(f"nested keys outside the whitelist: {sorted(bad)}")
     else:
-        ok("nested note/enrich/followup keys within the whitelist")
+        ok("nested note/enrich/gate/followup keys within the whitelist")
+
+    # 5a. a private field added to a whitelist by mistake would pass 4 and 5
+    checks += 1
+    lists = allowed | n_allowed | e_allowed | f_allowed | a_allowed | g_allowed
+    let_in = sorted(set(publish.NEVER) & lists)
+    if let_in:
+        fail(f"a whitelist admits private fields: {let_in}")
+    else:
+        ok(f"no whitelist admits any of the {len(publish.NEVER)} private fields")
 
     # 5b. the text inside every published PDF. A PDF compresses its text, so
     #     the byte scan above cannot see into one; a document Claude wrote is

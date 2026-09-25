@@ -165,7 +165,7 @@ def detect_gate(caption: str, onscreen: list[str] | None = None) -> dict:
     return {"gated": False}
 
 
-def _floor_for(n_media: int):
+def _floor_for(n_media: int, video: bool = False):
     """What a read of this item has to contain before it counts as one.
 
     Returns a callback for models.generate, or None when there is nothing to
@@ -174,17 +174,24 @@ def _floor_for(n_media: int):
     comes back with no sections and no on-screen text was not read, and
     accepting that is how an eleven slide post ended up stored with a title
     and nothing else behind it.
+
+    It used to apply only from two pictures up, which left a single image
+    and every reel with no floor at all. A video can also pass on its speech.
+    A page or a transcript with no media is not held to it: there is nothing
+    to look at, only text that was already read.
     """
-    if n_media < 2:
+    if n_media < 1:
         return None
 
     def check(res) -> str:
         d = res.data if isinstance(res.data, dict) else {}
         if not d:
             return "no JSON came back"
-        if not d.get("sections") and not d.get("onscreen_text"):
-            return ("read %d pieces of media and returned no sections and no "
-                    "on-screen text" % n_media)
+        if not d.get("sections") and not d.get("onscreen_text") \
+                and not (video and d.get("spoken_transcript")):
+            return ("read %d piece%s of media and returned no sections and no "
+                    "on-screen text%s" % (n_media, "" if n_media == 1 else "s",
+                                          " or speech" if video else ""))
         return ""
 
     return check
@@ -201,7 +208,7 @@ def extract_item(acq: Acquired, *, user_note: str = "", deep: bool = False,
     prompt = PROMPT.format(context=_context_block(acq, user_note))
 
     task = "extract_deep" if deep else "extract"
-    check = _floor_for(len(media))
+    check = _floor_for(len(media), video=bool(acq.video))
     r1 = models.generate(task, prompt, media, accept=check)
     meta: dict[str, Any] = {
         "passes": [], "escalated": deep, "media_count": len(media),

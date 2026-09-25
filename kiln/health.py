@@ -6,14 +6,15 @@ untitled row. A site that said ten items while the database held twelve. A
 job sitting in the queue under two names. None of it raised anything at the
 time, because nothing was looking.
 
-The run looks now, every time, and prints what it finds before anything
-else. Findings that need me to decide something become questions; the rest
-are printed and left alone, because a warning I see every morning and never
-act on is just noise with extra steps.
+The run looks now, every time, as its last stage, so it checks the state
+the pass leaves behind. Findings that need me to decide something become
+questions; the rest are printed and left alone, because a warning I see
+every morning and never act on is just noise with extra steps.
 """
 from __future__ import annotations
 
 import json
+import subprocess
 import time
 from pathlib import Path
 
@@ -27,8 +28,11 @@ MISSED_AFTER = 18 * 3600
 STUCK_AFTER = 7 * 86400
 
 
-def _finding(level: str, what: str, detail: str = "", fix: str = "") -> dict:
-    return {"level": level, "what": what, "detail": detail, "fix": fix}
+def _finding(level: str, what: str, detail: str = "", fix: str = "",
+             key: str = "") -> dict:
+    # key names the card a finding asks on. It has to stay the same while the
+    # count in "what" changes, or an answer given at 2 items is lost at 3.
+    return {"level": level, "what": what, "detail": detail, "fix": fix, "key": key}
 
 
 def beat(mode: str, added: int) -> None:
@@ -63,8 +67,24 @@ def check_last_run() -> list[dict]:
             "meant to be twelve apart. Either a run was skipped or one "
             "started and died part way through."
             % (gap / 3600),
-            "Check the routine's run history in the app.")]
+            "Check the routine's run history in the app.", key="missed-run")]
     return []
+
+
+def _pushed_items() -> tuple[list | None, str]:
+    """The item list as last pushed, which is what the live site serves."""
+    try:
+        p = subprocess.run(["git", "show", "origin/master:public/data/items.json"],
+                           cwd=config.ROOT, capture_output=True, text=True,
+                           encoding="utf-8", errors="replace", timeout=60)
+    except (OSError, subprocess.SubprocessError) as e:
+        return None, type(e).__name__
+    if p.returncode != 0:
+        return None, (p.stderr or "").strip()[:200]
+    try:
+        return json.loads(p.stdout).get("items") or [], ""
+    except ValueError as e:
+        return None, str(e)
 
 
 def check_site_matches_db(conn) -> list[dict]:
@@ -75,19 +95,31 @@ def check_site_matches_db(conn) -> list[dict]:
         return [_finding("warn", "the site has never been built",
                          str(items_file))]
     try:
-        published = len(json.loads(
-            items_file.read_text(encoding="utf-8")).get("items") or [])
+        built = json.loads(items_file.read_text(encoding="utf-8")).get("items") or []
     except Exception as e:
         return [_finding("warn", "the published item list will not parse",
                          "%s: %s" % (type(e).__name__, e))]
 
     held = store.counts(conn)["total"]
-    if published != held:
+    if len(built) != held:
         out.append(_finding(
             "warn", "the site and the database disagree",
             "the database holds %d items, the published site shows %d"
-            % (held, published),
+            % (held, len(built)),
             "python -m kiln.publish"))
+
+    # The file above is rebuilt even when the audit stops the push, so it
+    # says what the site should show. The pushed copy is what it does show.
+    pushed, why = _pushed_items()
+    if pushed is None:
+        out.append(_finding("info", "could not read the pushed copy of the site", why))
+    elif pushed != built:
+        out.append(_finding(
+            "warn", "the live site does not have this build",
+            "public/ was rebuilt (%d items) but the pushed copy differs (%d "
+            "items). The audit stopped the push, or the push failed."
+            % (len(built), len(pushed)),
+            "see the site stage above"))
     return out
 
 
@@ -123,8 +155,8 @@ def check_items(conn) -> list[dict]:
     if redo:
         out.append(_finding("info", "%d link(s) tagged redo" % len(redo),
                             "\n".join(redo[:5]),
-                            "they could not be read; each is retried on later "
-                            "syncs up to three times, or re-fire it by hand"))
+                            "they could not be read; each gets three tries in "
+                            "all, the later two on later syncs, or re-fire it by hand"))
     if errored:
         out.append(_finding("info", "%d item(s) carry an error" % len(errored),
                             "\n".join(errored[:5])))
@@ -132,7 +164,7 @@ def check_items(conn) -> list[dict]:
         out.append(_finding(
             "ask", "%d item(s) stuck in the inbox for over a week" % len(stuck),
             "\n".join(stuck[:5]),
-            "re-fire them, or drop them"))
+            "re-fire them, or drop them", key="stuck-inbox"))
     return out
 
 
@@ -170,7 +202,8 @@ def check_follow_ups(conn) -> list[dict]:
         out.append(_finding(
             "ask", "Claude could not finish %d item(s)" % len(gave_up),
             "\n".join(gave_up[:5]),
-            "python -m kiln.brain run <item id> to try again by hand"))
+            "python -m kiln.brain run <item id> to try again by hand",
+            key="follow-up-gave-up"))
     if partial:
         out.append(_finding(
             "info", "%d request(s) only partly answered" % len(partial),
@@ -250,14 +283,28 @@ def render(found: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def _ignored(key: str) -> bool:
+    """Did I answer ignore on this card? Then it stays quiet for good."""
+    for q in questions.all_questions():
+        if q.get("job_id") == key and q.get("kind") == "health" and q.get("answered_at"):
+            return (q.get("answer") or "").lower().startswith("ignore")
+    return False
+
+
 def raise_questions(found: list[dict]) -> int:
-    """Anything needing a decision becomes a card, the rest stays printed."""
+    """Anything needing a decision becomes a card, the rest stays printed.
+
+    "looked" means I dealt with it, so if it comes back it is asked again.
+    "ignore" means stop: re-asking used to wipe that answer on the next sync.
+    """
     asked = 0
     for f in found:
         if f["level"] != "ask":
             continue
-        key = "health-" + "".join(c if c.isalnum() else "-"
-                                  for c in f["what"])[:40]
+        key = "health-" + (f.get("key") or "".join(c if c.isalnum() else "-"
+                                                     for c in f["what"])[:40])
+        if _ignored(key):
+            continue
         questions.ask(key, "health", f["what"],
                       (f.get("detail") or "") + (
                           "\n" + f["fix"] if f.get("fix") else ""),

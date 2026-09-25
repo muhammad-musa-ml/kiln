@@ -73,7 +73,8 @@ def make_repo(base: Path) -> tuple[Path, Path]:
 
 
 def load_daily(repo: Path, build: str, morning: bool = False,
-               answer: dict | None = None):
+               answer: dict | None = None, open_qs: list | None = None,
+               raise_card: bool = False, shipped: list | None = None):
     """Import daily.py with kiln faked out and every command sent to `repo`.
 
     The real kiln package creates data dirs and a token file on import and
@@ -82,7 +83,10 @@ def load_daily(repo: Path, build: str, morning: bool = False,
     Returns the module and a list the fakes append to, so a test can say
     what was reached rather than guessing from text. `answer` is what the
     queue card says when the pass reads it; None means nobody answered.
+    `open_qs` are the cards open when the pass starts, `raise_card` makes the
+    offer raise the queue card, and `shipped` is what the publish stage returns.
     """
+    qstate = list(open_qs or [])
     calls: list[tuple] = []
     counts = iter([{"total": 0}, {"total": 1}])
     store = types.ModuleType("kiln.store")
@@ -100,8 +104,8 @@ def load_daily(repo: Path, build: str, morning: bool = False,
     brain.render = lambda result: "      nothing needed"
 
     questions = types.ModuleType("kiln.questions")
-    questions.open_questions = lambda: []
-    questions.render = lambda qs=None: ""
+    questions.open_questions = lambda: list(qstate)
+    questions.render = lambda qs=None: "RENDER[%s]" % ",".join(q["id"] for q in qs or [])
 
     def consented():
         calls.append(("read answer",))
@@ -115,11 +119,13 @@ def load_daily(repo: Path, build: str, morning: bool = False,
 
     def offer(at_once=3):
         calls.append(("offer", at_once))
+        if raise_card:
+            qstate.append({"id": "queue.queue", "asked_count": 1})
         return {"projects": [{"job_id": "a"}], "total_min": 90}
 
     def ship_now(limit=3):
         calls.append(("ship", limit))
-        return []
+        return list(shipped or [])
 
     runner = types.ModuleType("kiln.runner")
     runner.jobs = types.SimpleNamespace(pending=lambda: [{"file": "a.md", "job_id": "a"}])
@@ -128,6 +134,7 @@ def load_daily(repo: Path, build: str, morning: bool = False,
     runner.run_consented = build_now
     runner.offer_queue = offer
     runner.ship_done = ship_now
+    runner.ci_line = lambda ci, with_url=True: "CI-%s" % ("ok" if ci.get("ok") else "red")
 
     health = types.ModuleType("kiln.health")
     health.check_all = lambda conn=None: []
@@ -171,8 +178,9 @@ def load_daily(repo: Path, build: str, morning: bool = False,
 
 
 def sync(repo: Path, inbox: Path, build: str, morning: bool = False,
-         answer: dict | None = None, args: list | None = None) -> tuple[int, str, list]:
-    daily, calls = load_daily(repo, build, morning, answer)
+         answer: dict | None = None, args: list | None = None,
+         **fakes) -> tuple[int, str, list]:
+    daily, calls = load_daily(repo, build, morning, answer, **fakes)
     argv, sys.argv = sys.argv, ["daily.py", str(inbox)] + (args or [])
     out = io.StringIO()
     try:
@@ -267,6 +275,24 @@ def main() -> int:
         check("--builds yes builds the whole queue without reading a card",
               ("build", ("a",), 3) in calls and ("read answer",) not in calls,
               f"called: {calls}")
+
+        print("cards raised during the pass, and a project whose CI went red")
+        repo, origin = make_repo(tmp / "eight")
+        code, out, calls = sync(
+            repo, inbox, OLD_BUILD, open_qs=[{"id": "old.q", "asked_count": 1}],
+            raise_card=True,
+            shipped=[{"ok": True, "repo": "r", "url": "https://github.com/x/r",
+                      "ci": {"checked": True, "ok": False, "conclusion": "failure"}}])
+        head, tail = out[:out.find("[1/6]")], out[out.find("[6/6]"):]
+        check("the cards open at the start print before any work",
+              "RENDER[old.q]" in head, head[-200:])
+        check("the card raised during the pass prints in full at the end, alone",
+              "RENDER[queue.queue]" in tail, tail[-400:])
+        check("and the closing line says where each one is",
+              "1 at the top of this output" in tail
+              and "1 raised during this pass, just above" in tail, tail[-300:])
+        check("a red CI run is printed, not dropped",
+              out.count("CI-red") == 2, out[-600:])
 
         print("the site is rebuilt even when the inbox had nothing new")
         repo, origin = make_repo(tmp / "four")

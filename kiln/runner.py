@@ -25,7 +25,7 @@ RUNS.mkdir(parents=True, exist_ok=True)
 
 # How many real failures before it stops retrying quietly and asks me what
 # to do. Two, because one failure is often the model having a bad night and
-# three mornings of the same crash is three wasted hours.
+# three passes of the same crash is three wasted hours.
 FAIL_LIMIT = 2
 
 # Where a build is allowed to write. Anything outside is refused, so a bad
@@ -258,9 +258,10 @@ def _failed(job_id: str, repo: str, picked: str, log: Path, code: int,
                     "project failing. It is still queued and will be offered "
                     "again on the next sync.\n"
                     "Last output:\n  %s" % tail.strip()[-400:]),
+            # No cloud choice: nothing here can start one, and a choice that
+            # quietly did the local build instead was a promise not kept.
             options=["wait - leave it queued for the next sync",
-                     "claude - build it with claude on this machine",
-                     "claude cloud - build it in a cloud session"])
+                     "claude - build it with claude on this machine"])
         return d
 
     attempts = int(read_state(job_id).get("attempts") or 0) + 1
@@ -418,7 +419,9 @@ def _eligible(only: list[str] | None = None) -> list[tuple[dict, str]]:
 
 
 def run_pending(limit: int = 3, only: list[str] | None = None) -> list[dict]:
-    """Build everything queued, up to `limit` of them at once.
+    """Build up to `limit` of the queued jobs, all at once, and wait for them.
+
+    What is left waits for the next call; run_consented loops over batches.
 
     They run together rather than one after another. Each is a separate agent
     in its own directory with nothing to fight over, so three at a time turns
@@ -719,13 +722,18 @@ def _ship_one(d: dict, public: bool, results: list, lock) -> None:
     # gone by the time anyone asks. tests_run is the one worth having: a
     # reviewer that could not run the suite is not the same as a green one.
     rv = r.get("review") or {}
+    # CI runs after the push, so it cannot stop one. Kept so a project that
+    # only breaks on a clean machine is reported rather than looking green.
+    ci = {k: v for k, v in (r.get("ci") or {}).items()
+          if k in ("checked", "ok", "conclusion", "url", "why")}
     _write_state(jid, shipped=bool(r.get("ok")), ship_stage=r.get("stage", ""),
                  ship_why=r.get("why", ""), ship_attempts=attempts,
                  shipped_at=time.time(), repo_url=url, shipping=0,
                  tests_run=bool(rv.get("tests_run")),
                  tests_pass=bool(rv.get("tests_pass")),
                  review_summary=str(rv.get("summary") or "")[:800],
-                 review_blocking=[str(b)[:300] for b in (rv.get("blocking") or [])])
+                 review_blocking=[str(b)[:300] for b in (rv.get("blocking") or [])],
+                 ci=ci)
 
     if r.get("ok"):
         questions.clear(jid, "ship_failed")
@@ -734,19 +742,36 @@ def _ship_one(d: dict, public: bool, results: list, lock) -> None:
             jid, "ship_failed", repo=job.get("repo_name", ""),
             title="%s built but will not publish (%s)"
                   % (job.get("repo_name") or jid, r.get("stage", "")),
-            detail=_why_not(r),
+            detail=_why_not(r) + ("\n\nTo fix it by hand first: open %s, fix it, "
+                                  "then answer retry." % workdir),
+            # There used to be a "look" choice. It counted as retry, so the
+            # chain ran again on the next sync whether or not I had fixed it.
             options=["skip - leave it unpublished",
-                     "retry - try the whole chain again",
-                     "look - I will open the folder and fix it myself"])
+                     "retry - try the whole chain again"])
 
     with lock:
         results.append({"job_id": jid, "repo": job.get("repo_name", ""),
                         "ok": bool(r.get("ok")), "stage": r.get("stage", ""),
-                        "why": r.get("why", ""), "url": url})
+                        "why": r.get("why", ""), "url": url, "ci": ci})
+
+
+def ci_line(ci: dict, with_url: bool = True) -> str:
+    """How the project's own CI went after the push, in a few words."""
+    url = (" " + ci.get("url", "")) if with_url and (ci or {}).get("url") else ""
+    if not ci:
+        return "CI not checked"
+    if not ci.get("checked"):
+        return "CI not checked: %s" % (ci.get("why") or "no reason given")
+    if ci.get("ok"):
+        return "CI passed" + url
+    return "CI FAILED (%s)%s" % (ci.get("conclusion") or ci.get("why") or "?", url)
 
 
 def ship_done(limit: int = 3, public: bool = True) -> list[dict]:
-    """Review, write a readme for, and publish everything that is waiting."""
+    """Review, write a readme for, and publish up to `limit` finished builds.
+
+    They go through the chain side by side. The rest wait for the next pass.
+    """
     waiting = needs_ship()[:limit]
     results: list[dict] = []
     lock = threading.Lock()

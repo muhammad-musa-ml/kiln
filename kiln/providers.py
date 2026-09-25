@@ -318,7 +318,7 @@ def config_tmp() -> Path:
 
 
 def list_providers() -> list[dict]:
-    """What the Add-a-model UI offers, with key status but never the key."""
+    """The providers /api/models can add, with key status but never the key."""
     out = []
     for name, spec in PROVIDER_SPECS.items():
         ref = spec.get("key_ref") or ""

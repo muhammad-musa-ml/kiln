@@ -42,7 +42,7 @@ def write(item_id: str, *, url: str, stage: str, why: str,
     brief = {
         "item_id": item_id,
         "url": url,
-        "stage": stage,                 # extract | enrich | artifact
+        "stage": stage,                 # only extract writes one so far
         "why": why,
         "media": media or [],
         "instruction": instruction,
@@ -102,16 +102,18 @@ def fill(item_id: str, note: dict) -> dict:
         item = store.get_item(conn, item_id)
         if not item:
             return {"error": f"no item {item_id}"}
+        action = pipeline.derive_action(note, item.get("user_do", ""),
+                                        media_kind=item.get("kind", ""))
+        # The action column as well as the tag. Left as redo, the item looked
+        # unread to everything that reads the column, and the follow-up never
+        # looked at it again after this first time.
         rec = {"id": item_id, "url": item["url"], "error": "",
                "title": note.get("title") or item.get("title") or item["url"],
                "hook": note.get("hook", ""), "summary": note.get("summary", ""),
                "kind": note.get("kind") or item.get("kind") or "other",
                "note_json": json.dumps(note, ensure_ascii=False),
-               "status": "triage", "processed_at": time.time()}
+               "action": action, "status": "triage", "processed_at": time.time()}
         store.upsert_item(conn, rec)
-
-        action = pipeline.derive_action(note, item.get("user_do", ""),
-                                        media_kind=item.get("kind", ""))
         store.set_tags(conn, item_id, "action", [action])
         store.set_tags(conn, item_id, "topic",
                        pipeline.normalise_topics(note.get("topics") or []))
@@ -126,7 +128,7 @@ def fill(item_id: str, note: dict) -> dict:
 
 
 def render(briefs: list[dict] | None = None) -> str:
-    """The block the run prints so the work is not invisible."""
+    """What `python -m kiln.handoff list` prints. The sync shows a card instead."""
     briefs = pending() if briefs is None else briefs
     if not briefs:
         return ""

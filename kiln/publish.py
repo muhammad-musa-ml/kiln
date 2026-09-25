@@ -45,8 +45,12 @@ ARTIFACT_FIELDS = ("file", "title", "about", "kind", "pages")
 # site's own origin. When a document's PDF could not be made, it stays local.
 PUBLISH_KINDS = {".pdf", ".md", ".csv", ".txt", ".json"}
 
-# Never exported, for the avoidance of doubt. Enforced by the whitelist
-# above; listed here so the audit can assert their absence.
+# The gate says what to comment, or that the payload sits behind the
+# creator's bio link. advice is the sentence the page shows.
+GATE_FIELDS = ("gated", "how", "keyword", "advice")
+
+# Never exported. The whitelists above are what keep these out, and the
+# audit fails if any whitelist ever names one of them.
 NEVER = ("user_note", "user_do", "status", "urgent", "deadline", "cost_usd",
          "error", "media_dir", "pdf_path", "source", "processed_at",
          "created_at", "updated_at", "note_json", "enrich_json", "gate_json",
@@ -89,11 +93,8 @@ def public_item(full: dict) -> dict:
     d["note"] = pick(note, NOTE_FIELDS)
     d["enrich"] = pick(enr, ENRICH_FIELDS)
 
-    # The gate is useful publicly (it says what to comment) but the advice
-    # string is the only part worth showing.
     if gate.get("gated"):
-        d["gate"] = {"gated": True, "how": gate.get("how", ""),
-                     "keyword": gate.get("keyword", "")}
+        d["gate"] = pick(gate, GATE_FIELDS)
 
     tags = full.get("tags") or {}
     d["tags"] = {k: v for k, v in tags.items()

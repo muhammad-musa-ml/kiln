@@ -553,7 +553,9 @@ def test_unread_asks_first():
     reset_db()
     conn = store.connect()
     make_item(conn, "r", do="list the companies", note=False, media=3, kind="instagram")
-    conn.execute("UPDATE items SET summary='' WHERE id='r'")
+    # What the pipeline really stores for a read that failed: action redo.
+    conn.execute("UPDATE items SET summary='', action='redo' WHERE id='r'")
+    store.set_tags(conn, "r", "action", ["redo"])
     conn.commit()
     handoff.write("r", url="https://example.com/p/r", stage="extract",
                   why="every rung out of quota", media=[], instruction="list the companies",
@@ -564,6 +566,18 @@ def test_unread_asks_first():
     q = [x for x in questions.open_questions() if x.get("job_id") == brain.READ_ASK]
     check("as one question card with the choices", len(q) == 1 and len(q[0]["options"]) == 2,
           json.dumps(q)[:300])
+
+    # "wait" first: the free models get fresh tries, and Claude reads nothing.
+    conn.execute("UPDATE items SET attempts=3 WHERE id='r'")
+    conn.commit()
+    questions.answer(q[0]["id"], q[0]["options"][1])
+    brain.sweep(conn=conn)
+    check("wait gives the free models their tries back, and Claude reads nothing",
+          int(store.get_item(conn, "r").get("attempts") or 0) == 0 and not STUB.calls)
+    brain.sweep(conn=conn)
+    q = [x for x in questions.open_questions() if x.get("job_id") == brain.READ_ASK]
+    check("and the next sync asks again while the item is still unread",
+          len(q) == 1 and not STUB.calls, json.dumps(q)[:200])
 
     questions.answer(q[0]["id"], q[0]["options"][0])
     plan = good_plan(["r"])
@@ -595,7 +609,134 @@ def test_unread_asks_first():
     check("the question is gone", not [x for x in questions.open_questions()
                                        if x.get("job_id") == brain.READ_ASK])
     check("the brief no longer waits", not handoff.pending())
+    check("and the item is no longer marked redo", r.get("action") != "redo"
+          and (r.get("tags") or {}).get("action") != ["redo"], str(r.get("action")))
+    conn.execute("UPDATE items SET claude_state='blocked' WHERE id='r'")
+    conn.commit()
+    check("so a later follow-up can still pick it up",
+          ["r"] in brain.needs_follow_up(conn))
     conn.close()
+
+
+def test_one_yes_covers_the_list():
+    print("one yes covers every item on the card, over as many passes as it takes")
+    reset_db()
+    conn = store.connect()
+    ids = ["ra", "rb", "rc"]
+    for iid in ids:
+        make_item(conn, iid, note=False, media=1, kind="instagram")
+        conn.execute("UPDATE items SET summary='', action='redo' WHERE id=?", (iid,))
+        store.set_tags(conn, iid, "action", ["redo"])
+        handoff.write(iid, url="https://example.com/p/" + iid, stage="extract",
+                      why="every rung out of quota", media=[])
+    conn.commit()
+    brain.sweep(conn=conn, limit=2)
+    q = [x for x in questions.open_questions() if x.get("job_id") == brain.READ_ASK]
+    check("the card lists all three and says how many a sync reads",
+          len(q) == 1 and sorted(q[0].get("items") or []) == ids
+          and "reads up to" in q[0].get("detail", ""), json.dumps(q)[:300])
+
+    def read_plan(iid):
+        plan = good_plan([iid], filing=[], new_sections=[])
+        plan["tasks"] = [{"id": "t1", "kind": "read", "goal": "read the reel",
+                          "items": [iid], "model": "claude-sonnet-5", "effort": "high",
+                          "tools": [], "depends_on": [], "brief": "read every frame"}]
+        return plan
+
+    def final_read(cwd):
+        views = json.loads((Path(cwd) / "items.json").read_text(encoding="utf-8"))
+        return {"items": [{"id": v["id"], "answer": "", "answered": "not asked",
+                           "missing": "", "retry_later": False, "title": "", "hook": "",
+                           "summary": "", "artifacts": [], "sources": [],
+                           "extra_sections": [], "extra_links": [], "next_action": ""}
+                          for v in views], "lessons": []}
+
+    STUB.plans = [read_plan(i) for i in ids]
+    STUB.final = final_read
+    questions.answer(q[0]["id"], q[0]["options"][0])
+    out = brain.sweep(conn=conn, limit=2)
+    first = [r.get("items") for r in out.get("reads", [])]
+    check("a yes reads as many as the pass has room for",
+          first == [["ra"], ["rb"]], json.dumps(out)[:300])
+    check("says the rest wait, and asks nothing new",
+          "1 read(s) you said yes to wait" in brain.render(out) and not out.get("asked"),
+          brain.render(out))
+    out = brain.sweep(conn=conn, limit=2)
+    second = [r.get("items") for r in out.get("reads", [])]
+    check("the next pass reads the rest without a new card",
+          second == [["rc"]] and not out.get("asked")
+          and not [x for x in questions.open_questions() if x.get("job_id") == brain.READ_ASK],
+          json.dumps(out)[:300])
+    check("and forgets the yes once every item on it is read",
+          brain._read_ok() == set(), str(brain._read_ok()))
+    conn.close()
+
+
+def test_inbox_changes():
+    print("a line that changes after it was read")
+    reset_db()
+    conn = store.connect()
+    from kiln import acquire as acq_mod, extract as ex_mod, ingest
+    from kiln.acquire import Acquired
+    real = acq_mod.acquire, ex_mod.extract_item, _enrich.enrich_note
+    acq_mod.acquire = lambda url, **kw: Acquired(url=url, kind="web", title="T", body_text="b")
+    ex_mod.extract_item = lambda acq, **kw: {"kind": "news", "summary": "s",
+                                             "sections": [{"heading": "h", "detail": "d"}]}
+    _enrich.enrich_note = lambda *a, **kw: {"_meta": {"ok": True}}
+    try:
+        one = "https://example.com/one"
+        two = "https://example.com/two"
+        ingest.ingest_text(one + "\n", conn=conn)
+        check("the first read happens", store.get_item(conn, store.item_id(one)) is not None)
+        check("reading the same doc again finds nothing new",
+              ingest.new_items(one + "\n", conn) == [])
+        ingest.ingest_text(one + " " + two + "\n", conn=conn)
+        check("a link added to the line later is read",
+              store.get_item(conn, store.item_id(two)) is not None)
+        got = store.get_item(conn, store.item_id(one))
+        check("without the first one being read again", int(got.get("attempts") or 0) == 1,
+              str(got.get("attempts")))
+        conn.execute("UPDATE items SET claude_state='done' WHERE id=?", (store.item_id(one),))
+        conn.commit()
+        out = ingest.ingest_text(one + " " + two + " | put both in a PDF\n", conn=conn)
+        got = store.get_item(conn, store.item_id(one))
+        check("an instruction written under the links later reaches them",
+              got.get("user_do") == "put both in a PDF"
+              and any(r.get("status") == "instruction added" for r in out), str(out)[:200])
+        check("and puts them back in line for the follow-up", got.get("claude_state") == "")
+        conn.execute("UPDATE items SET user_do='my own words' WHERE id=?", (store.item_id(one),))
+        conn.commit()
+        ingest.ingest_text(one + " | something else\n", conn=conn)
+        check("but never overwrites an instruction the item already has",
+              store.get_item(conn, store.item_id(one)).get("user_do") == "my own words")
+    finally:
+        acq_mod.acquire, ex_mod.extract_item, _enrich.enrich_note = real
+        conn.close()
+
+
+def test_health_cards_listen():
+    print("a health card remembers ignore, and asks again after looked")
+    reset_db()
+    from kiln import health
+    f2 = [health._finding("ask", "2 item(s) stuck in the inbox for over a week",
+                          key="stuck-inbox")]
+    f3 = [health._finding("ask", "3 item(s) stuck in the inbox for over a week",
+                          key="stuck-inbox")]
+    health.raise_questions(f2)
+    q = [x for x in questions.open_questions() if x.get("kind") == "health"]
+    check("the finding becomes one card", len(q) == 1, json.dumps(q)[:200])
+    questions.answer(q[0]["id"], q[0]["options"][1])        # ignore
+    health.raise_questions(f3)
+    check("ignore holds even after the count changes",
+          not [x for x in questions.open_questions() if x.get("kind") == "health"])
+    for f in questions.QUESTIONS.glob("*.json"):
+        f.unlink()
+    health.raise_questions(f2)
+    q = [x for x in questions.open_questions() if x.get("kind") == "health"]
+    questions.answer(q[0]["id"], q[0]["options"][0])        # looked
+    health.raise_questions(f3)
+    check("looked is asked again when the problem comes back",
+          len([x for x in questions.open_questions() if x.get("kind") == "health"]) == 1)
 
 
 def test_sweep_stops_and_survives():
@@ -642,15 +783,17 @@ def test_first_pass_reports_and_lessons():
 
     def fake_generate(task, prompt, media=None, **kw):
         seen.append(prompt)
+        n = len(seen)
         return models.ModelResult(ok=True, data={"queries": ["acme careers"]},
-                                  provider="gemini", model="stub")
+                                  provider="gemini", model="stub",
+                                  tokens_in=100 * n, tokens_out=10 * n)
     real_gen, real_research = models.generate, search.research
     models.generate = fake_generate
     enrich.models.generate = fake_generate
     search.research = lambda qs: ("", [])
     try:
-        enrich.enrich_note({"title": "t", "kind": "listicle", "entities": []}, None,
-                           user_note="", lessons=["search each company with careers"])
+        enr = enrich.enrich_note({"title": "t", "kind": "listicle", "entities": []}, None,
+                                 user_note="", lessons=["search each company with careers"])
     finally:
         models.generate = real_gen
         enrich.models.generate = real_gen
@@ -662,10 +805,25 @@ def test_first_pass_reports_and_lessons():
     check("every enrichment asks for followups and could_not",
           '"followups"' in final and '"could_not"' in final, final[-300:])
     check("and carries the lessons", "search each company with careers" in final)
+    em = enr.get("_meta") or {}
+    check("both calls record their tokens",
+          (em.get("tokens_in"), em.get("tokens_out")) == (200, 20)
+          and ((em.get("queries_call") or {}).get("tokens_in"),
+               (em.get("queries_call") or {}).get("tokens_out")) == (100, 10), str(em))
+    check("no sources fetched is said, not papered over",
+          "No live sources could be fetched" in final
+          and "Search the live web" not in final)
     check("the read asks what could not be made out", '"could_not"' in extract.PROMPT)
     merged = extract._union({"could_not": ["slide 3 blurred"]}, {"could_not": ["slide 9 cut"]})
     check("two reads keep both lists of what they missed",
           merged.get("could_not") == ["slide 3 blurred", "slide 9 cut"], str(merged))
+    blank = models.ModelResult(ok=True, data={"title": "t", "summary": "s"})
+    spoken = models.ModelResult(ok=True, data={"summary": "s", "spoken_transcript": "hi all"})
+    check("one picture is held to the floor too", bool(extract._floor_for(1)(blank)))
+    check("so is a reel, which can pass on its speech",
+          bool(extract._floor_for(1, video=True)(blank))
+          and not extract._floor_for(1, video=True)(spoken))
+    check("a page with no media has no floor", extract._floor_for(0) is None)
 
     print("re-firing and retrying")
     reset_db()
@@ -717,7 +875,64 @@ def test_first_pass_reports_and_lessons():
         conn.close()
 
 
+def test_frames_cover_the_video():
+    print("a video's frames reach its end")
+    import shutil
+    import subprocess
+    ff = shutil.which("ffmpeg")
+    if not ff or not shutil.which("ffprobe"):
+        check("ffmpeg and ffprobe are here to make a test video", False,
+              "install ffmpeg; the follow-up needs it for reels too")
+        return
+    from PIL import Image
+    d = Path(TMP) / "frames"
+    d.mkdir(exist_ok=True)
+    video = d / "clip.mp4"
+    # Red for 50 seconds, then blue. Frames every three seconds, capped at
+    # 16, never got past second 48 and so never saw blue.
+    subprocess.run([ff, "-hide_banner", "-loglevel", "error", "-y",
+                    "-f", "lavfi", "-i", "color=c=red:s=64x64:d=50:r=5",
+                    "-f", "lavfi", "-i", "color=c=blue:s=64x64:d=10:r=5",
+                    "-filter_complex", "[0][1]concat=n=2:v=1:a=0",
+                    "-pix_fmt", "yuv420p", str(video)], capture_output=True, timeout=120)
+    names = brain._frames(video, d, "vid")
+    check("a minute of video gives 16 frames", len(names) == 16, str(names))
+    if names:
+        r, g, b = Image.open(d / names[-1]).convert("RGB").getpixel((32, 32))
+        check("and the last one is from the end", b > 150 and r < 100, str((r, g, b)))
+
+
+def test_site_check_reads_the_push():
+    print("the site check looks at what was pushed, not only what was built")
+    from kiln import health
+    root = Path(TMP) / "siteroot"
+    (root / "public" / "data").mkdir(parents=True, exist_ok=True)
+    (root / "public" / "data" / "items.json").write_text(
+        json.dumps({"items": [{"id": "a"}]}), encoding="utf-8")
+    conn = store.connect()
+    real_root, real_pushed = config.ROOT, health._pushed_items
+    try:
+        config.ROOT = root
+        health._pushed_items = lambda: ([{"id": "a"}], "")
+        same = [f["what"] for f in health.check_site_matches_db(conn)]
+        health._pushed_items = lambda: ([], "")
+        stopped = [f["what"] for f in health.check_site_matches_db(conn)]
+        health._pushed_items = real_pushed
+        nogit = [f["what"] for f in health.check_site_matches_db(conn)]
+    finally:
+        config.ROOT, health._pushed_items = real_root, real_pushed
+        conn.close()
+    gone = "the live site does not have this build"
+    check("a build that was pushed raises nothing about the live site",
+          gone not in same, str(same))
+    check("a build that never reached the site is said", gone in stopped, str(stopped))
+    check("and a folder with no pushed copy says it could not look",
+          "could not read the pushed copy of the site" in nogit, str(nogit))
+
+
 def main() -> int:
+    test_site_check_reads_the_push()
+    test_frames_cover_the_video()
     test_first_pass_reports_and_lessons()
     test_check_plan()
     test_check_final()
@@ -727,7 +942,10 @@ def main() -> int:
     test_blocked_and_failed()
     test_nothing_to_do_and_selection()
     test_unread_asks_first()
+    test_one_yes_covers_the_list()
     test_sweep_stops_and_survives()
+    test_health_cards_listen()
+    test_inbox_changes()
     print()
     print("%d/%d pass" % (sum(results), len(results)))
     return 0 if all(results) else 1

@@ -102,7 +102,7 @@ def get_key(ref: str) -> str:
     """Return a credential, or '' if absent.
 
     Environment variables win over the store, so a CI or shell-exported key
-    overrides whatever was saved from the UI.
+    overrides whatever was saved through /api/models.
     """
     env_name = {"gemini": "GEMINI_API_KEY"}.get(ref, f"KILN_KEY_{ref.upper()}")
     if os.environ.get(env_name):
@@ -135,7 +135,7 @@ def known_refs() -> list[str]:
 
 
 def mask(value: str) -> str:
-    """What the UI is allowed to display. Never the key itself."""
+    """What an API response may show of a key. Never the key itself."""
     if not value:
         return ""
     if len(value) <= 10:

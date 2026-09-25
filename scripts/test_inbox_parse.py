@@ -41,12 +41,8 @@ if __name__ == "__main__":
             print("   do  : %s" % p["do"][:110])
         if p.get("saved_on"):
             print("   date: %s" % p["saved_on"])
-        for k in ("url", "urls"):
-            v = p.get(k)
-            if isinstance(v, list):
-                urls += v
-            elif v:
-                urls.append(v)
+        # `url` is only the first of `urls`, so counting both counted it twice.
+        urls += p.get("urls") or ([p["url"]] if p.get("url") else [])
         print()
     print("TOTAL URLS RECOVERED:", len(urls))
     print("EXPECTED             : 10  (3 instagram + 6 youtube + 1 article)")
@@ -56,3 +52,6 @@ if __name__ == "__main__":
     print("MISSING              :", missing or "none")
     bad = [u for u in urls if "\\" in u]
     print("STILL ESCAPED        :", bad or "none")
+    ok = len(urls) == len(set(urls)) == 10 and not missing and not bad
+    print("pass" if ok else "FAIL")
+    sys.exit(0 if ok else 1)
