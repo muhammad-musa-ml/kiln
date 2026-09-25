@@ -595,7 +595,8 @@ def offer_queue(at_once: int = 3) -> dict | None:
     if n > 1:
         lines.append("All of them: about %s, up to %d at a time."
                      % (_hm(total), at_once))
-    lines += [basis, "The answer is read at the start of the next sync."]
+    lines += [basis, "The answer is read when the next sync reaches its build "
+                     "queue, after the inbox, the follow-up and the site."]
     return questions.ask(
         QUEUE_JOB, "queue",
         title="%d project%s queued to build, about %s%s"
