@@ -371,6 +371,12 @@ def test_set_aside_wrong_research():
     again = (store.get_item(conn, "j").get("enrich") or {}).get("_set_aside") or {}
     check("a second set-aside keeps what the first one kept",
           (again.get("fields") or {}).get("company") == "TypeSafe AI", str(again)[:200])
+    v = brain._view(store.get_item(conn, "j"), [])
+    check("the planner sees what was set aside, and not as research",
+          "company" in (v.get("research_set_aside") or {}).get("fields", [])
+          and "company" not in v.get("research", {}), str(v.get("research_set_aside"))[:200])
+    check("and is told an earlier answer is not proof of what his page shows",
+          "earlier_follow_up" in brain.PLANNER and "research_set_aside" in brain.PLANNER)
     conn.close()
 
 
@@ -633,6 +639,32 @@ def test_nothing_to_do_and_selection():
           {"new-plain", "stale", "refired", "partial"} <= set(want), str(want))
     check("done, running, redo and final partial ones are not",
           not ({"e", "working", "redo", "partial-final"} & set(want)), str(want))
+    conn.close()
+
+
+def test_nothing_to_do_keeps_the_answer():
+    print("a later look that finds nothing to add keeps the earlier answer")
+    reset_db()
+    conn = store.connect()
+    make_item(conn, "k")
+    earlier = {"state": "done", "verdict": "work", "answer": "Jev is real; the repo is paid.",
+               "answered": "not asked", "sources": [{"url": "https://jev.example"}],
+               "tasks": [{"id": "t1"}], "unit": "u0"}
+    conn.execute("UPDATE items SET claude_state='done', claude_json=? WHERE id='k'",
+                 (json.dumps(earlier),))
+    conn.commit()
+    STUB.plans = [{"verdict": "nothing_to_do", "why": "already covered", "tasks": [],
+                   "final": {"model": "claude-haiku-4-5-20251001", "effort": "low", "brief": ""},
+                   "new_sections": [], "filing": []}]
+    out = brain.follow_up(["k"], conn=conn)
+    c = store.get_item(conn, "k").get("claude") or {}
+    check("the run is done", out.get("state") == "done", str(out)[:200])
+    check("the earlier answer, sources and tasks stay",
+          c.get("answer") == earlier["answer"] and c.get("sources") == earlier["sources"]
+          and c.get("tasks") == earlier["tasks"] and c.get("verdict") == "work", str(c)[:300])
+    check("and the later look is on record",
+          (c.get("checked_again") or {}).get("verdict") == "nothing_to_do"
+          and (c.get("checked_again") or {}).get("why") == "already covered", str(c)[:300])
     conn.close()
 
 
@@ -1119,6 +1151,7 @@ def main() -> int:
     test_refused_then_fixed()
     test_blocked_and_failed()
     test_nothing_to_do_and_selection()
+    test_nothing_to_do_keeps_the_answer()
     test_unread_asks_first()
     test_gate_keyword()
     test_claude_read_stored_in_full()
