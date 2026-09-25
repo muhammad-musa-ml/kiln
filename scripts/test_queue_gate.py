@@ -588,6 +588,11 @@ def test_ci_line() -> None:
     check("and one that was never checked says why", runner.ci_line(
         {"checked": False, "why": "the project has no workflow"})
         == "CI not checked: the project has no workflow")
+    check("a run still going when the wait ran out is not called a failure",
+          runner.ci_line({"checked": True, "ok": False, "conclusion": "timed out",
+                          "url": "u"}) == "CI still running when the wait ran out u"
+          and "FAILED" not in runner.ci_line({"checked": True, "ok": False,
+                                              "conclusion": "timed out"}))
 
 
 # --- building what was agreed ------------------------------------------------

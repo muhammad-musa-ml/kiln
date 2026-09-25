@@ -767,6 +767,10 @@ def ci_line(ci: dict, with_url: bool = True) -> str:
         return "CI not checked: %s" % (ci.get("why") or "no reason given")
     if ci.get("ok"):
         return "CI passed" + url
+    if ci.get("conclusion") == "timed out":
+        # Still going, or never started, when the wait ran out. Not a failure.
+        return ("CI still running when the wait ran out" + url if ci.get("url")
+                else "CI had not started when the wait ran out")
     return "CI FAILED (%s)%s" % (ci.get("conclusion") or ci.get("why") or "?", url)
 
 
