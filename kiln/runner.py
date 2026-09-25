@@ -357,15 +357,17 @@ def _already_built(item_id: str, this_job: str) -> str:
 
 
 def _chosen_agent(job_id: str) -> str:
-    """Where an answered question says this job should go."""
-    for q in questions.all_questions():
-        if q.get("job_id") != job_id or not q.get("answered_at"):
-            continue
-        answer = (q.get("answer") or "").strip().lower()
-        if answer.startswith("skip"):
-            return "skip"
-        if "claude" in answer:
-            return "claude"
+    """Where the answered questions say this job should go.
+
+    A skip on any card wins. It used to lose to an older card answered
+    claude, which sorts first by name, so skip did nothing at all.
+    """
+    answers = [(q.get("answer") or "").strip().lower() for q in questions.all_questions()
+               if q.get("job_id") == job_id and q.get("answered_at")]
+    if any(a.startswith("skip") for a in answers):
+        return "skip"
+    if any("claude" in a for a in answers):
+        return "claude"
     return ""
 
 
