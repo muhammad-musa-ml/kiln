@@ -32,8 +32,10 @@ the prompt ships inside the data, so it needs no server.
 - **Adding links.** No write route exists. If you POST to one you get a 405.
 - **Running or queueing a build.** Needs a real machine with a shell.
 - **Installing anything.** Same. A public endpoint that runs shell commands
-  is remote code execution with extra steps, so it only exists locally and
-  it refuses to load unless `KILN_LOCAL=1`.
+  is remote code execution with extra steps, so it only exists on the local
+  server. That server refuses every write, and the install route above all,
+  when `KILN_LOCAL` is set to anything but 1 (it is 1 unless set otherwise),
+  and it answers only to this machine's own names.
 - **Live link checking.** It says "checked 23 Sep" rather than "checked just
   now" because that's the truth. The check ran when I processed the item and
   the result was stored. A static page has nothing to re-check with. The
@@ -96,8 +98,9 @@ and is always read twice with the two reads merged.
 I keep a doc in Drive and just paste links there. Kiln reads it and never
 writes to it, so I can reorganise the doc however I want. It remembers each
 link it has read, not each line, so a link added to an old line later still
-gets read, and an instruction I write under a link after it was read still
-reaches it.
+gets read and joins the others on that line, and an instruction I write
+under a link after it was read still reaches it, if the item had none of
+its own.
 
 The scheduled sync reads the doc through the Drive connector and saves a
 copy of it for `scripts/daily.py` (next section). By hand, from a saved copy:
@@ -123,7 +126,8 @@ Every pass does the same six stages, and prints each one: the inbox (new
 links, plus another go at reads that failed), Claude's follow-up, the site
 (rebuilt, audited, and pushed if it changed), the build queue, publishing
 finished builds, and a check of its own work, which includes whether the
-live site actually got the build. Questions waiting on me are printed
+push carried the build (the site deploys from what was pushed). Questions
+waiting on me are printed
 before any of that, and any raised during the pass are printed in full at
 the end.
 
@@ -249,8 +253,10 @@ call, which is the part that was ever true.
 A couple of things I found out the hard way:
 
 - Turning thinking on made extraction worse, not better. It reasons instead
-  of transcribing and you get less text for more money. It's off for reading
-  and only on for judgement calls.
+  of transcribing and you get less text for more money. So Kiln only asks
+  for thinking on judgement calls. For reading it asks for none, which leaves
+  each model's own default in place; whether to switch it off outright is an
+  open question in `WORKLOG.md`.
 - The same model on the same images gives different results run to run, so
   anything important gets read twice and the results merged.
 - Local vision models can't do video at all, only frames.
@@ -273,10 +279,10 @@ tasks run three at a time, and a last step puts together what I see: the
 answer, any document (turned into a PDF here), where the facts came from,
 and a better title if the first one was bad. When the first pass researched
 the wrong question, say a setup guide taken for a job posting, that research
-comes off the page and the item's tag is corrected; it stays on this machine
-with the reason. Whatever it learned about
-handling a kind of post goes into a playbook, and the next post like it is
-searched and planned with that in hand.
+and the links it added come off the page and the item's tag is corrected;
+it stays on this machine with the reason. Whatever it learned about handling
+a kind of post goes into a playbook, and the next post like it is searched
+and planned with that in hand.
 
 It also files things into sections I name myself. "make a new section called
 to watch with subsections for types of videos" makes the section, works out
@@ -288,13 +294,15 @@ It sees the post's pictures and what the first pass found, and the web when
 its task needs it. Safe mode matters for cost too: without it every call
 loads my whole Claude setup first, about 183k tokens of it.
 
-A sync follows up six items at most (`KILN_BRAIN_UNITS`), so one busy day
-cannot turn into hours of Claude work, and the rest wait for the next one.
-Items no free model could read go on a card first. One yes covers every
-item on it, read six a sync.
+A sync follows up six units at most (`KILN_BRAIN_UNITS`; all the links on
+one line of the inbox are one unit), so one busy day cannot turn into hours
+of Claude work, and the rest wait for the next one. A unit can still take a
+while: the planner alone at max effort has taken about seventeen minutes. Items no
+free model could read go on a card first. One yes covers every item on it,
+and they are read within the same six a sync.
 
 ```bash
-python -m kiln.brain sweep        # follow up what is waiting, six at most
+python -m kiln.brain sweep        # follow up what is waiting, six units at most
 python -m kiln.brain run <id>     # one item, now; reads it too if no free model could
 python -m kiln.brain show <id>    # what it did for that item
 ```
@@ -310,10 +318,13 @@ be there and exits non-zero if it finds something. It reads the text inside
 every PDF as well, and fails if any eight words in a row of what I wrote
 next to a link turn up anywhere in the build. A note of five to seven words
 is looked for whole. One under five is not checked, because that few words
-turn up in ordinary text. `scripts/test_audit.py` plants each kind of leak
-in a throwaway copy to make sure the audit still catches it.
-`scripts/publish_and_deploy.sh` runs the build and the audit and won't
-deploy if the audit fails.
+turn up in ordinary text. It also fails if the page itself names an AI
+vendor or model; the items may, since a post can be about one.
+`scripts/test_audit.py` plants a private field name, long and short runs of
+my notes, a stray gate key, a whitelist that admits a private field, and a
+vendor named in the page, each in a throwaway copy, to make sure the audit
+still catches them. `scripts/publish_and_deploy.sh` runs the build and the
+audit and won't deploy if the audit fails.
 
 ## Layout
 
@@ -361,7 +372,8 @@ and readme before a publish.
 For builds, a coding CLI: codex, or gemini's. `claude` builds a job only
 when I answer a card saying so. For publishing, `git` and `gh` signed in,
 and pytest wherever a project's tests run (its own `.venv`, or Kiln's
-Python), or a project that has tests will not publish.
+Python), or a project that has tests will not publish. `npx` (Node) only
+for `scripts/publish_and_deploy.sh`; the sync pushes instead.
 
 Ollama is optional. Kiln finds its port on its own, because mine was on a
 non-standard one, and it can be added as a provider, but no list uses it.

@@ -104,7 +104,8 @@ CREATE VIRTUAL TABLE IF NOT EXISTS items_fts USING fts5(
 );
 
 -- Sections the owner asks for by name, with subsections inside them. The
--- action facet is a closed list of eight verbs; this is the open one.
+-- action facet is a closed list (eight verbs, and redo for a link that could
+-- not be read); this is the open one.
 CREATE TABLE IF NOT EXISTS sections (
   id          TEXT PRIMARY KEY,        -- slug path: "to-watch" or "to-watch/rag"
   name        TEXT NOT NULL,

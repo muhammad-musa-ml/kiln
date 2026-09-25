@@ -1,4 +1,4 @@
-"""Pull the inbox doc and process everything new."""
+"""Process everything new in a saved copy of the inbox doc. No follow-up."""
 import sys, time
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))

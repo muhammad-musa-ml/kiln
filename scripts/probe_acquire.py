@@ -1,4 +1,4 @@
-"""Probe every login-free route to a public Instagram carousel.
+"""Probe the routes to a public Instagram carousel, with a saved session if one exists.
 
 Run:  python scripts/probe_acquire.py <url>
 """
