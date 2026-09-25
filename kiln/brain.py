@@ -111,7 +111,9 @@ FINAL_SCHEMA = _obj(
         extra_sections=_arr(_obj(heading=_S, detail=_S)),
         extra_links=_arr(_obj(url=_S, label=_S)),
         drop_links=_arr(_obj(url=_S, why=_S)),
-        next_action=_S)),
+        next_action=_S,
+        action=_enum([""] + list(store.ACTIONS)),
+        set_aside=_B, set_aside_why=_S)),
     lessons=_arr(_obj(kind=_S, topics=_arr(_S), lesson=_S)))
 
 
@@ -126,6 +128,7 @@ WHEN THERE IS WORK
 - He attached an instruction and the first pass did not fully carry it out. The instruction is the task. A request for a PDF, a list, links, deadlines, prices, a comparison, setup steps, or a check of whether something is real or free, is only done when that thing exists and is right.
 - The first pass listed followups or things it could not do, and they are worth doing and possible with the tools below.
 - The read is thin, wrong or missing things it clearly should have: slides not covered, names on screen not captured, a title that is the post's clickbait rather than its subject.
+- The first pass researched the wrong question: it took a setup guide for a job posting, a tool for a course, and so on, so the research on his page is about the wrong thing.
 - Something he would act on is unverified, or a link he needs is dead and a live one exists.
 
 WHEN THERE IS NOT
@@ -152,7 +155,7 @@ RULES FOR TASKS
 - Links come only from pages actually fetched or from the post itself. A worker never guesses a URL.
 - When he asked for a document, one task writes it into out/ as Markdown, after the research it needs, and its brief says so.
 
-THE FINAL STEP. Choose its model and effort, and write its brief: what the owner should end up with for each item (the answer he reads, which files are the deliverables and which must become PDFs, and what to correct in a title, hook or summary). The final step can read every task's results and write files. It can add sections and links the first pass missed, and take links off the item that turned out to be wrong; it cannot rewrite the first pass's sections. When the verdict is nothing_to_do it does not run, but it still needs a model, an effort and a brief.
+THE FINAL STEP. Choose its model and effort, and write its brief: what the owner should end up with for each item (the answer he reads, which files are the deliverables and which must become PDFs, and what to correct in a title, hook or summary). The final step can read every task's results and write files. It can add sections and links the first pass missed, and take links off the item that turned out to be wrong. It cannot rewrite the first pass's sections, but it can set aside the first pass's research when that answered the wrong question, and correct the item's action tag. When the verdict is nothing_to_do it does not run, but it still needs a model, an effort and a brief.
 
 SECTIONS. He files items into sections he names himself, with subsections (types or topics) inside them. The current tree and what belongs in each part is below.
 - If he asked for a section or for subsections, create them in new_sections. "path" is [section] or [section, subsection], and "about" says in one line what belongs there. Keep subsections few, plainly named, and broad enough that later items will fit them.
@@ -257,6 +260,8 @@ FOR EACH ITEM RETURN
 - extra_sections, extra_links: things in the post itself that the first pass missed, and the corrected form of any link that was wrong. [] when none.
 - drop_links: links on the item that the work showed to be wrong (a misread address, a page that does not exist, a link to the wrong thing), each with a short reason. They come off his list; put the right one in extra_links. [] when none.
 - next_action: the single most useful next step for him, or "".
+- action: the item's action tag when the first pass got it wrong, one of {actions}; "" keeps the current one.
+- set_aside: true when the first pass's research answered the wrong question for this item, for example it took a setup guide for a job posting and went looking for the job. That research then comes off his page, so the answer has to give him what the item is actually for. set_aside_why: one sentence on what the first pass got wrong; "" when set_aside is false.
 
 LESSONS: up to three short, general lessons about handling items like these next time: what to search for, which kinds of source were reliable, what the first pass tends to miss. No links, no names from the post, nothing true only of this one item. Write one only if it would change what the next planner does; [] is fine.
 
@@ -741,6 +746,13 @@ def check_final(final: dict, ids: list[str], fdir: Path, asked: bool = False) ->
     unknown = [i for i in got if i not in ids]
     if unknown:
         problems.append("entries for unknown items %s" % unknown)
+    for r in final.get("items") or []:
+        if (r.get("action") or "") not in ("",) + tuple(store.ACTIONS):
+            problems.append("item %s: action %r is not one of %s"
+                            % (r.get("id"), r.get("action"), ", ".join(store.ACTIONS)))
+        if r.get("set_aside") and not str(r.get("set_aside_why") or "").strip():
+            problems.append("item %s: set_aside needs set_aside_why, one sentence on "
+                            "what the first pass got wrong" % r.get("id"))
     root = fdir.resolve()
     for r in final.get("items") or []:
         for a in r.get("artifacts") or []:
@@ -772,6 +784,7 @@ def _final(run_dir: Path, plan: dict, instruction: str, done: dict, views: dict,
     prompt = FINAL.format(brief=plan["final"].get("brief", ""), why=plan.get("why", ""),
                           instruction=instruction or "(none: he attached no instruction)",
                           filed=filed, voice=_voice(), results=results[:120000],
+                          actions=", ".join(store.ACTIONS),
                           items=_dump(list(views.values()))[:120000])
     (fdir / "prompt.md").write_text(prompt, encoding="utf-8")
 
@@ -890,10 +903,25 @@ def _store_final(conn, items: list[dict], plan: dict, final: dict, done: dict,
             "final": logs.get("final", []), "at": now,
         }
         rec: dict[str, Any] = {"id": it["id"], "url": it["url"], "claude_state": "done",
-                               "claude_json": json.dumps(claude, ensure_ascii=False),
                                "claude_at": now}
         for k, v in claude["improved"].items():
             rec[k] = v
+        if r.get("set_aside"):
+            # Research that answered the wrong question comes off the page but
+            # is kept here, whole, with the reason. The underscored fields are
+            # how it was made and stay where they are.
+            enr = dict(it.get("enrich") or {})
+            moved = {k: enr.pop(k) for k in list(enr) if not k.startswith("_")}
+            why = _plain(r.get("set_aside_why"))
+            enr["_set_aside"] = {"why": why, "at": now, "fields": moved}
+            rec["enrich_json"] = json.dumps(enr, ensure_ascii=False)
+            claude["set_aside"] = why
+        action = r.get("action") or ""
+        if action in store.ACTIONS and action != it.get("action"):
+            rec["action"] = action
+            store.set_tags(conn, it["id"], "action", [action])
+            claude["action_was"] = it.get("action") or ""
+        rec["claude_json"] = json.dumps(claude, ensure_ascii=False)
         store.upsert_item(conn, rec)
         if checked or dropped:
             # Exact match, never lowercased: a YouTube id differs from a wrong

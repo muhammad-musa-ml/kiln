@@ -600,6 +600,7 @@ function detail(it){
   const followSec = (fu.answer_html || (fu.artifacts||[]).length || working) ? `<div class="sec"><h4>${working?'Following up on this now':heading}</h4>
     ${fu.answer_html?`<div class="answer">${fu.answer_html}</div>`:''}
     ${!STATIC && c.missing?`<p class="warn">Not done: ${esc(c.missing)}</p>`:''}
+    ${!STATIC && c.set_aside?`<p class="warn">The first read's research was set aside: ${esc(c.set_aside)}</p>`:''}
     ${fu.next_action?`<p class="warn">Next: ${esc(fu.next_action)}</p>`:''}
     ${fuFiles}${fuSources}</div>` : '';
 

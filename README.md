@@ -267,7 +267,10 @@ Opus 5.5, Sonnet or Haiku, anywhere from low to max. Never Fable, and that
 is checked in code before anything runs rather than left to the prompt. The
 tasks run three at a time, and a last step puts together what I see: the
 answer, any document (turned into a PDF here), where the facts came from,
-and a better title if the first one was bad. Whatever it learned about
+and a better title if the first one was bad. When the first pass researched
+the wrong question, say a setup guide taken for a job posting, that research
+comes off the page and the item's tag is corrected; it stays on this machine
+with the reason. Whatever it learned about
 handling a kind of post goes into a playbook, and the next post like it is
 searched and planned with that in hand.
 

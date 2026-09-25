@@ -288,6 +288,61 @@ def test_check_final():
               {"items": [quiet], "lessons": []}, ["a"], fdir, asked=True)))
     check("and allowed when he did not",
           brain.check_final({"items": [quiet], "lessons": []}, ["a"], fdir, asked=False) == [])
+    odd = dict(entry("a"), action="redo")
+    check("an action tag outside the list is refused, redo included",
+          any("action" in x for x in brain.check_final(
+              {"items": [odd], "lessons": []}, ["a"], fdir)))
+    bare = dict(entry("a"), set_aside=True, set_aside_why=" ")
+    check("setting research aside needs a reason",
+          any("set_aside_why" in x for x in brain.check_final(
+              {"items": [bare], "lessons": []}, ["a"], fdir)))
+    fine = dict(entry("a"), action="learn", set_aside=True,
+                set_aside_why="it took a setup guide for a job posting")
+    check("and with a reason and a real tag it passes",
+          brain.check_final({"items": [fine], "lessons": []}, ["a"], fdir) == [])
+
+
+def test_set_aside_wrong_research():
+    print("research that answered the wrong question comes off the page")
+    from kiln import publish
+    reset_db()
+    conn = store.connect()
+    make_item(conn, "j", kind="tutorial")
+    conn.execute("UPDATE items SET action='apply', enrich_json=? WHERE id='j'", (json.dumps({
+        "_enricher": "job", "_subject": "Jarvis", "role": "Senior Infrastructure Engineer",
+        "company": "TypeSafe AI", "posting_urls": [{"url": "https://jobs.example/1"}],
+        "answer": "a job", "followups": []}),))
+    store.set_tags(conn, "j", "action", ["apply"])
+    conn.commit()
+    run_dir = Path(config.DATA) / "brain" / "setaside"
+    fdir = run_dir / "final"
+    (fdir / "out").mkdir(parents=True, exist_ok=True)
+    final = {"items": [{"id": "j", "answer": "The setup, step by step.", "answered": "not asked",
+                        "missing": "", "retry_later": False, "title": "", "hook": "",
+                        "summary": "", "artifacts": [], "sources": [], "extra_sections": [],
+                        "extra_links": [], "drop_links": [], "next_action": "",
+                        "action": "learn", "set_aside": True,
+                        "set_aside_why": "it took a setup guide for a job posting"}],
+             "lessons": []}
+    brain._store_final(conn, [store.get_item(conn, "j")], {"why": "wrong research"}, final,
+                       {}, {}, run_dir, fdir, "u1")
+    it = store.get_item(conn, "j")
+    enr = it.get("enrich") or {}
+    check("the job fields are off the item",
+          not any(k in enr for k in ("role", "company", "posting_urls", "answer")), str(enr)[:200])
+    check("but kept on it, whole, with the reason",
+          (enr.get("_set_aside") or {}).get("fields", {}).get("company") == "TypeSafe AI"
+          and "job posting" in (enr.get("_set_aside") or {}).get("why", ""), str(enr)[:300])
+    check("and how it was made stays", enr.get("_enricher") == "job")
+    check("the action tag is corrected, in both places",
+          it.get("action") == "learn" and (it.get("tags") or {}).get("action") == ["learn"],
+          "%s %s" % (it.get("action"), (it.get("tags") or {}).get("action")))
+    check("and the old one is on record", (it.get("claude") or {}).get("action_was") == "apply")
+    pub = publish.public_item(it)
+    check("the published copy has no trace of the job research",
+          not any(k in (pub.get("enrich") or {}) for k in ("role", "company", "posting_urls"))
+          and "TypeSafe" not in json.dumps(pub), json.dumps(pub)[:300])
+    conn.close()
 
 
 def test_command_line():
@@ -936,6 +991,7 @@ def main() -> int:
     test_first_pass_reports_and_lessons()
     test_check_plan()
     test_check_final()
+    test_set_aside_wrong_research()
     test_command_line()
     test_end_to_end()
     test_refused_then_fixed()
