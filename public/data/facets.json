@@ -1,14 +1,20 @@
 {
  "total": 25,
  "by_action": {
-  "redo": 11,
+  "redo": 10,
+  "apply": 1,
   "build": 2,
-  "reference": 1,
-  "learn": 2,
+  "reference": 2,
   "watch": 7,
-  "read": 2
+  "read": 1,
+  "learn": 2
  },
  "by_topic": {
+  "anthropic": 2,
+  "artificial intelligence": 4,
+  "career advice": 1,
+  "certifications": 1,
+  "claude": 3,
   "ai agents": 3,
   "ai tools": 1,
   "automation": 3,
@@ -18,7 +24,6 @@
   "obsidian": 1,
   "productivity": 3,
   "workflow": 1,
-  "claude": 2,
   "coding": 2,
   "web development": 1,
   "data science": 2,
@@ -32,9 +37,7 @@
   "neural networks": 2,
   "word embeddings": 1,
   "word2vec": 1,
-  "anthropic": 1,
   "prompt engineering": 1,
-  "artificial intelligence": 3,
   "large language models": 1,
   "transformers": 2,
   "data engineering": 1,
@@ -55,13 +58,13 @@
    "id": "to-watch",
    "name": "To Watch",
    "parent": "",
-   "count": 9
+   "count": 10
   },
   {
    "id": "to-watch/concept-explainers",
    "name": "Concept Explainers",
    "parent": "to-watch",
-   "count": 3
+   "count": 4
   },
   {
    "id": "to-watch/full-courses",
@@ -78,5 +81,5 @@
  ],
  "by_status": {},
  "gated": 2,
- "dead_links": 15
+ "dead_links": 3
 }

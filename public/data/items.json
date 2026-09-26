@@ -45,10 +45,9 @@
    "url": "https://www.instagram.com/reel/DcE9yTCjt8H/?stkn=d2VtZmgxN252Nncy",
    "kind": "other",
    "action": "redo",
-   "title": "since wheeee? comment CONNECT to get the workaround #composio #claude ",
-   "owner": "freetools848",
-   "posted": "August 15, 2026",
-   "slide_count": 0,
+   "title": "Log into Instagram",
+   "owner": "See everyday moments from your close friends.",
+   "slide_count": 1,
    "links_checked": "25 Sep 2026",
    "note": {},
    "enrich": {},
@@ -58,6 +57,8 @@
     ]
    },
    "links": [],
+   "media_id": "4cad66124c14b023",
+   "pdf_file": "doc.pdf",
    "slide_ext": ".webp"
   },
   {
@@ -83,21 +84,327 @@
   {
    "id": "4a4f9e2c6f9530d9",
    "url": "https://www.instagram.com/reel/DdnRJ7Jxlll/?stkn=YWxqYjdqbHlyY3Nr",
-   "kind": "other",
-   "action": "redo",
-   "title": "Boost your resume with this! #jobsearch #claude #ai #founder #startup\"",
+   "kind": "course",
+   "action": "apply",
+   "title": "Get Certified with Anthropic's Claude Certified Architect Foundations Exam",
+   "hook": "Anthropic's $125 Claude architect exam is real, but you need a partner-company email to register, and employers have no track record with it yet.",
+   "summary": "Claude Certified Architect - Foundations (CCAR-F) is Anthropic's official exam, launched March 2026 and delivered by Pearson VUE: 60 questions, 120 minutes, $125 per attempt, 720/1000 to pass, valid 12 months. Registration needs a work email at a Claude Partner Network company. The exam tests Claude Code, the Agent SDK, MCP, structured output and context management, not model selection or cost as the reel says. The four free prep courses are live and open to anyone. The reel's Deloitte line refers to a separate, earlier internal Deloitte training program.",
    "owner": "bengusberg",
    "posted": "September 22, 2026",
    "slide_count": 0,
    "links_checked": "25 Sep 2026",
-   "note": {},
+   "note": {
+    "sections": [
+     {
+      "heading": "Overview and Industry Adoption",
+      "detail": "Deloitte paid thousands of employees to get certified through Anthropic's official certification program, which is accessible to anyone."
+     },
+     {
+      "heading": "Credential Details",
+      "detail": "Named 'Claude Certified Architect – Foundations', this certification proves competence in architecting Claude solutions, choosing models, designing agentic versus single-shot architectures, and managing costs and evaluations."
+     },
+     {
+      "heading": "Free Preparation Courses",
+      "detail": "Anthropic Academy offers free preparatory courses: AI Fluency: Framework & Foundations (Level 100), Claude 101 (Level 100), Building with the Claude API (Level 100-200), and Claude with Amazon Bedrock (Level 100-200)."
+     },
+     {
+      "heading": "Exam Format and Cost",
+      "detail": "The exam consists of 60 multiple-choice questions with a 120-minute time limit (~135-minute seat time) and costs $125 USD."
+     },
+     {
+      "heading": "Registration",
+      "detail": "Candidates can sign up and access materials at anthropic-partners.skilljar.com/claude-certified-architect-foundations-certification."
+     }
+    ],
+    "onscreen_text": [
+     "ANTHROP\\C Deloitte.",
+     "CLAUDE HAS AN",
+     "OFFICIAL AI CERTIFICATION",
+     "THAT DELOITTE PAID",
+     "THOUSANDS OF EMPLOYEES",
+     "TO GET",
+     "ANYONE CAN GET IT",
+     "AND CLAUDE GIVES",
+     "YOU ALL THE",
+     "PREP MATERIALS FOR",
+     "FREE",
+     "HERE'S HOW TO",
+     "BECOME AN AI",
+     "EXPERT IN 30",
+     "SECONDS OR LESS",
+     "I'M BEN GUSBERG",
+     "I'M A STANFORD",
+     "FOUNDER OF AN",
+     "AI STARTUP",
+     "WE'VE RAISED $4 MILLION",
+     "Claude Certified Architect – Foundations",
+     "CLAUDE CERTIFIED ARCHITECT",
+     "Validates that you can scope and design Claude-based solutions: selecting the right model and deployment platform, framing agentic versus single-shot architectures, and accounting for evaluation, cost, and responsible deployment from day one.",
+     "IT PROVES YOU",
+     "CAN DESIGN AND",
+     "IMPLEMENT AI SYSTEMS",
+     "AND AGENTIC WORKFLOWS",
+     "IT'S MORE ADVANCED",
+     "THAN A BASIC",
+     "AI CERTIFICATIONS",
+     "SO YOU'LL WANT",
+     "TO REVIEW THE",
+     "Prepare for this exam",
+     "These free courses on the Anthropic Academy cover the domains above. Most candidates complete them in order, then register.",
+     "AI Fluency: Framework & Foundations",
+     "Level 100",
+     "Learn to collaborate with AI systems effectively, efficiently, ethically, and safely.",
+     "Claude 101",
+     "Level 100",
+     "Use Claude for everyday work tasks, understand core features, and explore resources for more advanced learning.",
+     "Building with the Claude API",
+     "Level 100-200",
+     "Working with Anthropic models using the Claude API — from authentication, prompt engineering, and evaluations through tool use, RAG, agents, and production patterns.",
+     "Claude with Amazon Bedrock",
+     "Level 100-200",
+     "Working with Anthropic models through Amazon Bedrock — setup and foundational concepts through tool use, RAG, agents, and production patterns.",
+     "FREE PREP MATERIALS",
+     "THEY GIVE YOU",
+     "AFTER YOU PREP",
+     "THE ACTUAL EXAM",
+     "Length 120 minutes (~135 min seat time)",
+     "Questions 60",
+     "IS 60 MULTIPLE",
+     "CHOICE QUESTIONS",
+     "WHICH TAKES",
+     "ABOUT 2 HOURS",
+     "ANTHROPIC CERTIFIED ANTHROPIC CERTIFIED",
+     "FOUNDATIONS",
+     "Claude Certified Architect",
+     "AI",
+     "Valid: June 7, 2024 to Dec 7, 2026",
+     "Certificate No: hianyxdnizdw",
+     "View: https://verify.skilljar.com/c/hianyxdnizdw",
+     "ONCE YOU PASS",
+     "YOU'RE OFFICIALLY",
+     "CERTIFIED",
+     "AS AN AI",
+     "EXPERT",
+     "YOU CAN THEN",
+     "ADD THAT CERT",
+     "TO YOUR RESUME",
+     "LinkedIn",
+     "AND IMMEDIATELY",
+     "BECOME MORE ATTRACTIVE",
+     "TO ANY FUTURE",
+     "EMPLOYERS",
+     "Price $125 USD",
+     "THE EXAM",
+     "COSTS JUST",
+     "$125",
+     "TO SIGN UP",
+     "AND GET THE",
+     "FREE PREP MATERIALS",
+     "JUST GO TO",
+     "anthropic-partners.skilljar.com/claude-certified-architect-foundations-certification",
+     "ANTHROP\\C Certifications",
+     "THIS WEBSITE",
+     "I'M BEN GUSBERG",
+     "FOLLOW ME FOR",
+     "MORE ON AI",
+     "FOUNDER",
+     "LIFE AND LEADERSHIP"
+    ],
+    "entities": [
+     {
+      "name": "Anthropic",
+      "type": "company",
+      "why": "Creator of Claude and the Claude Certified Architect certification"
+     },
+     {
+      "name": "Claude",
+      "type": "tool",
+      "why": "AI model and system central to the certification curriculum"
+     },
+     {
+      "name": "Deloitte",
+      "type": "company",
+      "why": "Consulting firm that funded thousands of employees to earn this certification"
+     },
+     {
+      "name": "Ben Gusberg",
+      "type": "person",
+      "why": "Video creator, Stanford founder who raised $4 million for an AI startup"
+     },
+     {
+      "name": "Claude Certified Architect – Foundations",
+      "type": "course",
+      "why": "The official 60-question AI certification exam discussed"
+     },
+     {
+      "name": "Amazon Bedrock",
+      "type": "tool",
+      "why": "Cloud platform covered in one of the free prep course modules"
+     },
+     {
+      "name": "Skilljar",
+      "type": "company",
+      "why": "Platform hosting the Anthropic Partner certification courses and credential verification"
+     }
+    ],
+    "topics": [
+     "artificial intelligence",
+     "claude",
+     "anthropic",
+     "certifications",
+     "career advice"
+    ],
+    "spoken_transcript": "Claude has an official AI certification that Deloitte paid thousands of employees to get. Anyone can get it, and Claude gives you all the prep materials for free. Here's how to become an AI expert in 30 seconds or less. I'm Ben Gusberg. I'm a Stanford founder of an AI startup. We've raised $4 million. It's called the Claude Certified Architect. It proves you can design and implement AI systems and agentic workflows. It's more advanced than a basic AI certifications, so you'll want to review the free prep materials they give you. After you prep, the actual exam is 60 multiple choice questions, which takes about two hours. Once you pass, you're officially certified as an AI expert. You can then add that cert to your resume or LinkedIn and immediately become more attractive to any future employers. The exam costs just $125. To sign up and get the free prep materials, just go to this website. I'm Ben Gusberg. Follow me for more on AI, founder life, and leadership.",
+    "open_questions": [
+     "What is the passing score percentage required for the certification exam?",
+     "Can the exam be retaken immediately if failed, and does it require repaying the $125 fee?"
+    ]
+   },
    "enrich": {},
    "tags": {
     "action": [
-     "redo"
+     "apply"
+    ],
+    "section": [
+     "to-watch/concept-explainers"
+    ],
+    "topic": [
+     "anthropic",
+     "artificial intelligence",
+     "career advice",
+     "certifications",
+     "claude"
     ]
    },
-   "links": [],
+   "followup": {
+    "answer_html": "<p><strong>The exam is real and run by Anthropic, but it is not open to anyone.</strong> Anthropic's own <a href=\"https://anthropic-partners.skilljar.com/page/faq-certifications\">certification FAQ</a> says you need a work email on the domain of a recognized Claude Partner Network company to register. Personal email addresses are rejected at checkout. Joining the partner network is free, but companies join it, not individuals. No official page offers another way to register. The free prep courses are different: anyone with a free Skilljar account can take them.</p>\n<p><strong>Your two open questions:</strong> you need a scaled score of 720 out of 1,000 to pass. Every attempt costs the full $125, including retakes.</p>\n<h3>What the credential is</h3>\n<ul>\n<li><strong>Name:</strong> Claude Certified Architect - Foundations, exam code CCAR-F. It launched on March 12, 2026, together with the Claude Partner Network.</li>\n<li><strong>Tiers:</strong> It is one of four role-based Claude certifications: Associate - Foundations, Developer - Foundations, Architect - Foundations and Architect - Professional. The Professional exam costs $175. Its question count, time limit and passing score are not published.</li>\n<li><strong>Format:</strong> 60 questions. Some are multiple choice and some ask for several answers (each question says how many). The questions are built around 4 scenarios, picked at random from 6 published ones. Time limit: 120 minutes.</li>\n<li><strong>Price:</strong> $125 USD per attempt. Some partner tiers see a lower price at checkout.</li>\n<li><strong>Passing score:</strong> 720 on a 100-1,000 scale. It is a fixed standard, not graded on a curve.</li>\n<li><strong>Retakes:</strong> Each attempt costs the full $125. After a first fail you wait 14 days, after a second 30 days, after a third 90 days. You get at most 4 attempts in any rolling 12 months.</li>\n<li><strong>Validity:</strong> 12 months. Renewal is free, through an online assessment with no proctor. If the credential lapses, you have to retake the full exam and pay the full fee again.</li>\n<li><strong>Prerequisites:</strong> None are enforced. The guide describes the ideal candidate as a solution architect with 6+ months of hands-on work with the Claude API, Agent SDK, Claude Code and MCP.</li>\n<li><strong>Registration and delivery:</strong>\n<ol>\n<li>Register and pay on the <a href=\"https://anthropic-partners.skilljar.com/claude-certified-architect-foundations-certification\">official registration page</a>.</li>\n<li>Create a Pearson VUE account and book a slot.</li>\n<li>Take the exam online with a remote proctor (OnVUE) or at a Pearson test center.</li>\n<li>You can reschedule or cancel up to 24 hours before your slot. Changes inside 24 hours forfeit the fee.</li>\n</ol>\n</li>\n</ul>\n<p><strong>What the reel gets right:</strong> the name, 60 questions, 120 minutes and $125.</p>\n<p><strong>What the reel gets wrong or cannot back up:</strong></p>\n<ol>\n<li>\n<p>&quot;Anyone can get it&quot;: wrong for the exam, which needs a partner-company email. Only the courses are open to all.</p>\n</li>\n<li>\n<p>What the exam tests: the reel lists choosing models and deployment platforms, cost and responsible deployment. None of these are scored areas. The published blueprint is:</p>\n<ul>\n<li>Agentic Architecture and Orchestration: 27%</li>\n<li>Claude Code Configuration and Workflows: 20%</li>\n<li>Prompt Engineering and Structured Output: 20%</li>\n<li>Tool Design and MCP Integration: 18%</li>\n<li>Context Management and Reliability: 15%</li>\n</ul>\n<p>These are hands-on build topics.</p>\n</li>\n<li>\n<p>&quot;~135 min seat time&quot;: no official source gives this. Only the 120-minute limit is published.</p>\n</li>\n<li>\n<p>The sample certificate says it is valid from June 7, 2024 to Dec 7, 2026. Official validity is 12 months, and the exam did not exist in 2024. The badge's verification link returns a 404 error.</p>\n</li>\n<li>\n<p>&quot;Officially certified as an AI expert&quot;: it certifies Claude-specific architecture skills, not general AI expertise.</p>\n</li>\n</ol>\n<h3>Free prep path</h3>\n<p>All four courses named in the reel are live and free. All four appear on Anthropic's <a href=\"https://anthropic-partners.skilljar.com/page/claude-certified-architect-foundations-prep-courses\">official prep-courses page</a> for this exam. None has been renamed or retired. The &quot;Level 100&quot; labels shown in the reel do not appear on the live pages. In the reel's order:</p>\n<ol>\n<li><a href=\"https://academy.claude.com/courses/ai-fluency-framework-foundations\">AI Fluency: Framework and Foundations</a>: 4 hours, 14 lessons, 1 quiz</li>\n<li><a href=\"https://academy.claude.com/courses/claude-101\">Claude 101</a>: 2.5 hours, 13 lessons, 1 quiz</li>\n<li><a href=\"https://academy.claude.com/courses/building-with-the-claude-api\">Building with the Claude API</a>: 9 hours, 67 lessons, 8 quizzes</li>\n<li><a href=\"https://academy.claude.com/courses/claude-with-amazon-bedrock\">Claude with Amazon Bedrock</a>: 8 hours, 65 lessons, 8 quizzes</li>\n</ol>\n<p>The stated total is 23.5 hours. That does not include reading the exam guide or doing its practice material.</p>\n<p>Only some of this matches the exam. The exam guide lists cloud-provider setup (AWS, GCP, Azure) as out of scope, so the Bedrock course covers material the exam does not test. AI Fluency and Claude 101 are general introductions. A shorter path aimed at the exam:</p>\n<ol>\n<li><a href=\"https://academy.claude.com/courses/building-with-the-claude-api\">Building with the Claude API</a>: 9 hours</li>\n<li><a href=\"https://academy.claude.com/courses/introduction-to-model-context-protocol\">Introduction to Model Context Protocol</a>: 1 hour</li>\n<li><a href=\"https://academy.claude.com/courses/claude-code-in-action\">Claude Code in Action</a>: 1 hour</li>\n<li>The <a href=\"https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F6nizmqk8tpzpfjvt6qmmav7rh%2Fpublic%2F1783542750%2FClaude+Certified+Architect+%E2%80%93+Foundations+Exam+Guide.pdf\">official exam guide (PDF)</a>. It is free with no login and contains the full blueprint, the 6 scenarios, 4 hands-on exercises and 12 sample questions with answers and explanations.</li>\n</ol>\n<p>That is 11 hours of stated course time plus the guide. People who say they sat the exam report about six weeks of prep if they already build with Claude, and a few months if they are new to it. Those reports are self-reported and unverified.</p>\n<p>Warning: lookalike &quot;Claude certification&quot; prep sites rank highly in search, such as claudearchitectcertification.com, claudepractice.com and passitexams.com. They are not Anthropic's. Some get the exam format wrong, and some hint at &quot;real&quot; exam content, which would break the certification's non-disclosure terms and can void your result. Do not pay any of them.</p>\n<h3>Reality check and verdict</h3>\n<p><strong>The Deloitte claim.</strong> Deloitte's own press release of April 2, 2025 announced a program with Anthropic to certify 15,000 Deloitte practitioners. It runs through Deloitte's internal AI Academy and covers generative AI, Constitutional AI and MCP. Anthropic repeated the 15,000 target on October 6, 2025. Both announcements came about a year before this exam existed. Neither mentions this exam, Pearson VUE or any fee. No primary source says any number of Deloitte staff sat the $125 Foundations exam. The reel merges two separate things. The 15,000 figure is a target, not a count of completed certifications.</p>\n<p><strong>Employer recognition.</strong> The credential is about six months old. No job posting naming it was found, and there is no salary or recruiter data. The only numbers come from Anthropic: 36,000+ people certified across 1,300+ organizations, but that total covers all four Claude certifications combined. The partner firms' training targets are also self-reported. Salary-increase figures on prep sites could not be traced to any source.</p>\n<p><strong>Price and format against the obvious alternatives:</strong></p>\n<table>\n<thead>\n<tr>\n<th>Certification</th>\n<th>Price</th>\n<th>Format</th>\n<th>Aimed at</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Claude Certified Architect - Foundations</td>\n<td>$125</td>\n<td>60 questions, 120 min, 720/1000 to pass</td>\n<td>Technical: building Claude agent systems</td>\n</tr>\n<tr>\n<td>AWS Certified AI Practitioner</td>\n<td>$100</td>\n<td>65 questions, 90 min</td>\n<td>General AI literacy, no coding</td>\n</tr>\n<tr>\n<td>Google Cloud Generative AI Leader</td>\n<td>$99</td>\n<td>50-60 questions, 90 min</td>\n<td>Any role, business-level</td>\n</tr>\n<tr>\n<td>NVIDIA Generative AI LLMs Associate</td>\n<td>$125</td>\n<td>50-60 questions, 60 min, 70% to pass</td>\n<td>Entry-level technical roles</td>\n</tr>\n<tr>\n<td>Microsoft Azure AI Fundamentals (AI-901, replaced AI-900 in June 2026)</td>\n<td>Varies by country (AI-900 was $99)</td>\n<td>Scenario-based multiple choice</td>\n<td>Aspiring AI developers</td>\n</tr>\n</tbody>\n</table>\n<p><strong>Verdict.</strong></p>\n<ul>\n<li><strong>Worth $125</strong> if you work at a Claude partner company, or your employer is one and will pay, and you already build with the Claude API, Agent SDK, Claude Code or MCP. Test-takers describe the exam as a real test of design judgment, and the price is in line with the alternatives.</li>\n<li><strong>Not worth it</strong> if you would register with a personal email, because checkout will reject it.</li>\n<li><strong>Not worth it</strong> if you want a general &quot;knows AI&quot; line on your resume. The AWS and Google certificates cost less, have a longer track record and are not tied to one vendor's tools.</li>\n<li><strong>Not worth it</strong> as a shortcut to &quot;AI expert.&quot; It needs real hands-on skill, has no proven hiring value yet and expires after 12 months.</li>\n</ul>\n<p>The free courses are worth taking whatever you decide.</p>\n<p>The creator, Ben Gusberg, is a real Stanford GSB-affiliated startup founder. No link to Anthropic and no referral arrangement were found.</p>\n",
+    "answered": "not asked",
+    "sources": [
+     {
+      "url": "https://anthropic-partners.skilljar.com/claude-certified-architect-foundations-certification",
+      "title": "Claude Certified Architect - Foundations: official registration page"
+     },
+     {
+      "url": "https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F6nizmqk8tpzpfjvt6qmmav7rh%2Fpublic%2F1783542750%2FClaude+Certified+Architect+%E2%80%93+Foundations+Exam+Guide.pdf",
+      "title": "Claude Certified Architect - Foundations Exam Guide (PDF, v1.0)"
+     },
+     {
+      "url": "https://anthropic-partners.skilljar.com/page/faq-certifications",
+      "title": "Claude Certification FAQ"
+     },
+     {
+      "url": "https://anthropic-partners.skilljar.com/page/claude-certified-architect-foundations-prep-courses",
+      "title": "Official prep-courses page for the Foundations exam"
+     },
+     {
+      "url": "https://anthropic-partners.skilljar.com/claude-certified-architect-professional-certification",
+      "title": "Claude Certified Architect - Professional"
+     },
+     {
+      "url": "https://www.pearsonvue.com/us/en/anthropic.html",
+      "title": "Claude Certification Program - Pearson VUE"
+     },
+     {
+      "url": "https://claude.com/blog/four-role-based-claude-certifications",
+      "title": "Four role-based Claude certifications (Anthropic blog)"
+     },
+     {
+      "url": "https://www.anthropic.com/news/claude-partner-network",
+      "title": "Anthropic: Claude Partner Network launch"
+     },
+     {
+      "url": "https://www.anthropic.com/news/deloitte-anthropic-partnership",
+      "title": "Anthropic: Deloitte partnership (Oct 6, 2025)"
+     },
+     {
+      "url": "https://www.deloitte.com/us/en/about/press-room/deloitte-and-anthropic-launch-certification-program.html",
+      "title": "Deloitte: Deloitte and Anthropic launch certification program (Apr 2, 2025)"
+     },
+     {
+      "url": "https://academy.claude.com/courses/ai-fluency-framework-foundations",
+      "title": "AI Fluency: Framework and Foundations"
+     },
+     {
+      "url": "https://academy.claude.com/courses/claude-101",
+      "title": "Claude 101"
+     },
+     {
+      "url": "https://academy.claude.com/courses/building-with-the-claude-api",
+      "title": "Building with the Claude API"
+     },
+     {
+      "url": "https://academy.claude.com/courses/claude-with-amazon-bedrock",
+      "title": "Claude with Amazon Bedrock"
+     },
+     {
+      "url": "https://academy.claude.com/courses/introduction-to-model-context-protocol",
+      "title": "Introduction to Model Context Protocol"
+     },
+     {
+      "url": "https://academy.claude.com/courses/claude-code-in-action",
+      "title": "Claude Code in Action"
+     },
+     {
+      "url": "https://aws.amazon.com/certification/certified-ai-practitioner/",
+      "title": "AWS Certified AI Practitioner"
+     },
+     {
+      "url": "https://cloud.google.com/learn/certification/generative-ai-leader",
+      "title": "Google Cloud Generative AI Leader"
+     },
+     {
+      "url": "https://www.nvidia.com/en-us/learn/certification/generative-ai-llm-associate/",
+      "title": "NVIDIA Generative AI LLMs Associate"
+     },
+     {
+      "url": "https://learn.microsoft.com/en-us/credentials/certifications/exams/ai-901/",
+      "title": "Microsoft Exam AI-901: Azure AI Fundamentals"
+     },
+     {
+      "url": "https://www.bengusberg.com/",
+      "title": "Ben Gusberg personal site"
+     }
+    ],
+    "next_action": "Check whether your employer is a Claude Partner Network member before paying anything. Meanwhile, start the free Building with the Claude API course and the 12 sample questions in the exam guide."
+   },
+   "links": [
+    {
+     "url": "https://academy.claude.com/courses/ai-fluency-framework-foundations",
+     "label": "Free prep course 1: AI Fluency: Framework and Foundations (4 hours)",
+     "alive": true,
+     "page_title": "AI Fluency: Framework and foundations · Claude Academy"
+    },
+    {
+     "url": "https://academy.claude.com/courses/building-with-the-claude-api",
+     "label": "Free prep course 3: Building with the Claude API (9 hours)",
+     "alive": true,
+     "page_title": "Building with the Claude API · Claude Academy"
+    },
+    {
+     "url": "https://academy.claude.com/courses/claude-101",
+     "label": "Free prep course 2: Claude 101 (2.5 hours)",
+     "alive": true,
+     "page_title": "Claude 101 · Claude Academy"
+    },
+    {
+     "url": "https://academy.claude.com/courses/claude-with-amazon-bedrock",
+     "label": "Free prep course 4: Claude with Amazon Bedrock (8 hours)",
+     "alive": true,
+     "page_title": "Claude with Amazon Bedrock · Claude Academy"
+    },
+    {
+     "url": "https://anthropic-partners.skilljar.com/claude-certified-architect-foundations-certification",
+     "label": "Direct URL for Claude Certified Architect Foundations registration and courses",
+     "alive": true,
+     "page_title": "Claude Certified Architect – Foundations Certification"
+    },
+    {
+     "url": "https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F6nizmqk8tpzpfjvt6qmmav7rh%2Fpublic%2F1783542750%2FClaude+Certified+Architect+%E2%80%93+Foundations+Exam+Guide.pdf",
+     "label": "Official exam guide (PDF): blueprint, 12 sample questions, retake and validity rules",
+     "alive": true,
+     "page_title": ""
+    }
+   ],
    "slide_ext": ".webp"
   },
   {
@@ -1440,10 +1747,10 @@
    "id": "2c2a8864f72ad461",
    "url": "https://www.instagram.com/p/DdcDA1sN8eS/?stkn=eW01N3A0ZWM3bDds",
    "kind": "listicle",
-   "action": "learn",
+   "action": "reference",
    "title": "Curated List of Awesome Claude AI Skills and Resources",
-   "hook": "Access a collection of specialized Claude AI skills and development resources.",
-   "summary": "This post provides a curated list of twelve distinct skills and resources related to Claude AI. Each item is linked to a specific resource, covering topics ranging from general superpowers and UI/UX to technical workflows like TDD and deployment. It serves as a quick-reference directory for developers looking to enhance their Claude-related capabilities.",
+   "hook": "Twelve Claude Code skills. The post's links are dead, so here are the working repos and install lines.",
+   "summary": "A single slide listing 12 Claude Code skills (folders with a SKILL.md that Claude Code loads): Superpowers, Matt Pocock Skills, UI/UX Pro Max, Caveman, Humanizer, Find Skills, Deploy to Vercel, Brainstorming, TDD, Excalidraw, Remotion and Web Quality. Every entry on the slide is a LinkedIn lnkd.in short link, and none of them works any more: 11 return 404 and one redirects to a broken LinkedIn page. The working repos below were found by searching each printed name. Three of the entries (Superpowers, Brainstorming, TDD) come from the same project.",
    "owner": "leadgenman",
    "slide_count": 1,
    "links_checked": "23 Sep 2026",
@@ -1508,136 +1815,10 @@
      "Are these prompts, tutorials, or code repositories?"
     ]
    },
-   "enrich": {
-    "what_it_is": "Excalidraw is an open‑source, web‑based whiteboard that lets you draw hand‑sketch‑style diagrams on an infinite canvas. It ships as a React component (npm package @excalidraw/excalidraw) that can be embedded in any web app or run as a self‑hosted instance.",
-    "current_state": {
-     "latest_stable_version": "2.0.0",
-     "release_date": "2024‑09‑10",
-     "content_still_accurate": true,
-     "sources": [
-      "[3] – GitHub repository (package.json shows version 2.0.0) ",
-      "[3] – GitHub releases page lists 2.0.0 published 2024‑09‑10"
-     ]
-    },
-    "why_it_matters": "Unlike generic drawing tools, Excalidraw stores diagrams as JSON, enabling programmatic generation, version‑control, and easy export to PNG/SVG. Its hand‑drawn aesthetic is built‑in, so you get a “sketchy” look without extra styling, and the component can be dropped into any React app for real‑time collaboration, something most diagram‑DSLs (Mermaid, PlantUML) cannot do out‑of‑the‑box.",
-    "prerequisites": [
-     "Basic JavaScript/TypeScript",
-     "Familiarity with React (hooks, JSX)",
-     "Node.js ≥ 18 and npm or yarn"
-    ],
-    "time_to_useful": 8,
-    "gotchas": [
-     "Every element must include the required fields (type, id, x, y, width, height) – missing any throws at export time (source [4]).",
-     "Arrow bindings require both startBinding/endBinding **and** the target shape’s boundElements array to be kept in sync (source [4]).",
-     "Do not use custom hex colours; only colours listed in color‑palette.md are accepted (source [4]).",
-     "Roughness > 0 gives a hand‑drawn look but can cause blurry edges; set roughness = 0 for technical diagrams (source [4]).",
-     "Exporting via the CLI launches Chromium; non‑finite numbers (NaN, Infinity) or stringified numbers break the renderer (source [4])."
-    ],
-    "beyond_the_post": [
-     "Self‑hosting Excalidraw+ (enterprise) and configuring the MCP server for AI‑driven diagram editing (source [2]).",
-     "Using the Excalidraw SDK to create custom shape libraries and plugins (not covered in the Claude‑skill list).",
-     "Deploying a collaborative instance on Vercel or Cloudflare Workers for production use.",
-     "Programmatic export with the `excalidraw-brute-export-cli` tool for headless PNG/SVG generation (source [5]).",
-     "Integrating Excalidraw with other AI tools via the REST API (scene CRUD, collections, workspaces)."
-    ],
-    "official_docs": [
-     {
-      "title": "Excalidraw Developer Docs",
-      "url": "https://docs.excalidraw.com/",
-      "why": "Step‑by‑step guide for embedding the component, customizing tools, and exporting."
-     },
-     {
-      "title": "Excalidraw+ Documentation (API & MCP)",
-      "url": "https://plus.excalidraw.com/docs",
-      "why": "Covers the enterprise API, self‑hosting, and the MCP protocol for AI integration."
-     },
-     {
-      "title": "GitHub Repository",
-      "url": "https://github.com/excalidraw/excalidraw",
-      "why": "Source code, release notes, and the npm package readme."
-     }
-    ],
-    "best_free_resources": [
-     {
-      "title": "FreeCodeCamp – “Build a Sketch‑like Whiteboard with Excalidraw”",
-      "url": "https://www.freecodecamp.org/news/build-an-open-source-whiteboard-with-excalidraw/",
-      "why": "Walk‑through video + code that shows a minimal React app and explains the JSON format."
-     },
-     {
-      "title": "YouTube – “Excalidraw Deep Dive” by The Net Ninja",
-      "url": "https://www.youtube.com/watch?v=KXbZcV6YV8U",
-      "why": "Covers component props, theming, and real‑time collaboration in under 30 min."
-     },
-     {
-      "title": "EdoardoB90 – Excalidraw Gotchas",
-      "url": "https://github.com/edoardob90/excalidraw-skills/blob/main/excalidraw/gotchas.md",
-      "why": "A concise checklist of common JSON‑format mistakes that break rendering. (source [4])"
-     }
-    ],
-    "project": {
-     "name": "excalidraw‑quick‑diagram",
-     "one_liner": "A tiny React app that turns a plain‑text description into an Excalidraw diagram and lets you download PNG/SVG.",
-     "why_portfolio_worthy": "Shows end‑to‑end mastery: parsing natural language, generating valid Excalidraw JSON, embedding the editor, and exporting assets – a full‑stack product rather than a static tutorial clone.",
-     "scope": {
-      "in": [
-       "React front‑end with @excalidraw/excalidraw component",
-       "Simple parser that maps keywords (flow, decision, start, end) to shapes",
-       "Export buttons for PNG and SVG using the built‑in `exportToBlob` API",
-       "Deployable on Vercel (no server‑side code)"
-      ],
-      "out": [
-       "No authentication or multi‑user collaboration",
-       "No custom shape libraries beyond the built‑in set",
-       "No enterprise Excalidraw+ features"
-      ]
-     },
-     "stack": [
-      "React 18",
-      "TypeScript",
-      "Vite",
-      "@excalidraw/excalidraw",
-      "TailwindCSS (optional)"
-     ],
-     "milestones": [
-      {
-       "step": "Setup project & embed editor",
-       "outcome": "Running React app with an empty Excalidraw canvas."
-      },
-      {
-       "step": "Implement text‑to‑JSON parser",
-       "outcome": "User can type a line like \"start → process → end\" and see corresponding shapes appear."
-      },
-      {
-       "step": "Add export buttons",
-       "outcome": "Canvas can be saved as PNG or SVG with a single click."
-      },
-      {
-       "step": "Deploy to Vercel",
-       "outcome": "Public URL that works offline (PWA support)."
-      }
-     ],
-     "stretch": [
-      "Add MCP integration so Claude can edit the diagram via API.",
-      "Support custom colour palettes and roughness toggles.",
-      "Persist diagrams in localStorage and allow sharing via read‑only links."
-     ],
-     "readme_outline": [
-      "Project Overview",
-      "Demo Screenshot / Live URL",
-      "Tech Stack",
-      "Installation (npm install, dev server)",
-      "Usage (how to type descriptions, export options)",
-      "Architecture (parser → JSON → Excalidraw component)",
-      "Deployment (Vercel steps)",
-      "Future Work (MCP, plugins)",
-      "License"
-     ],
-     "est_hours": 12
-    }
-   },
+   "enrich": {},
    "tags": {
     "action": [
-     "learn"
+     "reference"
     ],
     "topic": [
      "ai",
@@ -1647,119 +1828,195 @@
      "web development"
     ]
    },
+   "followup": {
+    "answer_html": "<p>These are Claude Code skills. A skill is a folder with a SKILL.md file (instructions, sometimes with scripts) that Claude Code loads when a task needs it. You install one by copying the folder into <code>~/.claude/skills/</code> or a project's <code>.claude/skills/</code>, or by installing a plugin that includes it.</p>\n<p>The 12 printed short codes were re-read character by character and all match the first reading, so no code was misread. The links are still dead: 11 return 404, and #3 redirects to a broken LinkedIn hiring page. Each entry below is therefore the project that matches the printed name, and each link was opened and checked. None of them can be traced back to the post's own link. No maintained &quot;awesome-claude-skills&quot; list carries these 12. The public lists with that name, such as ComposioHQ and travisvn, are missing most of them.</p>\n<p>Entries 1, 8 and 9 all come from one project, Superpowers.</p>\n<ol>\n<li><strong>Superpowers</strong> - A set of skills that makes Claude follow a full engineering process (brainstorm, plan, test first, review) instead of answering in one shot.\n<ul>\n<li>By Jesse Vincent (obra) / Prime Radiant. Community, MIT.</li>\n<li><a href=\"https://github.com/obra/superpowers\">github.com/obra/superpowers</a></li>\n<li>Install: <code>/plugin install superpowers@claude-plugins-official</code>, or add the <a href=\"https://github.com/obra/superpowers-marketplace\">obra/superpowers-marketplace</a> marketplace and run <code>/plugin install superpowers@superpowers-marketplace</code></li>\n<li>Match: exact name, the main project by that name.</li>\n</ul>\n</li>\n<li><strong>Matt Pocock Skills</strong> - Matt Pocock's own skills. It interviews you about requirements before coding (<code>/grill-with-docs</code>), runs a TDD loop (<code>/tdd</code>), and adds skills for code review, bug diagnosis and architecture checks.\n<ul>\n<li>By Matt Pocock. Community, MIT.</li>\n<li><a href=\"https://github.com/mattpocock/skills\">github.com/mattpocock/skills</a></li>\n<li>Install: <code>/plugin install mattpocock-skills</code>, or <code>npx skills@latest add mattpocock/skills</code>. Then run <code>/setup-matt-pocock-skills</code> once per repo.</li>\n<li>Match: exact name.</li>\n</ul>\n</li>\n<li><strong>UI/UX Pro Max</strong> - Gives Claude a searchable design database (UI styles, color palettes, font pairings, industry rules) so it builds a full design system instead of a generic interface. It also checks contrast, focus states and touch targets.\n<ul>\n<li>By nextlevelbuilder. Community, MIT.</li>\n<li><a href=\"https://github.com/nextlevelbuilder/ui-ux-pro-max-skill\">github.com/nextlevelbuilder/ui-ux-pro-max-skill</a> (site: <a href=\"https://ui-ux-pro-max-skill.com/\">ui-ux-pro-max-skill.com</a>)</li>\n<li>Install: <code>/plugin marketplace add nextlevelbuilder/ui-ux-pro-max-skill</code> then <code>/plugin install ui-ux-pro-max@ui-ux-pro-max-skill</code></li>\n<li>Match: likely, not certain. The base skill is free. A paid premium tier is advertised for extra brand and asset features. Several similarly named &quot;UI/UX Pro Max&quot; listings on mcpmarket.com come from other parties. This repo is the one with its own site and CLI.</li>\n</ul>\n</li>\n<li><strong>Caveman</strong> - Makes the agent reply in terse &quot;caveman&quot; style to cut output tokens. The project claims savings of about 30 to 87 percent. Code, commands and error text are left intact. Modes: <code>/caveman-lite</code>, <code>/caveman</code>, <code>/caveman-ultra</code>, <code>/normal</code>.\n<ul>\n<li>By Julius Brussee. Community. The skill is MIT. The optional compression proxy is under Business Source License 1.1 and becomes Apache-2.0 on 2030-06-21.</li>\n<li><a href=\"https://github.com/JuliusBrussee/caveman\">github.com/JuliusBrussee/caveman</a></li>\n<li>Install: <code>npx skills add JuliusBrussee/caveman -g</code></li>\n<li>Match: exact name. Other repos use the same name; this is the actively developed original.</li>\n</ul>\n</li>\n<li><strong>Humanizer</strong> - Rewrites AI-sounding text so it reads naturally, targeting 25 named patterns of AI writing. Run it with <code>/humanizer</code>.\n<ul>\n<li>By blader. Community, MIT.</li>\n<li><a href=\"https://github.com/blader/humanizer\">github.com/blader/humanizer</a></li>\n<li>Install: <code>/plugin marketplace add blader/humanizer</code> then <code>/plugin install humanizer@humanizer</code> (Claude Code 2.1.142+), or <code>npx skills add blader/humanizer --global</code></li>\n<li>Match: likely, not certain. The name is generic and several other projects use it. This is the original that forks such as jooray/humanizer point back to.</li>\n</ul>\n</li>\n<li><strong>Find Skills</strong> - Finds and installs other skills. When you ask &quot;how do I do X&quot;, it searches skills.sh and the skills CLI, checks install counts and who made each skill, and recommends official skills over community ones.\n<ul>\n<li>By Vercel Labs. Official Vercel-affiliated. License not shown.</li>\n<li><a href=\"https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md\">find-skills in vercel-labs/skills</a></li>\n<li>Install: it lives in <a href=\"https://github.com/vercel-labs/skills\">vercel-labs/skills</a>, the repo behind the <code>npx skills</code> CLI. The exact install line was not captured.</li>\n<li>Match: exact skill name.</li>\n</ul>\n</li>\n<li><strong>Deploy to Vercel</strong> - Deploys apps and static sites to Vercel from inside Claude Code and shows deployment logs.\n<ul>\n<li>By Vercel. Official, MIT. Needs the Vercel CLI (<code>npm install -g vercel</code>) and a logged-in Vercel account.</li>\n<li><a href=\"https://github.com/vercel/vercel-deploy-claude-code-plugin\">github.com/vercel/vercel-deploy-claude-code-plugin</a></li>\n<li>Install: <code>/plugin install vercel@claude-plugins-official</code></li>\n<li>Match: likely, not certain. Vercel also publishes a no-login deploy skill in <a href=\"https://github.com/vercel-labs/agent-skills\">vercel-labs/agent-skills</a>, installed with <code>npx skills add vercel-labs/agent-skills --skill vercel-deploy</code>. Either could be the one the post meant.</li>\n</ul>\n</li>\n<li><strong>Brainstorming</strong> - Makes Claude hold a design conversation, one question at a time, before any code is written.\n<ul>\n<li>Part of Superpowers (#1). Community, MIT.</li>\n<li><a href=\"https://github.com/obra/superpowers/tree/main/skills\">obra/superpowers skills folder</a></li>\n<li>Install: included with Superpowers.</li>\n<li>Match: strong. The name matches a skill in the same project as #1.</li>\n</ul>\n</li>\n<li><strong>TDD</strong> - Enforces red-green-refactor: write a failing test first, then the smallest code that passes it, then refactor. It uses whatever test runner the project already has.\n<ul>\n<li>The Superpowers test-driven-development skill. Community, MIT.</li>\n<li><a href=\"https://github.com/obra/superpowers/blob/main/skills/test-driven-development/SKILL.md\">test-driven-development SKILL.md</a></li>\n<li>Install: included with Superpowers.</li>\n<li>Match: strong. Matt Pocock Skills (#2) also has a <code>/tdd</code> skill.</li>\n</ul>\n</li>\n<li><strong>Excalidraw</strong> - <strong>Unresolved.</strong> A skill that draws Excalidraw diagrams from a text description. Only unofficial community repos match, and none comes from Excalidraw or Anthropic:\n<ul>\n<li><a href=\"https://github.com/coleam00/excalidraw-diagram-skill\">coleam00/excalidraw-diagram-skill</a> by Cole Medin. It appears to be the original. No license is stated, and the repo has only two commits. Install: <code>git clone https://github.com/coleam00/excalidraw-diagram-skill.git</code>, then <code>cp -r excalidraw-diagram-skill .claude/skills/excalidraw-diagram</code>, then in <code>references/</code> run <code>uv sync</code> and <code>uv run playwright install chromium</code>.</li>\n<li><a href=\"https://github.com/edoardob90/excalidraw-skills\">edoardob90/excalidraw-skills</a>. MIT, adapted from coleam00's repo. Install: <code>npx skills add edoardob90/excalidraw-skills</code></li>\n<li><a href=\"https://github.com/sthonghy/excalidraw-skill\">sthonghy/excalidraw-skill</a>. MIT, a separate project that exports PNG, SVG or PDF.</li>\n</ul>\n</li>\n<li><strong>Remotion</strong> - Teaches Claude how to work with Remotion (videos written in React): new projects and compositions, Studio preview, rendering, captions and map animations. <code>/remotion-best-practices</code> covers all of them.\n<ul>\n<li>By the Remotion team. Official from Remotion, not from Anthropic. License not stated.</li>\n<li><a href=\"https://github.com/remotion-dev/skills\">github.com/remotion-dev/skills</a> (<a href=\"https://www.remotion.dev/docs/ai/skills\">docs</a>)</li>\n<li>Install: <code>npx skills add remotion-dev/skills</code></li>\n<li>Match: strong, official.</li>\n</ul>\n</li>\n<li><strong>Web Quality</strong> - Audits and fixes web projects using Lighthouse, Chrome DevTools and Core Web Vitals, covering performance, accessibility, SEO and best practices.\n<ul>\n<li>By Addy Osmani. Community (individual), MIT.</li>\n<li><a href=\"https://github.com/addyosmani/web-quality-skills\">github.com/addyosmani/web-quality-skills</a></li>\n<li>Install: <code>npx skills add addyosmani/web-quality-skills</code>, or copy the skill folder into <code>~/.claude/skills/</code></li>\n<li>Match: exact name.</li>\n</ul>\n</li>\n</ol>\n<p>None of the 12 is behind a paywall, email capture or paid community. UI/UX Pro Max advertises an optional paid tier, and Deploy to Vercel needs your own Vercel account.</p>\n",
+    "answered": "not asked",
+    "sources": [
+     {
+      "url": "https://github.com/obra/superpowers",
+      "title": "obra/superpowers"
+     },
+     {
+      "url": "https://github.com/obra/superpowers-marketplace",
+      "title": "obra/superpowers-marketplace"
+     },
+     {
+      "url": "https://github.com/obra/superpowers/blob/main/skills/test-driven-development/SKILL.md",
+      "title": "Superpowers test-driven-development SKILL.md"
+     },
+     {
+      "url": "https://github.com/obra/superpowers/tree/main/skills",
+      "title": "Superpowers skills folder"
+     },
+     {
+      "url": "https://github.com/mattpocock/skills",
+      "title": "mattpocock/skills"
+     },
+     {
+      "url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+      "title": "nextlevelbuilder/ui-ux-pro-max-skill"
+     },
+     {
+      "url": "https://ui-ux-pro-max-skill.com/",
+      "title": "UI UX Pro Max Skill site"
+     },
+     {
+      "url": "https://github.com/JuliusBrussee/caveman",
+      "title": "JuliusBrussee/caveman"
+     },
+     {
+      "url": "https://github.com/blader/humanizer",
+      "title": "blader/humanizer"
+     },
+     {
+      "url": "https://github.com/jooray/humanizer",
+      "title": "jooray/humanizer (fork of blader/humanizer)"
+     },
+     {
+      "url": "https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md",
+      "title": "vercel-labs/skills find-skills SKILL.md"
+     },
+     {
+      "url": "https://github.com/vercel/vercel-deploy-claude-code-plugin",
+      "title": "vercel/vercel-deploy-claude-code-plugin"
+     },
+     {
+      "url": "https://mcpmarket.com/tools/skills/deploy-to-vercel",
+      "title": "mcpmarket.com - Deploy to Vercel"
+     },
+     {
+      "url": "https://github.com/vercel-labs/agent-skills",
+      "title": "vercel-labs/agent-skills"
+     },
+     {
+      "url": "https://github.com/coleam00/excalidraw-diagram-skill",
+      "title": "coleam00/excalidraw-diagram-skill"
+     },
+     {
+      "url": "https://github.com/edoardob90/excalidraw-skills",
+      "title": "edoardob90/excalidraw-skills"
+     },
+     {
+      "url": "https://github.com/sthonghy/excalidraw-skill",
+      "title": "sthonghy/excalidraw-skill"
+     },
+     {
+      "url": "https://github.com/remotion-dev/skills",
+      "title": "remotion-dev/skills"
+     },
+     {
+      "url": "https://www.remotion.dev/docs/ai/skills",
+      "title": "Remotion Agent Skills docs"
+     },
+     {
+      "url": "https://github.com/addyosmani/web-quality-skills",
+      "title": "addyosmani/web-quality-skills"
+     },
+     {
+      "url": "https://github.com/ComposioHQ/awesome-claude-skills",
+      "title": "ComposioHQ/awesome-claude-skills (does not carry these 12)"
+     },
+     {
+      "url": "https://github.com/travisvn/awesome-claude-skills",
+      "title": "travisvn/awesome-claude-skills (does not carry these 12)"
+     },
+     {
+      "url": "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=KXbZcV6YV8U&format=json",
+      "title": "YouTube oEmbed for KXbZcV6YV8U (404)"
+     }
+    ],
+    "extra_sections": [
+     {
+      "heading": "What these are",
+      "detail": "Each entry is a Claude Code skill: a folder with a SKILL.md file (instructions, sometimes with scripts) that Claude Code loads when a task needs it. Skills are copied into ~/.claude/skills/ or a project's .claude/skills/, or installed as part of a plugin with /plugin install or with the npx skills CLI."
+     },
+     {
+      "heading": "Where the 12 come from",
+      "detail": "Superpowers, Brainstorming and TDD are all part of obra/superpowers, so one install covers three entries. Deploy to Vercel and Find Skills come from Vercel, and Remotion comes from the Remotion team. Matt Pocock Skills, UI/UX Pro Max, Caveman, Humanizer and Web Quality are made by individuals. Excalidraw has no official source, only community repos."
+     },
+     {
+      "heading": "The printed links",
+      "detail": "All 12 lnkd.in codes on the slide were re-read and match the original transcription. None of them works: 11 return 404, and #3 (UI/UX Pro Max) redirects to a broken LinkedIn hiring page. The repos listed here were found by searching each printed name, not by following the post's links."
+     }
+    ],
+    "next_action": "Install Superpowers first (`/plugin install superpowers@claude-plugins-official`). That one install covers entries 1, 8 and 9."
+   },
    "links": [
     {
-     "url": "https://docs.excalidraw.com/",
-     "label": "",
-     "alive": true,
-     "page_title": "Excalidraw developer docs"
-    },
-    {
-     "url": "https://github.com/edoardob90/excalidraw-skills/blob/main/excalidraw/gotchas.md",
-     "label": "",
+     "url": "https://github.com/JuliusBrussee/caveman",
+     "label": "4. Caveman",
      "alive": true,
      "page_title": ""
     },
     {
-     "url": "https://github.com/excalidraw/excalidraw",
-     "label": "",
+     "url": "https://github.com/addyosmani/web-quality-skills",
+     "label": "12. Web Quality",
      "alive": true,
      "page_title": ""
     },
     {
-     "url": "https://lnkd.in/dB8mKdTy",
-     "label": "TDD resource",
-     "alive": false,
-     "page_title": ""
-    },
-    {
-     "url": "https://lnkd.in/dC7tQaNs",
-     "label": "Deploy to Vercel resource",
-     "alive": false,
-     "page_title": ""
-    },
-    {
-     "url": "https://lnkd.in/dEOzMqLj",
-     "label": "Web Quality resource",
-     "alive": false,
-     "page_title": ""
-    },
-    {
-     "url": "https://lnkd.in/dJ5_PvXr",
-     "label": "Brainstorming resource",
-     "alive": false,
-     "page_title": ""
-    },
-    {
-     "url": "https://lnkd.in/dKp8VwQa",
-     "label": "Superpowers resource",
-     "alive": false,
-     "page_title": ""
-    },
-    {
-     "url": "https://lnkd.in/dN2xLrPk",
-     "label": "Humanizer resource",
-     "alive": false,
-     "page_title": ""
-    },
-    {
-     "url": "https://lnkd.in/dR3n-Tzb",
-     "label": "Matt Pocock Skills resource",
-     "alive": false,
-     "page_title": ""
-    },
-    {
-     "url": "https://lnkd.in/dS6wNbGe",
-     "label": "Remotion resource",
-     "alive": false,
-     "page_title": ""
-    },
-    {
-     "url": "https://lnkd.in/dW9cYmFv",
-     "label": "UI/UX Pro Max resource",
+     "url": "https://github.com/blader/humanizer",
+     "label": "5. Humanizer (likely match)",
      "alive": true,
-     "page_title": "LinkedIn Talent Solutions"
-    },
-    {
-     "url": "https://lnkd.in/dY1fRcHu",
-     "label": "Excalidraw resource",
-     "alive": false,
      "page_title": ""
     },
     {
-     "url": "https://lnkd.in/dZ4bHjWm",
-     "label": "Find Skills resource",
-     "alive": false,
-     "page_title": ""
-    },
-    {
-     "url": "https://lnkd.in/dh6SgUeq",
-     "label": "Caveman resource",
-     "alive": false,
-     "page_title": ""
-    },
-    {
-     "url": "https://plus.excalidraw.com/docs",
-     "label": "",
+     "url": "https://github.com/coleam00/excalidraw-diagram-skill",
+     "label": "10. Excalidraw - unresolved, unofficial candidate",
      "alive": true,
-     "page_title": "Excalidraw documentation | Excalidraw+ | Online whiteboard collaboration made easy"
-    },
-    {
-     "url": "https://www.freecodecamp.org/news/build-an-open-source-whiteboard-with-excalidraw/",
-     "label": "",
-     "alive": false,
      "page_title": ""
     },
     {
-     "url": "https://www.youtube.com/watch?v=KXbZcV6YV8U",
-     "label": "",
+     "url": "https://github.com/mattpocock/skills",
+     "label": "2. Matt Pocock Skills",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+     "label": "3. UI/UX Pro Max (likely match)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/obra/superpowers",
+     "label": "1. Superpowers (also covers 8. Brainstorming and 9. TDD)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/obra/superpowers/blob/main/skills/test-driven-development/SKILL.md",
+     "label": "9. TDD (Superpowers test-driven-development skill)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/obra/superpowers/tree/main/skills",
+     "label": "8. Brainstorming (Superpowers skills folder)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/remotion-dev/skills",
+     "label": "11. Remotion (official)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md",
+     "label": "6. Find Skills (Vercel Labs)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/vercel/vercel-deploy-claude-code-plugin",
+     "label": "7. Deploy to Vercel (likely match)",
      "alive": true,
      "page_title": ""
     }
    ],
    "media_id": "2c2a8864f72ad461",
    "pdf_file": "doc.pdf",
-   "build_prompt": "# Build: excalidraw‑quick‑diagram\n\nA tiny React app that turns a plain‑text description into an Excalidraw diagram and lets you download PNG/SVG.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Why this matters\nShows end‑to‑end mastery: parsing natural language, generating valid Excalidraw JSON, embedding the editor, and exporting assets – a full‑stack product rather than a static tutorial clone.\n\n## Scope\nBuild these:\n- React front‑end with @excalidraw/excalidraw component\n- Simple parser that maps keywords (flow, decision, start, end) to shapes\n- Export buttons for PNG and SVG using the built‑in `exportToBlob` API\n- Deployable on Vercel (no server‑side code)\n\nExplicitly do NOT build these:\n- No authentication or multi‑user collaboration\n- No custom shape libraries beyond the built‑in set\n- No enterprise Excalidraw+ features\n\n## Stack - use these exact versions\n- React 18\n- TypeScript\n- Vite\n- @excalidraw/excalidraw\n- TailwindCSS (optional)\n\n## Milestones - each must be verifiably done before the next\n1. **Setup project & embed editor**\n   - Done when: Running React app with an empty Excalidraw canvas.\n2. **Implement text‑to‑JSON parser**\n   - Done when: User can type a line like \"start → process → end\" and see corresponding shapes appear.\n3. **Add export buttons**\n   - Done when: Canvas can be saved as PNG or SVG with a single click.\n4. **Deploy to Vercel**\n   - Done when: Public URL that works offline (PWA support).\n\n## README must cover\n- Project Overview\n- Demo Screenshot / Live URL\n- Tech Stack\n- Installation (npm install, dev server)\n- Usage (how to type descriptions, export options)\n- Architecture (parser → JSON → Excalidraw component)\n- Deployment (Vercel steps)\n- Future Work (MCP, plugins)\n- License\n\n## Only after everything above works\n- Add MCP integration so Claude can edit the diagram via API.\n- Support custom colour palettes and roughness toggles.\n- Persist diagrams in localStorage and allow sharing via read‑only links.\n\n## Background\nExcalidraw is an open‑source, web‑based whiteboard that lets you draw hand‑sketch‑style diagrams on an infinite canvas. It ships as a React component (npm package @excalidraw/excalidraw) that can be embedded in any web app or run as a self‑hosted instance.\n\n## Known traps - handle these, do not rediscover them\n- Every element must include the required fields (type, id, x, y, width, height) – missing any throws at export time (source).\n- Arrow bindings require both startBinding/endBinding **and** the target shape’s boundElements array to be kept in sync (source).\n- Do not use custom hex colours; only colours listed in color‑palette.md are accepted (source).\n- Roughness > 0 gives a hand‑drawn look but can cause blurry edges; set roughness = 0 for technical diagrams (source).\n- Exporting via the CLI launches Chromium; non‑finite numbers (NaN, Infinity) or stringified numbers break the renderer (source).\n\n## Reference (checked and reachable)\n- Excalidraw Developer Docs: https://docs.excalidraw.com/\n- Excalidraw+ Documentation (API & MCP): https://plus.excalidraw.com/docs\n- GitHub Repository: https://github.com/excalidraw/excalidraw\n- Excalidraw developer docs: https://docs.excalidraw.com/\n- https://github.com/edoardob90/excalidraw-skills/blob/main/excalidraw/gotchas.md: https://github.com/edoardob90/excalidraw-skills/blob/main/excalidraw/gotchas.md\n- https://github.com/excalidraw/excalidraw: https://github.com/excalidraw/excalidraw\n- LinkedIn Talent Solutions: https://lnkd.in/dW9cYmFv\n- Excalidraw documentation | Excalidraw+ | Online whiteboard collaboration made easy: https://plus.excalidraw.com/docs\n- https://www.youtube.com/watch?v=KXbZcV6YV8U: https://www.youtube.com/watch?v=KXbZcV6YV8U\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. Python tests are run with pytest before\n  any of this is published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the, boasts, in today's, ever-evolving, at its core, robust and scalable, first-class, battle-tested, rock-solid, supercharge, effortlessly, in conclusion, let's explore, we'll explore, whether you're, look no further, the world of.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/p/DdcDA1sN8eS/?stkn=eW01N3A0ZWM3bDds\nRough size: about 12 hours of work.",
    "slide_ext": ".jpg"
   },
   {
@@ -3189,10 +3446,10 @@
    "id": "df36fce5e7f93fd2",
    "url": "https://www.instagram.com/p/DddmSMCCKbq/?stkn=eXRhNnBsZ2Z0bWUw",
    "kind": "tutorial",
-   "action": "read",
+   "action": "learn",
    "title": "Transformer 45 Most Important Interview Questions",
-   "hook": "Master 45 essential Transformer interview questions, complete with theoretical solutions, diagrams, and code snippets.",
-   "summary": "This comprehensive guide covers 45 of the most important Transformer interview questions across 16 slides. It breaks down core architecture details, self-attention mechanics, positional encodings, layer normalization, sequence handling, masking, and advanced variations like prefix tuning and beam search. Each question provides theoretical solutions, architecture diagrams, comparisons, follow-up questions, and interview tips to help you ace your AI interview.",
+   "hook": "The deck promises 45 questions; only 39 are distinct, several answers are wrong if said aloud in an interview, and none of its code runs as printed - this document has all 45 slots covered and corrected.",
+   "summary": "A corrected, question-by-question study document for all 45 numbered slots in this carousel (39 of them distinct; 6 numbers never appear and 3 are reused for a different question). It fixes the deck's real errors - especially its contradictory treatment of masked vs. causal self-attention, the scaling and complexity claims, dropout timing, and the positional-encoding extrapolation claim - gives working replacements for all four broken code snippets, lists the 2026-interview topics (KV-cache, RoPE, GQA, RMSNorm, SwiGLU, MoE, LoRA) the deck never covers despite advertising Vision, Speech, Multimodal, Optimization, Training Process and Inference on its cover, and reports that no free official PDF of the deck exists - only a comment-gated funnel.",
    "owner": "techyy_bandaa",
    "posted": "September 19, 2026",
    "slide_count": 16,
@@ -3345,7 +3602,7 @@
    "enrich": {},
    "tags": {
     "action": [
-     "read"
+     "learn"
     ],
     "topic": [
      "deep learning",
@@ -3355,7 +3612,352 @@
      "transformers"
     ]
    },
-   "links": [],
+   "followup": {
+    "answer_html": "<p>This carousel promises 45 interview questions across 15 numbered pages but does not deliver 45 distinct ones. Questions 22-24 and 28-30 never appear on any slide, and questions 25, 26 and 27 are each reused two or three times (the second use of &quot;27&quot; is actually a different question, about the feed-forward network, reusing the same number). That leaves 39 distinct questions, heavily concentrated on a small set of topics: positional encoding alone fills 12 of the 45 slots, and masked-vs-causal attention, encoder/decoder architecture types, and variable-length-sequence handling are each asked three or four times. The cover slide advertises Vision/ViT, Speech, Multimodal, Optimization, Training Process and Inference as covered topics; none of the 45 questions actually cover them (Vision and Speech get one throwaway line each inside an unrelated answer, and Optimization, Training Process and Inference are not addressed at all).</p>\n<p>The corrected, question-by-question study document (out/transformer-45-interview-questions.md) walks through all 45 numbered slots, gives the real answer for each, and fixes what the deck gets wrong. The most important fix: four separate slides claim &quot;masked self-attention&quot; (used in BERT) and &quot;causal self-attention&quot; (used in GPT) are two different mechanisms - they are not. In the original Transformer paper, &quot;masked attention&quot; means the decoder's causal mask; BERT's attention is unmasked and bidirectional, and its &quot;masking&quot; refers to the masked-language-model training objective, not the attention matrix. Other real errors: scaling by sqrt(d_k) does not &quot;prevent large dot products,&quot; it keeps softmax gradients from vanishing; self-attention is not &quot;more efficient for long sequences&quot; than RNNs (it is more expensive per layer; what it gains is a short path length and parallelism); multi-head attention does not cost more than single-head at the same total dimension; dropout's 1/(1-p) rescaling happens during training, not at inference; sinusoidal positional encoding's claimed ability to &quot;extrapolate to longer sequences&quot; is only a hope in the original paper and measured to be weak in practice; and a worked positional-encoding table has several wrong numbers, which the document recomputes.</p>\n<p>Of the four code blocks shown across the deck, none is usable as printed. The self-attention snippet computes the attention scores and then discards them (<code>return {};</code>) without ever applying softmax or using V. Both feed-forward network snippets are pseudocode with undeclared types or per-feature scalars standing in for real matrix projections and won't compile. Only the padding-mask snippet is close to correct, with one bounds-checking bug. Working replacements for all four are included in the document.</p>\n<p>A 2026 machine-learning interview would also expect KV-cache, RoPE, grouped-query attention, RMSNorm, SwiGLU, mixture-of-experts and LoRA - none of which this deck explains (a couple are named only in a follow-up line). The document lists all of these with a working link for each.</p>\n<p>On the free PDF: the post's own hook is a comment-gated funnel (&quot;Want the PDF? Comment 'PDF' below!&quot;), not a link to a document. What that comment actually returns (a free file, an email-capture form, or a paid group) could not be checked without commenting from your own account, and the creator's Instagram profile returned only a login wall with no visible bio link. No free official PDF of this deck was found anywhere. This study document is the substitute.</p>\n",
+    "answered": "not asked",
+    "artifacts": [
+     {
+      "file": "transformer-45-interview-questions.pdf",
+      "title": "Transformer: 45 Interview Questions, Corrected Study Sheet",
+      "about": "Every one of the deck's 45 numbered questions with the real answer, error corrections and sources, code verdicts, omitted 2026 topics, and the PDF finding.",
+      "kind": "pdf",
+      "pages": 26
+     }
+    ],
+    "sources": [
+     {
+      "url": "https://arxiv.org/abs/1706.03762",
+      "title": "Attention Is All You Need"
+     },
+     {
+      "url": "https://arxiv.org/html/1706.03762v7",
+      "title": "Attention Is All You Need (HTML full text)"
+     },
+     {
+      "url": "https://arxiv.org/abs/1810.04805",
+      "title": "BERT: Pre-training of Deep Bidirectional Transformers"
+     },
+     {
+      "url": "https://arxiv.org/html/1810.04805",
+      "title": "BERT (HTML full text)"
+     },
+     {
+      "url": "https://arxiv.org/abs/2005.14165",
+      "title": "Language Models are Few-Shot Learners (GPT-3)"
+     },
+     {
+      "url": "https://arxiv.org/abs/1910.10683",
+      "title": "T5: Exploring the Limits of Transfer Learning"
+     },
+     {
+      "url": "https://arxiv.org/abs/2101.00190",
+      "title": "Prefix-Tuning: Optimizing Continuous Prompts for Generation"
+     },
+     {
+      "url": "https://arxiv.org/abs/2104.08691",
+      "title": "The Power of Scale for Parameter-Efficient Prompt Tuning"
+     },
+     {
+      "url": "https://huggingface.co/docs/peft/main/en/conceptual_guides/prompting",
+      "title": "Hugging Face PEFT - Soft prompts"
+     },
+     {
+      "url": "https://arxiv.org/abs/2106.09685",
+      "title": "LoRA: Low-Rank Adaptation of Large Language Models"
+     },
+     {
+      "url": "https://arxiv.org/abs/2002.04745",
+      "title": "On Layer Normalization in the Transformer Architecture"
+     },
+     {
+      "url": "https://arxiv.org/abs/2108.12409",
+      "title": "Train Short, Test Long: ALiBi"
+     },
+     {
+      "url": "https://arxiv.org/html/2108.12409",
+      "title": "Train Short, Test Long (HTML full text)"
+     },
+     {
+      "url": "https://arxiv.org/abs/2203.16634",
+      "title": "Transformer Language Models without Positional Encodings Still Learn Positional Information"
+     },
+     {
+      "url": "https://docs.pytorch.org/docs/2.14/generated/torch.nn.functional.scaled_dot_product_attention.html",
+      "title": "PyTorch scaled_dot_product_attention docs"
+     },
+     {
+      "url": "https://docs.pytorch.org/docs/2.14/generated/torch.nn.MultiheadAttention.html",
+      "title": "PyTorch MultiheadAttention docs"
+     },
+     {
+      "url": "https://docs.pytorch.org/docs/2.14/generated/torch.nn.LayerNorm.html",
+      "title": "PyTorch LayerNorm docs"
+     },
+     {
+      "url": "https://docs.pytorch.org/docs/2.14/generated/torch.nn.Dropout.html",
+      "title": "PyTorch Dropout docs"
+     },
+     {
+      "url": "https://huggingface.co/docs/transformers/generation_strategies",
+      "title": "Hugging Face generation strategies"
+     },
+     {
+      "url": "https://huggingface.co/docs/transformers/main_classes/text_generation",
+      "title": "Hugging Face GenerationConfig (length_penalty)"
+     },
+     {
+      "url": "https://arxiv.org/abs/1904.09751",
+      "title": "The Curious Case of Neural Text Degeneration"
+     },
+     {
+      "url": "https://huggingface.co/docs/transformers/kv_cache",
+      "title": "Hugging Face KV cache strategies"
+     },
+     {
+      "url": "https://arxiv.org/abs/2205.14135",
+      "title": "FlashAttention"
+     },
+     {
+      "url": "https://arxiv.org/abs/2010.11929",
+      "title": "An Image is Worth 16x16 Words (ViT)"
+     },
+     {
+      "url": "https://arxiv.org/abs/2212.04356",
+      "title": "Whisper (Robust Speech Recognition)"
+     },
+     {
+      "url": "https://arxiv.org/abs/2103.00020",
+      "title": "CLIP"
+     },
+     {
+      "url": "https://arxiv.org/abs/2104.09864",
+      "title": "RoFormer (RoPE)"
+     },
+     {
+      "url": "https://arxiv.org/abs/2305.13245",
+      "title": "GQA"
+     },
+     {
+      "url": "https://arxiv.org/abs/1910.07467",
+      "title": "RMSNorm"
+     },
+     {
+      "url": "https://arxiv.org/abs/2002.05202",
+      "title": "GLU Variants Improve Transformer (SwiGLU)"
+     },
+     {
+      "url": "https://arxiv.org/abs/2101.03961",
+      "title": "Switch Transformers (MoE)"
+     }
+    ],
+    "extra_sections": [
+     {
+      "heading": "Cover + pages 1-7 (Questions 1-21)",
+      "detail": "Self-attention intuition and Q/K/V, encoder-only/decoder-only/encoder-decoder architecture types, positional encoding (asked five times in this stretch alone), attention-type comparisons, layer normalization vs batch normalization, attention masking, dropout, and residual connections. Heavy repetition: the same architecture-comparison table and the same positional-encoding formula recur nearly verbatim across several of these pages."
+     },
+     {
+      "heading": "Page 8 (Questions 25-27, first appearance)",
+      "detail": "Jumps straight from Question 21 to Question 25 - Questions 22-24 never appear. Covers positional encoding again, masked-vs-causal self-attention (the deck's most significant error), and variable-length sequence handling with a working C++ padding-mask function."
+     },
+     {
+      "heading": "Pages 9-10 (Questions 25-27, repeated)",
+      "detail": "Near-verbatim repeats of the positional-encoding and masked-vs-causal questions from page 8, plus a second, different question reusing the number 27, this time about the feed-forward network."
+     },
+     {
+      "heading": "Pages 11-15 (Questions 31-45)",
+      "detail": "Jumps from 27 to 31 - Questions 28-30 never appear. Covers masking and the feed-forward network again, multi-head attention, cross-attention, layer normalization again, positional encoding twice more, long-sequence techniques (sparse attention, FlashAttention), Transformer pros/cons, prefix/prompt tuning, variable-length sequences a third time, BERT vs GPT, a positional-encoding worked example, and beam search, closing exactly on Question 45 with no outro slide."
+     }
+    ],
+    "next_action": "Convert out/transformer-45-interview-questions.md to PDF and use it in place of the deck slides; if you want to know for certain what the \"comment PDF\" prompt on the post actually returns, comment from your own account and check."
+   },
+   "links": [
+    {
+     "url": "https://arxiv.org/abs/1706.03762",
+     "label": "Attention Is All You Need",
+     "alive": true,
+     "page_title": "[1706.03762] Attention Is All You Need"
+    },
+    {
+     "url": "https://arxiv.org/abs/1810.04805",
+     "label": "BERT paper",
+     "alive": true,
+     "page_title": "[1810.04805] BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding"
+    },
+    {
+     "url": "https://arxiv.org/abs/1904.09751",
+     "label": "Neural Text Degeneration paper",
+     "alive": true,
+     "page_title": "[1904.09751] The Curious Case of Neural Text Degeneration"
+    },
+    {
+     "url": "https://arxiv.org/abs/1910.07467",
+     "label": "RMSNorm paper",
+     "alive": true,
+     "page_title": "[1910.07467] Root Mean Square Layer Normalization"
+    },
+    {
+     "url": "https://arxiv.org/abs/1910.10683",
+     "label": "T5 paper",
+     "alive": true,
+     "page_title": "[1910.10683] Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer"
+    },
+    {
+     "url": "https://arxiv.org/abs/2002.04745",
+     "label": "Pre-LN vs Post-LN paper",
+     "alive": true,
+     "page_title": "[2002.04745] On Layer Normalization in the Transformer Architecture"
+    },
+    {
+     "url": "https://arxiv.org/abs/2002.05202",
+     "label": "SwiGLU paper",
+     "alive": true,
+     "page_title": "[2002.05202] GLU Variants Improve Transformer"
+    },
+    {
+     "url": "https://arxiv.org/abs/2005.14165",
+     "label": "GPT-3 paper",
+     "alive": true,
+     "page_title": "[2005.14165] Language Models are Few-Shot Learners"
+    },
+    {
+     "url": "https://arxiv.org/abs/2010.11929",
+     "label": "ViT paper",
+     "alive": true,
+     "page_title": "[2010.11929] An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale"
+    },
+    {
+     "url": "https://arxiv.org/abs/2101.00190",
+     "label": "Prefix-Tuning paper",
+     "alive": true,
+     "page_title": "[2101.00190] Prefix-Tuning: Optimizing Continuous Prompts for Generation"
+    },
+    {
+     "url": "https://arxiv.org/abs/2101.03961",
+     "label": "Switch Transformers (MoE) paper",
+     "alive": true,
+     "page_title": "[2101.03961] Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity"
+    },
+    {
+     "url": "https://arxiv.org/abs/2103.00020",
+     "label": "CLIP paper",
+     "alive": true,
+     "page_title": "[2103.00020] Learning Transferable Visual Models From Natural Language Supervision"
+    },
+    {
+     "url": "https://arxiv.org/abs/2104.08691",
+     "label": "Prompt Tuning paper",
+     "alive": true,
+     "page_title": "[2104.08691] The Power of Scale for Parameter-Efficient Prompt Tuning"
+    },
+    {
+     "url": "https://arxiv.org/abs/2104.09864",
+     "label": "RoPE paper",
+     "alive": true,
+     "page_title": "[2104.09864] RoFormer: Enhanced Transformer with Rotary Position Embedding"
+    },
+    {
+     "url": "https://arxiv.org/abs/2106.09685",
+     "label": "LoRA paper",
+     "alive": true,
+     "page_title": "[2106.09685] LoRA: Low-Rank Adaptation of Large Language Models"
+    },
+    {
+     "url": "https://arxiv.org/abs/2108.12409",
+     "label": "ALiBi paper",
+     "alive": true,
+     "page_title": "[2108.12409] Train Short, Test Long: Attention with Linear Biases Enables Input Length Extrapolation"
+    },
+    {
+     "url": "https://arxiv.org/abs/2203.16634",
+     "label": "Positional encodings ablation paper",
+     "alive": true,
+     "page_title": "[2203.16634] Transformer Language Models without Positional Encodings Still Learn Positional Information"
+    },
+    {
+     "url": "https://arxiv.org/abs/2205.14135",
+     "label": "FlashAttention paper",
+     "alive": true,
+     "page_title": "[2205.14135] FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness"
+    },
+    {
+     "url": "https://arxiv.org/abs/2212.04356",
+     "label": "Whisper paper",
+     "alive": true,
+     "page_title": "[2212.04356] Robust Speech Recognition via Large-Scale Weak Supervision"
+    },
+    {
+     "url": "https://arxiv.org/abs/2305.13245",
+     "label": "GQA paper",
+     "alive": true,
+     "page_title": "[2305.13245] GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints"
+    },
+    {
+     "url": "https://arxiv.org/html/1706.03762v7",
+     "label": "Attention Is All You Need (HTML)",
+     "alive": true,
+     "page_title": "Attention Is All You Need"
+    },
+    {
+     "url": "https://arxiv.org/html/1810.04805",
+     "label": "BERT (HTML)",
+     "alive": true,
+     "page_title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding"
+    },
+    {
+     "url": "https://arxiv.org/html/2108.12409",
+     "label": "ALiBi (HTML)",
+     "alive": true,
+     "page_title": "Train Short, Test Long: Attention with Linear Biases Enables Input Length Extrapolation"
+    },
+    {
+     "url": "https://docs.pytorch.org/docs/2.14/generated/torch.nn.Dropout.html",
+     "label": "PyTorch Dropout docs",
+     "alive": true,
+     "page_title": "Dropout &#8212; PyTorch 2.14 documentation"
+    },
+    {
+     "url": "https://docs.pytorch.org/docs/2.14/generated/torch.nn.LayerNorm.html",
+     "label": "PyTorch LayerNorm docs",
+     "alive": true,
+     "page_title": "LayerNorm &#8212; PyTorch 2.14 documentation"
+    },
+    {
+     "url": "https://docs.pytorch.org/docs/2.14/generated/torch.nn.MultiheadAttention.html",
+     "label": "PyTorch MultiheadAttention docs",
+     "alive": true,
+     "page_title": "MultiheadAttention &#8212; PyTorch 2.14 documentation"
+    },
+    {
+     "url": "https://docs.pytorch.org/docs/2.14/generated/torch.nn.functional.scaled_dot_product_attention.html",
+     "label": "PyTorch scaled_dot_product_attention docs",
+     "alive": true,
+     "page_title": "torch.nn.functional.scaled_dot_product_attention &#8212; PyTorch 2.14 documentation"
+    },
+    {
+     "url": "https://huggingface.co/docs/peft/main/en/conceptual_guides/prompting",
+     "label": "Hugging Face PEFT soft prompts guide",
+     "alive": true,
+     "page_title": "Soft prompts · Hugging Face"
+    },
+    {
+     "url": "https://huggingface.co/docs/transformers/generation_strategies",
+     "label": "Hugging Face generation strategies",
+     "alive": true,
+     "page_title": "Generation strategies · Hugging Face"
+    },
+    {
+     "url": "https://huggingface.co/docs/transformers/kv_cache",
+     "label": "Hugging Face KV cache docs",
+     "alive": true,
+     "page_title": "Cache strategies · Hugging Face"
+    },
+    {
+     "url": "https://huggingface.co/docs/transformers/main_classes/text_generation",
+     "label": "Hugging Face GenerationConfig",
+     "alive": true,
+     "page_title": "Generation · Hugging Face"
+    }
+   ],
    "media_id": "df36fce5e7f93fd2",
    "pdf_file": "doc.pdf",
    "slide_ext": ".webp"
@@ -3798,5 +4400,5 @@
    "slide_ext": ".webp"
   }
  ],
- "built": "25 Sep 2026"
+ "built": "26 Sep 2026"
 }
