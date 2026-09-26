@@ -31,7 +31,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from . import claude_cli, config, handoff, questions, store
+from . import claude_cli, config, handoff, listen, questions, store
 
 HOME = config.DATA / "brain"
 
@@ -140,7 +140,7 @@ ITEMS WITH NO READ
 - An item marked "unread": true has no read at all. No free model could read it and he has agreed to Claude reading it. Plan a task of kind "read" for it (one item per read task). A read task looks at the images in its media folder and returns the full read. Any other task about that item depends on its read task.
 
 WHAT WORKERS HAVE
-- Their own folder, holding items.json (everything the first pass found, per item) and media/ (each item's images, named <item id>-NN.<ext>; for a video, up to 16 frames spread evenly over it, named <item id>-fNN.jpg). Workers can look at images. They cannot hear audio; the first pass's transcript is in items.json.
+- Their own folder, holding items.json (everything the first pass found, per item) and media/ (each item's images, named <item id>-NN.<ext>; for a video, up to 16 frames spread evenly over it, named <item id>-fNN.jpg). Workers can look at images. They cannot hear audio themselves, so each item's speech is already transcribed for them in items.json: the `spoken` field, with `spoken_heard_by` saying what heard it and `spoken_not_heard` saying why there is none.
 - Tool kit "web": live web search and fetching pages.
 - Tool kit "write": writing files into out/ in their own folder. Documents are written as Markdown or HTML; Kiln turns them into PDFs itself.
 - Nothing else: no shell, no other files on the machine.
@@ -209,7 +209,7 @@ THE ITEMS
 >>>
 """
 
-READER = """You are reading a saved post for Kiln, because no free model could. Look at every image in media/ (for a video these are up to 16 frames spread evenly over it, and you cannot hear its audio). Get everything down: this is the only read the post will get.
+READER = """You are reading a saved post for Kiln, because no free model could. Look at every image in media/ (for a video these are up to 16 frames spread evenly over it). You cannot hear the video yourself, but its speech has been transcribed for you: it is the `spoken` field of the item, and `spoken_not_heard` says why when there is none. Get everything down: this is the only read the post will get.
 
 {brief}
 
@@ -219,7 +219,7 @@ RULES
 - onscreen_text is a literal transcription of the text you can see, in order. Never paraphrase it.
 - Never invent, complete or guess a URL. Copy only what is actually shown.
 - sections cover every image in order: one section per slide for a carousel.
-- spoken_transcript is "" because you have no audio; say in could_not that the speech was not heard.
+- spoken_transcript: copy the item's `spoken` field into it verbatim when there is one. It is a machine transcript of the sound, so it can mishear a name; correct a word only when an image in media/ shows the real spelling, and never add anything it does not say. When `spoken` is empty leave spoken_transcript "" and say in could_not that the speech was not heard, quoting `spoken_not_heard` as the reason.
 - If something is unreadable, say so in could_not.
 {web}
 Return the JSON the schema asks for.
@@ -354,6 +354,15 @@ def _view(it: dict, media: list[str], unread: bool = False) -> dict:
     research = {k: v for k, v in enr.items()
                 if not k.startswith("_")
                 and k not in ("answer", "answered", "followups", "could_not", "raw")}
+    # A free video model hears a reel while it reads it; Claude cannot. When
+    # the first pass left no transcript the sound is transcribed here instead
+    # of being lost, which is the whole difference on a post that says what
+    # it is about out loud and never writes it down.
+    spoken = (note.get("spoken_transcript") or "").strip()
+    spoken_from, spoken_missing = ("the first pass", "") if spoken else ("", "")
+    if not spoken:
+        spoken, spoken_missing = listen.for_item(it)
+        spoken_from = "a local transcriber" if spoken else ""
     v: dict[str, Any] = {
         "id": it["id"], "url": it["url"], "kind": it.get("kind") or "",
         "creator": it.get("owner") or "", "posted": it.get("posted") or "",
@@ -363,7 +372,9 @@ def _view(it: dict, media: list[str], unread: bool = False) -> dict:
         "slides": it.get("slide_count") or 0,
         "sections": note.get("sections") or [],
         "onscreen_text": (note.get("onscreen_text") or [])[:150],
-        "spoken": (note.get("spoken_transcript") or "")[:8000],
+        "spoken": spoken[:8000],
+        "spoken_heard_by": spoken_from,
+        "spoken_not_heard": spoken_missing,
         "links": [{"url": l.get("url"), "label": l.get("label") or "",
                    "alive": bool(l.get("alive")), "status": l.get("status_code")}
                   for l in (it.get("links") or [])],
