@@ -44,6 +44,19 @@ KITS = {
 }
 BASE_TOOLS = ("Read", "Glob", "Grep")
 
+# The scheduled sync runs at max effort through CLAUDE_CODE_EFFORT_LEVEL, set
+# for its own session only. That variable outranks --effort (measured
+# 2026-09-26: a call started with --effort low asked the API for max), so a
+# process Kiln starts must not inherit it, or every worker the planner put on
+# low or medium runs at max.
+_NOT_INHERITED = ("CLAUDE_CODE_EFFORT_LEVEL",)
+
+
+def child_env() -> dict:
+    """The environment for a process Kiln starts, minus what must not leak."""
+    return {k: v for k, v in os.environ.items() if k.upper() not in _NOT_INHERITED}
+
+
 # Words that mean the call never really happened, as opposed to a task that
 # ran and went badly. The first wants trying again later and is nobody's
 # fault; the second is a result. Only read off a failed call, never off the
@@ -180,7 +193,8 @@ def run(prompt: str, *, model: str, effort: str, cwd: Path, kits=(),
         # about 32k characters, and a brief with a whole carousel in it is
         # longer than that.
         p = subprocess.Popen(cmd, cwd=str(cwd), stdin=subprocess.PIPE,
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                             env=child_env())
     except Exception as e:
         res.error = "could not start claude: %s: %s" % (type(e).__name__, e)
         res.blocked = res.error

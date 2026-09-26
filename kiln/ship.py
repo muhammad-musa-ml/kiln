@@ -21,7 +21,7 @@ import sys
 import time
 from pathlib import Path
 
-from . import slop
+from . import claude_cli, slop
 
 REVIEW_TIMEOUT = 1800
 README_TIMEOUT = 900
@@ -89,7 +89,7 @@ def _run(cmd: list[str], cwd: Path, timeout: int, stdin_text: str = "") -> tuple
             input=stdin_text.encode("utf-8") if stdin_text else None,
             stdin=None if stdin_text else subprocess.DEVNULL,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-            timeout=timeout)
+            timeout=timeout, env=claude_cli.child_env())
         return p.returncode, p.stdout.decode("utf-8", "replace")
     except subprocess.TimeoutExpired:
         return -1, "[timed out after %d seconds]" % timeout

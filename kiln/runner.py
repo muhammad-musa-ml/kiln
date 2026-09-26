@@ -19,7 +19,7 @@ import threading
 import time
 from pathlib import Path
 
-from . import config, jobs, questions, ship
+from . import claude_cli, config, jobs, questions, ship
 
 RUNS = config.DATA / "jobs" / "runs"
 RUNS.mkdir(parents=True, exist_ok=True)
@@ -196,7 +196,7 @@ def _execute(job_id: str, picked: str, repo: str, workdir: Path, log: Path,
             p = subprocess.Popen(
                 cmd, cwd=str(workdir),
                 stdin=subprocess.PIPE if on_stdin else subprocess.DEVNULL,
-                stdout=fh, stderr=subprocess.STDOUT)
+                stdout=fh, stderr=subprocess.STDOUT, env=claude_cli.child_env())
             if on_stdin:
                 try:
                     p.stdin.write(prompt.encode("utf-8"))

@@ -746,8 +746,42 @@ def run(test) -> None:
               "%s: %s" % (type(e).__name__, e))
 
 
+def test_agent_env():
+    print("a build agent does not inherit the routine's effort level")
+    queue("envjob", "item-env")
+    seen: dict = {}
+
+    class FakeAgent:
+        def __init__(self, cmd, **kw):
+            seen.update(kw)
+            self.stdin = None
+
+        def wait(self, timeout=None):
+            return 0
+
+    old = os.environ.get("CLAUDE_CODE_EFFORT_LEVEL")
+    os.environ["CLAUDE_CODE_EFFORT_LEVEL"] = "max"
+    real = runner.subprocess.Popen
+    runner.subprocess.Popen = FakeAgent
+    work = DATA / "builds" / "envjob"
+    work.mkdir(parents=True, exist_ok=True)
+    try:
+        runner._execute("envjob", "claude", "envjob", work, DATA / "envjob.log",
+                        ["claude", "-p"], "", False)
+    finally:
+        runner.subprocess.Popen = real
+        if old is None:
+            os.environ.pop("CLAUDE_CODE_EFFORT_LEVEL", None)
+        else:
+            os.environ["CLAUDE_CODE_EFFORT_LEVEL"] = old
+    env = seen.get("env")
+    check("it builds at its own effort, not the routine's",
+          env is not None and "CLAUDE_CODE_EFFORT_LEVEL" not in env
+          and env.get("KILN_DATA") == str(DATA), str(sorted(k for k in seen if k != "env")))
+
+
 def main() -> int:
-    for test in (test_ask_extra, test_answer_picked, test_estimate_defaults,
+    for test in (test_agent_env, test_ask_extra, test_answer_picked, test_estimate_defaults,
                  test_estimate_history, test_estimate_what, test_ship_is_timed,
                  test_offer, test_offer_same_rules, test_offer_answered_waits,
                  test_offer_empty, test_consent, test_terminal_answers,

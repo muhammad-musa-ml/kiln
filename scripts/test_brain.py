@@ -102,6 +102,7 @@ class Stub:
 
 
 STUB = Stub()
+_REAL_RUN = claude_cli.run
 claude_cli.run = STUB
 brain.claude_cli.run = STUB
 
@@ -404,6 +405,38 @@ def test_command_line():
     check("a usage limit reads as blocked, not broken",
           claude_cli.blocked_reason("Claude AI usage limit reached|1790000000") == "usage limit reached")
     check("an ordinary error does not", claude_cli.blocked_reason("bad JSON") == "")
+
+    # The routine runs at max through CLAUDE_CODE_EFFORT_LEVEL, and that
+    # variable outranks --effort, so a worker must not inherit it.
+    seen: dict = {}
+
+    class FakePopen:
+        def __init__(self, cmd, **kw):
+            seen.update(kw, cmd=cmd)
+            self.returncode = 0
+
+        def communicate(self, data, timeout=None):
+            return b"{}", b""
+
+    old = os.environ.get("CLAUDE_CODE_EFFORT_LEVEL")
+    os.environ["CLAUDE_CODE_EFFORT_LEVEL"] = "max"
+    real_popen, real_which = claude_cli.subprocess.Popen, claude_cli.shutil.which
+    claude_cli.subprocess.Popen = FakePopen
+    claude_cli.shutil.which = lambda name: "claude"
+    try:
+        _REAL_RUN("hi", model="claude-sonnet-5", effort="low", cwd=Path(TMP) / "envcheck")
+    finally:
+        claude_cli.subprocess.Popen, claude_cli.shutil.which = real_popen, real_which
+        if old is None:
+            os.environ.pop("CLAUDE_CODE_EFFORT_LEVEL", None)
+        else:
+            os.environ["CLAUDE_CODE_EFFORT_LEVEL"] = old
+    env = seen.get("env")
+    cmd = seen.get("cmd") or []
+    check("a worker does not inherit the routine's effort level, and keeps its own",
+          env is not None and "CLAUDE_CODE_EFFORT_LEVEL" not in env
+          and env.get("KILN_DATA") == TMP and cmd[cmd.index("--effort") + 1] == "low",
+          str(sorted(k for k in seen if k != "env")))
 
 
 def test_end_to_end():
