@@ -10,6 +10,7 @@ does not match the very checks it is testing.
 from __future__ import annotations
 
 import json
+import os
 import sys
 import tempfile
 import time
@@ -417,7 +418,38 @@ def test_readme_prompt() -> None:
     check("no unfilled placeholder is left in it", "%s" not in p, p[-200:])
 
 
+def test_child_env():
+    print("a process ship starts does not inherit the routine's effort level")
+    seen: dict = {}
+
+    class Done:
+        returncode = 0
+        stdout = b""
+
+    def fake_run(cmd, **kw):
+        seen.update(kw)
+        return Done()
+
+    old = os.environ.get("CLAUDE_CODE_EFFORT_LEVEL")
+    os.environ["CLAUDE_CODE_EFFORT_LEVEL"] = "max"
+    real = ship.subprocess.run
+    ship.subprocess.run = fake_run
+    try:
+        ship._run(["claude", "-p"], Path(tempfile.gettempdir()), 5)
+    finally:
+        ship.subprocess.run = real
+        if old is None:
+            os.environ.pop("CLAUDE_CODE_EFFORT_LEVEL", None)
+        else:
+            os.environ["CLAUDE_CODE_EFFORT_LEVEL"] = old
+    env = seen.get("env")
+    check("the reviewer, readme writer and tests get their own effort, not the routine's",
+          env is not None and "CLAUDE_CODE_EFFORT_LEVEL" not in env and "PATH" in env,
+          str(sorted(k for k in seen if k != "env")))
+
+
 def main() -> int:
+    test_child_env()
     test_allowlist()
     test_description()
     test_run_tests()
