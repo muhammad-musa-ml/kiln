@@ -378,3 +378,10 @@ for `scripts/publish_and_deploy.sh`; the sync pushes instead.
 
 Ollama is optional. Kiln finds its port on its own, because mine was on a
 non-standard one, and it can be added as a provider, but no list uses it.
+
+faster-whisper is optional too: `pip install faster-whisper`, plus a
+faster-whisper model already in the Hugging Face cache (or `KILN_WHISPER_DIR`
+pointing at one), because it never downloads anything. With it, a reel no
+free model could read is transcribed here before Claude reads it, since
+Claude only sees the frames. Without it Claude reads the frames alone.
+`KILN_LISTEN=0` turns it off.

@@ -454,6 +454,28 @@ on its own in bypass permissions mode, on `claude-opus-5` at `max` effort
         `CLAUDE_CODE_EFFORT_LEVEL` environment variable, Claude Code applies
         `max` to the current session only." A session cannot raise its own
         effort either: the app refuses that.
+      - Found 2026-09-26 in the app's log (`%LOCALAPPDATA%\Claude\Logs\main.log`)
+        and the run transcripts. The routine had no stored mode until he saved
+        one at 02:02:13 on 09-26 (`updateScheduledTask`). The 09-25 21:11 run
+        started in Manual (`[permissionMode] spawn ... requested=default
+        effective=default`), asked to read the Drive doc at 21:11:57, and
+        waited until he set bypass by hand at 23:12:21; the read went through
+        at once, so bypass covers it. Every run so far waited there the same
+        way (`Not auto-approving ... not covered by usable stored approvals`).
+      - `change_directory` asks even after bypass: requested at 23:12:53,
+        `Not auto-approving ... no suggestions on request`, approved by hand
+        at 23:25:38. The app's own note to every scratch-folder run says to
+        use it for an existing project. The 09-24 morning run never called it:
+        it wrote `data\inbox_snapshot.txt` by its full path and ran
+        `python scripts/daily.py` after a `cd` into Kiln in the same command.
+      - Effort measured at the request itself: a local catcher that records a
+        request's `output_config` and refuses it, forwarding nothing. Opus 5
+        from a plain folder asked for medium (his top-level `effortLevel`).
+        From a folder whose `.claude/settings.local.json` sets
+        `"env": {"CLAUDE_CODE_EFFORT_LEVEL": "max"}` it asked for max. A call
+        started the way Kiln starts its workers, with `--effort low`, asked
+        for low, and for max when it inherited that variable: the variable
+        outranks `--effort`.
 - [!] **8.2 Make the routine start in bypass, on Opus 5 at max.** Owner
       action, because permission mode is a security setting:
       1. Settings, Claude Code: "Allow bypass permissions mode" on (it
@@ -488,9 +510,32 @@ on its own in bypass permissions mode, on `claude-opus-5` at `max` effort
       isn't accepted as a level in either key". The update tool this session
       can call changes a routine's prompt, schedule and on/off only, not its
       model or mode, so steps 2 and 3 are his.
+      2026-09-26: he wants max for the routine only, nothing else, so step 3's
+      two ways (every session, or every Opus 5 session) are off the table.
+      Done instead, and measured (8.1):
+      - The routine's own folder (the scratch workspace the app made for it,
+        under `%APPDATA%\Claude\scratch-workspaces\`; its full path is the
+        `cwd` in the app's `scheduled-tasks.json`)
+        got `"env": {"CLAUDE_CODE_EFFORT_LEVEL": "max"}` in its
+        `.claude\settings.local.json`, beside the allow list already there.
+        Only a session started in that folder reads it, and only the routine
+        starts there. A call from that folder asked for max.
+      - Kiln no longer passes that variable on (`3bb3360`): the planner, the
+        workers, builds, the reviewer and the readme writer each run at the
+        effort they are given. Shown on the real launcher: `--effort low` with
+        the variable set now asks for low.
+      - The routine's instructions (`~\.claude\scheduled-tasks\kiln-inbox-sync\SKILL.md`)
+        now say to stay in its folder, never call `change_directory` or
+        `request_directory`, and reach Kiln by full path.
+      Left for him: the saved model is `claude-opus-5-5` (read 02:28 on
+      09-26); Edit, pick Opus 5, save. Bypass is saved already.
 - [ ] **8.3 Watch the next scheduled run start that way**, with nobody at the
       keyboard, and record what its session reports (`permissionMode`,
-      `bypassChosenInApp`, `model`, `effort`).
+      `bypassChosenInApp`, `model`, `effort`). For the 09-26 09:00 run, the
+      app log should show `[permissionMode] spawn <id> ... requested=bypassPermissions`
+      and no `Emitted tool permission request` for that session, and its
+      transcript should show `claude-opus-5` from the first turn. Effort is
+      not in the app log; the folder file was proved at the request (8.1).
 
 ---
 
@@ -536,7 +581,9 @@ machine. It happened to me three times in this session and once in the
 command that runs `python -`. That changes your Claude Code settings, so it
 waits for a yes.
 
-**Q7. Max effort for the routine** (8.2, step 3). With `"effortLevel":
+**Q7. Answered 2026-09-26: max for the routine only, nothing else.** Done
+with a settings file in the routine's own folder (8.2). The question as it
+stood: **Max effort for the routine** (8.2, step 3). With `"effortLevel":
 "medium"` in your user settings, a routine on Opus 5 starts at medium (that
 key still applies to Opus 5; Opus 5.5 ignores it). `max` cannot be saved in
 settings at all. The one lasting way to max is the `CLAUDE_CODE_EFFORT_LEVEL`
@@ -674,3 +721,18 @@ edited in the main checkout, so it is always current where it is read.
   without reading the clock, which said 13:27; both corrected. And two
   inline `python -c` commands with quotes, which the house rule sends to a
   script file.
+
+### 2026-09-26
+- The 09-25 21:11 run waited in Manual mode until he came back (8.1). While
+  it ran he had it hear the reels: a session commit at 00:35 added
+  `kiln/listen.py` (a reel's sound transcribed here with faster-whisper
+  when Claude reads it, since Claude sees only frames) and
+  `scripts/test_listen.py`, now 17/17. It carried a Co-Authored-By trailer;
+  the message was reworded to drop it before anything was pushed (same
+  tree), and it went out as `f4fa733`. The README's Needs now says what it
+  wants.
+- He asked for max effort on the routine only. Measured where effort can
+  be read (the request), found the inherited variable outranks `--effort`,
+  fixed Kiln so its workers keep their own (`3bb3360`), gave the routine's
+  folder the setting, and stopped its runs calling `change_directory`
+  (8.2). Thirteen suites green before and after, pushed.
