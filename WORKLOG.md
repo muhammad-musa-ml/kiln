@@ -513,9 +513,8 @@ on its own in bypass permissions mode, on `claude-opus-5` at `max` effort
       2026-09-26: he wants max for the routine only, nothing else, so step 3's
       two ways (every session, or every Opus 5 session) are off the table.
       Done instead, and measured (8.1):
-      - The routine's own folder (the scratch workspace the app made for it,
-        under `%APPDATA%\Claude\scratch-workspaces\`; its full path is the
-        `cwd` in the app's `scheduled-tasks.json`)
+      - The routine's own folder (the scratch workspace the app made for it;
+        its full path is the `cwd` in the app's `scheduled-tasks.json`)
         got `"env": {"CLAUDE_CODE_EFFORT_LEVEL": "max"}` in its
         `.claude\settings.local.json`, beside the allow list already there.
         Only a session started in that folder reads it, and only the routine
@@ -529,6 +528,14 @@ on its own in bypass permissions mode, on `claude-opus-5` at `max` effort
         `request_directory`, and reach Kiln by full path.
       Left for him: the saved model is `claude-opus-5-5` (read 02:28 on
       09-26); Edit, pick Opus 5, save. Bypass is saved already.
+      Where these are on disk: the desktop app is a Windows package
+      (`Claude_pzs8sxrjxfjjc`), so what it and everything it starts see as
+      `%APPDATA%\Claude\...` is really under
+      `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude\...`,
+      and File Explorer shows no `Claude` folder in Roaming at all. That holds
+      for the routine's folder and the app's `scheduled-tasks.json`. The app's
+      log (`%LOCALAPPDATA%\Claude\Logs\main.log`) and the routine's
+      `SKILL.md` (in the user profile) are where they look.
 - [ ] **8.3 Watch the next scheduled run start that way**, with nobody at the
       keyboard, and record what its session reports (`permissionMode`,
       `bypassChosenInApp`, `model`, `effort`). For the 09-26 09:00 run, the
@@ -736,3 +743,8 @@ edited in the main checkout, so it is always current where it is read.
   fixed Kiln so its workers keep their own (`3bb3360`), gave the routine's
   folder the setting, and stopped its runs calling `change_directory`
   (8.2). Thirteen suites green before and after, pushed.
+- A slip of mine: I gave him the routine folder's path as the app sees it
+  (`AppData\Roaming\Claude\...`), and he could not find it, because the app
+  is a Windows package and that path is redirected into its package folder.
+  The redirect was in front of me: the same files had shown up under both
+  trees in a search. Corrected in 8.2.
