@@ -931,6 +931,66 @@ def test_one_yes_covers_the_list():
     conn.close()
 
 
+def test_a_yes_survives_a_killed_sync():
+    print("a yes on the card survives a sync killed during its reads")
+    reset_db()
+    conn = store.connect()
+    ids = ["ka", "kb"]
+    for iid in ids:
+        make_item(conn, iid, note=False, media=1, kind="instagram")
+        conn.execute("UPDATE items SET summary='', action='redo' WHERE id=?", (iid,))
+        store.set_tags(conn, iid, "action", ["redo"])
+        handoff.write(iid, url="https://example.com/p/" + iid, stage="extract",
+                      why="every rung out of quota", media=[])
+    conn.commit()
+    brain.ask_to_read(brain.unread(conn))
+    q = [x for x in questions.open_questions() if x.get("job_id") == brain.READ_ASK][0]
+    questions.answer(q["id"], q["options"][0])
+
+    class Killed(BaseException):
+        """What a process being killed looks like from inside: nothing catches it."""
+
+    def die(*a, **kw):
+        raise Killed()
+
+    brain.claude_cli.run = die
+    try:
+        brain.sweep(conn=conn)
+        check("the stand-in kill stopped the sync", False, "sweep returned normally")
+    except Killed:
+        pass
+    finally:
+        brain.claude_cli.run = STUB
+    check("the yes is on disk although the card is gone",
+          brain._read_ok() == set(ids)
+          and not [x for x in questions.all_questions() if x.get("job_id") == brain.READ_ASK],
+          str(brain._read_ok()))
+
+    def read_plan(iid):
+        plan = good_plan([iid], filing=[], new_sections=[])
+        plan["tasks"] = [{"id": "t1", "kind": "read", "goal": "read the reel",
+                          "items": [iid], "model": "claude-sonnet-5", "effort": "high",
+                          "tools": [], "depends_on": [], "brief": "read every frame"}]
+        return plan
+
+    STUB.plans = [read_plan(i) for i in ids]
+    STUB.final = lambda cwd: {"items": [{"id": v["id"], "answer": "", "answered": "not asked",
+                                         "missing": "", "retry_later": False, "title": "",
+                                         "hook": "", "summary": "", "artifacts": [],
+                                         "sources": [], "extra_sections": [],
+                                         "extra_links": [], "next_action": ""}
+                                        for v in json.loads((Path(cwd) / "items.json")
+                                                            .read_text(encoding="utf-8"))],
+                              "lessons": []}
+    out = brain.sweep(conn=conn)
+    check("so the next sync reads both without asking again",
+          [r.get("items") for r in out.get("reads", [])] == [["ka"], ["kb"]]
+          and not out.get("asked"), json.dumps(out)[:300])
+    check("and forgets the yes once they are read", brain._read_ok() == set(),
+          str(brain._read_ok()))
+    conn.close()
+
+
 def test_inbox_changes():
     print("a line that changes after it was read")
     reset_db()
@@ -1233,6 +1293,7 @@ def main() -> int:
     test_gate_keyword()
     test_claude_read_stored_in_full()
     test_one_yes_covers_the_list()
+    test_a_yes_survives_a_killed_sync()
     test_sweep_stops_and_survives()
     test_health_cards_listen()
     test_inbox_changes()

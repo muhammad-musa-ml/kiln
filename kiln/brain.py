@@ -1303,6 +1303,10 @@ def sweep(limit: int | None = None, *, conn=None) -> dict:
                 # this pass has no room for. Those are read on later passes
                 # without asking again.
                 ok |= set(_read_card().get("items") or [b["item_id"] for b in briefs])
+                # On disk before the card goes. On 2026-09-28 a sync killed
+                # during its reads took the yes with it: the card was gone,
+                # and this file was only written after the last read.
+                _save_read_ok(ok)
                 questions.clear(READ_ASK, READ_KIND)
             elif consent == "no":
                 # Wait was the answer, so the free models get fresh tries: a
