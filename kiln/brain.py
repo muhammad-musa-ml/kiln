@@ -160,8 +160,11 @@ RULES FOR TASKS
 THE FINAL STEP. Choose its model and effort, and write its brief: what the owner should end up with for each item (the answer he reads, which files are the deliverables and which must become PDFs, and what to correct in a title, hook or summary). The final step can read every task's results and write files. It can add sections and links the first pass missed, and take links off the item that turned out to be wrong. It cannot rewrite the first pass's sections, but it can set aside the first pass's research when that answered the wrong question, and correct the item's action tag. When the verdict is nothing_to_do it does not run, but it still needs a model, an effort and a brief.
 
 SECTIONS. He files items into sections he names himself, with subsections (types or topics) inside them. The current tree and what belongs in each part is below.
-- If he asked for a section or for subsections, create them in new_sections. "path" is [section] or [section, subsection], and "about" says in one line what belongs there. Keep subsections few, plainly named, and broad enough that later items will fit them.
-- File items where they fit ("filing"), including into sections that already exist; an item can go in more than one. If nothing fits and he did not ask, leave it unfiled.
+- EVERY item gets filed. Never leave one unfiled and never wait to be asked. An unfiled item is one he can only find by scrolling, which is the thing the tree exists to prevent.
+- Create what an item needs in new_sections, asked or not. "path" is [section] or [section, subsection], and "about" says in one line what belongs there. File into an existing part when it genuinely fits; make a new one when nothing does, rather than forcing the item somewhere wrong.
+- Name a section for what its items are ABOUT - the topic or the domain. Never name one after what to do with it: the action tag already carries the verb, and a section named "To Read" or "Builds" just repeats it.
+- Keep names plain and broad enough that later items land in them. A subsection with one item in it is right when it names a topic more will join, and wrong when it only describes this single item.
+- Put an item in MORE THAN ONE section or subsection whenever it belongs in several, including in one you are creating in this same plan. A reel about RAG asked as an interview question belongs under both retrieval and interview prep. Do not choose just one for tidiness.
 - Filing happens now, whatever the verdict.
 
 LESSONS FROM EARLIER WORK on items like these. They came from doing this before; use them.
