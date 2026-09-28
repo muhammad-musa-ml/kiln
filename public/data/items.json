@@ -1,6 +1,46 @@
 {
  "items": [
   {
+   "id": "99cc8ebb69886d63",
+   "url": "https://www.instagram.com/reel/Ddp1VsxtoEw/",
+   "kind": "other",
+   "action": "redo",
+   "title": "Was he onto something or on something ? Ep6 \n\n#sidehustle #makemoney #",
+   "owner": "larpinleon",
+   "posted": "September 23, 2026",
+   "slide_count": 0,
+   "links_checked": "28 Sep 2026",
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "slide_ext": ".webp"
+  },
+  {
+   "id": "a5ae5eb1ce0ebb14",
+   "url": "https://www.instagram.com/reel/Dd1Cklmk2bN/",
+   "kind": "other",
+   "action": "redo",
+   "title": "HeyGen just open-sourced a free motion designer for Claude 🎬\n\nHyperFra",
+   "owner": "aiexplained412",
+   "posted": "September 28, 2026",
+   "slide_count": 0,
+   "links_checked": "28 Sep 2026",
+   "note": {},
+   "enrich": {},
+   "tags": {
+    "action": [
+     "redo"
+    ]
+   },
+   "links": [],
+   "slide_ext": ".webp"
+  },
+  {
    "id": "ff608848fd33513a",
    "url": "https://www.instagram.com/reel/DdrgzwPlF1w/",
    "kind": "tool",
@@ -3054,7 +3094,7 @@
    "id": "c2dc716cd4fa6bc1",
    "url": "https://www.instagram.com/p/Ddqj0svm6yq/",
    "kind": "listicle",
-   "action": "reference",
+   "action": "apply",
    "title": "Four Free Design Resources to Fix Generic Vibe Coded Apps",
    "hook": "Learn how to use four free design curation and asset websites to elevate your AI-generated apps from generic templates to professional-grade designs.",
    "summary": "Most vibe-coded apps look identical because Claude lacks high-quality design references to copy. To fix this, you can feed screenshots of curated, world-class websites directly into Claude to match their layout, spacing, and typography decisions. Additionally, you can copy-paste UI transitions, generate browser-based launch videos, and borrow slide structures from top-tier pitch decks. These four free resources give your AI agent the visual taste it needs to build unique, polished products.",
@@ -3204,9 +3244,11 @@
    "enrich": {},
    "tags": {
     "action": [
-     "reference"
+     "apply"
     ],
     "section": [
+     "claude-prompting/claude-code-skills",
+     "media-generation/motion-graphics-video",
      "shipping-quality/design"
     ],
     "topic": [
@@ -3216,6 +3258,81 @@
      "ui ux",
      "web design"
     ]
+   },
+   "followup": {
+    "answer_html": "<h2>The four, resolved</h2>\n<p><strong>1. godly.design</strong> - A curated daily gallery of well designed websites, apps, UI patterns, and page sections (hero sections, CTAs, footers, logos, app icons). No owner or company name is listed anywhere on the site. It is free with no login wall found on the homepage, the /websites browse page, or a third-party directory listing. No terms of service page exists (/terms returns 404), so there is no stated policy on screenshotting entries for reuse. What to do with it: open <a href=\"https://godly.design/websites\">godly.design/websites</a>, screenshot a page or section you like, and ask Claude to match its layout, spacing, and type, not the brand.</p>\n<p><strong>2. transitions.dev</strong> - A library of about 40 copy-paste CSS UI transitions (card hovers, modals, success checks, notification badges, tabs), run independently by Jakub Antalik. The free tier is real: no login requirement was stated, and the transitions ship as self-contained CSS with a license that allows unlimited personal and commercial use (you just can't repackage the library itself). Pro is $9/month, or $149 one-time for a lifetime solo license, and gates 36+ transitions total, React/TypeScript variants, a live-tuning tool called Refine, and a &quot;commercial license&quot; that mostly restates what the free terms already grant. What to do with it: install the free Claude Code skill (steps below) so the agent can apply a transition by name instead of you writing the CSS by hand.</p>\n<p><strong>3. animos.app</strong> - A browser tool that turns uploaded app screenshots into a short looping motion-graphics video (MP4/WebM), built by Herdetya Priambodo. The site itself only returns a JavaScript shell to a plain fetch, so none of the detail below is confirmed first-hand; it rests on Product Hunt, a review site (MakerStack), and search summaries, which mostly agree with each other. Most sources describe it as currently fully free, no watermark, no account needed for the core flow, but one summary says exports above 720p require a paid Pro plan, conflicting with the &quot;fully free&quot; reports. This is unresolved. The post's &quot;25 templates&quot; figure does not match any source; real counts range from about 30 to 50. What to do with it: drop a screenshot of your app into a template and export a loop, but check the export resolution and watermark status yourself before relying on the &quot;no cap&quot; claim.</p>\n<p><strong>4. deck.gallery</strong> - A curated archive of real pitch decks and brand guideline decks (OpenAI, Perplexity, Zapier, Discord, Nike, and others), run by a product designer named Muharrem. The &quot;200+ decks, 9,000+ slides&quot; figure is real, but it describes the $12/month Pro tier ($144/year), not the free tier. Free access is limited to today's new deck in full, plus 6 slides from each archived deck; email verification is required for Pro content. No download or export option was found on any fetched page, so treat it as browser-viewing only. What to do with it: browse today's free deck or the 6-slide previews and copy the structure (section order, slide count, information hierarchy) for your own pitch, not the exact numbers the post advertises.</p>\n<h2>Installing the transitions.dev Claude Code skill</h2>\n<p>transitions.dev's own instructions and Anthropic's current Claude Code docs describe different mechanisms that happen to land in the same place: a SKILL.md sitting in a folder Claude Code watches.</p>\n<ol>\n<li>Run <code>npx skills add Jakubantalik/transitions.dev</code> in your project (or anywhere, for a personal install). This is a third-party CLI, not an Anthropic tool. It writes the skill's SKILL.md into <code>.claude/skills/</code> for a project or <code>~/.claude/skills/</code> for a personal install, which is exactly where Anthropic's docs say skills belong.</li>\n<li>Optional: run <code>npx skills add Jakubantalik/transitions.dev -s transitions-polish</code> for the &quot;Polish&quot; add-on that matches hardcoded animation durations to a token scale.</li>\n<li>Restart Claude Code, or if the skills folder did not exist before step 1, run <code>/reload-skills</code> to make Claude Code pick it up without a restart.</li>\n<li>Run <code>/skills</code> to confirm it loaded and see the exact slash name it registered under (transitions.dev does not publish this name in advance).</li>\n<li>Use it by asking Claude directly, for example &quot;apply a success-check transition to this button,&quot; or invoke it explicitly with the slash command from step 4.</li>\n<li>Pro users only: run <code>npx transitions-dev skill</code> and complete the browser sign-in against an active subscription for the 36+ transition set, or <code>npx transitions-dev add --pro</code> to copy code directly instead of installing a skill.</li>\n</ol>\n<p>Where the site and Anthropic's docs differ: transitions.dev only tells you to run the npx installer. Anthropic's docs additionally document the manual path (write the SKILL.md by hand in <code>~/.claude/skills/&lt;name&gt;/</code> or <code>.claude/skills/&lt;name&gt;/</code>, with YAML frontmatter) and a separate plugin system (<code>/plugin marketplace add</code>, then <code>/plugin</code>) that transitions.dev does not use. If you don't want to run a third-party npx package, you can build the same SKILL.md by hand, but the raw file content is not published on transitions.dev, only delivered through the installer.</p>\n<h2>Where the post overstates</h2>\n<ul>\n<li><strong>animos.app's &quot;25 templates&quot;</strong>: not supported by any source. Real counts run 30 to 50 depending on the source, and the true figure could not be confirmed directly from the site.</li>\n<li><strong>animos.app's free-tier limits</strong>: most sources say no watermark and no export cap right now, but one summary says HD and higher-resolution export needs a paid plan. Unconfirmed either way from the site itself.</li>\n<li><strong>deck.gallery's &quot;200+ decks and 9,000+ slides&quot;</strong>: real numbers, but they describe the $12/month Pro tier. The free tier gives you today's deck plus 6-slide previews of the rest, not the full archive the post implies.</li>\n<li><strong>transitions.dev's &quot;27+ transitions&quot;</strong>: this one holds. The skill page states 27+ for the free tier, matching the post.</li>\n</ul>\n<p>No title correction is needed: all four have a working free tier you can use without paying, even where the headline numbers (deck.gallery's count, animos.app's template count) belong to a paid tier or a different source than the post used.</p>\n<h2>The comment gate</h2>\n<p>You do not need to comment &quot;LINKS&quot; for anything here. All four sites are named on screen in the carousel and in the caption, and the confirmed URLs are attached to this item below.</p>\n<h2>Left unconfirmed</h2>\n<ul>\n<li>godly.design: no owner, company, or curator found anywhere; no terms of service page exists to confirm a screenshotting policy.</li>\n<li>animos.app: exact template count, the free/paid resolution split, exact clip length, whether a render queue exists for free users, and any paid-tier price (one reviewer's $10-20/month figure is a guess, not a stated price).</li>\n<li>deck.gallery: whether an account is required just to see the free 6-slide previews versus only for Pro, and whether a hidden download option exists that a plain page fetch would miss.</li>\n<li>transitions.dev: whether sign-in is required for the free tier, the raw SKILL.md contents, the exact slash-command name the skill registers under, and whether it appears in any official Claude Code plugin marketplace.</li>\n</ul>\n",
+    "answered": "fully",
+    "sources": [
+     {
+      "url": "https://transitions.dev",
+      "title": "transitions.dev homepage"
+     },
+     {
+      "url": "https://transitions.dev/skill.html",
+      "title": "transitions.dev - Claude Code skill page"
+     },
+     {
+      "url": "https://transitions.dev/pro.html",
+      "title": "transitions.dev - Pro pricing page"
+     },
+     {
+      "url": "https://transitions.dev/terms.html",
+      "title": "transitions.dev - Terms page"
+     },
+     {
+      "url": "https://code.claude.com/docs/en/skills",
+      "title": "Extend Claude with skills - Claude Code Docs"
+     },
+     {
+      "url": "https://code.claude.com/docs/en/plugins",
+      "title": "Plugins overview - Claude Code Docs"
+     },
+     {
+      "url": "https://www.skills.sh/agent/claude-code",
+      "title": "Skills for Claude Code - Install via the skills CLI"
+     },
+     {
+      "url": "https://godly.design",
+      "title": "godly.design homepage"
+     },
+     {
+      "url": "https://godly.design/websites",
+      "title": "godly.design/websites"
+     },
+     {
+      "url": "https://www.gooddesign.tools/tools/godly",
+      "title": "Godly | Good Design Tools directory listing"
+     },
+     {
+      "url": "https://deck.gallery",
+      "title": "deck.gallery homepage"
+     },
+     {
+      "url": "https://deck.gallery/pricing",
+      "title": "deck.gallery/pricing"
+     },
+     {
+      "url": "https://www.deck.gallery/info/",
+      "title": "deck.gallery/info/"
+     },
+     {
+      "url": "https://deckgallery.substack.com/",
+      "title": "deck.gallery Substack by Muharrem"
+     },
+     {
+      "url": "https://makerstack.co/reviews/animos-app-review/",
+      "title": "Animos Review (2026) - MakerStack"
+     },
+     {
+      "url": "https://www.producthunt.com/products/animos-app",
+      "title": "Animos App | Product Hunt"
+     },
+     {
+      "url": "https://www.visalytica.com/tool/animos-app",
+      "title": "Animos App | Visalytica"
+     }
+    ],
+    "next_action": "Install the transitions.dev skill in Claude Code before your next build, and confirm animos.app's export limits and deck.gallery's free-tier scope yourself, since both rest on unconfirmed or conflicting sources."
    },
    "links": [
     {
@@ -3231,16 +3348,40 @@
      "page_title": "Deck.gallery - Beautifully designed decks, curated"
     },
     {
+     "url": "https://deck.gallery/pricing",
+     "label": "deck.gallery Pro pricing and free-tier limits (confirmed)",
+     "alive": true,
+     "page_title": "Membership - Deck.gallery"
+    },
+    {
      "url": "https://godly.design",
      "label": "Web design inspiration gallery",
      "alive": true,
      "page_title": "Godly — Design Inspiration"
     },
     {
+     "url": "https://godly.design/websites",
+     "label": "godly.design browse page (confirmed live, matches the post's link)",
+     "alive": true,
+     "page_title": "Godly Website Design Inspiration"
+    },
+    {
      "url": "https://transitions.dev",
      "label": "UI transitions and animations library",
      "alive": true,
      "page_title": "Transitions.dev: UI transitions for AI agents"
+    },
+    {
+     "url": "https://transitions.dev/pro.html",
+     "label": "transitions.dev Pro pricing and what it gates (confirmed)",
+     "alive": true,
+     "page_title": "Transitions Pro: The essential UI transitions for web apps"
+    },
+    {
+     "url": "https://transitions.dev/skill.html",
+     "label": "transitions.dev Claude Code skill install page (confirmed)",
+     "alive": true,
+     "page_title": "Transitions.dev Skill — Teach your AI about product motion"
     }
    ],
    "media_id": "c2dc716cd4fa6bc1",
@@ -4261,10 +4402,10 @@
    "id": "66c103114a6cd5a7",
    "url": "https://www.instagram.com/p/DdxLqyancxH/?img_index=6",
    "kind": "news",
-   "action": "watch",
+   "action": "read",
    "title": "Claude Opus 5.5 vs GPT 6 Astra Motion Design Generation",
-   "hook": "See how AI models write live code to generate complex motion graphic showreels from simple prompts.",
-   "summary": "Claude Opus 5.5 and GPT 6 Astra can create dynamic 15-second motion graphic showreels using code execution like WebGL, Canvas, and SVG. Rather than generating direct video pixels, the models program kinetic typography, dynamic grids, and 3D shapes rendered in real time. This allows creators to edit scenes, fonts, or speed using simple text commands.",
+   "hook": "Claude Opus 5.5 really does write and render its own motion-graphics code into video; GPT 6 Astra is a real model but nothing confirms it works the same way.",
+   "summary": "Claude Opus 5.5 writes animation code (Canvas, SVG, three.js/WebGL, or Python drawing libraries) and, through Claude Code plus ffmpeg on your own machine, that code becomes a real .mp4 - confirmed by Anthropic's docs and two working GitHub examples. On claude.ai artifacts alone you only get a live, editable preview, not a video file. GPT 6 Astra is a real OpenAI model released September 3, 2026, but no OpenAI source confirms it renders its own code the same way; the one description found of its actual workflow says it hands rendering off to a separate video-diffusion tool instead.",
    "owner": "artificialntellligence",
    "posted": "September 26, 2026",
    "slide_count": 1,
@@ -4351,10 +4492,11 @@
    "enrich": {},
    "tags": {
     "action": [
-     "watch"
+     "read"
     ],
     "section": [
-     "claude-prompting/model-comparisons"
+     "claude-prompting/model-comparisons",
+     "media-generation/motion-graphics-video"
     ],
     "topic": [
      "ai",
@@ -4363,6 +4505,61 @@
      "motiongraphics",
      "tech"
     ]
+   },
+   "followup": {
+    "answer_html": "<h2>Is this real, and can you do it yourself</h2>\n<p>Yes, for Claude Opus 5.5, with conditions on which surface you use.</p>\n<p>Anthropic's own docs confirm the mechanism: Claude runs Bash and Python in a sandboxed Linux container and can write and edit files there, including animation code. The same docs list MP4 and MOV as file types the sandbox can produce. But which surface you use changes what you actually get back:</p>\n<ul>\n<li><strong>claude.ai artifacts</strong>: renders live in your browser as an interactive Canvas/SVG/WebGL page. This is a runnable animation, not a video file. Anthropic's artifacts documentation does not describe any video export from this surface.</li>\n<li><strong>Claude API code execution tool</strong>: runs in Anthropic's hosted sandbox. MP4 is listed as a producible format, but ffmpeg is not on the sandbox's documented list of pre-installed tools, so the exact encoding path inside the pure API sandbox is not spelled out anywhere Anthropic publishes.</li>\n<li><strong>Claude Code (the terminal coding agent)</strong>: this is the surface that actually produces a finished .mp4 on disk, and it is demonstrated, not theoretical. Two independent, inspectable GitHub repos show Opus 5.5, run through Claude Code, writing three.js/Canvas2D/GLSL or Python (pycairo/PangoCairo) animation code, then rendering it with headless Chrome plus ffmpeg (or a direct ffmpeg pipe) into a real showreel.mp4 with synced audio: <a href=\"https://github.com/pupubird/claude-motion-reel\">pupubird/claude-motion-reel</a> and <a href=\"https://github.com/DYH1319/claude-motion-showreel\">DYH1319/claude-motion-showreel</a>. The prompt in the second repo is close to the one in this post.</li>\n</ul>\n<p>So the honest answer is: you can do this yourself today, but not with a single button in the chat app. You need Claude Code plus ffmpeg installed locally (and a headless browser like Puppeteer/Chromium if you go the three.js/Canvas route rather than a pure Python drawing library). Cost: Claude Code usage is bundled into any paid Claude plan (Pro and up), or billed by API token/execution time if you go that route: $4 / $20 per million input/output tokens for Opus 5.5, plus code execution at 1,550 free container-hours a month, then $0.05/hour after that. The GitHub authors both note it still takes some back-and-forth prompting to get a clean result, not one shot.</p>\n<h2>GPT 6 Astra: real model, unconfirmed mechanism</h2>\n<p>GPT-6 Astra is a real, currently deployed OpenAI model, released September 3, 2026, confirmed directly on two first-party OpenAI subdomains: OpenAI's own <a href=\"https://developers.openai.com/api/docs/models/gpt-6-astra\">model docs</a> and its <a href=\"https://deploymentsafety.openai.com/gpt-6-astra\">safety/deployment card</a>. &quot;GPT 6 Astra Max&quot;, the label on the slide, does not match any tier name OpenAI documents anywhere reachable; the real tier names are &quot;GPT-6 Pro&quot; (powered by Astra) and plain &quot;GPT-6 Astra.&quot;</p>\n<p>What is not confirmed: that Astra works the way the post implies. Astra's own model card explicitly states it does not support a videos endpoint. Nothing on OpenAI's own site documents Astra writing Canvas/SVG/WebGL code and rendering its own video file. The only description found of how Astra actually produces motion graphics (from a lower-credibility, non-first-party source, so treat it as unconfirmed rather than fact) says the opposite: Astra plans a shot list and hands the actual rendering to a separate video-diffusion tool such as Higgsfield or PixVerse, rather than running its own code. If that is accurate, this is not a like-for-like comparison: one model renders its own code, the other would be directing a different vendor's video generator.</p>\n<h2>What the caption gets wrong about the mechanism</h2>\n<p>The caption says Claude &quot;writes the animation code in real time... and renders the final video file,&quot; and that edits happen by &quot;just describing the change.&quot; The confirmed mechanism is closer to two separate, non-live steps: Claude writes the animation code, then a separate render pass (headless Chrome or a Python drawing library, piped through ffmpeg) turns a frame sequence into the actual video file. That render pass is a deterministic batch process, not something happening live while you watch. On claude.ai artifacts, only the first, live-preview half exists; there is no video export at all. Editing does work through follow-up prompts (Claude Code's chat-style loop), but per the people who built the demo repos, getting a polished result still takes iteration, not a single instant edit.</p>\n<h2>The stack, if you want to build this</h2>\n<p>Everything here splits into two layers: a <strong>rendering layer</strong> that paints pixels, and a separate <strong>capture/encode layer</strong> that turns painted frames into an actual video file. None of Canvas, SVG, or raw WebGL produce a video file on their own.</p>\n<p><strong>Rendering routes</strong></p>\n<ol>\n<li><strong>Canvas 2D</strong>: single bitmap, no retained scene graph. Good for particle systems and large numbers of moving objects at 60fps; weak on crisp text (no automatic DPI handling).</li>\n<li><strong>SVG (CSS/SMIL/JS driven)</strong>: each shape is a DOM node, resolution-independent. Good for kinetic typography and per-letter animation; degrades past a few thousand elements.</li>\n<li><strong>WebGL via three.js</strong>: GPU-accelerated, the only realistic option for 3D/material work (glossy shapes, lighting, camera moves). Steeper learning curve.</li>\n</ol>\n<p>A 15-second, type-and-3D piece like the one in this post typically mixes all three: SVG/CSS for kinetic type, Canvas for particles and beat-synced cuts, three.js for the 3D material slide.</p>\n<p><strong>Libraries for defining the video in code</strong></p>\n<ol>\n<li><strong>Remotion</strong>: write video as React components; has a Player, Studio, CLI, and cloud rendering. Not MIT: a source-available custom license, free for individuals and orgs up to 3 people, paid Company License above that ($25/seat/month, or $0.01/render with a $100/month minimum for automated rendering). This is the only one of these tools with an official, documented prompt-to-video pipeline: a published <a href=\"https://www.remotion.dev/docs/ai/generate\">system prompt for LLMs</a>, and an official <a href=\"https://github.com/remotion-dev/template-prompt-to-motion-graphics-saas\">Prompt-to-Motion-Graphics starter</a> that matches this post's exact brief (prompt in, LLM writes React/Remotion code, live preview, render to video).</li>\n<li><strong>Motion Canvas</strong>: TypeScript animation library and editor, MIT licensed. No built-in renderer; ships an FFmpeg export plugin or dumps PNG frames for you to encode.</li>\n<li><strong>p5.js</strong>: creative-coding library, LGPL. No built-in video export; the community add-on p5.capture hooks the draw loop to export frames.</li>\n<li><strong>GSAP</strong>: timeline/tweening engine, free for everyone under a custom Webflow license (AI-generated code using GSAP is explicitly permitted). No renderer of its own; the community tool gsap-video-export drives headless Chrome to capture and export.</li>\n<li><strong>Theatre.js</strong>: visual keyframe editor, Apache 2.0, framework-agnostic. Outputs values only, no rendering or capture built in.</li>\n<li><strong>Lottie</strong>: MIT-licensed player for After-Effects-exported JSON animations. Weakest fit for model-written code, since its normal workflow is designer-authored JSON, not code.</li>\n<li><strong>Manim</strong>: MIT-licensed Python framework built for math/diagram explainer videos (3Blue1Brown style). It does render video directly through ffmpeg with no separate capture step, but it is built for equations and diagrams, not consumer kinetic-typography showreels, so it is a mismatch for this brief despite technically being able to move type and shapes.</li>\n</ol>\n<p><strong>How the file actually gets made</strong></p>\n<ol>\n<li><strong>Headless Chrome/Puppeteer + ffmpeg</strong>: loads the animation in a browser, steps through it frame by frame (deterministic, not tied to real time), screenshots each frame, and stitches them into a video with ffmpeg. This is what Remotion, Motion Canvas's exporter, and gsap-video-export all do under the hood, and it is the one built for a model to drive unattended (a CLI render command with no human in the loop).</li>\n<li><strong>In-browser MediaRecorder</strong>: records a live canvas.captureStream() in real time. Simplest to wire up, but a 15-second animation takes at least 15 seconds to record, and frames can drop under load.</li>\n<li><strong>WebCodecs API</strong>: frame-accurate, hardware-accelerated, can encode faster than real time, but only gives raw encoded chunks; you must add your own muxing library to get a playable file. Newest and least &quot;out of the box.&quot;</li>\n</ol>\n<p><strong>Path from this prompt to an .mp4 in an afternoon</strong></p>\n<ol>\n<li>Use Remotion; it is the only one of these with an official, maintained prompt-to-video loop.</li>\n<li>Clone the official starter: <a href=\"https://github.com/remotion-dev/template-prompt-to-motion-graphics-saas\">template-prompt-to-motion-graphics-saas</a>.</li>\n<li>Feed it the prompt below, plus Remotion's own <a href=\"https://www.remotion.dev/system-prompt.txt\">system-prompt.txt</a>, so the generated code sticks to real Remotion APIs.</li>\n<li>Steer type-led slides toward SVG/DOM+CSS, particles and cuts toward Canvas or three.js (Remotion has an official three.js integration).</li>\n<li>Render locally with <code>npx remotion render</code> (bundles headless Chrome and ffmpeg automatically) to get the .mp4 directly.</li>\n<li>For edits, keep using the starter's chat-style regeneration rather than hand-editing code.</li>\n</ol>\n<h2>The prompt, verbatim</h2>\n<blockquote>\n<p>&quot;Make a dynamic 15-second motion graphics video that shows what an incredible motion designer you are, like it's your showreel for a résumé. Go all out&quot;</p>\n</blockquote>\n<h2>One flag</h2>\n<p>The post's own image contains an embedded overlay reading &quot;You will never see this page again unless you follow us right now&quot; pointing at an unrelated account. It is bait text inside the source image, not a real prompt or instruction, and should be ignored.</p>\n",
+    "answered": "fully",
+    "sources": [
+     {
+      "url": "https://www.anthropic.com/claude-opus-5-5",
+      "title": "Introducing Claude Opus 5.5"
+     },
+     {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool",
+      "title": "Code execution tool - Claude Platform Docs"
+     },
+     {
+      "url": "https://academy.claude.com/tutorials/intro-to-artifacts",
+      "title": "Intro to Artifacts (Claude Academy)"
+     },
+     {
+      "url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
+      "title": "GPT-6 Astra Model - OpenAI API docs"
+     },
+     {
+      "url": "https://deploymentsafety.openai.com/gpt-6-astra",
+      "title": "GPT-6 Astra System Card / Safety Overview"
+     },
+     {
+      "url": "https://github.com/pupubird/claude-motion-reel",
+      "title": "pupubird/claude-motion-reel (GitHub)"
+     },
+     {
+      "url": "https://github.com/DYH1319/claude-motion-showreel",
+      "title": "DYH1319/claude-motion-showreel (GitHub)"
+     },
+     {
+      "url": "https://www.remotion.dev/docs/license",
+      "title": "Remotion - License and terms"
+     },
+     {
+      "url": "https://www.remotion.dev/docs/ai/ai-saas-template",
+      "title": "Prompt to Motion Graphics SaaS Starter Kit"
+     },
+     {
+      "url": "https://github.com/remotion-dev/template-prompt-to-motion-graphics-saas",
+      "title": "template-prompt-to-motion-graphics-saas (GitHub)"
+     },
+     {
+      "url": "https://motioncanvas.io/docs/rendering/video/",
+      "title": "Motion Canvas docs - Video (FFmpeg) rendering"
+     },
+     {
+      "url": "https://gsap.com/community/standard-license/",
+      "title": "GSAP Standard License"
+     }
+    ],
+    "next_action": "Install ffmpeg and Node locally, clone Remotion's prompt-to-motion-graphics starter, and run the prompt below through Claude Code with Opus 5.5."
    },
    "links": [],
    "media_id": "66c103114a6cd5a7",
@@ -5159,7 +5356,8 @@
      "build"
     ],
     "section": [
-     "retrieval-rag/beyond-chunking"
+     "retrieval-rag/beyond-chunking",
+     "retrieval-rag/document-ai-pdfs"
     ],
     "topic": [
      "colpali",
@@ -5170,10 +5368,154 @@
      "rag"
     ]
    },
+   "followup": {
+    "answer_html": "<p>This is a build guide for a page-image PDF search tool: each PDF page becomes an image, gets embedded by the ColQwen2 vision model, and is matched to a question by comparing embeddings directly, with no OCR step. The top matching pages are then sent to Gemini as images, and it answers with a page citation, so tables, charts and layout survive instead of getting flattened into text.</p>\n<p>The verified pinned set (checked 2026-09-28) is <code>colpali-engine==0.3.18</code>, <code>transformers==5.17.0</code>, <code>torch==2.13.0</code>/<code>torchvision==0.28.0</code>, <code>google-genai==2.25.0</code>. The model, <code>vidore/colqwen2-v1.0</code>, is Apache 2.0 and not gated, no Hugging Face token needed, but the real download is about 8.9 GB, not the carousel's claimed ~5 GB, because it also pulls an ~8.8 GB base model. No source states a minimum VRAM; a 16 GB Colab T4 is the safe target, and the carousel's &quot;8GB+&quot; figure is unconfirmed.</p>\n<p>Gemini's answering step (<code>gemini-3.8-flash</code>) is free on the AI Studio free tier for both input and output. Google no longer publishes fixed RPM/RPD/TPM numbers, only a live per-account dashboard behind login, so check your own limits there before a bulk run. For one PDF under 1,000 pages / 50 MB, sending the whole file straight to Gemini is simpler and about as cheap as this pipeline; build the index only past that size, across many PDFs, or for scanned, handwritten or chart-heavy pages.</p>\n<p>The carousel contradicts itself on <code>transformers</code> (5.7.0 on one slide, a hard pin to 5.3.0 on another), and the pin is stale: 5.3.0 was colpali-engine's old minimum, not a ceiling, and the ImportError it blames on that pin traces to an unrelated, already-closed transformers issue. The carousel also stops right before the Gemini call and holds the rest of the build behind a &quot;comment RAG&quot; gate. The item's comment_gate flag saying &quot;not gated&quot; understates that: the missing half, the actual Gemini call, the full scripts and the error handling, is exactly what got withheld, and the project document below writes that missing half from the libraries' own documentation.</p>\n",
+    "answered": "fully",
+    "artifacts": [
+     {
+      "file": "vision-rag-project.pdf",
+      "title": "Vision RAG Build Guide: ColQwen2 Page Retrieval + Gemini",
+      "about": "Full buildable project: decision box (whole-PDF vs this pipeline vs layout-aware parsing), a table of every carousel error, pinned versions, per-platform setup, complete rag.py/ingest.py/query.py/eval.py/baseline.py, troubleshooting, scaling and evaluation.",
+      "kind": "pdf",
+      "pages": 26
+     }
+    ],
+    "sources": [
+     {
+      "url": "https://huggingface.co/vidore/colqwen2-v1.0",
+      "title": "vidore/colqwen2-v1.0 model card"
+     },
+     {
+      "url": "https://huggingface.co/api/models/vidore/colqwen2-base?blobs=true",
+      "title": "vidore/colqwen2-base file sizes (HF API, blobs)"
+     },
+     {
+      "url": "https://pypi.org/pypi/colpali-engine/json",
+      "title": "colpali-engine PyPI JSON (version 0.3.18)"
+     },
+     {
+      "url": "https://raw.githubusercontent.com/illuin-tech/colpali/main/README.md",
+      "title": "illuin-tech/colpali README (deprecation notice)"
+     },
+     {
+      "url": "https://raw.githubusercontent.com/illuin-tech/colpali/v0.3.18/pyproject.toml",
+      "title": "illuin-tech/colpali pyproject.toml v0.3.18 (dependency bounds)"
+     },
+     {
+      "url": "https://github.com/huggingface/transformers/issues/45405",
+      "title": "huggingface/transformers issue #45405 (ImportError origin)"
+     },
+     {
+      "url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "title": "Gemini API pricing"
+     },
+     {
+      "url": "https://ai.google.dev/gemini-api/docs/rate-limits",
+      "title": "Gemini API rate limits"
+     },
+     {
+      "url": "https://ai.google.dev/gemini-api/docs/models",
+      "title": "Gemini API models (2.5 access limits, 3.8 Flash default)"
+     },
+     {
+      "url": "https://ai.google.dev/gemini-api/docs/document-processing",
+      "title": "Gemini document processing (whole-PDF baseline, 258 tokens/page)"
+     },
+     {
+      "url": "https://qdrant.tech/blog/colpali-qdrant-optimization/",
+      "title": "Qdrant: Optimizing ColPali for Retrieval at Scale"
+     },
+     {
+      "url": "https://blog.vespa.ai/scaling-colpali-to-billions/",
+      "title": "Vespa: Scaling ColPali to billions of PDFs"
+     },
+     {
+      "url": "https://github.com/illuin-tech/vidore-benchmark",
+      "title": "illuin-tech/vidore-benchmark"
+     },
+     {
+      "url": "https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-4b",
+      "title": "TomoroAI/tomoro-colqwen3-embed-4b"
+     },
+     {
+      "url": "https://github.com/docling-project/docling",
+      "title": "docling-project/docling"
+     }
+    ],
+    "extra_sections": [
+     {
+      "heading": "Verified stack, versions and install",
+      "detail": "colpali-engine: pin 0.3.18 (2026-08-22), not the carousel's 0.3.15; 0.3.18 fixed ColQwen2 LoRA weights being silently dropped under transformers v5. Its own maintainers now call colpali-engine deprecated, recommending Sentence Transformers v6+ (MultiVectorEncoder) for new projects; that path is covered as an extension in the project document rather than the main build, since it hasn't shipped long enough to be the safe default.\n\ntransformers: pin 5.17.0 (current), not the carousel's numbers. Slide 2 says 5.7.0, slide 7 pins ==5.3.0 and blames an ImportError (`_maybe_shard_state_dict_for_tp`) on anything newer. 5.3.0 is colpali-engine's declared minimum, not a ceiling: 0.3.18 accepts any transformers in [5.3.0, 6.0.0). The ImportError is a real string but traces to an unrelated, already-fixed dev-build issue (huggingface/transformers #45405), not a colpali-engine or ColQwen2 problem.\n\ntorch: pin 2.13.0 + torchvision 0.28.0, with cu126 wheels confirmed. Current stable torch is 2.14.0, but colpali-engine 0.3.18 requires torch<2.14.0, so installing the newest torch breaks it.\n\ngoogle-genai: pin 2.25.0. The old google-generativeai package is deprecated (support ended November 30, 2025).\n\npoppler: Windows Release-26.09.0-0.zip (the carousel's example filename is about a year stale but the steps are unchanged); Homebrew 26.09.0; apt poppler-utils. Full per-platform install commands (Colab, Windows, Linux/macOS) are in the project document."
+     },
+     {
+      "heading": "The Gemini answering step the carousel never showed",
+      "detail": "The carousel's architecture diagram names Gemini 2.5 Flash, but access to the 2.5 line is now limited to accounts that already used it; new projects should use gemini-3.8-flash, or gemini-3.5-flash-lite for a cheaper option. The current SDK is google-genai (the older google-generativeai is deprecated). The call pattern is: create a client with `genai.Client()`, then `client.models.generate_content(model=\"gemini-3.8-flash\", contents=[...images and text...], config=types.GenerateContentConfig(system_instruction=...))`, reading the answer from `response.text`. PIL images can go straight into `contents`; the API allows up to 3,600 images per request, far more than any retrieval top-k. The carousel's own code stops at the retrieval function on slide 15 and gates this entire step, plus the full script and error handling, behind a request to comment \"RAG\"."
+     },
+     {
+      "heading": "Free-tier limits and cost",
+      "detail": "gemini-3.8-flash input and output are both free of charge on the AI Studio free tier. Google no longer publishes static RPM/RPD/TPM numbers in its docs; the rate-limits page only points to a live, per-account AI Studio dashboard that requires login, so real limits have to be checked there directly. If the free tier is exceeded, paid rates through 2026-12-31 are $0.75/1M input tokens and $3.75/1M output tokens (roughly doubling from 2027-01-01). Each retrieved page image costs about 258 tokens per 768x768 tile, so a typical scanned page runs to roughly 1,500-1,600 tokens; sending 3 retrieved pages plus a question is about 4,500-5,000 tokens, or roughly $0.0035-0.005 at the paid rate. For comparison, Gemini accepts whole PDFs up to 1,000 pages / 50MB directly at a flat 258 tokens per page, which for one modest PDF is usually cheaper and simpler than building this pipeline at all."
+     },
+     {
+      "heading": "Scaling past one .npy file per page",
+      "detail": "Each page at ColQwen2's 768-patch cap is 384 KiB in float32 or 192 KiB in float16. 10,000 pages of embeddings alone comes to about 3.7 GiB (float32) or 1.8 GiB (float16), on top of the roughly 8.9 GB of model weights. Up to a few thousand pages, one file per page plus a full in-memory MaxSim scan is fine. Past roughly 10,000 pages, move to a vector store with native multi-vector MaxSim support: Qdrant and Vespa both publish first-party ColPali/ColQwen2 guides with real numbers (Qdrant's pooled-prefetch-then-rerank design is about 13x faster at ~99% of full-search quality; Vespa's binary-quantized MaxSim is 32x smaller in storage, with nDCG@5 dropping from 52.4 to 49.5 and recovering to 51.6 with a rerank stage). Milvus supports this only through a custom client-side retriever; LanceDB and Weaviate (v1.29+) support it natively but have thinner first-party ColPali documentation. colpali-engine's own hierarchical token pooling at factor 3 cuts vector count by two-thirds while keeping 97.8% of original performance, its own published number; no vendor publishes int8 (as opposed to binary) quantization numbers for these models."
+     },
+     {
+      "heading": "Newer checkpoints and the layout-aware-parser alternative",
+      "detail": "colpali-engine's own maintainers now call it deprecated in favor of Sentence Transformers v6+ (MultiVectorEncoder). Fully open, Apache 2.0 successors already outscore colqwen2-v1.0 on the legacy ViDoRe average: TomoroAI/tomoro-colqwen3-embed-4b (90.6) and athrael-soju/colqwen3.5-4.5B-v3 (90.9, though that one is an individual maintainer's checkpoint, not a lab). vidore/colqwen2.5-v0.2 scores similarly (89.4) but its backbone carries a non-commercial Qwen Research Licence. NVIDIA's Nemotron ColEmbed VL 8B v2 leads the newer ViDoRe V3 benchmark but is CC-BY-NC-4.0, non-commercial.\n\nOn the alternative path: for clean, born-digital PDFs, a layout-aware text parser undercuts the carousel's claim that OCR always destroys tables. Docling (MIT, local, free, self-reported table-structure TEDS 0.97) and marker (Apache 2.0 code, free weights under $5M revenue/funding) both preserve table and reading-order structure without flattening the page to one text stream. Page-image retrieval still earns its cost for scanned pages, handwriting, non-standard fonts, or charts where the visual layout itself carries the meaning."
+     },
+     {
+      "heading": "Evaluation",
+      "detail": "The practical approach: hand-build 30-50 questions with known correct pages across a few real PDFs, covering a table page, a chart page, a multi-column page and a scanned page if one exists, then measure Recall@3 (the pipeline sends the top 3 pages), MRR and nDCG@5, and compare against simply sending the whole PDF to Gemini on the same questions. The formal tool for this space, illuin-tech's vidore-benchmark, evaluates a full custom pipeline through a BasePipeline subclass and pytrec_eval metrics, but its documented workflow only covers Hugging-Face-hosted ViDoRe datasets, not a private local PDF set; the project document's own eval.py fills that specific gap."
+     }
+    ],
+    "next_action": "Open inputs/t5/out/vision-rag-project.md, get a Gemini API key from AI Studio, and follow its build-order milestones (section 8) on a short 10-20 page test PDF before scaling up."
+   },
    "links": [
+    {
+     "url": "https://ai.google.dev/gemini-api/docs/document-processing",
+     "label": "Gemini document processing (whole-PDF baseline)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://ai.google.dev/gemini-api/docs/pricing",
+     "label": "Gemini API pricing",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://ai.google.dev/gemini-api/docs/rate-limits",
+     "label": "Gemini API rate limits",
+     "alive": true,
+     "page_title": ""
+    },
     {
      "url": "https://aistudio.google.com",
      "label": "Google AI Studio API Key",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://blog.vespa.ai/scaling-colpali-to-billions/",
+     "label": "Vespa ColPali scaling blog",
+     "alive": true,
+     "page_title": "Scaling ColPali to billions of PDFs with Vespa | Vespa Blog"
+    },
+    {
+     "url": "https://github.com/docling-project/docling",
+     "label": "Docling (layout-aware parser alternative)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/illuin-tech/colpali",
+     "label": "colpali-engine GitHub repo (deprecation notice, current docs)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/illuin-tech/vidore-benchmark",
+     "label": "vidore-benchmark (evaluation tool)",
      "alive": true,
      "page_title": ""
     },
@@ -5182,6 +5524,30 @@
      "label": "Poppler Windows Binaries Release",
      "alive": true,
      "page_title": ""
+    },
+    {
+     "url": "https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-4b",
+     "label": "TomoroAI/tomoro-colqwen3-embed-4b (recommended newer checkpoint)",
+     "alive": true,
+     "page_title": "TomoroAI/tomoro-colqwen3-embed-4b · Hugging Face"
+    },
+    {
+     "url": "https://huggingface.co/vidore/colqwen2-v1.0",
+     "label": "vidore/colqwen2-v1.0 model card (license, gating, size)",
+     "alive": true,
+     "page_title": "vidore/colqwen2-v1.0 · Hugging Face"
+    },
+    {
+     "url": "https://pypi.org/project/google-genai/",
+     "label": "google-genai on PyPI (current SDK)",
+     "alive": true,
+     "page_title": "Client Challenge"
+    },
+    {
+     "url": "https://qdrant.tech/documentation/tutorials-search-engineering/pdf-retrieval-at-scale/",
+     "label": "Qdrant ColPali/ColQwen scaling tutorial",
+     "alive": true,
+     "page_title": "Multivector Document Retrieval - Qdrant"
     }
    ],
    "media_id": "4e924e78701d05f5",
@@ -5192,10 +5558,10 @@
    "id": "05f18e1c86517703",
    "url": "https://www.instagram.com/reel/DcbDo37zTvJ/",
    "kind": "listicle",
-   "action": "reference",
-   "title": "Sixteen Critical Security Vulnerabilities in AI-Built Applications",
-   "hook": "Audit your AI-generated web app against 16 common security oversights and architectural flaws.",
-   "summary": "This checklist outlines items 55 through 70 of essential security verifications for apps built using AI. It highlights authentication flaws, CI/CD pipeline vulnerabilities, and business logic flaws. It also addresses AI-specific risks including data leakage, excessive agent permissions, and unvalidated AI execution. Finally, it covers client-side storage issues, redirects, and exposed real-time endpoints.",
+   "action": "apply",
+   "title": "Security Checks for AI-Built Apps, Part 4 (Items 55-70)",
+   "hook": "Part 4 excerpt, items 55-70 of a longer checklist. Sixteen checks, each with a test to run on your own app and the fix.",
+   "summary": "Items 55-70 (Part 4) of a numbered security checklist for AI-built apps, shown in the reel as bare names. They cover authentication and business-logic flaws, CI/CD supply chain, fail-open checks and missing timeouts, LLM and agent risks, and browser storage, redirects and realtime endpoints. The earlier 54 items are not public.",
    "owner": "byarnieverma",
    "posted": "August 24, 2026",
    "slide_count": 0,
@@ -5302,23 +5668,13 @@
      "What specific tools are recommended to automatically scan AI-built apps for these flaws?"
     ]
    },
-   "enrich": {
-    "what_it_is": "A 16-item excerpt (items 55–70, labeled Part 4) from a security checklist created by Arnie Verma targeting applications built using AI coding tools ('vibecoding'). It covers authentication and logic flaws, CI/CD build vulnerabilities, reliability/AI safety (including unvalidated AI output and excessive agent permissions), and client-side/endpoint exposure.",
-    "current_state": "Cannot be confirmed without live web access. Standard security threats highlighted (such as CI/CD supply chain risks, race conditions, and LLM excessive agency) remain critical in 2026, but the specific checklist doc referenced in the post could not be retrieved.",
-    "why_it_matters": "AI code generators and rapid prototyping tools routinely generate functional code that omits defensive programming patterns—such as replay protection, webhook signature verification, dependency pinning, and least-privilege scoping for agent tool use—leaving production systems vulnerable to compromise.",
-    "beyond_the_post": [
-     "Context on items 1 through 54, as this post is only Part 4 of an extended multi-part series.",
-     "Actionable remediation code snippets or reference architectures for the listed items (e.g., how to implement cryptographic nonce checks against webhook replay or how to sandbox AI agent execution).",
-     "Clear separation between classic web app vulnerabilities (items 55–59, 68–70) and LLM/agent-specific failure modes (items 66–67).",
-     "Disclosure that social posts prompting users to comment a keyword ('risk') are lead-generation funnels designed to deliver PDFs via automated direct message."
-    ],
-    "next_action": "Audit your codebase's AI agent interfaces and CI/CD pipelines against items 60–67, ensuring all build action dependencies are pinned by commit SHA and AI tool calls are strictly restricted by least-privilege scopes."
-   },
+   "enrich": {},
    "tags": {
     "action": [
-     "reference"
+     "apply"
     ],
     "section": [
+     "agents-assistants/agent-security-permissions",
      "shipping-quality/security-launch"
     ],
     "topic": [
@@ -5329,18 +5685,237 @@
      "web development"
     ]
    },
+   "followup": {
+    "answer_html": "<p>Each of the sixteen checks now has an audit entry: what the gap looks like in AI-generated code, how to test for it in an app that already exists, and the fix, with the OWASP, GitHub, Stripe or vendor page behind it.</p>\n<p>Three corrections to the post:</p>\n<ol>\n<li>Pinning an action to a tag like <code>@v4</code> is not a safe middle ground. Per GitHub's docs, only a full commit SHA makes an action immutable.</li>\n<li>Items 65-67 map to the 2025 OWASP LLM Top 10 and the OWASP Top 10 for Agentic Applications (December 2025). The post cites neither. Prompt injection triggers all three items, and the post never names it.</li>\n<li>Coding-agent permission defaults have changed. Current Claude Code starts in a classifier-reviewed &quot;auto&quot; mode, not one where a person approves every action.</li>\n</ol>\n<p>The Hacker News citation now points at the actual comment shown in the reel. The OpenText citation could not be confirmed, so it has been removed.</p>\n<p>This is Part 4 only. Items 1-54 are not published anywhere public. The caption's &quot;resource doc&quot; is sent by DM to people who comment, and there is no public link to it.</p>\n",
+    "answered": "not asked",
+    "sources": [
+     {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html",
+      "title": "Multifactor Authentication - OWASP Cheat Sheet Series"
+     },
+     {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+      "title": "Authentication - OWASP Cheat Sheet Series"
+     },
+     {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html",
+      "title": "Forgot Password Cheat Sheet"
+     },
+     {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Business_Logic_Security_Cheat_Sheet.html",
+      "title": "Business Logic Security - OWASP Cheat Sheet Series"
+     },
+     {
+      "url": "https://community.owasp.org/pages/vulnerabilities/race_conditions",
+      "title": "Race Conditions | OWASP Foundation"
+     },
+     {
+      "url": "https://docs.stripe.com/webhooks",
+      "title": "Receive Stripe events in your webhook endpoint"
+     },
+     {
+      "url": "https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token",
+      "title": "Controlling permissions for GITHUB_TOKEN - GitHub Docs"
+     },
+     {
+      "url": "https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/about-security-hardening-with-openid-connect",
+      "title": "About security hardening with OpenID Connect - GitHub Docs"
+     },
+     {
+      "url": "https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions",
+      "title": "Security hardening for GitHub Actions - GitHub Docs"
+     },
+     {
+      "url": "https://github.blog/changelog/2025-08-15-github-actions-policy-now-supports-blocking-and-sha-pinning-actions/",
+      "title": "GitHub Actions policy now supports blocking and SHA pinning actions - GitHub Changelog"
+     },
+     {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/CI_CD_Security_Cheat_Sheet.html",
+      "title": "CI CD Security - OWASP Cheat Sheet Series"
+     },
+     {
+      "url": "https://news.ycombinator.com/item?id=18534689",
+      "title": "Backdoor in event-stream library dependency | Hacker News"
+     },
+     {
+      "url": "https://community.owasp.org/Fail_securely",
+      "title": "Fail Securely - OWASP Community"
+     },
+     {
+      "url": "https://genai.owasp.org/llm-top-10/",
+      "title": "OWASP Top 10 for LLM/GenAI Applications"
+     },
+     {
+      "url": "https://genai.owasp.org/llmrisk/llm01-prompt-injection/",
+      "title": "LLM01:2025 Prompt Injection - OWASP Gen AI Security Project"
+     },
+     {
+      "url": "https://genai.owasp.org/llmrisk/llm022025-sensitive-information-disclosure/",
+      "title": "LLM02:2025 Sensitive Information Disclosure - OWASP Gen AI Security Project"
+     },
+     {
+      "url": "https://genai.owasp.org/llmrisk/llm052025-improper-output-handling/",
+      "title": "LLM05:2025 Improper Output Handling - OWASP Gen AI Security Project"
+     },
+     {
+      "url": "https://genai.owasp.org/llmrisk/llm062025-excessive-agency/",
+      "title": "LLM06:2025 Excessive Agency - OWASP Gen AI Security Project"
+     },
+     {
+      "url": "https://genai.owasp.org/llmrisk/llm072025-system-prompt-leakage/",
+      "title": "LLM07:2025 System Prompt Leakage - OWASP Gen AI Security Project"
+     },
+     {
+      "url": "https://genai.owasp.org/2025/12/09/owasp-top-10-for-agentic-applications-the-benchmark-for-agentic-security-in-the-age-of-autonomous-ai/",
+      "title": "OWASP Top 10 for Agentic Applications - The Benchmark for Agentic Security in the Age of Autonomous AI"
+     },
+     {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html",
+      "title": "AI Agent Security - OWASP Cheat Sheet Series"
+     },
+     {
+      "url": "https://blog.redwoodresearch.org/p/untrusted-advice-for-ai-control-short",
+      "title": "Untrusted advice for AI control: Short, strong advice significantly uplifts weak LLMs"
+     },
+     {
+      "url": "https://code.claude.com/docs/en/permission-modes",
+      "title": "Choose a permission mode - Claude Code Docs"
+     },
+     {
+      "url": "https://code.claude.com/docs/en/sandbox-environments",
+      "title": "Choose a sandbox environment - Claude Code Docs"
+     },
+     {
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool",
+      "title": "Code execution tool - Claude API Docs"
+     },
+     {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html",
+      "title": "HTML5 Security Cheat Sheet"
+     },
+     {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html",
+      "title": "Session Management Cheat Sheet"
+     },
+     {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html",
+      "title": "Unvalidated Redirects and Forwards Cheat Sheet"
+     },
+     {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/GraphQL_Cheat_Sheet.html",
+      "title": "GraphQL Cheat Sheet"
+     },
+     {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/WebSocket_Security_Cheat_Sheet.html",
+      "title": "WebSocket Security"
+     },
+     {
+      "url": "https://supabase.com/docs/guides/realtime/authorization",
+      "title": "Realtime Authorization | Supabase Docs"
+     },
+     {
+      "url": "https://www.instagram.com/byarnieverma/",
+      "title": "Arnie Verma (@byarnieverma) - Instagram photos and videos"
+     }
+    ],
+    "extra_sections": [
+     {
+      "heading": "What this is and why it matters",
+      "detail": "This reel is Part 4 of a numbered checklist. It shows items 55-70 only, as bare names, and every name is a standard security term used correctly. They share one pattern. AI code generators write the happy path: a login that works, a webhook handler that checks a signature, a workflow that deploys, an agent that can act. They leave out the defensive half: a second factor, uniform error messages, atomic updates, replay windows, pinned actions, deny-on-error, timeouts, scoped retrieval, output encoding, least-privilege tools, HttpOnly cookies, redirect allowlists and locked-down GraphQL.\n\nThe sections below turn each name into an audit entry. Each one covers what the gap looks like in generated code, how to test an existing app for it, and the fix, with the authoritative reference. Items 55-59 and 68-70 are classic web flaws. Items 60-62 are pipeline supply chain. Items 63-64 are design principles that apply in CI and at runtime. Items 65-67 are the LLM and agent checks, where the post's framing lags the current OWASP lists."
+     },
+     {
+      "heading": "Audit: Authentication & Logic Flaws (Items 55-59)",
+      "detail": "**55. No MFA.**\n*Flaw:* Generated auth is email plus password. MFA touches enrollment, factor delivery, recovery codes and step-up, so it rarely gets built unless someone asks for it.\n*Check:* Log in as owner, admin and billing roles and see whether a second factor is ever required. Then, from a logged-in session, change the email or password, disable MFA, create an API key or change payment details. Note whether anything asks you to verify again.\n*Fix:* Require MFA on every account, and always on privileged roles. Use TOTP or stronger; OWASP rates SMS-only as the weakest acceptable option. Add step-up verification before password or email changes, before disabling MFA and before admin elevation. Prompt again on a new device or IP. See the [OWASP MFA Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html).\n\n**56. Account enumeration.**\n*Flaw:* Generated login code often returns \"user not found\" early, before checking the password. The message, the status code or the response time then differs for real accounts. Signup forms often say \"email already registered\".\n*Check:* On login (real user with a wrong password vs unknown user), signup and forgot-password, send both cases. Compare the response body, the status code and the timing. Any difference confirms enumeration.\n*Fix:* Return one message and one status for a wrong password, an unknown user and a locked account. Password reset always says \"if an account exists, we sent a link\". Signup accepts every address and emails either way; an existing user gets a note that someone tried to register. For unknown users, compare against a dummy hash so the timing matches. See the [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html) and the [Forgot Password Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html).\n\n**57. Business logic abuse.**\n*Flaw:* Each endpoint is generated on its own. It checks that a field is a number, but not that it is non-negative, one-time-use or in sequence. Multi-step flows trust the client to say which step it is on.\n*Check:* Call the API directly and skip the UI. Try:\n- negative quantities\n- the same coupon twice in one request\n- checkout step 3 without steps 1 and 2\n- a referral bonus on your own account\n- a promo or signup-bonus endpoint hit back to back\n\n*Fix:* Keep the flow state on the server as a state machine, and reject steps that arrive out of order or repeat. Give bonus, referral and promo endpoints their own rate limits, separate from general API limits. Write adversarial tests for each flow: skip a step, reorder, repeat, race. See the [OWASP Business Logic Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Business_Logic_Security_Cheat_Sheet.html).\n\n**58. Race conditions.**\n*Flaw:* Generated handlers read a row, compute in app code, then write the row back. Two concurrent requests read the same value, so a one-time coupon redeems twice, stock goes negative or a balance ends up wrong. The reel's diagram shows this exact lost update: two processes both read a balance of 100, and the final value is wrong.\n*Check:* Send 10-50 identical requests in parallel to a check-then-act endpoint (redeem coupon, withdraw, decrement stock, claim a limited item). Compare the result with what the same requests would produce one after another.\n*Fix:* Make the check and the write one atomic database operation. Options:\n- a conditional update such as `UPDATE inventory SET qty = qty - 1 WHERE id = ? AND qty > 0`, then check how many rows it changed\n- `SELECT ... FOR UPDATE` inside a transaction at REPEATABLE READ or higher\n- optimistic locking with a version column\n\nPrefer these to app-level locks. For queued work, use idempotency keys so duplicate requests run once. See [OWASP: Race Conditions](https://community.owasp.org/pages/vulnerabilities/race_conditions).\n\n**59. Webhook replay.**\n*Flaw:* Generated handlers verify the HMAC signature and stop there. A captured valid payload stays valid forever, so sending it again fulfills the order again or applies the credit again.\n*Check:* Take a real webhook that was already processed (headers and raw body), from your logs or the provider's resend feature, and POST it again later. If the side effect happens a second time, replay protection is missing. In the code, look for a timestamp tolerance check and a record of processed event IDs.\n*Fix:*\n- Verify with the provider's official library, over the raw body.\n- Reject signed timestamps outside a small window. Stripe's libraries default to 5 minutes, and a tolerance of 0 turns the check off.\n- Record processed event IDs and reject repeats. This also catches replays that arrive inside the window.\n\nSee [Stripe: Receive events in your webhook endpoint](https://docs.stripe.com/webhooks)."
+     },
+     {
+      "heading": "Audit: Pipeline & Build Security (Items 60-62)",
+      "detail": "**60. Insecure CI/CD.**\n*Flaw:* Scaffolded GitHub Actions workflows leave out a `permissions:` block and keep long-lived cloud keys as repository secrets. The pipeline can then write to the repo, publish and deploy, and one leaked secret reaches production. GitHub's current default is safer than the post implies. Repositories created since February 2023 get a read-only `GITHUB_TOKEN` for contents and packages. Older repos and orgs may still default to read and write. Today the risk is mostly a legacy default or a setting someone widened.\n*Check:*\n- Settings > Actions > General > Workflow permissions. \"Read and write\" is too broad.\n- Grep every workflow for a `permissions:` key.\n- Search workflows and secrets for `AWS_SECRET_ACCESS_KEY`, `AZURE_CLIENT_SECRET` and similar keys.\n\n*Fix:* Set the default to read-only. Add explicit `permissions:` to each job (for example `contents: read`), and grant more only where a job needs it. Replace static cloud keys with OIDC, so jobs get short-lived tokens and GitHub stores no long-lived credential. See [Controlling permissions for GITHUB_TOKEN](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token) and [Security hardening with OpenID Connect](https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/about-security-hardening-with-openid-connect).\n\n**61. Untrusted build actions.**\n*Flaw:* Generated workflows pull in whatever third-party action a tutorial used. Every action runs with the job's environment and every secret exposed to that job.\n*Check:* List every `uses:` line. For anything not from `actions/*` or a verified creator, confirm three things: it comes from the real upstream repo, not a fork; someone has read its source; and the job really needs the secrets the action can see.\n*Fix:* Prefer actions from GitHub or verified creators. Read the source of anything else, and limit which secrets each job gets. At org level, Settings > Actions > General > \"Allow select actions and reusable workflows\" can block unapproved actions. Since August 2025 it can also require SHA pinning. See [Security hardening for GitHub Actions](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions) and the [GitHub changelog entry](https://github.blog/changelog/2025-08-15-github-actions-policy-now-supports-blocking-and-sha-pinning-actions/).\n\n**62. Unpinned build dependencies.**\n*Flaw:* `@v4` or `@main` runs whatever the tag points at on the day of the run. If the maintainer, or someone who compromised the repo, moves the tag, new code runs with the old trust. The post calls this \"not pinned or reviewed\", but tag pinning is not a safe halfway point: GitHub's docs say a full-length commit SHA is the only way to use an action as an immutable release.\n*Check:* Grep workflows for `uses:` lines that do not end in a 40-character SHA. Check whether Dependabot or a similar bot is set up to propose updates.\n*Fix:* Write `uses: owner/action@<40-char-sha> # v4`, with the SHA taken from the real upstream repo. Let Dependabot propose SHA bumps so pinned actions still get reviewed updates and do not go stale. For package dependencies, enforce lockfiles and verify versions by hash.\n\nThe reel's citation for this item is a [Hacker News comment in the 2018 event-stream npm backdoor thread](https://news.ycombinator.com/item?id=18534689): \"If you aren't reviewing the diffs of your dependencies when you update them, you're trusting random strangers on the Internet to run code on your systems.\" The [OWASP CI/CD Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/CI_CD_Security_Cheat_Sheet.html) covers least privilege, pinning and deny-by-default for the whole pipeline."
+     },
+     {
+      "heading": "Audit: System Reliability & AI Safety (Items 63-67)",
+      "detail": "**63. Checks fail open.** This applies both in CI and at runtime.\n*Flaw:* Generated code wraps an auth check, permission check or rate limiter in try/catch and returns \"allowed\" when it errors. In CI, a scanner step errors and the pipeline carries on. Either way, the check gives way exactly when something has already gone wrong.\n*Check (code):* Read every catch/except in auth, permission and rate-limit functions. Anything that returns true or \"allowed\" fails open. Also test what the app does when its auth service or cache is down.\n*Check (CI):* Look for security steps marked `continue-on-error: true` or whose exit code is ignored. Check whether they are required status checks in branch protection.\n*Fix:* Every error path returns deny, the same path a refused operation takes. Remove `continue-on-error` from security gates and make them required checks. No single setting fixes this; every place the app makes a security decision needs checking. See [OWASP: Fail Securely](https://community.owasp.org/Fail_securely). The reel's citation card for this item names an OpenText Community article, \"Security Fundamentals Part 1: Fail Open vs. Fail Closed\". A page with that title turned up in search but could not be read, so it is not linked here.\n\n**64. Missing timeouts.**\n*Flaw:* Generated HTTP, database and RPC clients use library defaults, and those are often no timeout at all (Python `requests`, axios). One slow dependency then holds request threads until the app stops responding. In CI, GitHub-hosted runners cap a job at 360 minutes by default. That is far too long to catch a hang, and self-hosted runners can run longer.\n*Check:*\n- `requests` calls without `timeout=`\n- fetch or axios calls without a timeout or `AbortController` signal\n- database pools and gRPC clients without connect or read timeouts\n- workflows without `timeout-minutes:` on jobs and long steps\n\n*Fix:* Set explicit connect and read timeouts on every outbound call, with bounded retry and backoff. Set `timeout-minutes` on every job and every long step.\n\n**One trigger behind items 65-67: prompt injection** ([LLM01:2025](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)). An instruction hidden in a web page, document or email the model reads can leak data (65), produce the payload your code executes (66) and steer an agent's tools (67), all at once. OWASP says it is unclear whether fool-proof prevention exists. The defense is layers: the controls below, human approval for high-risk actions, and adversarial testing.\n\n**65. Sensitive info leak.** Maps to [LLM02:2025 Sensitive Information Disclosure](https://genai.owasp.org/llmrisk/llm022025-sensitive-information-disclosure/) and [LLM07:2025 System Prompt Leakage](https://genai.owasp.org/llmrisk/llm072025-system-prompt-leakage/).\n*Flaw:* Common leaks in generated code:\n- secrets, internal URLs or business rules in the system prompt\n- a shared vector index queried with no user or tenant filter\n- memory or response caches shared across tenants\n- raw prompts and completions sent to logging, analytics or third-party APIs\n\n*Check:*\n- Read the system prompt for anything you would not publish, then ask the model to repeat its instructions.\n- As user A, search for content only user B has.\n- List everywhere prompts and completions are logged, and how long each provider keeps them.\n- Look for database rows or environment values pasted into prompts.\n\n*Fix:* Keep secrets and enforcement rules out of the system prompt, and enforce authorization in code, outside the model. Scope retrieval in the query itself (a `tenant_id` filter or a per-tenant namespace), not through prompt instructions. Redact before logging or display. Use zero-data-retention terms where offered, and check each tool: eligibility differs even within one vendor, and Anthropic marks its code execution tool as not eligible.\n\n**66. Invalid AI output.** Maps to [LLM05:2025 Improper Output Handling](https://genai.owasp.org/llmrisk/llm052025-improper-output-handling/).\n*Flaw:* Model output flows somewhere that runs or renders it:\n- `eval`, `exec` or a shell: remote code execution\n- SQL built by string concatenation: injection\n- the DOM as HTML or Markdown: XSS\n- file paths: path traversal\n\n*Check:* Grep for `eval(`, `exec(`, `new Function(`, `child_process.exec` and `os.system` fed by model output. Look for SQL built with f-strings or concatenation, and for `dangerouslySetInnerHTML`, `v-html` or `.innerHTML =` fed by model text. Find any tool that runs a model-written command verbatim.\n*Fix:* Treat the model as an untrusted user. Use parameterized queries, context-aware output encoding, an HTML sanitizer such as DOMPurify and a strict Content-Security-Policy. Give the model narrow typed tools instead of a free-text \"run this\" tool. When generated code must run, sandbox it. Anthropic's [code execution tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool) runs in a container with no internet access. Its open-source sandbox-runtime wraps a process with OS-level isolation (bubblewrap on Linux, Seatbelt on macOS); see [sandbox environments](https://code.claude.com/docs/en/sandbox-environments).\n\n**67. Excessive AI permissions.** Maps to [LLM06:2025 Excessive Agency](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/). For autonomous agents it also maps to ASI02 Tool Misuse and ASI03 Identity & Privilege Abuse in the [OWASP Top 10 for Agentic Applications](https://genai.owasp.org/2025/12/09/owasp-top-10-for-agentic-applications-the-benchmark-for-agentic-security-in-the-age-of-autonomous-ai/).\n*Flaw:*\n- a broad tool (\"run any SQL\", \"write anywhere\") where a narrow one would do\n- long-lived shared credentials embedded in tool or MCP server definitions\n- irreversible actions (delete, deploy, merge, send, spend) with no human approval\n\n*Check:*\n- List every tool and the real privilege of the credential behind it, and try to make a read tool write.\n- Look for static keys in tool and MCP configs.\n- Ask the agent to do something irreversible and see whether it stops for approval.\n- Confirm which permission mode your coding agent actually starts in.\n\n*Fix:*\n- Scope each tool (read vs write, allowed paths and operations, blocked patterns) instead of giving open shell access.\n- Use short-lived, per-user scoped tokens.\n- Redact `password`, `api_key`, `token`, `secret` and `credential` parameters from logs.\n- Require step-up approval for payments, privilege changes, bulk deletion and production deploys, bound to the exact parameters and expiring quickly.\n\nSee the [OWASP AI Agent Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html).\n\n**Where the post is out of step on 65-67**\n1. The post gives no OWASP mapping, apart from an LLM02 label in one diagram. The current IDs come from the 2025 list. Improper Output Handling moved from LLM02 (2023) to LLM05, Excessive Agency moved from LLM08 to LLM06, and System Prompt Leakage (LLM07) is new. Checklists that cite older LLM0x numbers point at the wrong entries. The full current list is the [OWASP Top 10 for LLM/GenAI Applications](https://genai.owasp.org/llm-top-10/).\n2. The post never mentions prompt injection, which triggers all three items.\n3. Item 67 now has its own list, the OWASP Top 10 for Agentic Applications (ASI01-ASI10), published December 2025. Its ASI01 Agent Goal Hijack is the injection-driven form of this item.\n4. Agent permission defaults have changed. As of v2.1.283, Claude Code starts interactive sessions in \"auto\" mode on every plan. In auto mode a classifier model, not a person, reviews each action. By default it blocks production deploys, permission grants, force pushes, mass deletion and secret exfiltration. The [permission-mode docs](https://code.claude.com/docs/en/permission-modes) say auto mode \"does not guarantee safety\" and that `bypassPermissions` belongs only inside containers, VMs or the sandbox runtime. Advice that assumes coding agents ask before every action is out of date for this tool.\n5. The reel's item-67 dropdown (\"Default permissions / Auto-review / Full access\") matches no single product's current labels. Read it as an illustration. The item-66 diagram is research, not a feature (see the diagrams section)."
+     },
+     {
+      "heading": "Audit: Client Storage & Endpoints (Items 68-70)",
+      "detail": "**68. Sensitive browser storage.**\n*Flaw:* Generated auth stores the JWT or session token in `localStorage`, because it takes one line to set and read. Any script on the page's origin can read it, so a single XSS exposes every token. sessionStorage and IndexedDB have the same exposure.\n*Check:* Open DevTools > Application (Chrome) or Storage (Firefox). Look in Local Storage, Session Storage and IndexedDB for JWTs, API keys, session IDs, or keys named like `token` or `supabase.auth.token`. Grep the frontend for `localStorage.setItem` near login code. Decode any token you find to see what it can do.\n*Fix:* Use a cookie set by the server as `HttpOnly; Secure; SameSite=Lax` (or Strict). The alternative is a backend-for-frontend that keeps tokens on the server and gives the browser only an opaque session cookie. HttpOnly is what stops XSS from reading the token. SameSite adds CSRF defense in depth but does not replace CSRF tokens. Keep web storage for non-sensitive UI state. See the [OWASP Session Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html) and the [HTML5 Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html).\n\n**69. Open redirects.**\n*Flaw:* \"Return to where you were\" gets built as a 302 to a raw `next`, `redirect` or `returnUrl` parameter. A link that starts on your trusted domain and lands on an attacker's site works well for phishing and OAuth token theft. Forwards can also reach internal functions and skip access checks.\n*Check:* Find every endpoint that takes `redirect`, `next`, `returnTo`, `url` or `callback` and returns a 3xx. Try `https://evil.example.com`, `//evil.example.com` and `/\\evil.example.com`. If the Location header leaves your site, the redirect is open.\n*Fix:* OWASP's first choice is to take no URL from the user at all: map a short ID to a destination stored on the server. Otherwise, allow only relative same-origin paths (reject anything with a scheme or a leading `//`) or an explicit host allowlist. Show a confirmation page before any allowed off-site redirect. See the [OWASP Unvalidated Redirects and Forwards Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html).\n\n**70. Unsecured endpoints.**\n*GraphQL flaw:* Scaffolded servers keep development defaults in production: introspection and GraphiQL on, no depth or cost limit, verbose errors.\n*Check:* Send `{ __schema { types { name } } }` to the production `/graphql` endpoint. Send a deeply nested query, then a batch of 50 or more aliased copies of an expensive query, and watch the latency. Look for stack traces in error responses.\n*Fix:*\n- Turn off introspection and GraphiQL in production.\n- Add a depth limit (for example graphql-depth-limit) and a cost or complexity limit; depth alone misses wide queries.\n- Limit batching and aliases.\n- Check authorization in every object and field resolver, not only the top-level query.\n- Run in production error mode (`NODE_ENV=production` for Apollo).\n\nSee the [OWASP GraphQL Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/GraphQL_Cheat_Sheet.html).\n\n*WebSocket flaw:* The server accepts handshakes from any origin, which allows cross-site WebSocket hijacking: a malicious page opens a socket and the browser attaches the victim's cookies. Auth is checked once, at connect.\n*Check:* In DevTools, filter the Network tab by WS and inspect the handshake. Connect from another origin with a small script. Check whether permissions are rechecked per message and whether logout closes the socket.\n*Fix:* Check the Origin against an allowlist on every handshake, use `wss://` only, authorize each message, and close sockets on logout using a session-to-connection map. See the [OWASP WebSocket Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/WebSocket_Security_Cheat_Sheet.html).\n\n*Hosted realtime flaw (Supabase, Firebase):* Generated quick starts leave data readable by anyone.\n*Check:* Subscribe from a signed-out client or another tenant's account and see whether rows or messages arrive.\n*Fix:* On Supabase, write RLS policies on your tables and on `realtime.messages` for Broadcast and Presence, and turn off \"Allow public access\" for private channels ([Supabase Realtime Authorization](https://supabase.com/docs/guides/realtime/authorization)). On Firebase, replace the test-mode security rules."
+     },
+     {
+      "heading": "What the reel's diagrams and citation cards show",
+      "detail": "The reel shows a small diagram or citation card next to most items:\n- **55-56:** a login form with an error line under the password field. It illustrates enumeration, not MFA.\n- **57:** a flow labeled \"Business Logic Flaw\": attacker, then backend, then phone.\n- **58:** a lost-update race diagram. Two processes each read a shared balance of 100 and write their own update, and the final value of 110 is marked wrong.\n- **60:** an infographic titled \"Compromising CI/CD Pipelines\", with five panels: Jenkins Pipeline, CI/CD, Credentials, Problem, Attack. The panel text is too small to read.\n- **60-61:** a citation card, \"Security best practices for authors of GitHub Actions\" (GitHub, Fall 2023).\n- **62:** the Hacker News comment linked in item 62 above.\n- **63:** a citation card, OpenText Community, \"Security Fundamentals Part 1: Fail Open vs. Fail Closed\". Unconfirmed; see item 63.\n- **65:** a diagram labeled \"LLM02: Sensitive Information Disclosure\". One column is data going into the LLM (PII in prompts, source code in chat, meeting notes). The other is data coming out (training data regurgitation, RAG over-retrieval, system prompt leakage).\n- **66:** \"Untrusted advice protocol with an information bottleneck\". A strong untrusted model may send only a few characters (\"del L97\") to a weak trusted model, which alone takes action. It comes from a Redwood Research AI-control paper, [Untrusted advice for AI control](https://blog.redwoodresearch.org/p/untrusted-advice-for-ai-control-short). It is research on limiting what a powerful model can pass along, not a product or setting. The reel shows it without attribution.\n- **67:** a permission dropdown mockup: \"Default permissions / Auto-review / Full access\".\n- **68:** \"Types of Web Storage\": Session Storage, Local Storage, Cookies, IndexedDB.\n- **69:** a flow from \"Safe site\" through \"Open redirect\" to either \"correct destination\" or \"Malicious redirection\".\n- **70:** an annotated GraphQL query with the labels Query Depth, Query Width, Operations, Field, Directives, Parameters, Aliases, Batches and Fragments. It maps the query's syntax to depth, width, alias and batching attacks.\n\nItems 59 and 64 have no graphic."
+     },
+     {
+      "heading": "Where the rest of the checklist is",
+      "detail": "This is Part 4 of a numbered series. Items 1-54 (Parts 1-3) are not published anywhere public. No website, newsletter, GitHub, LinkedIn or X account connected to the creator turned up. The only confirmed home is the [@byarnieverma Instagram profile](https://www.instagram.com/byarnieverma/), so any earlier parts would be reels there.\n\nThe caption's offer, \"Comment 'risk' for the resource doc\", is a comment-to-DM lead magnet, not a link. No public copy of the doc exists. That it is sent by DM automation is an inference from the missing public copy, not something that could be confirmed."
+     }
+    ],
+    "next_action": "Run three quick checks on your live app. Send 20 parallel requests to your coupon or checkout endpoint. Grep your workflows for `uses:` lines not pinned to a 40-character SHA. Open DevTools > Application and see whether an auth token is sitting in localStorage."
+   },
    "links": [
     {
-     "url": "https://community.opentext.com",
-     "label": "OpenText Community screenshot citation",
+     "url": "https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html",
+     "label": "OWASP AI Agent Security Cheat Sheet",
+     "alive": true,
+     "page_title": "AI Agent Security - OWASP Cheat Sheet Series"
+    },
+    {
+     "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+     "label": "OWASP Authentication Cheat Sheet (items 55-56)",
+     "alive": true,
+     "page_title": "Authentication - OWASP Cheat Sheet Series"
+    },
+    {
+     "url": "https://cheatsheetseries.owasp.org/cheatsheets/CI_CD_Security_Cheat_Sheet.html",
+     "label": "OWASP CI/CD Security Cheat Sheet",
+     "alive": true,
+     "page_title": "CI CD Security - OWASP Cheat Sheet Series"
+    },
+    {
+     "url": "https://cheatsheetseries.owasp.org/cheatsheets/GraphQL_Cheat_Sheet.html",
+     "label": "OWASP GraphQL Cheat Sheet (item 70)",
+     "alive": true,
+     "page_title": "GraphQL - OWASP Cheat Sheet Series"
+    },
+    {
+     "url": "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html",
+     "label": "OWASP Session Management Cheat Sheet (item 68)",
+     "alive": true,
+     "page_title": "Session Management - OWASP Cheat Sheet Series"
+    },
+    {
+     "url": "https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions",
+     "label": "GitHub Docs: Security hardening for GitHub Actions (items 60-62)",
+     "alive": true,
+     "page_title": "Secure use reference - GitHub Docs"
+    },
+    {
+     "url": "https://docs.stripe.com/webhooks",
+     "label": "Stripe: Receive events in your webhook endpoint (item 59 replay protection)",
+     "alive": true,
+     "page_title": "Receive Stripe events in your webhook endpoint | Stripe Documentation"
+    },
+    {
+     "url": "https://genai.owasp.org/2025/12/09/owasp-top-10-for-agentic-applications-the-benchmark-for-agentic-security-in-the-age-of-autonomous-ai/",
+     "label": "OWASP Top 10 for Agentic Applications, December 2025 (item 67)",
      "alive": true,
      "page_title": ""
     },
     {
-     "url": "https://news.ycombinator.com",
-     "label": "Hacker News screenshot citation",
+     "url": "https://genai.owasp.org/llm-top-10/",
+     "label": "OWASP Top 10 for LLM/GenAI Applications, 2025 (items 65-67)",
      "alive": true,
-     "page_title": "Hacker News"
+     "page_title": ""
+    },
+    {
+     "url": "https://news.ycombinator.com/item?id=18534689",
+     "label": "Hacker News: the reel's item-62 citation, a comment in the 2018 event-stream backdoor thread",
+     "alive": true,
+     "page_title": "Unpinned dependencies are harmful. If you aren’t reviewing the diffs of your dep... | Hacker News"
+    },
+    {
+     "url": "https://www.instagram.com/byarnieverma/",
+     "label": "Arnie Verma (@byarnieverma) on Instagram, where Parts 1-3 would be if posted",
+     "alive": true,
+     "page_title": ""
     }
    ],
    "slide_ext": ".webp"
@@ -5350,9 +5925,9 @@
    "url": "https://www.instagram.com/p/Ddm2r7KkiXU/?img_index=1",
    "kind": "listicle",
    "action": "build",
-   "title": "6 JEV Projects to Build Smarter AI Systems",
-   "hook": "Learn six practical AI architecture patterns using Jev to optimize cost, latency, and reliability.",
-   "summary": "This carousel outlines six high-impact project ideas using Jev to upgrade AI systems. It covers critical agentic patterns including dynamic model routing, tool-call risk gating, intent classification, loop management, RAG reranking, and guardrail enforcement. Implementing these patterns replaces slow generative reasoning with rapid classification and decision-making.",
+   "title": "6 Jev Projects to Build Smarter AI Systems",
+   "hook": "Six agent patterns built on Jev, TypeSafe AI's closed classification API: routing, risk gates, triage, loop stops, reranking and guardrails.",
+   "summary": "This carousel pitches six agent patterns built on Jev, a hosted model from TypeSafe AI that returns labels and scores instead of generated text. The patterns are: routing between small and frontier models, allow/block/human-review gates on tool calls, intent triage, continue-or-stop loop decisions, RAG reranking, and policy checks. The slides never name TypeSafe. Jev launched a week before the post as a closed, paid, early-access API. Every pattern can also be built with open-source tools, and several are better done with plain code.",
    "owner": "lifeofarjav",
    "posted": "September 22, 2026",
    "slide_count": 8,
@@ -5538,7 +6113,9 @@
      "build"
     ],
     "section": [
-     "agents-assistants/frameworks-patterns"
+     "agents-assistants/agent-security-permissions",
+     "agents-assistants/frameworks-patterns",
+     "retrieval-rag/rag-foundations"
     ],
     "topic": [
      "ai agents",
@@ -5548,7 +6125,163 @@
      "system architecture"
     ]
    },
-   "links": [],
+   "followup": {
+    "answer_html": "<p><strong>Jev is real.</strong> It is a closed, hosted classification model from TypeSafe AI, Inc., launched September 15, 2026, one week before this post. The slides never name a maker. The link to TypeSafe rests on three things: the exact name, the timing, and TypeSafe's docs covering the same six uses. That match is strong, but it is an inference.</p>\n<h2>What Jev is</h2>\n<ul>\n<li>\n<p><strong>Name on the slides:</strong> &quot;JEV&quot; in the cover's all-caps display font and in the caption, and &quot;Jev&quot; on every other slide. The carousel shows no URL, handle, model id or logo.</p>\n</li>\n<li>\n<p><strong>Maker:</strong> TypeSafe AI, Inc. See the <a href=\"https://typesafe.ai/blog/introducing-system-one-models-and-jev\">launch post</a> by founder Diogo Almeida and the <a href=\"https://typesafe.ai/legal/terms\">Terms of Use</a>. There is also a <a href=\"https://en.wikipedia.org/wiki/Jev_(AI_model)\">Wikipedia article</a>.</p>\n</li>\n<li>\n<p><strong>What it does:</strong> It does not generate text. It answers typed questions with calibrated probabilities. There are three question types:</p>\n<ul>\n<li>Choice: pick from a set of options.</li>\n<li>Score: rate against a 2-10 level rubric.</li>\n<li>Noul: the probability that a statement is true.</li>\n</ul>\n<p>TypeSafe calls it a &quot;System One Model&quot;. This is why every slide frames the job as classify or score.</p>\n</li>\n<li>\n<p><strong>Weights:</strong> Closed. There are no public weights, no self-hosting, and no published model size or paper. You customise it per request (state, instructions, criteria), not by fine-tuning. TypeSafe's open code is client-side only: Python and JS SDKs, plus an MIT-licensed <a href=\"https://github.com/typesafe-ai/skills/blob/main/skills/typesafe-ai/SKILL.md\">agent skill</a>.</p>\n</li>\n<li>\n<p><strong>API:</strong> <code>POST https://api.typesafe.ai/v1/systemone</code> with a Bearer key.</p>\n<ul>\n<li>Model id <code>jev-1.13.0</code> is current. <code>jev-latest</code> and <code>jev-preview</code> are aliases.</li>\n<li>Text input only, up to 64k tokens per request. English is the primary language.</li>\n<li>Details are in <a href=\"https://docs.typesafe.ai/models.md\">Models</a> and the <a href=\"https://docs.typesafe.ai/api.md\">API reference</a>.</li>\n</ul>\n</li>\n<li>\n<p><strong>Price, as of 2026-09-28:</strong> TypeSafe's <a href=\"https://typesafe.ai/\">homepage</a> and <a href=\"https://docs.typesafe.ai/models.md\">models page</a> list $42 per billion input tokens ($0.042 per million). Output tokens are free. TypeSafe has no separate pricing page, so check the models page for the current figure.</p>\n</li>\n<li>\n<p><strong>Access, as of 2026-09-28:</strong></p>\n<ul>\n<li>The homepage says Jev is in early access. API keys come from console.typesafe.ai, but that page blocked our check, so its signup state is unknown.</li>\n<li>Third-party write-ups (for example <a href=\"https://flaviocopes.com/jev-api-key/\">this access guide</a>) report that the waitlist was dropped on Sept 20 and that new signups were paused on Sept 22 because of demand. Some also mention a $5 starting credit.</li>\n<li>No TypeSafe page we could read confirms the pause or the credit, so treat both as unverified.</li>\n</ul>\n</li>\n<li>\n<p><strong>Docs:</strong> <a href=\"https://docs.typesafe.ai/\">docs.typesafe.ai</a>, the <a href=\"https://docs.typesafe.ai/introduction/quickstart\">quick start</a> and the <a href=\"https://docs.typesafe.ai/llms.txt\">full docs index</a>. The index has guides on intent routing, confidence-gated routing, re-ranking, classifying RAG passages, guardrails and function calling.</p>\n</li>\n<li>\n<p><strong>Look-alike sites:</strong> None of these is run by TypeSafe:</p>\n<ul>\n<li>jevai.net resells access through referral links at double TypeSafe's input price.</li>\n<li>jevmodel.org sells its own credits and says it is not affiliated with TypeSafe.</li>\n<li>jevai.org, jevai.dev and the github.com/jev-ai org are independent.</li>\n</ul>\n<p>TypeSafe's real GitHub org is typesafe-ai. <a href=\"https://github.com/BillionsBobby/JevRouter\">JevRouter</a> is a genuine MIT-licensed community client that calls TypeSafe's API, but TypeSafe does not make it.</p>\n</li>\n<li>\n<p><strong>The creator's own material:</strong> Comment &quot;ACCESS&quot; on the post and the creator sends guides and repos by DM. That is the only way to get them. The creator's site does not mention Jev.</p>\n</li>\n</ul>\n<h2>Building the six patterns</h2>\n<p>With Jev, each pattern is one API call that returns a label or a score. Its selling points are speed and a low input price. The tradeoff is that it is a closed, early-access API. Every pattern can also be built without Jev.</p>\n<ol>\n<li>\n<p><strong>Model routing (small vs frontier model)</strong></p>\n<ul>\n<li>Jev: ask a Choice question with two options.</li>\n<li>Open source: <a href=\"https://github.com/lm-sys/RouteLLM\">RouteLLM</a> (Apache 2.0) uses trained routers. It reports up to 85% cost savings while keeping 95% of GPT-4 quality on MT-Bench. Its last commit was in August 2024, so treat it as reference code. <a href=\"https://github.com/aurelio-labs/semantic-router\">semantic-router</a> (MIT) routes by similarity to example phrases and can run fully locally.</li>\n<li>Paid: <a href=\"https://www.notdiamond.ai/pricing\">Not Diamond</a> is a hosted router at $0.05 per million tokens routed, as of 2026-09-28. <a href=\"https://docs.notdiamond.ai/docs/what-is-model-routing\">Its docs</a> cite 100-150 ms of added latency.</li>\n<li>Plain code: if your traffic is not very varied, a rule on input length or keywords is enough. Be careful with cascades (try the small model first, escalate on failure). When most requests are hard, a cascade can cost more than always calling the frontier model.</li>\n</ul>\n</li>\n<li>\n<p><strong>Tool-call risk gates (allow / block / human review)</strong></p>\n<ul>\n<li>Start with plain code: an allowlist of tool names, a JSON Schema check on arguments, and a human-approval step. The <a href=\"https://openai.github.io/openai-agents-python/tools/\">OpenAI Agents SDK</a> lets you mark a tool as needing approval. The run then pauses until you approve or reject the call (see the <a href=\"https://developers.openai.com/api/docs/guides/agents/guardrails-approvals\">approvals guide</a>). It is free and open source. Its docs warn that approval is not a sandbox, so your executor still has to enforce real permissions.</li>\n<li>Rules engine: <a href=\"https://www.openpolicyagent.org/\">Open Policy Agent</a> (Apache 2.0, free) handles rules you can write down, such as &quot;block any delete tool above a set amount&quot;.</li>\n<li>Model-based, for cases rules cannot cover: Meta's <a href=\"https://meta-llama.github.io/PurpleLlama/LlamaFirewall/docs/documentation/about-llamafirewall\">LlamaFirewall</a> is open source, though its page does not state a license or latency figure. A three-option Jev Choice also fits here.</li>\n<li>Caution: a gate that only reads the tool name and arguments can be fooled by instructions injected through earlier tool output. Scan tool output before it goes back into context.</li>\n</ul>\n</li>\n<li>\n<p><strong>Intent and domain triage</strong></p>\n<ul>\n<li>Jev: ask a Choice question over your fixed label set.</li>\n<li>Open source, no training: <a href=\"https://github.com/aurelio-labs/semantic-router\">semantic-router</a> with a few example phrases per intent. It needs one embedding call and no text generation. A local encoder is free. A hosted one costs very little: <a href=\"https://developers.openai.com/api/docs/models/text-embedding-3-small\">text-embedding-3-small</a> is $0.02 per million tokens as of 2026-09-28.</li>\n<li>Open source, once you have labelled data: <a href=\"https://huggingface.co/docs/setfit/en/index\">SetFit</a> (Apache 2.0) fine-tunes a small classifier from as few as 8 examples per class and runs on a CPU.</li>\n<li>Framework: <a href=\"https://docs.nvidia.com/nemo/guardrails/configure-guardrails/colang/colang-1/tutorials/6-topical-rails\">NeMo Guardrails topical rails</a> map each message to a fixed intent before choosing what to do next.</li>\n</ul>\n</li>\n<li>\n<p><strong>Loop decisions (continue or stop)</strong></p>\n<ul>\n<li>This is mostly plain code.</li>\n<li>Hard cap on steps: LangGraph's <a href=\"https://docs.langchain.com/oss/python/langgraph/errors/GRAPH_RECURSION_LIMIT\">recursion_limit</a>, or <code>max_turns</code> in the <a href=\"https://openai.github.io/openai-agents-python/running_agents/\">OpenAI Agents SDK</a>, which raises MaxTurnsExceeded when hit. CrewAI has <code>max_iter</code>. All are open source and free.</li>\n<li>Early stop: compare the last few steps and stop when nothing is changing (same output, a repeated error, a metric that is not moving). Base the stop on an outside signal, such as tests passing, not on the agent's own view of whether it is done.</li>\n<li>A learned stop model (a Jev Noul question or your own classifier) only pays off once your logs show the simple rules stopping too early or too late. No ready-made product for this was found.</li>\n</ul>\n</li>\n<li>\n<p><strong>RAG reranking</strong></p>\n<ul>\n<li>Jev: ask a Score question for each (query, chunk) pair. TypeSafe's docs have guides on re-ranking and on classifying RAG passages.</li>\n<li>Open weights, self-hosted and free to run:\n<ul>\n<li><a href=\"https://huggingface.co/BAAI/bge-reranker-v2-m3\">BAAI/bge-reranker-v2-m3</a>: Apache 2.0, 0.6B parameters, multilingual. LangChain's <a href=\"https://docs.langchain.com/oss/python/integrations/document_transformers/cross_encoder_reranker\">cross-encoder guide</a> calls it a strong default and shows how to plug it in.</li>\n<li><a href=\"https://github.com/mixedbread-ai/mxbai-rerank\">mxbai-rerank-large-v2</a>: Apache 2.0, 1.5B parameters.</li>\n<li><a href=\"https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual\">jina-reranker-v2-base-multilingual</a>: licensed CC-BY-NC-4.0, so commercial self-hosting needs a separate license from Jina.</li>\n</ul>\n</li>\n<li>Hosted and paid:\n<ul>\n<li><a href=\"https://docs.voyageai.com/docs/pricing\">Voyage</a>: rerank-2.5 is $0.05 and rerank-2.5-lite $0.02 per million tokens, as of 2026-09-28.</li>\n<li><a href=\"https://docs.cohere.com/docs/rerank-overview\">Cohere Rerank</a>: closed. Its <a href=\"https://cohere.com/pricing\">pricing page</a> shows no self-serve per-search price.</li>\n<li><a href=\"https://jina.ai/reranker/\">Jina Reranker API</a>: free tier of 100 requests per minute.</li>\n</ul>\n</li>\n<li>Start with bge-reranker-v2-m3.</li>\n</ul>\n</li>\n<li>\n<p><strong>Guardrails and policy checks</strong></p>\n<ul>\n<li>Free hosted: the <a href=\"https://developers.openai.com/api/docs/guides/moderation\">OpenAI Moderation API</a> is free and covers 13 harm categories. It returns a flagged value plus per-category scores.</li>\n<li>Open weights: <a href=\"https://huggingface.co/meta-llama/Llama-Guard-3-8B\">Llama Guard 3 8B</a> (Llama 3.1 Community License) covers 14 hazard categories in 8 languages.</li>\n<li>Open-source frameworks: <a href=\"https://github.com/NVIDIA-NeMo/Guardrails\">NeMo Guardrails</a> and <a href=\"https://github.com/guardrails-ai/guardrails\">Guardrails AI</a>, both Apache 2.0.</li>\n<li>Paid, metered: <a href=\"https://aws.amazon.com/bedrock/pricing/\">AWS Bedrock Guardrails</a>. Content filters and denied topics cost $0.15 per 1,000 text units, word filters are free, and blocked requests are not charged, as of 2026-09-28.</li>\n<li>Jev: one Choice or Noul question per policy.</li>\n<li>The caution from pattern 2 applies here too. These tools check user input and final output, not tool output in the middle of an agent loop.</li>\n</ul>\n</li>\n</ol>\n",
+    "answered": "not asked",
+    "sources": [
+     {
+      "url": "https://typesafe.ai/",
+      "title": "TypeSafe AI homepage"
+     },
+     {
+      "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+      "title": "TypeSafe AI - Introducing System One Models & Jev"
+     },
+     {
+      "url": "https://typesafe.ai/legal/terms",
+      "title": "TypeSafe AI Terms of Use"
+     },
+     {
+      "url": "https://docs.typesafe.ai/models.md",
+      "title": "TypeSafe docs - Models"
+     },
+     {
+      "url": "https://docs.typesafe.ai/api.md",
+      "title": "TypeSafe docs - API reference"
+     },
+     {
+      "url": "https://docs.typesafe.ai/llms.txt",
+      "title": "TypeSafe docs index"
+     },
+     {
+      "url": "https://docs.typesafe.ai/introduction/quickstart",
+      "title": "TypeSafe docs - Quick Start"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Jev_(AI_model)",
+      "title": "Jev (AI model) - Wikipedia"
+     },
+     {
+      "url": "https://flaviocopes.com/jev-api-key/",
+      "title": "How to get access to Jev (third-party)"
+     },
+     {
+      "url": "https://github.com/typesafe-ai/skills/blob/main/skills/typesafe-ai/SKILL.md",
+      "title": "typesafe-ai/skills SKILL.md"
+     },
+     {
+      "url": "https://github.com/lm-sys/RouteLLM",
+      "title": "RouteLLM"
+     },
+     {
+      "url": "https://github.com/aurelio-labs/semantic-router",
+      "title": "semantic-router"
+     },
+     {
+      "url": "https://www.notdiamond.ai/pricing",
+      "title": "Not Diamond pricing"
+     },
+     {
+      "url": "https://openai.github.io/openai-agents-python/tools/",
+      "title": "OpenAI Agents SDK - Tools"
+     },
+     {
+      "url": "https://developers.openai.com/api/docs/guides/agents/guardrails-approvals",
+      "title": "OpenAI - Guardrails and human review"
+     },
+     {
+      "url": "https://www.openpolicyagent.org/",
+      "title": "Open Policy Agent"
+     },
+     {
+      "url": "https://meta-llama.github.io/PurpleLlama/LlamaFirewall/docs/documentation/about-llamafirewall",
+      "title": "Meta LlamaFirewall"
+     },
+     {
+      "url": "https://huggingface.co/docs/setfit/en/index",
+      "title": "SetFit docs"
+     },
+     {
+      "url": "https://docs.nvidia.com/nemo/guardrails/configure-guardrails/colang/colang-1/tutorials/6-topical-rails",
+      "title": "NeMo Guardrails - Topical Rails"
+     },
+     {
+      "url": "https://docs.langchain.com/oss/python/langgraph/errors/GRAPH_RECURSION_LIMIT",
+      "title": "LangGraph GRAPH_RECURSION_LIMIT"
+     },
+     {
+      "url": "https://openai.github.io/openai-agents-python/running_agents/",
+      "title": "OpenAI Agents SDK - Running agents"
+     },
+     {
+      "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3",
+      "title": "BAAI/bge-reranker-v2-m3"
+     },
+     {
+      "url": "https://docs.langchain.com/oss/python/integrations/document_transformers/cross_encoder_reranker",
+      "title": "LangChain Cross Encoder Reranker"
+     },
+     {
+      "url": "https://github.com/mixedbread-ai/mxbai-rerank",
+      "title": "mixedbread-ai/mxbai-rerank"
+     },
+     {
+      "url": "https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual",
+      "title": "jina-reranker-v2-base-multilingual"
+     },
+     {
+      "url": "https://docs.voyageai.com/docs/pricing",
+      "title": "Voyage AI pricing"
+     },
+     {
+      "url": "https://docs.cohere.com/docs/rerank-overview",
+      "title": "Cohere Rerank overview"
+     },
+     {
+      "url": "https://developers.openai.com/api/docs/guides/moderation",
+      "title": "OpenAI Moderation"
+     },
+     {
+      "url": "https://huggingface.co/meta-llama/Llama-Guard-3-8B",
+      "title": "Llama Guard 3 8B"
+     },
+     {
+      "url": "https://github.com/NVIDIA-NeMo/Guardrails",
+      "title": "NeMo Guardrails"
+     },
+     {
+      "url": "https://aws.amazon.com/bedrock/pricing/",
+      "title": "Amazon Bedrock pricing"
+     }
+    ],
+    "next_action": "Check console.typesafe.ai to see if signups are open and, if so, run the quick start. Meanwhile, build the reranking pattern with bge-reranker-v2-m3."
+   },
+   "links": [
+    {
+     "url": "https://docs.typesafe.ai/introduction/quickstart",
+     "label": "Jev quick start (official docs)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://docs.typesafe.ai/models.md",
+     "label": "Jev models, limits and pricing (official)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://typesafe.ai/",
+     "label": "TypeSafe AI, maker of Jev",
+     "alive": true,
+     "page_title": "Home - TypeSafe AI"
+    },
+    {
+     "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+     "label": "Jev launch post (official)",
+     "alive": true,
+     "page_title": "Introducing System One Models &amp; Jev - TypeSafe AI Blog"
+    }
+   ],
    "media_id": "97e5b35439cbc1a1",
    "pdf_file": "doc.pdf",
    "slide_ext": ".jpg"

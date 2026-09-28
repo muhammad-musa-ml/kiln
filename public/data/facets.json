@@ -1,13 +1,14 @@
 {
- "total": 31,
+ "total": 33,
  "by_action": {
+  "redo": 2,
   "install": 3,
-  "read": 2,
-  "watch": 9,
-  "reference": 9,
+  "read": 3,
+  "watch": 8,
+  "reference": 7,
   "learn": 3,
-  "build": 4,
-  "apply": 1
+  "apply": 3,
+  "build": 4
  },
  "by_topic": {
   "ai agents": 7,
@@ -137,7 +138,13 @@
    "id": "agents-assistants",
    "name": "Agents & Assistants",
    "parent": "",
-   "count": 8
+   "count": 9
+  },
+  {
+   "id": "agents-assistants/agent-security-permissions",
+   "name": "Agent Security & Permissions",
+   "parent": "agents-assistants",
+   "count": 2
   },
   {
    "id": "agents-assistants/frameworks-patterns",
@@ -161,13 +168,13 @@
    "id": "claude-prompting",
    "name": "Claude & Prompting",
    "parent": "",
-   "count": 6
+   "count": 7
   },
   {
    "id": "claude-prompting/claude-code-skills",
    "name": "Claude Code & Skills",
    "parent": "claude-prompting",
-   "count": 3
+   "count": 4
   },
   {
    "id": "claude-prompting/model-comparisons",
@@ -206,6 +213,18 @@
    "count": 2
   },
   {
+   "id": "media-generation",
+   "name": "Media Generation",
+   "parent": "",
+   "count": 2
+  },
+  {
+   "id": "media-generation/motion-graphics-video",
+   "name": "Motion Graphics & Video",
+   "parent": "media-generation",
+   "count": 2
+  },
+  {
    "id": "models-training",
    "name": "Models & Training",
    "parent": "",
@@ -233,7 +252,7 @@
    "id": "retrieval-rag",
    "name": "Retrieval & RAG",
    "parent": "",
-   "count": 4
+   "count": 5
   },
   {
    "id": "retrieval-rag/beyond-chunking",
@@ -242,10 +261,16 @@
    "count": 2
   },
   {
+   "id": "retrieval-rag/document-ai-pdfs",
+   "name": "Document AI & PDFs",
+   "parent": "retrieval-rag",
+   "count": 1
+  },
+  {
    "id": "retrieval-rag/rag-foundations",
    "name": "RAG Foundations",
    "parent": "retrieval-rag",
-   "count": 2
+   "count": 3
   },
   {
    "id": "shipping-quality",
