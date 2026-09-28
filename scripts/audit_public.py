@@ -18,13 +18,21 @@ from kiln import publish  # noqa: E402
 
 OUT = ROOT / "public"
 
-# Things that must never appear in any published byte.
-FORBIDDEN_STRINGS = [
+# Private columns. A private column can only reach the build as a KEY - that
+# is what exporting one means - so these are checked as JSON keys at any
+# depth rather than as raw substrings. A saved post may legitimately contain
+# any of these words in its own text: the ColPali carousel ships Python whose
+# parameter is literally named pdf_path, and a substring scan cannot tell
+# that from a leak. Same reasoning that already moved this check off
+# index.html. Their VALUES are covered by FORBIDDEN_PATTERNS below.
+FORBIDDEN_KEYS = [
     "user_note", "user_do", "cost_usd", "media_dir", "pdf_path",
-    "local_token", "secrets.json", "KILN_TOKEN=",
     "enrich_json", "note_json", "processed_at",
     "claude_json", "claude_state", "claude_attempts", "run_dir",
 ]
+# Not field names: these are secret material, and must not appear in any
+# published byte in any position, key or value.
+FORBIDDEN_ANYWHERE = ["local_token", "secrets.json", "KILN_TOKEN="]
 FORBIDDEN_PATTERNS = [
     (r"AIza[0-9A-Za-z_\-]{20,}", "Google API key"),
     (r"\bsk-[0-9A-Za-z_\-]{20,}", "OpenAI-style key"),
@@ -36,6 +44,25 @@ FORBIDDEN_PATTERNS = [
 
 VENDOR_WORDS = re.compile(
     r"\b(gemini|ollama|claude|anthropic|openai|codex|opus|sonnet|haiku|gpt)\b", re.I)
+
+
+def json_keys(node) -> set[str]:
+    """Every key in a JSON document, at any depth.
+
+    An exported private column is always a key, however deeply nested, so
+    this is what check 1 looks at.
+    """
+    found: set[str] = set()
+    stack = [node]
+    while stack:
+        cur = stack.pop()
+        if isinstance(cur, dict):
+            for k, v in cur.items():
+                found.add(k)
+                stack.append(v)
+        elif isinstance(cur, list):
+            stack.extend(cur)
+    return found
 
 failures: list[str] = []
 checks = 0
@@ -92,14 +119,35 @@ def main() -> int:
     #    check that could not discriminate a leak from a variable name.
     #    What matters in code is VALUES, and check 2 and 3 cover those.
     data_files = [p for p in text_files if p.suffix == ".json"]
-    for needle in FORBIDDEN_STRINGS:
+    keys_by_file: dict[str, set[str]] = {}
+    for p in data_files:
+        try:
+            keys_by_file[p.name] = json_keys(
+                json.loads(p.read_text(encoding="utf-8", errors="replace")))
+        except ValueError as e:
+            # Unparseable data is never safe to wave through.
+            checks += 1
+            fail(f"could not parse {p.name} to check its keys: {e}")
+    before = len(failures)
+    for needle in FORBIDDEN_KEYS:
         checks += 1
-        hits = [p.name for p in data_files
-                if needle in p.read_text(encoding="utf-8", errors="replace")]
+        hits = [name for name, keys in keys_by_file.items() if needle in keys]
         if hits:
             fail(f"private field '{needle}' present in exported data: {hits[:3]}")
-    if not failures:
-        ok(f"none of {len(FORBIDDEN_STRINGS)} private field names in exported data")
+    if len(failures) == before:
+        ok(f"none of {len(FORBIDDEN_KEYS)} private field names appear as keys "
+           f"in {len(keys_by_file)} data file(s)")
+
+    # 1b. Secret material, anywhere in any text file, key or value.
+    before = len(failures)
+    for needle in FORBIDDEN_ANYWHERE:
+        checks += 1
+        hits = [p.name for p in text_files
+                if needle in p.read_text(encoding="utf-8", errors="replace")]
+        if hits:
+            fail(f"secret marker '{needle}' present in the build: {hits[:3]}")
+    if len(failures) == before:
+        ok(f"none of {len(FORBIDDEN_ANYWHERE)} secret markers anywhere in the build")
 
     # 2. key / path shapes
     for pat, label in FORBIDDEN_PATTERNS:
