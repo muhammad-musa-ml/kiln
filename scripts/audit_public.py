@@ -45,6 +45,17 @@ FORBIDDEN_PATTERNS = [
 VENDOR_WORDS = re.compile(
     r"\b(gemini|ollama|claude|anthropic|openai|codex|opus|sonnet|haiku|gpt)\b", re.I)
 
+# A share or tracking parameter in a link. The token Instagram adds to a link
+# I share (stkn now, igsh and igshid before) and YouTube's si tie the post to
+# my account. Looked for raw, as &amp; in HTML, and percent-encoded inside
+# another link. Only the parameter's name is ever printed, never its value.
+TRACKING_PARAMS = [
+    re.compile(r"(?:[?&]|&amp;|%3[Ff]|%26)(?P<name>stkn|igsh|igshid|utm_[A-Za-z0-9_]+"
+               r"|fbclid|gclid|msclkid)(?:=|%3[Dd])"),
+    re.compile(r"(?:youtube\.com|youtu\.be)/[^\s\"'<>]*?(?:[?&]|&amp;|%3[Ff]|%26)"
+               r"(?P<name>si)(?:=|%3[Dd])"),
+]
+
 
 def json_keys(node) -> set[str]:
     """Every key in a JSON document, at any depth.
@@ -297,6 +308,27 @@ def main() -> int:
         fail(f"{len(pages)} page(s) besides index.html in the build: {pages[:3]}")
     else:
         ok("index.html is the only page in the build")
+
+    # 5e. no link keeps its share token. publish strips them; this checks it
+    #     did, in every file and inside every PDF, and that no field or
+    #     document went out without passing through the strip. A PDF can
+    #     break a long address across two lines, so its lines are joined first.
+    checks += 1
+    hits: list[tuple[str, str]] = []
+    sources = [(p.relative_to(OUT).as_posix(), p.read_text(encoding="utf-8", errors="replace"))
+               for p in text_files]
+    sources += [(p.relative_to(OUT).as_posix(), re.sub(r"[\r\n]+", "", t))
+                for p, t in pdf_texts.items()]
+    for name, text in sources:
+        for rx in TRACKING_PARAMS:
+            hits += [(name, m.group("name")) for m in rx.finditer(text)]
+    if hits:
+        where = sorted({n for n, _ in hits})
+        fail(f"{len(hits)} share or tracking parameter(s) in links, in "
+             f"{len(where)} file(s) {where[:3]}: {sorted({p for _, p in hits})}")
+    else:
+        ok(f"no link keeps a share or tracking parameter ({len(sources)} files "
+           f"and PDF texts read)")
 
     # 6. every built file is actually committable.
     #    A broad ignore rule (data/ matches at any depth) silently dropped

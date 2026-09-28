@@ -418,6 +418,16 @@ def test_readme_prompt() -> None:
     check("no unfilled placeholder is left in it", "%s" not in p, p[-200:])
 
 
+def test_build_prompt_source() -> None:
+    print("what the build agent is told about where the idea came from")
+    post = "https://www.instagram.com/p/ABC/"
+    p = jobs.build_prompt({"enrich": {"project": {"name": "demo"}},
+                           "url": post + "?img_index=2&stkn=SECRET"})
+    check("the source link reaches it without the share token",
+          "stkn=SECRET" not in p and "Source this came from: %s?img_index=2" % post in p,
+          str([l for l in p.splitlines() if l.startswith("Source")]))
+
+
 def test_child_env():
     print("a process ship starts does not inherit the routine's effort level")
     seen: dict = {}
@@ -455,6 +465,7 @@ def main() -> int:
     test_run_tests()
     test_ci_helpers()
     test_readme_prompt()
+    test_build_prompt_source()
     test_agent_blocked()
     test_gate()
     test_dedup()

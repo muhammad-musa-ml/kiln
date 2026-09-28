@@ -10,9 +10,11 @@ from __future__ import annotations
 import json
 import re
 import shutil
+import tempfile
 import time
 from pathlib import Path
 from typing import Any
+from urllib.parse import quote, unquote
 
 from . import config, store
 
@@ -62,11 +64,124 @@ _ABS_PATH = re.compile(r"[A-Za-z]:\\\\?[^\s\"']+|/(?:home|Users)/[^\s\"']+")
 _KEYISH = re.compile(r"AIza[0-9A-Za-z_\-]{10,}|sk-[0-9A-Za-z_\-]{10,}"
                      r"|sb_secret_[0-9A-Za-z_\-]+")
 
+# Share and tracking parameters. A link I share carries a token that ties the
+# post to my account: Instagram has called it igshid, then igsh, and now stkn,
+# and YouTube's is si. The rest are the usual campaign and click ids. None of
+# them says which post, video or page a link is, so a reader loses nothing
+# when they go. On Instagram it works the other way round: only img_index
+# (which slide of a carousel) is kept, so the token's next name cannot slip
+# through. My own copy keeps every link as I saved it; this is only about
+# what goes out.
+_TRACKING = (r"stkn|igsh|igshid|fbclid|gclid|dclid|gbraid|wbraid|msclkid|yclid"
+             r"|mc_cid|mc_eid|_hsenc|_hsmi|mkt_tok|utm_\w*")
+_TRACKING_NAME = re.compile(_TRACKING, re.I)
+_TRACKING_ON = {"youtube.com": ("si", "pp"), "music.youtube.com": ("si", "pp"),
+                "youtu.be": ("si", "pp")}
+_ONLY_KEEP = {"instagram.com": ("img_index",)}
+
+# A link with a query: a host, a path, then ? and the query. The scheme is
+# optional, since a model copying an address off an image drops it. The query
+# stops at a space, a quote, a bracket or #, so a link inside Markdown, HTML
+# or a sentence ends where the reader's eye says it does.
+_QUERY_URL = re.compile(r"(?i)\b((?:https?://)?(?:[a-z0-9-]+\.)+[a-z]{2,}(?::\d+)?)"
+                        r"(/[^\s\"'<>?#()\[\]]*)?\?([^\s\"'<>#()\[\]]*)")
+_SEP = re.compile(r"(&amp;|&)")
+# The same names anywhere else, with no host in front: a code snippet or an
+# address a model wrote out without one. The value stops before a sentence's
+# closing punctuation.
+_VALUE = r"=[^&#\s\"'<>()\[\]]*?(?=&amp;|&|[#\s\"'<>()\[\]]|[.,;:!?]+(?:[\s\"'<>()\[\]]|$)|$)"
+_LOOSE_FIRST = re.compile(r"\?(?:%s)%s(?:&amp;|&)" % (_TRACKING, _VALUE), re.I)
+_LOOSE_NEXT = re.compile(r"(?:&amp;|&)(?:%s)%s" % (_TRACKING, _VALUE), re.I)
+_LOOSE_ONLY = re.compile(r"\?(?:%s)%s" % (_TRACKING, _VALUE), re.I)
+
+
+def _site(host: str) -> str:
+    host = host.lower().split("://", 1)[-1].split(":", 1)[0]
+    for prefix in ("www.", "m."):
+        if host.startswith(prefix):
+            host = host[len(prefix):]
+    return host
+
+
+def _dropped(site: str, name: str) -> bool:
+    n = unquote(name).lower()
+    if site in _ONLY_KEEP:
+        return n not in _ONLY_KEEP[site]
+    return bool(_TRACKING_NAME.fullmatch(n)) or n in _TRACKING_ON.get(site, ())
+
+
+def _clean_value(value: str) -> str:
+    """A link given as a parameter's value is cleaned by its own host's rules."""
+    if "://" in value:
+        return clean_urls(value)
+    if "%3a%2f%2f" in value.lower():
+        inner = unquote(value)
+        cleaned = clean_urls(inner)
+        return value if cleaned == inner else quote(cleaned, safe="")
+    return value
+
+
+def _clean_query(site: str, query: str) -> str | None:
+    """The query without share and tracking parameters, the rest byte for byte.
+
+    None when nothing is left, so the ? can go too.
+    """
+    parts = _SEP.split(query)
+    pairs = [("", parts[0])] + [(parts[i], parts[i + 1]) for i in range(1, len(parts) - 1, 2)]
+    kept = []
+    for sep, pair in pairs:
+        name, eq, value = pair.partition("=")
+        if _dropped(site, name):
+            continue
+        if eq:
+            pair = name + eq + _clean_value(value)
+        kept.append((sep, pair))
+    if not kept:
+        return None
+    return kept[0][1] + "".join(sep + pair for sep, pair in kept[1:])
+
+
+def _clean_match(m: re.Match) -> str:
+    host, path, query = m.group(1), m.group(2) or "", m.group(3)
+    # Closing punctuation belongs to the sentence, not to the last value.
+    core = query.rstrip(".,;:!?")
+    tail = query[len(core):]
+    if not core:
+        return m.group(0)
+    cleaned = _clean_query(_site(host), core)
+    return host + path + ("?" + cleaned if cleaned is not None else "") + tail
+
+
+def clean_urls(text: str) -> str:
+    """Every link in text without its share and tracking parameters."""
+    if "?" not in text:
+        return text
+    text = _QUERY_URL.sub(_clean_match, text)
+    for _ in range(20):
+        before = text
+        text = _LOOSE_FIRST.sub("?", text)
+        text = _LOOSE_NEXT.sub("", text)
+        text = _LOOSE_ONLY.sub("", text)
+        if text == before:
+            break
+    return text
+
+
+def has_tracking(text: str) -> bool:
+    """True if any link in text carries a share or tracking parameter.
+
+    Line breaks are ignored, since a PDF's text breaks a long address wherever
+    the line ended.
+    """
+    joined = re.sub(r"[\r\n]+", "", text or "")
+    return clean_urls(joined) != joined
+
 
 def scrub(value: Any) -> Any:
-    """Remove absolute paths and key-shaped strings from anything exported."""
+    """Remove share tokens, absolute paths and key-shaped strings from anything exported."""
     if isinstance(value, str):
-        v = _ABS_PATH.sub("[local path]", value)
+        v = clean_urls(value)
+        v = _ABS_PATH.sub("[local path]", v)
         return _KEYISH.sub("[redacted]", v)
     if isinstance(value, list):
         return [scrub(x) for x in value]
@@ -104,10 +219,12 @@ def public_item(full: dict) -> dict:
     if fu:
         d["followup"] = fu
 
-    d["links"] = [{"url": l.get("url", ""), "label": l.get("label", ""),
-                   "alive": bool(l.get("alive")),
-                   "page_title": l.get("page_title", "")}
-                  for l in (full.get("links") or []) if l.get("url")]
+    # Through scrub like every other field. The links used to go out as
+    # stored, share tokens and all.
+    d["links"] = scrub([{"url": l.get("url", ""), "label": l.get("label", ""),
+                         "alive": bool(l.get("alive")),
+                         "page_title": l.get("page_title", "")}
+                        for l in (full.get("links") or []) if l.get("url")])
 
     # Media is addressed by an OPAQUE id under media/<item id>/. The real
     # directory and the absolute pdf path never leave this machine - only the
@@ -255,18 +372,29 @@ def build(out: Path = OUT, copy_media: bool = True) -> dict:
     }, indent=2), encoding="utf-8")
 
     copied = 0
+    withheld: list[str] = []
     if copy_media:
         from . import artifacts
         for it in items:
             # Documents the follow-up made go under files/, so one called
             # doc.pdf can never overwrite the carousel's own bound PDF.
-            for a in (it.get("followup") or {}).get("artifacts") or []:
+            fu = it.get("followup") or {}
+            for a in list(fu.get("artifacts") or []):
                 f = artifacts.item_dir(it["id"]) / a["file"]
                 if f.is_file() and f.suffix.lower() in PUBLISH_KINDS:
                     dest = out / "media" / it["id"] / "files"
                     dest.mkdir(parents=True, exist_ok=True)
-                    shutil.copy2(f, dest / f.name)
+                    pages = _publish_document(it["id"], f, dest / f.name)
+                    if pages is None:
+                        # Better missing from the site than out with my token.
+                        fu["artifacts"].remove(a)
+                        withheld.append("%s/%s" % (it["id"], f.name))
+                        continue
+                    if pages:
+                        a["pages"] = pages
                     copied += 1
+            if "artifacts" in fu and not fu["artifacts"]:
+                del fu["artifacts"]
             src = config.MEDIA / _media_key(it)
             if not src.is_dir():
                 continue
@@ -294,7 +422,52 @@ def build(out: Path = OUT, copy_media: bool = True) -> dict:
             json.dumps({"items": items, "built": built}, ensure_ascii=False, indent=1),
             encoding="utf-8")
 
-    return {"items": len(items), "media_files": copied, "out": str(out), "built": built}
+    return {"items": len(items), "media_files": copied, "out": str(out), "built": built,
+            "withheld": withheld}
+
+
+def _publish_document(item_id: str, src: Path, dest: Path) -> int | None:
+    """Copy one of the follow-up's documents out without its links' share tokens.
+
+    Text goes out with its links cleaned. A PDF whose text carries a token is
+    printed again from its cleaned source, the same way it was made; my own
+    copy is left as it is. Returns the pages when a PDF was printed again, 0
+    when the file went out as it was or as cleaned text, and None when it
+    must stay here because it could not be cleaned.
+    """
+    from . import artifacts
+
+    if src.suffix.lower() != ".pdf":
+        raw = src.read_bytes()
+        try:
+            text = raw.decode("utf-8")
+        except UnicodeDecodeError:
+            text = ""  # never kept that way; goes out as it is, and the audit reads it
+        cleaned = clean_urls(text)
+        if cleaned == text:
+            shutil.copy2(src, dest)
+        else:
+            dest.write_bytes(cleaned.encode("utf-8"))
+        return 0
+    if not has_tracking(artifacts.pdf_text(src)):
+        shutil.copy2(src, dest)
+        return 0
+    rec = next((r for r in artifacts.list_for(item_id) if r.get("file") == src.name), {})
+    source = src.with_name(Path(str(rec.get("source") or "")).name or src.name)
+    if source.suffix.lower() in artifacts.DOC_SOURCES and source.is_file():
+        with tempfile.TemporaryDirectory() as t:
+            clean = Path(t) / source.name
+            text = source.read_bytes().decode("utf-8", errors="replace")
+            clean.write_bytes(clean_urls(text).encode("utf-8"))
+            page = artifacts.to_html(clean, rec.get("title") or "")
+            res = artifacts.render_pdf(page, dest) if page else {}
+        if res.get("ok") and not has_tracking(artifacts.pdf_text(dest)):
+            return int(res.get("pages") or 0) or 1
+    try:
+        dest.unlink()
+    except OSError:
+        pass
+    return None
 
 
 def _media_key(it: dict) -> str:

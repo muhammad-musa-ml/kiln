@@ -314,18 +314,29 @@ python -m kiln.brain show <id>    # what it did for that item
 whitelist, so only named fields get out. My notes and my file paths stay
 here, and so does anything about how an answer was made.
 
+Links go out without their share and tracking parameters. The token
+Instagram puts on a link I share (stkn now, igsh and igshid before) ties the
+post to my account, and so does YouTube's si. On Instagram only img_index,
+the slide a link opens on, is kept; everywhere else a link keeps whatever
+says which page it is, like YouTube's v= and list=. A document the follow-up
+made is printed again from its cleaned source when its PDF carries a token.
+My own copy keeps every link as I saved it.
+
 `python scripts/audit_public.py` greps the build for anything that shouldn't
 be there and exits non-zero if it finds something. It reads the text inside
 every PDF as well, and fails if any eight words in a row of what I wrote
 next to a link turn up anywhere in the build. A note of five to seven words
 is looked for whole. One under five is not checked, because that few words
 turn up in ordinary text. It also fails if the page itself names an AI
-vendor or model; the items may, since a post can be about one.
+vendor or model; the items may, since a post can be about one. And it fails
+if any link, in any file or inside any PDF, still carries a share token.
 `scripts/test_audit.py` plants a private field name, long and short runs of
-my notes, a stray gate key, a whitelist that admits a private field, and a
-vendor named in the page, each in a throwaway copy, to make sure the audit
-still catches them. `scripts/publish_and_deploy.sh` runs the build and the
-audit and won't deploy if the audit fails.
+my notes, a stray gate key, a whitelist that admits a private field, a
+vendor named in the page, and share tokens in links and inside PDFs, each in
+a throwaway copy, to make sure the audit still catches them. It also runs
+the real publish step to check that what it lets out passes.
+`scripts/publish_and_deploy.sh` runs the build and the audit and won't
+deploy if the audit fails.
 
 ## Layout
 

@@ -6,6 +6,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from kiln import ingest  # noqa: E402
 
+# The doc as it really reads, except the share tokens after stkn=: those are
+# made up, since a real one ties the post to my account.
 REAL = (
     "# **links**\n\n"
     "  - **https://www.instagram.com/p/DdZQsecgKqv/?img\\_index=7\\&stkn=ZmFrZXRva2VuMDE=**  \n"

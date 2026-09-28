@@ -14,7 +14,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from . import config, slop, store
+from . import config, publish, slop, store
 
 JOBS_DIR = config.DATA / "jobs"
 PENDING = JOBS_DIR / "pending"
@@ -163,7 +163,9 @@ def build_prompt(item: dict) -> str:
     A("")
     A(slop.voice_rules())
     A("")
-    A(f"Source this came from: {item.get('url','')}")
+    # Without its share token: whatever the build agent is told can end up
+    # in the files of a project that gets published.
+    A(f"Source this came from: {publish.clean_urls(item.get('url',''))}")
     if proj.get("est_hours"):
         A(f"Rough size: about {proj['est_hours']} hours of work.")
     return "\n".join(L)
