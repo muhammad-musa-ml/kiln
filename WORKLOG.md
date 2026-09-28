@@ -45,6 +45,7 @@ models do what they can, and Claude does the rest automatically (D10 below).
 | D14 | The planner decides and Python runs the plan | Code checks every plan before anything runs: allowed models and effort levels only, known tool kits, no cycles, a cap on tasks. A prompt can be talked around; a check in code cannot. |
 | D15 | On the queue card, "all" means every project the card listed | A job queued after the card went up waits for the next card rather than riding in on an answer given before it existed. |
 | D16 | The published page names no AI vendor | It named none before this work. The follow-up is called "the follow-up" on the page; the README still names Claude where it is a dependency, as it already named its other providers. |
+| D17 | Share and tracking parameters come off every link at the publish step; the private database keeps every link as it was saved | Decided 2026-09-28 (Phase 9). Item ids already ignore `stkn`, `igsh` and `utm_` (`store.item_id`), so nothing depends on the token, and `data/` never leaves this machine. The publish step is where the whitelist and the audit already stand. On Instagram only `img_index` is kept, since the share token has had three names (igshid, igsh, stkn). |
 
 ---
 
@@ -536,13 +537,112 @@ on its own in bypass permissions mode, on `claude-opus-5` at `max` effort
       for the routine's folder and the app's `scheduled-tasks.json`. The app's
       log (`%LOCALAPPDATA%\Claude\Logs\main.log`) and the routine's
       `SKILL.md` (in the user profile) are where they look.
-- [ ] **8.3 Watch the next scheduled run start that way**, with nobody at the
+- [~] **8.3 Watch the next scheduled run start that way**, with nobody at the
       keyboard, and record what its session reports (`permissionMode`,
       `bypassChosenInApp`, `model`, `effort`). For the 09-26 09:00 run, the
       app log should show `[permissionMode] spawn <id> ... requested=bypassPermissions`
       and no `Emitted tool permission request` for that session, and its
       transcript should show `claude-opus-5` from the first turn. Effort is
       not in the app log; the folder file was proved at the request (8.1).
+      Seen on 2026-09-28 on the run that started at 23:19 on 09-27: the app
+      log has `requested=bypassPermissions effective=bypassPermissions`, and
+      all 315 of its replies came from `claude-opus-5`. That run was started
+      by hand, though (8.4), so a run the schedule starts on its own is still
+      to be seen; the next is due about 09:10 on 09-28.
+- [x] **8.4 Why no run happened on 09-26 or 09-27.** The app's log: the
+      routine was switched off at 03:41 on 09-26 (`updateScheduledTaskStatus
+      ... status=disabled`), and its saved instructions changed a minute
+      later. No session's tool call did either: every scheduled-task call in
+      any transcript since then is a read, which leaves the app's own
+      Routines screen. It was switched back on at 02:13 on 09-28. The 23:19
+      run on 09-27 has a `Confirmed task run` line and no `Spawning new
+      session for scheduled task` line, so it was started by hand. The
+      sync's health check had raised this as "a scheduled run did not
+      happen" (51 hours since the last finished pass).
+
+Found on 2026-09-28, while that run went on:
+- The sync launched at 23:33 died at 01:06 in its follow-up stage, exit 1,
+  no traceback. Not Kiln: at 01:06:09 a helper agent of another session,
+  stopping its own stuck process, ran `taskkill /F /IM python.exe`, which
+  ends every Python process on the machine. The sync was one; an IDE helper
+  that restarted 8 seconds later was another. The routine's task-ended
+  notice came 1.6 seconds after the kill.
+- The kill cost more than the run. `brain.sweep` deleted the answered
+  unreadable-items card before it saved `read_ok.json`, and only saved it
+  after the last read, so the owner's yes died with the process. Fixed: the
+  yes goes to disk before the card goes, with a test that kills a sync
+  during its reads (`test_brain.py`, 174 to 177, and the new checks fail on
+  the old order). Uncommitted, with Phase 9.
+- The routine's session rebuilt `read_ok.json` by hand from every pending
+  item. That covered `83c0848dd9e01da9`, whose first read failed at 23:43 on
+  09-27, after the yes had been given, so it was read by the follow-up
+  without a card asking. Nothing to undo.
+- The second sync, launched at 01:14, finished at 03:31 with exit 1. Its
+  leak audit failed on the word `pdf_path` inside a code snippet of the
+  ColPali carousel, so it pushed nothing. The routine's session then
+  narrowed that check to JSON keys (`6062364`, with
+  `scripts/test_audit_keys.py`), filed every item into a section
+  (`aed0849`), dropped the Do what facet (`326ddde`), and at 04:15 pushed
+  the site it had built with the old publish step (`423419e`): 25 lines of
+  `items.json` and two PDFs carrying share tokens. All four commits carry a
+  Co-Authored-By trailer, and they are public. See Q9 and Q10.
+
+## Phase 9: Share tokens out of the published library (added 2026-09-28)
+
+Every Instagram link the owner shares carries a share token (`stkn=`,
+before that `igsh` and `igshid`) that ties the post to the owner's account,
+and `publish.scrub` never touched a link's parameters. At `5ec81b4` the
+published `items.json` had 19 lines carrying one, the text of one follow-up
+PDF (`transformer-45-interview-questions.pdf`) had one, and
+`scripts/test_inbox_parse.py` held three real ones. All of it is in the
+public repo and its history.
+
+- [x] **9.1 Strip at the publish step** (`kiln/publish.py`). `clean_urls`
+      takes the share and tracking parameters off every link in every
+      published string: stkn, igsh, igshid, utm_*, the usual click ids
+      (fbclid, gclid, msclkid and a few more), and YouTube's si and pp.
+      Everything else stays byte for byte, v=, list= and img_index= among
+      it, and a link given as another link's parameter is cleaned by its own
+      host's rules, raw or percent-encoded. On Instagram it works the other
+      way round: only img_index is kept. Item links, which went out without
+      passing through `scrub` at all, now pass through it. A follow-up
+      document goes out cleaned too: text as text, and a PDF whose text
+      carries a token is printed again from its cleaned source, the owner's
+      own copy left as it was; one that cannot be cleaned stays off the site
+      and is named under `withheld` in the build's output. The build
+      prompt's source line is cleaned as well (`jobs.build_prompt`), since
+      what the build agent reads can end up in a project that is published.
+- [x] **9.2 The audit checks it** (`scripts/audit_public.py`, check 5e):
+      every text file and the text of every PDF, with a PDF's lines joined
+      because it breaks a long address anywhere; raw, as `&amp;`, and
+      percent-encoded; only a parameter's name is printed, never its value.
+      Run against the build at `5ec81b4` it fails with 20 hits in two files,
+      the count taken by hand.
+- [x] **9.3 Tests.** `test_audit.py` 10 to 28: 22 link shapes through the
+      real publish step, an item with a token in every kind of field, a
+      document printed by the real renderer and printed again clean, and
+      each kind planted raw (a link, `&amp;` in an answer, si, utm_, a token
+      percent-encoded inside another link, a PDF, and a PDF with the token
+      split across two lines). `test_ship.py` 70 to 71 for the build prompt.
+      `test_inbox_parse.py` now carries made-up tokens. Run against the code
+      without each fix, the new checks fail there: the audit without its
+      line join, the publish step without the link scrub or the PDF reprint,
+      the audit without the new check, and the build prompt as it was.
+- [x] **9.4 Rebuild, commit, push.** Rebuilt in the main checkout: 31
+      items, 0 lines of `items.json` with `stkn=`, 0 in any PDF's text, the
+      audit passed 34 checks, and all 14 suites green (the thirteen plus
+      `test_audit_keys.py`). Committed as `3b57239` (the strip and the
+      audit), `29616a2` (the consent fix) and `a9a7319` (the rebuilt site),
+      and pushed on the owner's yes (`423419e..a9a7319`). The live site
+      checked at 04:42: `items.json` has 31 items, no line with `stkn=` and
+      no share or tracking parameter anywhere, and none of its 11 documents
+      carries one in its text. It had served `423419e` until then, with 25
+      such lines and two such PDFs (the transformer one and
+      `kdp-coloring-book-setup.pdf`, made by that night's follow-up).
+- [!] **9.5 The history.** Tokens are in the history from the first commit
+      (`d44a5dc`) on, and 16 commits changed how many there were. Owner
+      decision (Q9): a rewrite is prepared in a separate copy and shown, and
+      force-pushed only on a second yes.
 
 ---
 
@@ -586,7 +686,17 @@ same job and more. Delete it?
 machine. It happened to me three times in this session and once in the
 2026-09-25 9am run. A PreToolUse hook in `~/.claude/settings.json` could refuse any Bash
 command that runs `python -`. That changes your Claude Code settings, so it
-waits for a yes.
+waits for a yes. On 2026-09-28 three sessions typed it in one night, and one
+of those stuck processes was stopped by a kill by process name that took the
+Kiln sync down with it (8.4, and the findings under it). The same hook could
+refuse a kill by name too (`taskkill /IM`, `Stop-Process -Name`).
+Answered 2026-09-28: yes to both. `~/.claude/hooks/shell-guard.py` is a
+PreToolUse hook on the Bash and PowerShell tools, in `~/.claude/settings.json`.
+It refuses Python reading its program from stdin (`python -`, or python with
+no script) and any kill by process name. Text in quotes, heredoc bodies and
+here-strings is not matched. 51 test commands behave as intended, among them
+the three that hung or killed that night, and it refused a real kill by name
+in both tools.
 
 **Q7. Answered 2026-09-26: max for the routine only, nothing else.** Done
 with a settings file in the routine's own folder (8.2). The question as it
@@ -601,6 +711,40 @@ step below max. Which do you want?
 **Q8. An Instagram session name in the public repo.** `scripts/probe_acquire.py`
 loads a saved Instaloader session by its account name, which is written out
 in the file. Remove it from the script? It stays in the git history either way.
+
+**Q9. The share tokens and the four trailers in the public history.** Once
+9.4 is pushed the tree is clean; the history is not. Two ways:
+(a) Leave it. Every token ever published stays readable in the history of a
+public repo (it had no forks on 2026-09-28), and the four commits in 8.4's
+findings keep their Co-Authored-By trailer.
+(b) Rewrite and force-push master: take the tokens out of every version of
+`items.json`, the PDFs and `test_inbox_parse.py`, and the trailers out of the
+four messages, with `git filter-repo` (not installed here). Every commit id
+changes, so every id this file cites has to be pointed at its new copy; the
+main checkout moves onto the new history, which needs nothing unpushed there
+and no sync running; GitHub can still serve an old commit by its id until it
+collects it (its guide on removing sensitive data says support can clear
+cached views); Vercel may keep earlier deployments reachable at their own
+addresses, worth checking in its dashboard; and anyone who already cloned or
+copied the repo keeps what they have. The tokens have been public since
+2026-09-23 either way: a rewrite limits what can be found from now on, and
+cannot recall what was already copied.
+Answered 2026-09-28: prepare the rewrite in a separate copy, show what it
+changes, and force-push only on a second yes.
+
+**Q10. Keeping the trailer off future commits.** The routine's session added
+Co-Authored-By because nothing it loads says not to, and Claude Code's docs
+say an instruction in a CLAUDE.md or memory outranks its default trailer.
+Two fixes, both yours to approve: `"attribution": false` in
+`~/.claude/settings.json`, which hides it in every session (it needs Claude
+Code 2.1.281 or later, the version that runs here), and a line in the
+routine's instructions. The sync's own site step already commits without one.
+Answered 2026-09-28: both. The settings file got the object form,
+`"attribution": {"commit": "", "pr": "", "sessionUrl": false}`, which hides
+the same things: the app here also carries Claude Code 2.1.280, which would
+reject `false` and skip the whole file. The routine's instructions now say
+every commit reads as the owner's own, and its stored model, mode and
+schedule were the same before and after.
 
 ---
 
@@ -748,3 +892,27 @@ edited in the main checkout, so it is always current where it is read.
   is a Windows package and that path is redirected into its package folder.
   The redirect was in front of me: the same files had shown up under both
   trees in a search. Corrected in 8.2.
+
+### 2026-09-28
+- Asked to take the Instagram share tokens out of the published data, and
+  to look at the routine, which was running.
+- Found why the 23:33 sync died, what the kill cost, and why no run
+  happened for two days (8.4 and the findings under it).
+- Built the fix on a branch in a worktree (`.claude/worktrees/share-tokens`,
+  branch `share-tokens`), so the running sync could not pick up half-made
+  files. All thirteen suites green before and after. A build from a backup
+  copy of the database, with the old and the new publish step side by side,
+  differed only in 26 strings losing `stkn` and two PDFs printed again.
+- The owner chose to land it before the sync's site step. The sync had
+  finished at 03:31, before the answer came, and the routine's session
+  pushed its own build at 04:15, before the landing. The fix was merged into
+  the main checkout by 04:17, on top of the routine's four commits, and the
+  site rebuilt: 0 lines with `stkn=`, the audit passing 34 checks, all 14
+  suites green (04:18 to 04:21).
+- On the owner's yes: committed and pushed (9.4), the live site checked
+  clean, the trailer setting and the routine's line added (Q10), and the
+  guard hook installed and proved (Q6). The history rewrite is being
+  prepared for a second yes (Q9).
+- Two slips of mine: a `python -` stub in a command, stopped by its process
+  id with the sync left running and nothing written; and an inline
+  `python -c` carrying quotes, which the house rule sends to a script file.
