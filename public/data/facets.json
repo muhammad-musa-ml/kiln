@@ -1,34 +1,115 @@
 {
- "total": 25,
+ "total": 31,
  "by_action": {
-  "redo": 10,
-  "apply": 1,
-  "build": 2,
-  "reference": 2,
-  "watch": 7,
-  "read": 1,
-  "learn": 2
+  "install": 3,
+  "read": 2,
+  "watch": 9,
+  "reference": 9,
+  "learn": 3,
+  "build": 4,
+  "apply": 1
  },
  "by_topic": {
+  "ai agents": 7,
+  "desktop app": 1,
+  "dictation software": 1,
+  "github": 2,
+  "mcp model context protocol": 1,
+  "open source software": 1,
+  "text-to-speech": 1,
+  "voice cloning": 1,
+  "ai career community job coaching pitch": 1,
+  "ai engineering interviews": 1,
+  "latency and cost optimization": 1,
+  "llm debugging": 1,
+  "production ml systems": 1,
+  "rag retrieval-augmented generation": 1,
+  "vector databases": 1,
+  "ai data-labelingrlhf jobs": 1,
+  "alignerr": 1,
+  "mercor": 1,
+  "outlier": 1,
+  "remote job opportunities": 1,
+  "resume template": 1,
+  "surge ai": 1,
+  "tech hiring without interviews": 1,
+  "ai certifications": 1,
+  "anthropic claude certification": 1,
+  "career advice": 2,
+  "instagram reel": 1,
+  "tier list": 1,
+  "browser automation": 1,
+  "claude code": 2,
+  "jev": 1,
+  "open-source repos": 1,
+  "postgres": 1,
+  "typesafe ai": 1,
+  "buildinpublic": 1,
+  "claude": 5,
+  "pre-launch checklist": 1,
+  "vibe coding": 1,
+  "web accessibility": 1,
+  "web security": 1,
+  "website seo": 1,
+  "ai development": 1,
+  "claude ai": 1,
+  "nocode": 1,
+  "ui ux": 1,
+  "web design": 1,
+  "ai productivity hack": 1,
+  "chatgpt plugins": 1,
+  "composio": 1,
+  "engagement bait": 1,
+  "job search": 1,
+  "agentic coding": 1,
+  "ai safety guardrails": 1,
+  "claude opus 5.5": 1,
+  "claude.md configuration": 1,
+  "llm effortreasoning settings": 1,
+  "prompt engineering": 2,
+  "subagents": 1,
+  "ai video generation": 1,
+  "ai-generated motion graphics": 1,
+  "claude skills": 1,
+  "hyperframes": 1,
+  "open source": 1,
+  "product launch marketing": 1,
+  "ai": 8,
+  "design": 1,
+  "motiongraphics": 1,
+  "tech": 1,
+  "genai": 1,
+  "knowledge management": 1,
+  "llm": 6,
+  "okf": 1,
+  "rag": 3,
+  "colpali": 1,
+  "colqwen2": 1,
+  "computer vision": 1,
+  "document ai": 1,
+  "multimodal ai": 1,
+  "ai engineering": 1,
+  "app security": 1,
+  "devops": 1,
+  "vibecoding": 1,
+  "web development": 2,
+  "guardrails": 1,
+  "model routing": 1,
+  "rag reranking": 1,
+  "system architecture": 1,
   "anthropic": 2,
   "artificial intelligence": 4,
-  "career advice": 1,
   "certifications": 1,
-  "claude": 3,
-  "ai agents": 3,
   "ai tools": 1,
   "automation": 3,
   "hermes agent": 1,
   "jarvis": 1,
-  "ai": 7,
   "obsidian": 1,
   "productivity": 3,
   "workflow": 1,
   "coding": 2,
-  "web development": 1,
   "data science": 2,
   "finetuning": 1,
-  "llm": 5,
   "machine learning": 7,
   "development": 1,
   "programming": 1,
@@ -37,12 +118,10 @@
   "neural networks": 2,
   "word embeddings": 1,
   "word2vec": 1,
-  "prompt engineering": 1,
   "large language models": 1,
   "transformers": 2,
   "data engineering": 1,
   "langchain": 1,
-  "rag": 1,
   "career transition": 1,
   "llms": 1,
   "deep learning": 1,
@@ -55,16 +134,148 @@
  "by_place": {},
  "sections": [
   {
+   "id": "agents-assistants",
+   "name": "Agents & Assistants",
+   "parent": "",
+   "count": 8
+  },
+  {
+   "id": "agents-assistants/frameworks-patterns",
+   "name": "Frameworks & Patterns",
+   "parent": "agents-assistants",
+   "count": 4
+  },
+  {
+   "id": "agents-assistants/jarvis-voice",
+   "name": "Jarvis & Voice",
+   "parent": "agents-assistants",
+   "count": 3
+  },
+  {
+   "id": "agents-assistants/mcp-connectors",
+   "name": "MCP & Connectors",
+   "parent": "agents-assistants",
+   "count": 1
+  },
+  {
+   "id": "claude-prompting",
+   "name": "Claude & Prompting",
+   "parent": "",
+   "count": 6
+  },
+  {
+   "id": "claude-prompting/claude-code-skills",
+   "name": "Claude Code & Skills",
+   "parent": "claude-prompting",
+   "count": 3
+  },
+  {
+   "id": "claude-prompting/model-comparisons",
+   "name": "Model Comparisons",
+   "parent": "claude-prompting",
+   "count": 1
+  },
+  {
+   "id": "claude-prompting/prompting",
+   "name": "Prompting",
+   "parent": "claude-prompting",
+   "count": 2
+  },
+  {
+   "id": "jobs-money",
+   "name": "Jobs & Money",
+   "parent": "",
+   "count": 6
+  },
+  {
+   "id": "jobs-money/certifications",
+   "name": "Certifications",
+   "parent": "jobs-money",
+   "count": 2
+  },
+  {
+   "id": "jobs-money/hiring-companies",
+   "name": "Hiring & Companies",
+   "parent": "jobs-money",
+   "count": 2
+  },
+  {
+   "id": "jobs-money/roadmaps-side-income",
+   "name": "Roadmaps & Side Income",
+   "parent": "jobs-money",
+   "count": 2
+  },
+  {
+   "id": "models-training",
+   "name": "Models & Training",
+   "parent": "",
+   "count": 4
+  },
+  {
+   "id": "models-training/fundamentals",
+   "name": "Fundamentals",
+   "parent": "models-training",
+   "count": 2
+  },
+  {
+   "id": "models-training/interview-questions",
+   "name": "Interview Questions",
+   "parent": "models-training",
+   "count": 1
+  },
+  {
+   "id": "models-training/training-tuning",
+   "name": "Training & Tuning",
+   "parent": "models-training",
+   "count": 1
+  },
+  {
+   "id": "retrieval-rag",
+   "name": "Retrieval & RAG",
+   "parent": "",
+   "count": 4
+  },
+  {
+   "id": "retrieval-rag/beyond-chunking",
+   "name": "Beyond Chunking",
+   "parent": "retrieval-rag",
+   "count": 2
+  },
+  {
+   "id": "retrieval-rag/rag-foundations",
+   "name": "RAG Foundations",
+   "parent": "retrieval-rag",
+   "count": 2
+  },
+  {
+   "id": "shipping-quality",
+   "name": "Shipping & Quality",
+   "parent": "",
+   "count": 3
+  },
+  {
+   "id": "shipping-quality/design",
+   "name": "Design",
+   "parent": "shipping-quality",
+   "count": 1
+  },
+  {
+   "id": "shipping-quality/security-launch",
+   "name": "Security & Launch",
+   "parent": "shipping-quality",
+   "count": 2
+  },
+  {
    "id": "to-watch",
    "name": "To Watch",
    "parent": "",
-   "count": 10
+   "count": 16
   },
   {
    "id": "to-watch/concept-explainers",
    "name": "Concept Explainers",
    "parent": "to-watch",
-   "count": 4
+   "count": 10
   },
   {
    "id": "to-watch/full-courses",
@@ -80,6 +291,6 @@
   }
  ],
  "by_status": {},
- "gated": 2,
- "dead_links": 3
+ "gated": 7,
+ "dead_links": 7
 }

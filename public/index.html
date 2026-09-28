@@ -247,7 +247,7 @@ ul.plain li::before{content:'';position:absolute;left:0;top:11px;width:5px;heigh
   .kv dd{margin-bottom:8px}
 }
 </style>
-<script>window.KILN_STATIC=true;window.KILN_BUILT="26 Sep 2026";</script></head>
+<script>window.KILN_STATIC=true;window.KILN_BUILT="28 Sep 2026";</script></head>
 <body>
 <div class="shell">
   <aside class="rail">
@@ -400,8 +400,10 @@ function renderFacets(){
         aria-pressed="${state.filters.section===s.id}">
         <span class="swatch"></span><span>${esc(s.name)}</span><span class="n">${s.count}</span>
       </button>`).join('') + `</div>` : '';
+  // No "Do what" group: it repeated the Sections tree almost item for item
+  // once sections were named after topics. The action facet is still carried
+  // on each item (the card badge) and still filterable from the URL.
   $('#facets').innerHTML = sections +
-    group('Do what', 'action', f.by_action) +
     group('Stage', 'status', f.by_status, 6) +
     group('About', 'topic', f.by_topic, 16) +
     group('Where', 'place', f.by_place, 8);
