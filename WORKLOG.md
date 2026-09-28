@@ -121,7 +121,7 @@ models do what they can, and Claude does the rest automatically (D10 below).
 - [x] **4.1 An artifact writer.** Kiln could not produce a document. The only
       PDF writer bound carousel images (`acquire.py:510`). Two instructions
       asked for a PDF and neither could ever have worked. Built in
-      `kiln/artifacts.py` (`a063985`): Markdown or HTML in, PDF out through
+      `kiln/artifacts.py` (`7d2c423`): Markdown or HTML in, PDF out through
       the Chromium that Playwright already installs, kept per item under
       `data/artifacts/<item id>/`, rendered with JavaScript off and the
       network blocked, so a document cannot fetch anything while it is
@@ -191,7 +191,7 @@ models do what they can, and Claude does the rest automatically (D10 below).
       the card listed, six a sync (`KILN_BRAIN_UNITS`). "wait" clears the
       card and gives the free models their three tries back. Written. Raised
       live by the sync that ended at 13:06, and refreshed on 2026-09-25 with
-      one plain reason per item (`3ea0f31`, `8624bd0`). The yes or wait is
+      one plain reason per item (`c3211ce`, `c9326e5`). The yes or wait is
       the owner's; the card is open with 11 items.
 
 ## Phase 5: Queue consent gate (supersedes the 9am rule)
@@ -227,7 +227,7 @@ from the old 9am rule to this one: 23/23.
       match the next item. Built: a `playbook` table. Lessons carrying a link
       are refused, so a post cannot plant one that rides into every later
       prompt. On 2026-09-25 it turned out the lessons were never read (see
-      "Found while building"); fixed in `8c88bd0` and `c5635bb`, and the 20
+      "Found while building"); fixed in `b8ed4ac` and `ae93054`, and the 20
       live lessons re-filed. From the live store the Jarvis tutorial now
       finds ten lessons and the job carousel six, where both found none. The
       free tier's search step reads through the same call; tested, not yet
@@ -262,7 +262,7 @@ Found while building, and fixed in the same change:
 - The `/media/` route checked containment with a text prefix, which lets a
   sibling folder pass.
 - A spent free-tier day was never recognised (found 2026-09-25, fixed in
-  `0816427`). Gemini says whether a 429 is the minute or the day only in the
+  `140f2a1`). Gemini says whether a 429 is the minute or the day only in the
   `quotaId` near the end of the body, at character 1021 of 1362 in the one
   measured, and `_post` cut the body to 400 characters before anything read
   it. So every item waited 4 + 9 + 20 seconds and asked four times on every
@@ -271,12 +271,12 @@ Found while building, and fixed in the same change:
   refused every call. The ledger also turned over at local midnight while
   Google's quota resets at midnight Pacific ("Requests per day (RPD) quotas
   reset at midnight Pacific time", ai.google.dev rate-limits page).
-- A spent day also used up a link's tries (fixed in `d498b7d`). A try was
+- A spent day also used up a link's tries (fixed in `4850b89`). A try was
   counted as the read started, so every sync inside a spent day took one
   of a link's three without any model reading anything. A read every model
   turned away for a spent day now gives its try back.
 - The follow-up could add to an item but never take a first pass back
-  (fixed in `f1a94d6` and `8473ea3`). Live example: a setup guide for a
+  (fixed in `936ec85` and `9dd395a`). Live example: a setup guide for a
   local assistant (`03d5b6b18a964e5d`) is tagged apply. The post names
   TypeSafe once, as the maker of the Jev classifier it uses, and the first
   pass went looking for a job there and filled the item with an
@@ -284,7 +284,7 @@ Found while building, and fixed in the same change:
   aside with a reason (kept on the item, off the page and the site) and
   correct the tag.
 - A later look that found nothing to add threw the earlier answer away
-  (found and fixed 2026-09-25, `3a9040c`). The `nothing_to_do` branch
+  (found and fixed 2026-09-25, `0234cbb`). The `nothing_to_do` branch
   wrote a fresh follow-up record over the old one. Live: re-running
   `03d5b6b18a964e5d` by hand took it from an answer with 15 sources and 2
   tasks to no answer at all. A sync can do the same, because an item read
@@ -296,13 +296,13 @@ Found while building, and fixed in the same change:
   the two job links off the item's link list and said so, while the job
   research itself stayed (25 mentions of TypeSafe in the stored research).
   The planner read that as already fixed. It is now told an earlier answer
-  is only what it said, and shown what was really set aside (`3a9040c`).
+  is only what it said, and shown what was really set aside (`0234cbb`).
 - The card asking to let Claude read the unreadable items printed each
   item's raw HTTP error body, JSON and all. It now gives one plain line per
   item from what the models answered: out of quota for the day, overloaded,
-  or a read below the floor (`3ea0f31`).
+  or a read below the floor (`c3211ce`).
 - The playbook was written but never read (found and fixed 2026-09-25,
-  `8c88bd0`, `c5635bb`). `lessons_for` matches the next item by its kind
+  `b8ed4ac`, `ae93054`). `lessons_for` matches the next item by its kind
   and topic tags, but each lesson was filed under the model's own label
   for it ("pitfall", "tip") and its own topic words, so an item with no
   instruction matched nothing: the Jarvis tutorial got none of 20 lessons,
@@ -329,12 +329,12 @@ Found while building, and fixed in the same change:
         metadata (no quota) at most every five minutes.
       - `test_daily_commit.py` asserted the old 9am build rule. Re-keyed.
 
-      Then a separate reviewer read everything at `8fd7045` and found 45 live
+      Then a separate reviewer read everything at `5d6bcac` and found 45 live
       contradictions, six of them bugs where the code did something other than
       what a card or a doc promised. All 45 are fixed on the branch
-      (`60ab305` for the code, then the README, this file and the routine
+      (`aec248f` for the code, then the README, this file and the routine
       prompt). Each of the six bugs has a test, and each of those tests was
-      run against the old code (`8fd7045`) and fails there; the "ignore" one
+      run against the old code (`5d6bcac`) and fails there; the "ignore" one
       by crashing, because the card key it needs did not exist yet:
       - A Claude read left the item marked `redo`, so it was never followed
         up again.
@@ -358,37 +358,37 @@ Found while building, and fixed in the same change:
       calls; the gate box on the site showed an empty line; and a dozen
       comments, docstrings and README lines described code that had changed.
 
-      A second reviewer then read the branch at `8473ea3`. It confirmed all
+      A second reviewer then read the branch at `9dd395a`. It confirmed all
       45 fixed, with the file and line for each, and found 18 more, most of
       them run to prove them. Fixed, each with a test that was run against
       the code before it and fails there, except the published page's health
       check, which has no test and was checked by reading the code:
       - A Claude read of a reel took its frames from the sound-only file and
-        got none (`8f2c7d0`).
+        got none (`b32a150`).
       - Setting research aside left its install preview, citations, the
-        links it had added (published) and the search entry (`f69261e`).
+        links it had added (published) and the search entry (`cac025f`).
       - "skip" on a failing build lost to an older card answered "claude"
-        (`b55b600`).
+        (`b418b88`).
       - A card answered from a terminal needed an id it never printed, and
-        stored "1" as the answer (`4d944f7`).
+        stored "1" as the answer (`666799d`).
       - `brain run <id>`, which the health check recommends, could not read
-        an item no free model could (`3cd4309`).
+        an item no free model could (`f080be3`).
       - A CI run still going after ten minutes was printed as a failure
-        (`6f86daa`).
+        (`c9e221e`).
       - Tests one folder down counted as no tests, so a project went out
-        untested (`2e1a52f`).
+        untested (`0703f71`).
       - Sixteen of eighteen slides were sent while the prompt said to cover
-        all eighteen (`8c22dcb`).
+        all eighteen (`efc28c0`).
       - A Claude read dropped the links it found and the comment gate, and the
-        gate's keyword swallowed the next word ("PDF below") (`731f72b`).
+        gate's keyword swallowed the next word ("PDF below") (`90d5fae`).
       - The page named the model providers, and its health check threw on the
-        published copy every thirty seconds (`2d8a3c0`).
+        published copy every thirty seconds (`fef25f0`).
       - A link read alone on its line never joined the line's group
-        (`60e75b8`).
+        (`8f82a15`).
       - A built project's own ship.py or slop.py skipped the writing gate
-        (`79169cf`).
-      - The follow-up printout cut item ids and only counted files (`4a5b7b9`).
-      - The rest were words, fixed in `8a82dbe` and in this file.
+        (`0cf70c8`).
+      - The follow-up printout cut item ids and only counted files (`a4177f3`).
+      - The rest were words, fixed in `6b152b7` and in this file.
       Two of its points are questions instead: thinking for reading (Q2) and
       a session name in a probe script (Q8).
 - [~] **7.2 Re-fire the five stuck reels** and confirm they leave `inbox` with
@@ -411,8 +411,8 @@ Found while building, and fixed in the same change:
         midnight Pacific, or a yes on the card asking whether Claude should
         read them.
 - [x] **7.3 All suites green**, site rebuilt, audit clean, pushed. On
-      2026-09-25: all twelve suites green in the main checkout at `c5635bb`;
-      the site rebuilt and pushed (`6123b9e`) with the audit passing 33
+      2026-09-25: all twelve suites green in the main checkout at `ae93054`;
+      the site rebuilt and pushed (`19297dc`) with the audit passing 33
       checks. The live site then served this build: 25 items, no provider
       name in the page, no console errors, 375 pixels wide on a phone with
       nothing overflowing, the carousel's PDF downloading, and the Jarvis
@@ -520,7 +520,7 @@ on its own in bypass permissions mode, on `claude-opus-5` at `max` effort
         `.claude\settings.local.json`, beside the allow list already there.
         Only a session started in that folder reads it, and only the routine
         starts there. A call from that folder asked for max.
-      - Kiln no longer passes that variable on (`3bb3360`): the planner, the
+      - Kiln no longer passes that variable on (`7fe42af`): the planner, the
         workers, builds, the reviewer and the readme writer each run at the
         effort they are given. Shown on the real launcher: `--effort low` with
         the variable set now asks for low.
@@ -580,10 +580,10 @@ Found on 2026-09-28, while that run went on:
 - The second sync, launched at 01:14, finished at 03:31 with exit 1. Its
   leak audit failed on the word `pdf_path` inside a code snippet of the
   ColPali carousel, so it pushed nothing. The routine's session then
-  narrowed that check to JSON keys (`6062364`, with
+  narrowed that check to JSON keys (`bcf70d6`, with
   `scripts/test_audit_keys.py`), filed every item into a section
-  (`aed0849`), dropped the Do what facet (`326ddde`), and at 04:15 pushed
-  the site it had built with the old publish step (`423419e`): 25 lines of
+  (`a43cc93`), dropped the Do what facet (`1ff15ba`), and at 04:15 pushed
+  the site it had built with the old publish step (`185d742`): 25 lines of
   `items.json` and two PDFs carrying share tokens. All four commits carry a
   Co-Authored-By trailer, and they are public. See Q9 and Q10.
 
@@ -591,7 +591,7 @@ Found on 2026-09-28, while that run went on:
 
 Every Instagram link the owner shares carries a share token (`stkn=`,
 before that `igsh` and `igshid`) that ties the post to the owner's account,
-and `publish.scrub` never touched a link's parameters. At `5ec81b4` the
+and `publish.scrub` never touched a link's parameters. At `f4d03cc` the
 published `items.json` had 19 lines carrying one, the text of one follow-up
 PDF (`transformer-45-interview-questions.pdf`) had one, and
 `scripts/test_inbox_parse.py` held three real ones. All of it is in the
@@ -616,7 +616,7 @@ public repo and its history.
       every text file and the text of every PDF, with a PDF's lines joined
       because it breaks a long address anywhere; raw, as `&amp;`, and
       percent-encoded; only a parameter's name is printed, never its value.
-      Run against the build at `5ec81b4` it fails with 20 hits in two files,
+      Run against the build at `f4d03cc` it fails with 20 hits in two files,
       the count taken by hand.
 - [x] **9.3 Tests.** `test_audit.py` 10 to 28: 22 link shapes through the
       real publish step, an item with a token in every kind of field, a
@@ -631,18 +631,25 @@ public repo and its history.
 - [x] **9.4 Rebuild, commit, push.** Rebuilt in the main checkout: 31
       items, 0 lines of `items.json` with `stkn=`, 0 in any PDF's text, the
       audit passed 34 checks, and all 14 suites green (the thirteen plus
-      `test_audit_keys.py`). Committed as `3b57239` (the strip and the
-      audit), `29616a2` (the consent fix) and `a9a7319` (the rebuilt site),
+      `test_audit_keys.py`). Committed as `12ee059` (the strip and the
+      audit), `215ecd5` (the consent fix) and `ab1cf75` (the rebuilt site),
       and pushed on the owner's yes (`423419e..a9a7319`). The live site
       checked at 04:42: `items.json` has 31 items, no line with `stkn=` and
       no share or tracking parameter anywhere, and none of its 11 documents
-      carries one in its text. It had served `423419e` until then, with 25
+      carries one in its text. It had served `185d742` until then, with 25
       such lines and two such PDFs (the transformer one and
       `kdp-coloring-book-setup.pdf`, made by that night's follow-up).
-- [!] **9.5 The history.** Tokens are in the history from the first commit
-      (`d44a5dc`) on, and 16 commits changed how many there were. Owner
-      decision (Q9): a rewrite is prepared in a separate copy and shown, and
-      force-pushed only on a second yes.
+- [x] **9.5 The history.** 78 of the 83 commits carried a file with a share
+      token, from the fourth (`8b8c441`, 2026-09-23 05:46) on, and four
+      carried a Co-Authored-By trailer. On the owner's second yes (Q9) the
+      history was rewritten with git's own filter-branch: the tokens came out
+      of the 14 versions of `items.json` that held them and nothing else in
+      them changed, the inbox test's two versions got the made-up tokens, the
+      two PDFs were swapped for their clean reprints, and the four trailers
+      were dropped. Every commit kept its author, date and subject, the newest
+      tree is the same as before, and a scan of every file in every commit
+      finds no token. The ids of 80 of the 83 commits changed (every one from
+      the fourth on), and each id in this file now names the rewritten copy.
 
 ---
 
@@ -720,7 +727,8 @@ findings keep their Co-Authored-By trailer.
 (b) Rewrite and force-push master: take the tokens out of every version of
 `items.json`, the PDFs and `test_inbox_parse.py`, and the trailers out of the
 four messages, with `git filter-repo` (not installed here). Every commit id
-changes, so every id this file cites has to be pointed at its new copy; the
+from the first token on changes, so the ids this file cites have to be
+pointed at their new copies; the
 main checkout moves onto the new history, which needs nothing unpushed there
 and no sync running; GitHub can still serve an old commit by its id until it
 collects it (its guide on removing sensitive data says support can clear
@@ -730,7 +738,7 @@ copied the repo keeps what they have. The tokens have been public since
 2026-09-23 either way: a rewrite limits what can be found from now on, and
 cannot recall what was already copied.
 Answered 2026-09-28: prepare the rewrite in a separate copy, show what it
-changes, and force-push only on a second yes.
+changes, and force-push only on a second yes. Done on the second yes (9.5).
 
 **Q10. Keeping the trailer off future commits.** The routine's session added
 Co-Authored-By because nothing it loads says not to, and Claude Code's docs
@@ -764,8 +772,8 @@ edited in the main checkout, so it is always current where it is read.
 - Diagnosed the run. Fourteen issues found across acquisition, instruction
   handling, model policy and architecture. Reel fix proven by hand end to end.
 - This file created. Work starting at Phase 1.
-- Phases 1 to 3 finished and committed (`fbef5dd`, `b2d6fdc`, `20d5689`,
-  `fd0a8be`).
+- Phases 1 to 3 finished and committed (`def75de`, `0a81cf8`, `ba3f81c`,
+  `c2ccaf7`).
 
 ### 2026-09-25
 - Pushed the four commits from the 24th.
@@ -814,16 +822,16 @@ edited in the main checkout, so it is always current where it is read.
   were each caught by the test meant to catch them.
 - A separate security and correctness review, and the coherence review in
   7.1. Security fixes: documents a model wrote are served sandboxed and never
-  published as HTML (`8fd7045`), and the local server answers only to this
-  machine's own names (`5ddc110`). All 45 coherence findings fixed (`60ab305`, `ef49bf8`).
+  published as HTML (`5d6bcac`), and the local server answers only to this
+  machine's own names (`7ab2da7`). All 45 coherence findings fixed (`aec248f`, `bcff86e`).
   Two new suites: `test_audit.py` plants each kind of leak in a throwaway
   copy and runs the real audit; `test_server.py` runs a real server. Twelve
   suites now, all green on the branch and again in the main checkout.
 - The 9am scheduled sync ran the old code (09:23 to 10:05). Gemini answered
   503 (overloaded) and then 429 on every model; the free quota was spent for
   the day by 11:00. Found and fixed from that: the daily-quota bug in
-  "Found while building" (`0816427`).
-- Merged the branch into master (fast forward to `ef49bf8`). The live
+  "Found while building" (`140f2a1`).
+- Merged the branch into master (fast forward to `bcff86e`). The live
   registry dropped the retired research list on first load (backed up
   first). The group tag on `4091b1ffc3d48ceb` was put back, so "to watch"
   has all seven again (database backed up first).
@@ -838,7 +846,7 @@ edited in the main checkout, so it is always current where it is read.
   boxes, "tick at least one first", the stored answer read back by
   `consented()` as exactly the ticked job). At phone width the page was 460
   pixels wide on a 375 pixel screen because a failed item's link title could
-  not wrap; fixed in `5985131` and measured at 375 after.
+  not wrap; fixed in `058fc06` and measured at 375 after.
 - One slip of mine: I typed `python -` in a command, which hangs on this
   machine. Stopped within the minute; its output was 10 bytes and nothing
   was written.
@@ -846,10 +854,10 @@ edited in the main checkout, so it is always current where it is read.
   follow-up 4719 s). The five reels were fetched again and still could not
   be read, the quota being spent. The follow-up worked on six units, the
   carousel among them (7.2). Site rebuilt, audit passed 32 checks, pushed
-  (`68d2300`), each of those printed exit 0; the printout does not carry
+  (`361836b`), each of those printed exit 0; the printout does not carry
   the run's own exit code. It raised the card for the 11 unreadable items.
 - Rebased the branch onto that site commit and fast-forwarded master twice
-  (`3ea0f31`, then `3a9040c`), all twelve suites green in the main checkout
+  (`c3211ce`, then `0234cbb`), all twelve suites green in the main checkout
   each time. The rebase gave the branch's commits new ids, so every id in
   this file was pointed at its rebased copy by script and checked against
   master (21 ids, 24 places).
@@ -858,16 +866,16 @@ edited in the main checkout, so it is always current where it is read.
   said Opus 5 starts at high when his settings make it start at medium.
 - Re-ran the Jarvis item's follow-up by hand to set its wrong research
   aside. The first re-run (13:17) found nothing to do and exposed the two
-  bugs in "Found while building". The second (13:25, on `3a9040c`) set the
+  bugs in "Found while building". The second (13:25, on `0234cbb`) set the
   research aside with its reason, corrected the tag from apply to build,
   and answered with 19 sources: the repo sits in a paid community, Jev
   checked claim by claim, and what running the stack takes.
-- Published and pushed the site (`6123b9e`) and checked the live copy
+- Published and pushed the site (`19297dc`) and checked the live copy
   (7.3). Refreshed the unreadable-items card the old code had written with
-  raw error bodies: 11 items, one plain reason each (`8624bd0` also makes
+  raw error bodies: 11 items, one plain reason each (`c9326e5` also makes
   its opening name overloaded models).
 - Found the playbook never read, fixed it, and re-filed the 20 live
-  lessons (`8c88bd0`, `c5635bb`), store backed up first.
+  lessons (`b8ed4ac`, `ae93054`), store backed up first.
 - Two more slips of mine: a time (13:45) and a backup's name (1340) written
   without reading the clock, which said 13:27; both corrected. And two
   inline `python -c` commands with quotes, which the house rule sends to a
@@ -880,11 +888,11 @@ edited in the main checkout, so it is always current where it is read.
   when Claude reads it, since Claude sees only frames) and
   `scripts/test_listen.py`, now 17/17. It carried a Co-Authored-By trailer;
   the message was reworded to drop it before anything was pushed (same
-  tree), and it went out as `f4fa733`. The README's Needs now says what it
+  tree), and it went out as `b4168f7`. The README's Needs now says what it
   wants.
 - He asked for max effort on the routine only. Measured where effort can
   be read (the request), found the inherited variable outranks `--effort`,
-  fixed Kiln so its workers keep their own (`3bb3360`), gave the routine's
+  fixed Kiln so its workers keep their own (`7fe42af`), gave the routine's
   folder the setting, and stopped its runs calling `change_directory`
   (8.2). Thirteen suites green before and after, pushed.
 - A slip of mine: I gave him the routine folder's path as the app sees it
@@ -911,8 +919,12 @@ edited in the main checkout, so it is always current where it is read.
   suites green (04:18 to 04:21).
 - On the owner's yes: committed and pushed (9.4), the live site checked
   clean, the trailer setting and the routine's line added (Q10), and the
-  guard hook installed and proved (Q6). The history rewrite is being
-  prepared for a second yes (Q9).
+  guard hook installed and proved (Q6). On a second yes, the history was
+  rewritten and force-pushed (9.5).
+- A slip of mine in this file: 9.5 first said the tokens went back to the
+  first commit and that 16 commits changed their count. That came from a
+  search that also matched the code naming the parameter; the scan of every
+  stored file says 78 of 83, from the fourth commit on.
 - Two slips of mine: a `python -` stub in a command, stopped by its process
   id with the sync left running and nothing written; and an inline
   `python -c` carrying quotes, which the house rule sends to a script file.
