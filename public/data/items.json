@@ -3,41 +3,876 @@
   {
    "id": "99cc8ebb69886d63",
    "url": "https://www.instagram.com/reel/Ddp1VsxtoEw/",
-   "kind": "other",
-   "action": "redo",
-   "title": "Was he onto something or on something ? Ep6 \n\n#sidehustle #makemoney #",
+   "kind": "tutorial",
+   "action": "read",
+   "title": "Creating and Selling AI Coloring Books on Amazon KDP",
+   "hook": "An episode of a series testing viral side hustles, made as paid Higgsfield promotion (#higgsfieldpartner). Its prompt is gated behind \"comment Astra\", and at KDP's real royalty the $10k/month coloring-book claim works out to about $3,660.",
+   "summary": "An episode of a series testing viral money claims. The creator, a paid Higgsfield partner, shows a $9.99 kids' coloring book on Amazon, says to screenshot it into ChatGPT running GPT-6 Astra with the Higgsfield plugin plus a prompt, and repeats the claim that 33 sales a day make $10,000 a month. The prompt is never shown; it is offered to viewers who save, follow and comment \"Astra\". The tools exist as named and Higgsfield allows selling the output, but KDP pays about $3.69 a copy at $9.99 and allows only 2 new paperback titles a week.",
    "owner": "larpinleon",
    "posted": "September 23, 2026",
    "slide_count": 0,
    "links_checked": "28 Sep 2026",
-   "note": {},
+   "note": {
+    "sections": [
+     {
+      "heading": "Viral Claim Analysis",
+      "detail": "A podcast clip claims selling 33 AI books daily at $10 each generates $10,000 per month."
+     },
+     {
+      "heading": "Product Research",
+      "detail": "Search Amazon for popular children's coloring books selling at $9.99 with over 12,000 sales."
+     },
+     {
+      "heading": "AI Generation with ChatGPT & Higgsfield",
+      "detail": "Upload a screenshot of the target book to ChatGPT using the Higgsfield plugin and a prompt specifying outline styles and themes to generate vector coloring pages."
+     },
+     {
+      "heading": "Fulfillment & Execution",
+      "detail": "Upload generated files to Amazon KDP, which handles print-on-demand and shipping upon sale."
+     }
+    ],
+    "onscreen_text": [
+     "that only",
+     "of people",
+     "age of 21",
+     "$10,000",
+     "bro",
+     "21 again",
+     "$10,000",
+     "so easy",
+     "you know how?",
+     "Amazon AI books",
+     "dude",
+     "know you can",
+     "AI books",
+     "$10 each",
+     "33 a day",
+     "what is that?",
+     "$330",
+     "a day",
+     "multiply that by",
+     "I'll tell you",
+     "a month",
+     "Is he onto something? 🧑‍🔬",
+     "on something? 🍃 ep 2",
+     "Let's get it!",
+     "and then find",
+     "colouring book",
+     "for $9.99",
+     "over 12,000 units.",
+     "Do the math.",
+     "a lot of money.",
+     "take a screenshot",
+     "Go to",
+     "Make sure",
+     "GPT6 Astra",
+     "Go to plugins",
+     "Higgsfield MCP",
+     "Now paste in",
+     "exact prompt",
+     "a fully done",
+     "ready to print.",
+     "Amazon handles",
+     "and shipping",
+     "for you.",
+     "cause it is",
+     "that easy.",
+     "Comment \"Astra\""
+    ],
+    "entities": [
+     {
+      "name": "Amazon",
+      "type": "company",
+      "why": "E-commerce platform used to list and fulfill print-on-demand books."
+     },
+     {
+      "name": "ChatGPT",
+      "type": "tool",
+      "why": "AI chat platform used with custom plugins to create content."
+     },
+     {
+      "name": "Higgsfield",
+      "type": "tool",
+      "why": "AI model plugin integrated into ChatGPT to generate coloring illustrations."
+     }
+    ],
+    "topics": [
+     "side hustle",
+     "amazon kdp",
+     "chatgpt",
+     "ai tools",
+     "ecommerce"
+    ],
+    "spoken_transcript": "Bro, you know that only 8% of people under the age of 21 have $10,000 to their name? Bro, if I was 21 again, I'd make $10,000 so easy. You know how? Amazon AI books, dude. People don't even know you can sell AI books on Amazon, $10 each AI book. 33 a day, what is that? I'll tell you, it's $330 a day. Now you multiply that by 30 days, what is that? I'll tell you again, it's 10k a month. Welcome back to Is He Onto Something or On Something, a series where I test viral side hustles to see if they actually work so you don't have to. Let's get it. Go to Amazon and then find a kids coloring book just like this. They're selling it for $9.99 and have sold over 12,000 units. Do the math, and that's a lot of money. So now take a screenshot of the listing, go to ChatGPT. Make sure you're using GPT-6 Astra, go to plugins, and connect the Higgsfield MCP plugin. Now paste in that screenshot with this exact prompt, and it'll give you a fully done coloring book ready to print. So it turns out Amazon handles all the printing and shipping of your books for you. So I guess he was onto something 'cause it is that easy. I'm gonna go upload 15 books. If you want the prompts that I used, then save this video, follow me, and comment the word Astra and I'll send it to you.",
+    "open_questions": [
+     "What exact KDP formatting standards must be met before uploading?",
+     "How are copyright and AI disclosure policies handled on Amazon KDP?"
+    ]
+   },
    "enrich": {},
    "tags": {
     "action": [
-     "redo"
+     "read"
+    ],
+    "section": [
+     "jobs-money/print-on-demand-publishing",
+     "jobs-money/roadmaps-side-income",
+     "media-generation/image-generation"
+    ],
+    "topic": [
+     "ai tools",
+     "amazon kdp",
+     "chatgpt",
+     "ecommerce",
+     "side hustle"
     ]
    },
-   "links": [],
+   "followup": {
+    "answer_html": "<p><strong>Verdict: the tools are real, but the money is not.</strong> Every product the reel names exists under that name, and Higgsfield's terms allow you to sell the images. The income math is wrong. At $9.99, KDP pays the publisher about $3.69 a copy, not $10. So 33 sales a day nets about $3,657 a month, not the $9,900 the video claims. Hitting $10,000 would take about 90 sales a day, every day, before any costs. &quot;I'm gonna go upload 15 books&quot; also can't happen in one sitting: KDP lets you create only 2 new titles per format per week.</p>\n<h3>KDP economics</h3>\n<p>KDP's formula, from <a href=\"https://kdp.amazon.com/en_US/help/topic/G201834330\">Paperback Royalty</a>: <strong>royalty = (royalty rate x list price) - printing cost</strong>.</p>\n<ol>\n<li>Royalty rate on Amazon.com: 60% at a list price of $9.99 or more, 50% at $9.98 or less.</li>\n<li>Printing cost for black ink in the US, from <a href=\"https://kdp.amazon.com/en_US/help/topic/G201834340\">Paperback Printing Cost</a>: a flat $2.30 for 24 to 110 pages. Above 110 pages it is $1.00 plus $0.012 a page. A 30-, 60- or 100-page coloring book all cost $2.30 to print.</li>\n<li>Per copy at $9.99: (0.60 x $9.99) - $2.30 = $5.994 - $2.30 = <strong>$3.69</strong>.</li>\n<li>The video's math: 33 a day x $10 x 30 days = $9,900. KDP's math: 33 x 30 = 990 copies x $3.694 = <strong>$3,657 a month</strong>.</li>\n<li>To reach $10,000 a month at this price: $10,000 / 30 / $3.694 = about <strong>90 copies a day</strong>.</li>\n<li>The on-screen Google sum, &quot;$9.99 x 12,300 = $122,877&quot;, adds up list prices, not what the publisher is paid. At the real royalty, 12,300 copies pays about $45,400. The listing shows a publication date of May 22, 2024, so if the sales figure is true, that is roughly $1,600 a month over about 28 months. KDP does not publish per-book sales, so the 12,000-unit claim can't be checked.</li>\n<li>All of these are royalty figures before ad spend, returns, and the ChatGPT and Higgsfield subscriptions. The minimum list price at these page counts is $2.30 / 0.50 = $4.60 (<a href=\"https://kdp.amazon.com/en_US/help/topic/G8BKPU9AGVZSF9QF\">Print Book Pricing</a>), so the $9.99 price itself is allowed.</li>\n</ol>\n<h3>Tool chain, claim by claim</h3>\n<ol>\n<li><strong>&quot;GPT-6 Astra&quot;: real.</strong> OpenAI's <a href=\"https://developers.openai.com/api/docs/models\">model list</a> names GPT-6 Astra (<code>gpt-6-astra</code>) as its most capable current model. The reel only shows a browser tab titled &quot;GPT-6 Astra: A new g...&quot;. It never shows ChatGPT's model picker.</li>\n<li><strong>&quot;Go to plugins&quot;: real.</strong> ChatGPT has a current feature called <a href=\"https://help.openai.com/en/articles/20001256-plugins-in-chatgpt-and-codex\">Plugins</a>. Connectors were renamed &quot;apps&quot; in December 2025. The free ChatGPT plan can't connect apps (<a href=\"https://help.openai.com/en/articles/11487775-connectors-in-chatgpt\">Connectors in ChatGPT</a>), and the Plugins page gives no single plan cutoff. Only excerpts of these two OpenAI help pages could be read.</li>\n<li><strong>&quot;Higgsfield MCP plugin&quot;: real and official.</strong> Higgsfield publishes a <a href=\"https://higgsfield.ai/chatgpt-plugin\">Higgsfield Plugin for ChatGPT</a>, also called <a href=\"https://higgsfield.ai/mcp\">Higgsfield MCP</a>. To set it up, open ChatGPT's Plugins Directory, or go to higgsfield.ai/mcp and choose &quot;Add Higgsfield plugin&quot;. Sign in to Higgsfield, authorize, then call it in chat with @Higgsfield (<a href=\"https://higgsfield.ai/creator-hub/help-center/integrations/how-do-i-connect-higgsfield-to-ai-agent\">setup guide</a>).</li>\n<li><strong>Cost: a paid Higgsfield plan plus a paid ChatGPT plan.</strong> Higgsfield's help center says the plugin needs an &quot;active paid subscription&quot;. The only free route is a 24-hour trial that turns into a billed Plus monthly plan unless you cancel it (<a href=\"https://higgsfield.ai/blog/unlimited-mcp\">Higgsfield blog</a>). Higgsfield's <a href=\"https://higgsfield.ai/pricing\">pricing page</a> builds its table with scripts, so plan prices could not be read from it. Third-party price lists contradict each other and are not used here.</li>\n<li><strong>Selling the images: allowed.</strong> Higgsfield's <a href=\"https://higgsfield.ai/terms-of-use-agreement\">Terms of Use</a> say the company &quot;does not claim ownership of any of your Inputs or Outputs, nor does it restrict your commercial use of Outputs&quot;. Its <a href=\"https://higgsfield.ai/creator-hub/help-center/account/who-owns-my-generations-and-can-i-use-them-commercially\">help center</a> adds that this does not depend on your plan, but free-tier downloads may be watermarked. The catch: your uploads and outputs may be used to train Higgsfield's models unless you are on Enterprise or delete them. In this workflow, that includes the screenshot of someone else's bestselling book.</li>\n</ol>\n<h3>KDP rules the plan as filmed runs into</h3>\n<ol>\n<li><strong>AI disclosure.</strong> KDP's <a href=\"https://kdp.amazon.com/en_US/help/topic/G200672390\">Content Guidelines</a> require you to declare AI-generated text, images or translations when you publish, using a checkbox in the publishing flow. Pages generated from a prompt count as &quot;AI-generated&quot;, not &quot;AI-assisted&quot;.</li>\n<li><strong>2 new titles per format per week</strong> (<a href=\"https://kdp.amazon.com/en_US/help/topic/G202172740\">Create a Book</a>). Fifteen paperbacks take at least 8 weeks to create. KDP's own pages describe no exception process.</li>\n<li><strong>Duplicate content.</strong> The <a href=\"https://kdp.amazon.com/help?topicId=G200952510\">Guide to Kindle Content Quality</a> bars content &quot;excessively reused, recycled, or repeated within or across books&quot; and content &quot;not significantly different from content in another book&quot;. The guide is written for Kindle ebooks, but it is KDP's clearest statement on near-duplicates. Fifteen books made from one prompt, each copying a bestseller, fit the pattern it describes.</li>\n<li><strong>Disappointing or misleading books.</strong> The Content Guidelines disallow content &quot;typically disappointing to customers&quot; and descriptions that misrepresent the book.</li>\n<li><strong>Rights.</strong> You must hold the publishing rights to what you upload (<a href=\"https://kdp.amazon.com/en_US/help/topic/G200672400\">IP FAQ</a>). KDP says nothing directly about generating pages from a screenshot of a competitor's book. The responsibility sits with the publisher, including for AI content.</li>\n<li><strong>Not a low-content book.</strong> KDP's <a href=\"https://kdp.amazon.com/en_US/help/topic/GGE5T76TWKA85DJM\">Low-Content Books</a> page explicitly excludes coloring books, so the normal ISBN and distribution rules apply.</li>\n</ol>\n",
+    "answered": "not asked",
+    "sources": [
+     {
+      "url": "https://kdp.amazon.com/en_US/help/topic/G201834330",
+      "title": "KDP: Paperback Royalty"
+     },
+     {
+      "url": "https://kdp.amazon.com/en_US/help/topic/G201834340",
+      "title": "KDP: Paperback Printing Cost"
+     },
+     {
+      "url": "https://kdp.amazon.com/en_US/help/topic/G8BKPU9AGVZSF9QF",
+      "title": "KDP: Print Book Pricing Page"
+     },
+     {
+      "url": "https://kdp.amazon.com/en_US/help/topic/G200672390",
+      "title": "KDP: Content Guidelines"
+     },
+     {
+      "url": "https://kdp.amazon.com/en_US/help/topic/G202172740",
+      "title": "KDP: Create a Book (title creation limit)"
+     },
+     {
+      "url": "https://kdp.amazon.com/en_US/help/topic/GGE5T76TWKA85DJM",
+      "title": "KDP: Low-Content Books"
+     },
+     {
+      "url": "https://kdp.amazon.com/help?topicId=G200952510",
+      "title": "KDP: Guide to Kindle Content Quality"
+     },
+     {
+      "url": "https://kdp.amazon.com/en_US/help/topic/G200672400",
+      "title": "KDP: Intellectual Property Rights FAQ"
+     },
+     {
+      "url": "https://kdp.amazon.com/en_US/help/topic/GVBQ3CMEQW3W2VL6",
+      "title": "KDP: Set Trim Size, Bleed, and Margins"
+     },
+     {
+      "url": "https://kdp.amazon.com/en_US/help/topic/G201857950",
+      "title": "KDP: Paperback Submission Guidelines"
+     },
+     {
+      "url": "https://developers.openai.com/api/docs/models",
+      "title": "OpenAI: Models"
+     },
+     {
+      "url": "https://help.openai.com/en/articles/20001256-plugins-in-chatgpt-and-codex",
+      "title": "OpenAI Help: Plugins in ChatGPT and Codex"
+     },
+     {
+      "url": "https://help.openai.com/en/articles/11487775-connectors-in-chatgpt",
+      "title": "OpenAI Help: Connectors in ChatGPT"
+     },
+     {
+      "url": "https://higgsfield.ai/chatgpt-plugin",
+      "title": "Higgsfield Plugin for ChatGPT"
+     },
+     {
+      "url": "https://higgsfield.ai/mcp",
+      "title": "Higgsfield MCP"
+     },
+     {
+      "url": "https://higgsfield.ai/creator-hub/help-center/integrations/how-do-i-connect-higgsfield-to-ai-agent",
+      "title": "Higgsfield Help: connect Higgsfield to ChatGPT or Claude"
+     },
+     {
+      "url": "https://higgsfield.ai/blog/unlimited-mcp",
+      "title": "Higgsfield: Unlimited MCP (trial and Plus conversion)"
+     },
+     {
+      "url": "https://higgsfield.ai/terms-of-use-agreement",
+      "title": "Higgsfield Terms of Use"
+     },
+     {
+      "url": "https://higgsfield.ai/creator-hub/help-center/account/who-owns-my-generations-and-can-i-use-them-commercially",
+      "title": "Higgsfield Help: who owns my generations"
+     },
+     {
+      "url": "https://higgsfield.ai/ai-drawing-generator",
+      "title": "Higgsfield AI Drawing Generator (AI Coloring mode)"
+     },
+     {
+      "url": "https://higgsfield.ai/s/gm-leoncantcode-jcbcob",
+      "title": "Creator's bio link (Higgsfield MCP referral page)"
+     }
+    ],
+    "extra_sections": [
+     {
+      "heading": "The prompt on screen",
+      "detail": "The narration says \"paste in that screenshot with this exact prompt\", but the prompt text is not on screen in any of the 16 frames reviewed: [not shown]. The video cuts from a Higgsfield example page straight to a flipthrough video of a finished book. No ChatGPT chat window, model picker or plugin menu appears. What is legible: a browser tab reading \"GPT-6 Astra: A new g[unreadable]\"; a Higgsfield page with the subtitle \"Every image an[unreadable] model\"; and an Amazon listing showing Paperback $9.99, Spiral-bound $28.99, publication date May 22, 2024, and dimensions 8.5 x 0.2 x 8.5 inches. The word \"plugin\" is an editor's caption, not a menu label. The finished pages shown (unicorn with a birthday cake; sleeping unicorn under a moon) have clean black outlines but visible doubled, sketchy lines, and they appear as an MP4 flipthrough, not a print file. Nothing is known about what the prompt says, including any \"outline styles\" or \"vector\" settings."
+     },
+     {
+      "heading": "The gate and the sponsorship",
+      "detail": "The prompt is withheld. To get it, the video says to save the video, follow the creator and comment the word \"Astra\", and the creator will send it, presumably by DM. It is not published anywhere, and delivery can't be verified. The caption carries #higgsfieldpartner and tags @higgsfield.ai, so the creator is paid by the vendor the video tells viewers to use. The creator's bio link appears to be a Higgsfield referral link to its MCP page; Instagram only returned it once, so treat this as lower confidence. Higgsfield's own free-to-start alternative is its AI Drawing Generator, which has an \"AI Coloring\" mode for \"clean outlines, no shading\" line art (higgsfield.ai/ai-drawing-generator). It is the same vendor. Gumroad and Etsy packs sold as \"Higgsfield prompts\" are not linked from Higgsfield or the creator."
+     },
+     {
+      "heading": "Portfolio project: ai-coloring-book-compiler (corrected)",
+      "detail": "A pipeline that generates themed line art, cleans it to pure black and white, and compiles a KDP-ready interior PDF. Stack: Python 3.11+, an image API (OpenAI, or Higgsfield's developer API at open.higgsfield.ai), OpenCV, ReportLab or PyMuPDF, and Pydantic. About 8 hours.\n1. Generate structured JSON scene prompts for 20 or more pages, all in one theme.\n2. Generate the images, threshold them to pure black and white, and clean up doubled lines. Keep them as raster images at 300 DPI minimum, with 600 DPI the recommended maximum to keep the file under 650 MB. Vectorizing with Potrace is optional, not required: KDP only asks for 300 DPI images embedded in the PDF.\n3. Compile the PDF. Use an 8.5 x 11 in trim, or 8.5 x 8.5 like the filmed book; both are KDP sizes. Full-bleed art adds 0.125 in to the width and 0.25 in to the height, so the page becomes 8.625 x 11.25 or 8.625 x 8.75. Margins with bleed are at least 0.375 in on the outside and 0.375 in in the gutter for 24 to 110 pages. Embed fonts and images, flatten transparency, and use at least 7 pt text. Blank backs cost nothing extra, because any interior from 24 to 110 pages prints for the same $2.30.\n4. Add a checker that rejects pages below 300 DPI, art inside the margin zone, or large filled black areas.\nOut of scope: automating KDP uploads. Coloring books are not low-content books, and AI-generated pages must be declared at upload."
+     }
+    ],
+    "next_action": "Open higgsfield.ai/pricing, read the Plus plan price off the live page, and divide it by $3.69 to see how many copies a month it takes just to cover the subscription."
+   },
+   "links": [
+    {
+     "url": "https://developers.openai.com/api/docs/models",
+     "label": "OpenAI model list (GPT-6 Astra)",
+     "alive": true,
+     "page_title": "Models | OpenAI API"
+    },
+    {
+     "url": "https://higgsfield.ai",
+     "label": "Higgsfield AI Website",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://higgsfield.ai/ai-drawing-generator",
+     "label": "Higgsfield AI Drawing Generator (AI Coloring)",
+     "alive": true,
+     "page_title": "AI Drawing Generator - Create, Restyle, Resize &amp; Export Any Drawing"
+    },
+    {
+     "url": "https://higgsfield.ai/blog/unlimited-mcp",
+     "label": "Higgsfield: trial auto-converts to Plus",
+     "alive": true,
+     "page_title": "Meet Higgsfield Unlimited MCP: How It Works and What You Get"
+    },
+    {
+     "url": "https://higgsfield.ai/chatgpt-plugin",
+     "label": "Higgsfield Plugin for ChatGPT",
+     "alive": true,
+     "page_title": "Higgsfield MCP | AI Image &amp; Video Generation for Any Agent"
+    },
+    {
+     "url": "https://higgsfield.ai/creator-hub/help-center/account/who-owns-my-generations-and-can-i-use-them-commercially",
+     "label": "Higgsfield: commercial use of generations",
+     "alive": true,
+     "page_title": "Who Owns Your Higgsfield Generations"
+    },
+    {
+     "url": "https://higgsfield.ai/creator-hub/help-center/integrations/how-do-i-connect-higgsfield-to-ai-agent",
+     "label": "Higgsfield: connecting to ChatGPT",
+     "alive": true,
+     "page_title": "How to Connect Higgsfield to Claude or ChatGPT"
+    },
+    {
+     "url": "https://higgsfield.ai/mcp",
+     "label": "Higgsfield MCP",
+     "alive": true,
+     "page_title": "Higgsfield MCP | AI Image &amp; Video Generation for Any Agent"
+    },
+    {
+     "url": "https://higgsfield.ai/pricing",
+     "label": "Higgsfield pricing (check live)",
+     "alive": true,
+     "page_title": "Pricing plans — Higgsfield AI Video &amp; Image Generator"
+    },
+    {
+     "url": "https://higgsfield.ai/terms-of-use-agreement",
+     "label": "Higgsfield Terms of Use",
+     "alive": true,
+     "page_title": "Terms of Use Agreement • Higgsfield"
+    },
+    {
+     "url": "https://kdp.amazon.com/en_US/help/topic/G200672400",
+     "label": "KDP Intellectual Property FAQ",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://kdp.amazon.com/en_US/help/topic/G201834330",
+     "label": "KDP Paperback Royalty",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://kdp.amazon.com/en_US/help/topic/G201834340",
+     "label": "KDP Paperback Printing Cost",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://kdp.amazon.com/en_US/help/topic/G201857950",
+     "label": "KDP Paperback Submission Guidelines",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://kdp.amazon.com/en_US/help/topic/G202172740",
+     "label": "KDP title creation limit",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://kdp.amazon.com/en_US/help/topic/GGE5T76TWKA85DJM",
+     "label": "KDP Low-Content Books",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://kdp.amazon.com/en_US/help/topic/GVBQ3CMEQW3W2VL6",
+     "label": "KDP trim size, bleed and margins",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://kdp.amazon.com/help?topicId=G200952510",
+     "label": "KDP Guide to Kindle Content Quality",
+     "alive": true,
+     "page_title": ""
+    }
+   ],
    "slide_ext": ".webp"
   },
   {
    "id": "a5ae5eb1ce0ebb14",
    "url": "https://www.instagram.com/reel/Dd1Cklmk2bN/",
-   "kind": "other",
-   "action": "redo",
-   "title": "HeyGen just open-sourced a free motion designer for Claude 🎬\n\nHyperFra",
+   "kind": "tool",
+   "action": "install",
+   "title": "HeyGen HyperFrames: Open-Source Tool That Renders HTML to MP4 (Works With Claude Code, Codex, Cursor)",
+   "hook": "An open-source framework that lets a coding agent write a video as HTML and render it to MP4, free and fully local, with a few HeyGen-hosted features priced separately.",
+   "summary": "HeyGen has open-sourced HyperFrames, a framework that lets a coding agent write motion graphics as HTML and render them to MP4. It works with Claude Code, Codex, and Cursor, not only Claude. It ships 21 built-in skills, confirmed live in the repo as of 2026-09-28. The code is Apache 2.0 and local rendering is free and fully offline; HeyGen's own paid plans and credits only apply if you opt into HeyGen voice, avatar generation, or HeyGen's managed cloud rendering, and one built-in skill (changelog-video) requires a paid HeyGen account with no free fallback. GitHub stars: about 53.9k as of 2026-09-28 (the reel's 53.7K figure was close and dated to its own recording).",
    "owner": "aiexplained412",
    "posted": "September 28, 2026",
    "slide_count": 0,
    "links_checked": "28 Sep 2026",
-   "note": {},
-   "enrich": {},
-   "tags": {
-    "action": [
-     "redo"
+   "note": {
+    "sections": [
+     {
+      "heading": "Introduction to HyperFrames",
+      "detail": "Overview of HeyGen open-sourcing HyperFrames, an Apache 2.0 repository turning Claude into a free motion design tool."
+     },
+     {
+      "heading": "01 HyperFrames Repository",
+      "detail": "Display of the GitHub repository `heygen-com/hyperframes`, highlighting stars and file directory structure."
+     },
+     {
+      "heading": "02 How it works",
+      "detail": "Claude generates animations as HTML from single prompts, which HyperFrames renders into MP4 files."
+     },
+     {
+      "heading": "03 21 skills",
+      "detail": "Walkthrough of 21 built-in skills including product launches, animated typography, data charts, and GitHub PR explainers."
+     },
+     {
+      "heading": "04 Free Studio Setup",
+      "detail": "Explanation of pairing HyperFrames with Opus 5.5 to replace paid After Effects workflows without render fees."
+     },
+     {
+      "heading": "05 Setup & Installation",
+      "detail": "Demonstration of one-line installation within Claude Code interface."
+     },
+     {
+      "heading": "01 Introduction to HyperFrames",
+      "detail": "HeyGen open-sourced HyperFrames on GitHub under the Apache 2.0 license, accumulating over 53K stars."
+     },
+     {
+      "heading": "03 21 Built-In Skills & Examples",
+      "detail": "Includes 21 ready-to-use skills covering product launch reels, kinetic typography, beat-synced clips, data visualizations, and GitHub PR explainer videos."
+     },
+     {
+      "heading": "04 Free Studio vs Traditional Tooling",
+      "detail": "Pairs with Claude Opus to replace expensive After Effects subscriptions and tedious keyframing without rendering costs."
+     },
+     {
+      "heading": "05 Setup via Claude Code",
+      "detail": "Installation runs directly inside the Claude Code CLI via the prompt 'Install HyperFrames'."
+     }
+    ],
+    "onscreen_text": [
+     "HeyGen",
+     "open-sourced",
+     "a motion designer",
+     "for Claude · completely free",
+     "sourced a",
+     "that turns",
+     "53.6K GitHub stars",
+     "Claude into",
+     "designer, and",
+     "completely",
+     "01 HyperFrames",
+     "github.com/heygen-com/hyperframes",
+     "Sign in",
+     "heygen-com / hyperframes Public",
+     "<> Code",
+     "Issues 46",
+     "Pull requests 204",
+     "main",
+     "Code",
+     "miguel-heygen 1 hour ago",
+     ".agents/skills 2 weeks ago",
+     ".claude-plugin 2 hours ago",
+     ".claude 2 weeks ago",
+     ".codex-plugin 2 hours ago",
+     ".codex 3 months ago",
+     ".cursor-plugin 2 hours ago",
+     ".github 4 hours ago",
+     "assets 5 months ago",
+     "docs 2 hours ago",
+     "examples last month",
+     "HyperFrames.",
+     "It's already",
+     "View all files",
+     "README",
+     "Code of conduct",
+     "Contributing",
+     "More",
+     "HyperFrames",
+     "npm v0.8.82",
+     "downloads 1.3M/month",
+     "license Apache 2.0",
+     "node >=22",
+     "Discord Join",
+     "Write HTML. Render video. Built for agents.",
+     "Quickstart | S",
+     "ocs | Discord",
+     "53.7K STARS",
+     "almost",
+     "thousand stars",
+     "The idea",
+     "is simple.",
+     "02 How it works",
+     "HTML → video",
+     "Claude writes HTML",
+     "already really",
+     "good at",
+     "so HyperFrames",
+     "lets",
+     "Claude write",
+     "as HTML",
+     "HyperFrames renders",
+     "renders it",
+     "straight into",
+     "You get an MP4",
+     "Claude Code",
+     ">",
+     "just tell",
+     "> Ma",
+     "something",
+     "> Make me a 10-second product",
+     "like, \"Make",
+     "> Make me a 10-second product intro with a fade-in title",
+     "ten-second",
+     "> Make me a 10-second product intro with a fade-in title, background video and mus",
+     "fade-in title,",
+     "> Make me a 10-second product intro with a fade-in title, background video and music",
+     "✓ Planned the video",
+     "video, and",
+     "✓ Built the animations",
+     "Added the media",
+     "it plans",
+     "builds the",
+     "✓ Added the media",
+     "✓ Rendered intro.mp4",
+     "animations,",
+     "media, and",
+     "final file",
+     "for you.",
+     "21",
+     "BUILT-IN SKILLS",
+     "twenty-one",
+     "built-in",
+     "make product",
+     "03 21 skills",
+     "— printed, loud, unmistakable.",
+     "FRAME SYSTEM · VOL. 01",
+     "Everything a capsule.",
+     "BODONI MODA · SPACE GROTESK · NINE CANDY ACCENTS",
+     "MONOGRAPH",
+     "Grid Is the vas.",
+     "lectric cobalt, and graph-paper hind every frame.",
+     "HANKEN · DM MONO",
+     "on fire.",
+     "as graphic primitive, one fire-orange environment, and a negative space — dark to document, orange to declare.",
+     "IBM PLEX MONO",
+     "LAUNCHES · CAPTIONS · MUSIC",
+     "videos,",
+     "animated",
+     "captions, beat",
+     "hyperframes.heygen.com",
+     "Animated bar + line chart with staggered reveal, NYT-style typography, and value labels",
+     "Install",
+     "npx hyperframes add data-chart",
+     "That writes one file: compositions/data-chart.html",
+     "15 s duration",
+     "1920×1080",
+     "Data",
+     "Stable",
+     "Copy agent request",
+     "Copy wiring",
+     "Copy link",
+     "Raw",
+     "Monthly Revenue vs. Conversion Rate",
+     "DATA VISUALISATIONS",
+     "visualizations,",
+     "GitHub",
+     "and even",
+     "GitHub PR →",
+     "explainer video",
+     "turn a",
+     "request",
+     "hyperframes.heygen.com/examples",
+     "Examples",
+     "Watch finished HyperFrames videos, inspect real production projects, or start from a working template.",
+     "Copy page",
+     "What HyperFrames can make",
+     "Every film below is 100% HyperFrames — HTML rendered frame by frame, no other tool. They are grouped by what they show off. Where a source project is public, the card links to it.",
+     "Product & launch films",
+     "A whole product cut into a launch film — its own screens, type and colour.",
+     "Sound HeyGen x Stripe",
+     "Product launch",
+     "REAL EXAMPLES",
+     "feature into",
+     "Sound HyperFrames launch",
+     "The framework's own launch · source included",
+     "Sound Website → video",
+     "A live site becomes a promo source included",
+     "Sound SpaceX explainer",
+     "Data and motion at scale source included",
+     "Sound KS promo",
+     "Short product spot · 100% HyperFrames",
+     "The tooling, shown working",
+     "Each film is HyperFrames demons eatures.",
+     "an explainer",
+     "04 Free",
+     "video.",
+     "Opus 5.5",
+     "You can",
+     "Opus 5.5 + HyperFrames = free studio",
+     "with Opus",
+     "you basically",
+     "motion",
+     "design studio",
+     "that works",
+     "free.",
+     "Ae",
+     "Normally",
+     "you'd need",
+     "After Effects · subs · hours",
+     "After Effects,",
+     "subscription,",
+     "of key",
+     "framing to",
+     "get",
+     "anything",
+     "close to this.",
+     "And because",
+     "$0",
+     "Free · no render fees",
+     "fees,",
+     "Apache 2.0 · commercial use",
+     "can use",
+     "05 Setup",
+     "up Claude",
+     "> Install HyperFrames",
+     "it to",
+     "HyperFrames,",
+     "✓ 21 skills installed",
+     "it.",
+     "✓ Ready to make videos",
+     "start",
+     "Free & open source",
+     "heygen-com / hyperframes",
+     "★ 37.8K",
+     "automating",
+     "videos.",
+     "HeyGen open-sourced a motion designer",
+     "53.7K GitHub stars",
+     "Code Issues 46 Pull requests 204",
+     "main Code",
+     "README Code of conduct Contributing More",
+     "HeyGen HyperFrames",
+     "npm v0.8.82 downloads 1.3M/month license Apache 2.0 node >=22 Discord Join",
+     "Quickstart | Docs | Discord",
+     "21 BUILT-IN SKILLS",
+     "electric cobalt, and graph-paper behind every frame.",
+     "15 s duration 1920×1080 Data Stable",
+     "Copy agent request Copy wiring Copy link Raw",
+     "GitHub PR → explainer video",
+     "HeyGen × Stripe Product launch, 4K · 100% HyperFrames",
+     "HyperFrames launch The framework's own launch · source included",
+     "Website → video A live site becomes a promo · source included",
+     "SpaceX explainer Data and motion at scale · source included",
+     "RS promo Short product spot · 100% HyperFrames",
+     "The tooling, shown working Each film is HyperFrames demonstrating its own features."
+    ],
+    "entities": [
+     {
+      "name": "HyperFrames",
+      "type": "repo",
+      "why": "Open-source motion design tool created by HeyGen to render HTML into MP4 videos."
+     },
+     {
+      "name": "HeyGen",
+      "type": "company",
+      "why": "Creator and open-source publisher of HyperFrames."
+     },
+     {
+      "name": "Claude",
+      "type": "tool",
+      "why": "AI model used to generate HTML video structures and animations."
+     },
+     {
+      "name": "Claude Code",
+      "type": "tool",
+      "why": "Command-line interface used to install and run HyperFrames prompts."
+     },
+     {
+      "name": "After Effects",
+      "type": "product",
+      "why": "Traditional paid video motion graphics software compared against HyperFrames."
+     },
+     {
+      "name": "Adobe After Effects",
+      "type": "product",
+      "why": "Traditional paid software contrasted against HyperFrames"
+     },
+     {
+      "name": "Opus 5.5",
+      "type": "product",
+      "why": "Anthropic model paired with HyperFrames"
+     }
+    ],
+    "topics": [
+     "motion design",
+     "generative ai",
+     "claude",
+     "video editing",
+     "open source",
+     "hyperframes",
+     "heygen",
+     "claude code",
+     "ai video"
+    ],
+    "code_snippets": [
+     "Make me a 10-second product intro with a fade-in title, background video and music",
+     "npx hyperframes add data-chart",
+     "Install HyperFrames",
+     "> Make me a 10-second product intro with a fade-in title, background video and music",
+     "> Install HyperFrames"
+    ],
+    "spoken_transcript": "HeyGen just open-sourced a GitHub repo that turns Claude into a full-on motion designer, and it's completely free. It's called HyperFrames. It's already sitting at almost 54,000 stars on GitHub. The idea is simple: AI is already really good at writing HTML, so HyperFrames lets Claude write a video as HTML and then renders it straight into MP4. So you just tell Claude something like, 'Make me a 10-second product intro with a fade-in title, background video, and music.' It plans the video, builds the animations, adds the media, and renders the final file for you. It comes with 21 built-in skills, so it can make product launch videos, animated captions, beat-synced music videos, data visualizations, and even turn a GitHub pull request feature into an explainer video. You can pair it with Opus 5.5, and you basically have a motion design studio that works for free. Normally you'd need After Effects, a paid subscription, and hours of keyframing to get anything close to this. And because it's Apache 2.0 licensed, there are no render fees, and you can use it commercially. And to set it up, you can just open up Claude Code, ask it to install HyperFrames, and that's it. You're ready to start making and automating videos.",
+    "open_questions": [
+     "What underlying rendering engine converts the HTML into MP4 frames?",
+     "Does HyperFrames run fully locally or require an external GPU/rendering service?",
+     "Does HyperFrames use headless Chrome or Puppeteer under the hood to render HTML frames?",
+     "What are the local hardware and rendering time requirements for 4K video exports?"
     ]
    },
-   "links": [],
+   "enrich": {
+    "what_it_is": "HyperFrames is an open-source framework by HeyGen that turns HTML, CSS, media, and seekable animations into deterministic MP4 videos [1]. It provides 21 built-in agent skills that allow AI coding agents like Claude Code to plan, write, preview, and render motion graphics directly [1, 4]. The project is licensed under Apache 2.0 with zero render fees and full commercial use permissions [1, 4].",
+    "is_it_good": {
+     "verdict": "yes",
+     "confidence": "high",
+     "evidence": [
+      "Over 53.9k stars and 4.9k forks on GitHub [5]",
+      "Actively maintained by HeyGen with frequent daily patch releases (e.g., v0.8.86 through v0.8.89) [2, 3]",
+      "Permissive Apache 2.0 license with zero per-render fees or seat caps [4]",
+      "Works directly with standard web technologies (HTML, CSS, GSAP) without complex React bundling [4]"
+     ],
+     "against": [
+      "Requires local prerequisites including Node.js >= 22 and FFmpeg [4]",
+      "Distributed rendering is currently single-machine local rendering rather than cloud/Lambda-ready [4]",
+      "Still in pre-1.0 development (v0.8.x) [2]"
+     ]
+    },
+    "maturity": {
+     "latest_version": "v0.8.89 [2]",
+     "last_release": "2026-09-29 [2]",
+     "maintained": "yes"
+    },
+    "alternatives": [
+     {
+      "name": "Remotion",
+      "why_instead": "Choose Remotion if your team prefers authoring video compositions in React/TSX components and requires production-ready distributed AWS Lambda rendering [4]."
+     }
+    ],
+    "where_it_applies": [
+     "Generating product launch and website showcase videos from URLs or scripts [1]",
+     "Creating kinetic typography, faceless explainers, and animated charts with Claude Code [1, 4]",
+     "Converting GitHub pull requests into video explainers and changelogs [1]",
+     "Adding embedded captions and graphic overlays to talking-head videos [1]"
+    ],
+    "what_it_replaces": [
+     "Remotion (for teams wanting pure HTML/CSS without React build setups or licensing fees) [4]",
+     "Manual motion graphics workflows in tools like Adobe After Effects for standard programmatic clips [1, 4]"
+    ]
+   },
+   "tags": {
+    "action": [
+     "install"
+    ],
+    "section": [
+     "claude-prompting/claude-code-skills",
+     "media-generation/motion-graphics-video"
+    ],
+    "topic": [
+     "claude",
+     "claude code",
+     "generative ai",
+     "heygen",
+     "hyperframes",
+     "motion design",
+     "open source",
+     "video editing"
+    ]
+   },
+   "followup": {
+    "answer_html": "<p>HyperFrames is HeyGen's open-source framework (Apache 2.0) that lets an AI coding agent write a video as HTML and render it to MP4. It works with Claude Code, Codex, and Cursor as separate plugin surfaces, plus a standalone install path for any other agent, so Claude Code is one front end among several, not a requirement.</p>\n<h2>How it actually renders</h2>\n<p>Puppeteer drives headless Chrome to capture the HTML composition frame by frame, seeking to each exact frame rather than recording live playback, so a slow machine takes longer but produces the same output. FFmpeg then encodes the captured frames and mixes the audio into the final MP4.</p>\n<p>Local rendering (<code>npx hyperframes render</code>) runs fully offline: no account, no API key, no network call needed. The only mark added is unsigned container metadata (renderer name and version), not a visible watermark, and it can be stripped with FFmpeg. There is no length cap on local output.</p>\n<p>Sources: <a href=\"https://hyperframes.heygen.com/introduction\">HyperFrames Introduction</a>, <a href=\"https://hyperframes.heygen.com/guides/rendering.md\">rendering guide</a>, both checked 2026-09-28.</p>\n<h2>What's free and where HeyGen charges</h2>\n<p>Two separate things:</p>\n<ol>\n<li>Self-hosted, local use. The code is Apache 2.0, verified directly in the repo's LICENSE file. Rendering locally costs nothing and needs no HeyGen account. Voice and music default to free local engines (Kokoro for voice, MusicGen for music) unless you specifically ask for HeyGen's versions. The only cost is your own machine's compute time.</li>\n<li>HeyGen's paid cloud and API. HeyGen's subscription plans, checked 2026-09-28 at heygen.com/pricing, run Free ($0, 3 videos/month), Creator ($29/mo), Pro ($49/mo), Business ($149/mo), and custom Enterprise, priced in credits. These only apply if you opt into a HeyGen-hosted feature: HeyGen voice or music, avatar generation, or HeyGen's own managed cloud rendering (a separate path from local rendering, where 4K renders are billed at 1.5x).</li>\n</ol>\n<p>One built-in skill breaks the reel's &quot;completely free&quot; framing: changelog-video hardcodes a specific paid HeyGen voice and requires <code>heygen auth login --oauth</code>, with no local fallback documented. Running that one skill needs a HeyGen account and spends HeyGen credits. Avatar generation works the same way: it can prompt a HeyGen sign-in mid-session and then draws on your account's paid credit balance. Every other checked skill, including the beat-synced music video skill, uses free local defaults unless you deliberately sign in.</p>\n<h2>Built-in skills</h2>\n<p>21 skills, confirmed live in the repo's <code>skills/</code> directory and independently on skills.sh, both checked 2026-09-28. That matches the reel's claim; it is not stale. The full list with what each one does is in the attached skills reference. Two things are easy to confuse with the 21 and are not part of it: a separate <code>.agents/skills</code> folder holds 6 small dev-only skills used only for the project's own changelog videos (changelog-video, the paid-voice one, lives here), and the docs &quot;catalog&quot; page lists 150+ prebuilt visual building blocks (carousels, chart styles, transitions) that are components, not agent skills.</p>\n<h2>Setting it up on Windows 11</h2>\n<p>Prerequisites: Node.js 22+ and FFmpeg, per the repo's README. PowerShell 5.1 has no <code>&amp;&amp;</code>, so each step below is its own line.</p>\n<p>Standard package installs (ordinary winget packages, not HeyGen-specific and not from HeyGen's own docs):</p>\n<pre><code>winget install OpenJS.NodeJS\nwinget install Gyan.FFmpeg\n</code></pre>\n<p>Open a new PowerShell window so PATH updates take effect, then confirm:</p>\n<pre><code>node --version\nffmpeg -version\n</code></pre>\n<p>Install the plugin for Claude Code:</p>\n<pre><code>claude plugin marketplace add heygen-com/hyperframes\nclaude plugin install hyperframes@hyperframes\n</code></pre>\n<p>For Codex, Cursor, or any other agent, the standalone path from the same README works instead:</p>\n<pre><code>npx skills add heygen-com/hyperframes\n</code></pre>\n<p>First prompt that produces an actual MP4, from the official quickstart (swap in a real URL):</p>\n<pre><code>Using /hyperframes, make a 10-second product intro for https://example.com.\n</code></pre>\n<p>To remove it later:</p>\n<pre><code>claude plugin uninstall hyperframes@hyperframes\n</code></pre>\n<h2>Gotchas</h2>\n<ul>\n<li>The changelog-video skill needs a paid HeyGen account and voice, and will not warn you first if an agent picks it.</li>\n<li>Avatar generation can prompt a HeyGen sign-in mid-session and spends your paid credit balance.</li>\n<li>HyperFrames' own &quot;Cloud&quot; rendering path (separate from local) needs a HeyGen account and API key, and 4K renders through it are billed at 1.5x.</li>\n<li>No published render-time numbers exist for 1080p vs 4K on any hardware; you find out by testing on your own machine.</li>\n<li>No Windows-specific setup guidance exists beyond &quot;Node.js 22+, FFmpeg&quot;; the winget commands above are standard packages, not HeyGen's own instructions.</li>\n<li>Font licensing for the example and catalog templates (Bodoni Moda, Space Grotesk, Hanken, DM Mono, IBM Plex Mono, as seen in the reel) is undocumented anywhere in the project. Apache 2.0 covers the code, not necessarily the fonts, so verify font licensing separately before shipping a commercial video built from a catalog template.</li>\n</ul>\n<h2>Numbers, dated</h2>\n<p>GitHub stars: about 53.9k as of 2026-09-28 (the reel's on-screen &quot;53.7K&quot; and spoken &quot;almost 54,000&quot; were its own recording's figures and were already close, not wrong). Latest published version: 0.8.90 on npm as of 2026-09-28 (the reel's on-screen v0.8.82 is stale; the project ships frequent patch releases).</p>\n<h2>Bottom line</h2>\n<p>Install it if you want to render HTML compositions to MP4 locally for free, with any coding agent, not only Claude Code. Leave changelog-video and avatar-presenter alone unless you want a HeyGen account and are fine spending credits; everything else stays free and local by default.</p>\n",
+    "answered": "not asked",
+    "artifacts": [
+     {
+      "file": "hyperframes-skills-reference.pdf",
+      "title": "HyperFrames: the 21 built-in skills",
+      "about": "Full table of all 21 built-in skills with what each produces, plus what is not part of the 21 (dev-only skills and the component catalog).",
+      "kind": "pdf",
+      "pages": 2
+     }
+    ],
+    "sources": [
+     {
+      "url": "https://github.com/heygen-com/hyperframes",
+      "title": "heygen-com/hyperframes README"
+     },
+     {
+      "url": "https://hyperframes.heygen.com/introduction",
+      "title": "HyperFrames Introduction docs"
+     },
+     {
+      "url": "https://hyperframes.heygen.com/guides/rendering.md",
+      "title": "Render from the command line guide"
+     },
+     {
+      "url": "https://hyperframes.heygen.com/guides/authentication.md",
+      "title": "HyperFrames authentication guide"
+     },
+     {
+      "url": "https://hyperframes.heygen.com/guides/avatar-presenter.md",
+      "title": "Add an avatar presenter guide"
+     },
+     {
+      "url": "https://hyperframes.heygen.com/deploy/cloud.md",
+      "title": "Cloud rendering docs"
+     },
+     {
+      "url": "https://www.heygen.com/pricing",
+      "title": "HeyGen Pricing page"
+     },
+     {
+      "url": "https://github.com/heygen-com/hyperframes/blob/main/LICENSE",
+      "title": "HyperFrames LICENSE (Apache 2.0)"
+     },
+     {
+      "url": "https://github.com/heygen-com/hyperframes/blob/main/.agents/skills/changelog-video/SKILL.md",
+      "title": "changelog-video skill definition"
+     },
+     {
+      "url": "https://github.com/heygen-com/hyperframes/tree/main/skills",
+      "title": "HyperFrames skills directory listing"
+     },
+     {
+      "url": "https://www.skills.sh/heygen-com/hyperframes",
+      "title": "skills.sh HyperFrames skills listing"
+     },
+     {
+      "url": "https://hyperframes.heygen.com/quickstart",
+      "title": "HyperFrames Quickstart docs"
+     },
+     {
+      "url": "https://registry.npmjs.org/hyperframes",
+      "title": "hyperframes npm registry entry"
+     }
+    ],
+    "next_action": "Run the Windows setup commands and the quickstart prompt in Claude Code, Codex, or Cursor to render a test MP4 locally; leave changelog-video and avatar-presenter untouched unless you want a HeyGen account and are fine spending credits."
+   },
+   "links": [
+    {
+     "url": "https://github.com/heygen-com/hyperframes",
+     "label": "HyperFrames GitHub Repository",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/heygen-com/hyperframes/blob/main/LICENSE",
+     "label": "Apache 2.0 license text",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://github.com/heygen-com/hyperframes/tree/main/skills",
+     "label": "Live skills directory",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://hyperframes.heygen.com",
+     "label": "HyperFrames Tooling Site",
+     "alive": true,
+     "page_title": "HyperFrames — Edit Videos By Vibe-Coding"
+    },
+    {
+     "url": "https://hyperframes.heygen.com/deploy/cloud.md",
+     "label": "Cloud rendering pricing",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://hyperframes.heygen.com/examples",
+     "label": "HyperFrames Example Gallery",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://hyperframes.heygen.com/guides/authentication.md",
+     "label": "Local vs HeyGen account costs",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://hyperframes.heygen.com/guides/avatar-presenter.md",
+     "label": "Avatar presenter (paid HeyGen feature)",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://hyperframes.heygen.com/introduction",
+     "label": "How rendering works",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://www.heygen.com/pricing",
+     "label": "HeyGen subscription pricing",
+     "alive": true,
+     "page_title": ""
+    },
+    {
+     "url": "https://www.hyperframes.dev",
+     "label": "Interactive playground (official)",
+     "alive": true,
+     "page_title": "HyperFrames"
+    }
+   ],
    "slide_ext": ".webp"
   },
   {

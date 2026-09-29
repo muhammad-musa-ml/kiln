@@ -1,9 +1,8 @@
 {
  "total": 33,
  "by_action": {
-  "redo": 2,
-  "install": 3,
-  "read": 3,
+  "read": 4,
+  "install": 4,
   "watch": 8,
   "reference": 7,
   "learn": 3,
@@ -11,6 +10,19 @@
   "build": 4
  },
  "by_topic": {
+  "ai tools": 2,
+  "amazon kdp": 1,
+  "chatgpt": 1,
+  "ecommerce": 1,
+  "side hustle": 1,
+  "claude": 6,
+  "claude code": 3,
+  "generative ai": 1,
+  "heygen": 1,
+  "hyperframes": 2,
+  "motion design": 1,
+  "open source": 2,
+  "video editing": 1,
   "ai agents": 7,
   "desktop app": 1,
   "dictation software": 1,
@@ -40,13 +52,11 @@
   "instagram reel": 1,
   "tier list": 1,
   "browser automation": 1,
-  "claude code": 2,
   "jev": 1,
   "open-source repos": 1,
   "postgres": 1,
   "typesafe ai": 1,
   "buildinpublic": 1,
-  "claude": 5,
   "pre-launch checklist": 1,
   "vibe coding": 1,
   "web accessibility": 1,
@@ -72,8 +82,6 @@
   "ai video generation": 1,
   "ai-generated motion graphics": 1,
   "claude skills": 1,
-  "hyperframes": 1,
-  "open source": 1,
   "product launch marketing": 1,
   "ai": 8,
   "design": 1,
@@ -101,7 +109,6 @@
   "anthropic": 2,
   "artificial intelligence": 4,
   "certifications": 1,
-  "ai tools": 1,
   "automation": 3,
   "hermes agent": 1,
   "jarvis": 1,
@@ -168,13 +175,13 @@
    "id": "claude-prompting",
    "name": "Claude & Prompting",
    "parent": "",
-   "count": 7
+   "count": 8
   },
   {
    "id": "claude-prompting/claude-code-skills",
    "name": "Claude Code & Skills",
    "parent": "claude-prompting",
-   "count": 4
+   "count": 5
   },
   {
    "id": "claude-prompting/model-comparisons",
@@ -192,7 +199,7 @@
    "id": "jobs-money",
    "name": "Jobs & Money",
    "parent": "",
-   "count": 6
+   "count": 7
   },
   {
    "id": "jobs-money/certifications",
@@ -207,22 +214,34 @@
    "count": 2
   },
   {
+   "id": "jobs-money/print-on-demand-publishing",
+   "name": "Print-on-Demand & Publishing",
+   "parent": "jobs-money",
+   "count": 1
+  },
+  {
    "id": "jobs-money/roadmaps-side-income",
    "name": "Roadmaps & Side Income",
    "parent": "jobs-money",
-   "count": 2
+   "count": 3
   },
   {
    "id": "media-generation",
    "name": "Media Generation",
    "parent": "",
-   "count": 2
+   "count": 4
+  },
+  {
+   "id": "media-generation/image-generation",
+   "name": "Image Generation",
+   "parent": "media-generation",
+   "count": 1
   },
   {
    "id": "media-generation/motion-graphics-video",
    "name": "Motion Graphics & Video",
    "parent": "media-generation",
-   "count": 2
+   "count": 3
   },
   {
    "id": "models-training",
