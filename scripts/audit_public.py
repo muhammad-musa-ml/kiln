@@ -169,7 +169,7 @@ def main() -> int:
         for p in text_files:
             m = rx.search(p.read_text(encoding="utf-8", errors="replace"))
             if m:
-                fail(f"{label} found in {p.name}: {m.group(0)[:28]}...")
+                fail(f"{label} found in {p.name}; value withheld")
                 break
         else:
             ok(f"no {label}")

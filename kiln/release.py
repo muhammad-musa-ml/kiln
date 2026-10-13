@@ -2,10 +2,12 @@
 from __future__ import annotations
 
 import concurrent.futures as cf
+import http.client
 import hashlib
 import json
 import time
 import urllib.request
+import urllib.error
 from pathlib import Path
 from urllib.parse import quote, urlsplit
 
@@ -21,7 +23,12 @@ def verify_public(out: Path = config.ROOT/'public', url: str = PUBLIC_URL, *, at
     expected=json.loads((out/'data'/'items.json').read_text(encoding='utf-8'))
     def fetch(relative):
         req=urllib.request.Request(url.rstrip('/')+'/'+quote(relative,safe='/')+'?kiln_verify='+str(time.time_ns()),headers={'Cache-Control':'no-cache'})
-        with urllib.request.urlopen(req,timeout=35) as response:return response.read()
+        for retry in range(3):
+            try:
+                with urllib.request.urlopen(req,timeout=60) as response:return response.read()
+            except (TimeoutError, OSError, http.client.IncompleteRead, urllib.error.URLError) as exc:
+                if retry==2:raise ValueError('Unable to verify live file: '+relative) from exc
+                time.sleep(retry+1)
     live=None
     for attempt in range(attempts):
         try:
@@ -31,7 +38,8 @@ def verify_public(out: Path = config.ROOT/'public', url: str = PUBLIC_URL, *, at
         if attempt+1<attempts:
             print('Waiting for the audited deployment to appear…',flush=True);time.sleep(5)
     if live!=expected:raise ValueError('Live deployment differs from the current export; keep source files pending')
-    paths=[p for p in out.rglob('*') if p.is_file()]
+    # Vercel consumes its deployment config; it deliberately is not served.
+    paths=[p for p in out.rglob('*') if p.is_file() and p.relative_to(out).as_posix()!='vercel.json']
     def check(path):
         relative=path.relative_to(out).as_posix()
         blob=fetch(relative)

@@ -19,7 +19,13 @@
 - Verification: all 15 standalone test suites passed; the final exported site
   passed 40 privacy/publication checks. Browser checks covered search, tabs,
   copying commands, tags, moves, progress and mobile filtering, with temporary
-  edits restored. Cloud cleanup waits for byte-for-byte live verification.
+  edits restored. Verified all 267 served files byte-for-byte against the
+  live deployment before cleanup (Vercel consumes vercel.json privately).
+- Moved all 30 completed Drive Markdown files to Kilned and read back both
+  folders; researched has no pending Markdown and retains its five images.
+  Archived the exact local inputs after verified moves. Removed 33 completed
+  URLs from 27 paragraphs in links with a revision-guarded edit, preserving
+  the heading and terminal newline; readback confirms no handled URLs remain.
 - During verification, combined unittest discovery reused production config
   and damaged local state. Restored the database, full guides and source bytes
   from private backups, verified all 47 topics/63 sources/30 dossiers, and

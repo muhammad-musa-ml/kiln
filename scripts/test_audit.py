@@ -282,7 +282,8 @@ def main() -> int:
             "tags": {"action": ["reference"]}}
     doc = ("# Notes\n\nThe post: [on Instagram](%s?stkn=%s).\n\nA long one, broken "
            "across lines on paper: %s%s/?img_index=2&stkn=%s\n" % (POST, T, POST, "x" * 150, T))
-    got = strip({"texts": [c[0] for c in CLEAN_CASES], "item": full, "doc": doc})
+    hook = 'https://hooks.slack.com/' + 'services/' + '/'.join(['T'+'0'*8, 'B'+'0'*8, 'x'*24])
+    got = strip({"texts": [c[0] for c in CLEAN_CASES], "item": full, "doc": doc, 'webhook':hook})
     wrong = [(c[0], g, c[1]) for c, g in zip(CLEAN_CASES, got["clean"]) if g != c[1]]
     check("publish takes the share and tracking parameters off every kind of link, "
           "and leaves the rest byte for byte (%d cases)" % len(CLEAN_CASES),
@@ -324,9 +325,7 @@ def main() -> int:
           out[-400:])
 
     print("webhook examples are treated as credentials")
-    hook = 'https://hooks.slack.com/' + 'services/' + '/'.join(['T'+'0'*8, 'B'+'0'*8, 'x'*24])
-    hook_result = strip({'texts':[], 'item':item(), 'doc':'Safe notes', 'webhook':hook})
-    check("publisher strips a webhook-shaped literal", hook not in hook_result['webhook'])
+    check("publisher strips a webhook-shaped literal", hook not in got['webhook'])
     code, out = audit("slack-webhook", [item(summary=hook)], [])
     check("audit rejects webhook literals without printing them", code == 1 and 'Slack webhook' in out and hook not in out, out[-300:])
 
