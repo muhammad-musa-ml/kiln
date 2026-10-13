@@ -1,12 +1,10 @@
-"""Ingest an inbox document, then follow up on what came in.
+"""Research a directory of Muse README dossiers without publishing or cleanup.
 
-Kiln never edits your doc - it remembers every link it has read, so
-re-running is always safe. It then retries failed reads and runs the same
-follow-up the scheduled sync runs (kiln/brain.py). It does not rebuild the
-site or touch the build queue; scripts/daily.py does those.
+    python scripts/sync_inbox.py data/research/incoming
 
-    python scripts/sync_inbox.py inbox.txt
-    cat inbox.txt | python scripts/sync_inbox.py
+Use scripts/daily.py for the full scheduled flow. Direct URL intake is an
+explicit compatibility option: --legacy-links inbox.txt. Drive/Doc cleanup
+belongs to the authenticated connector after exact live verification.
 """
 import json
 import sys
@@ -18,6 +16,15 @@ from kiln import brain, ingest, pipeline, store
 
 
 def main() -> int:
+    if '--legacy-links' not in sys.argv:
+        from kiln import readme
+        folder=Path(sys.argv[1]) if len(sys.argv)>1 else readme.INCOMING
+        if not folder.is_dir():
+            print('Expected a README directory. Archived URL intake requires --legacy-links.');return 2
+        results=readme.import_folder(folder)
+        print(json.dumps(results,ensure_ascii=False,indent=2))
+        return int(any(r.get('error') for r in results))
+    sys.argv.remove('--legacy-links')
     if len(sys.argv) > 1:
         text = Path(sys.argv[1]).read_text(encoding="utf-8")
     else:

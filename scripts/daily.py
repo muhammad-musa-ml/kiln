@@ -1,19 +1,12 @@
-"""One command for the scheduled run: inbox, Claude, site, builds, publish, check.
+"""Six-stage README sync: research, matching, audit/export, consented builds,
+publish/live verification and health check. The connector stages exact Muse
+Markdown files and separately performs receipt-gated Drive/Doc cleanup.
 
-    python scripts/daily.py data/inbox_snapshot.txt [--builds ask|yes|no]
+    python scripts/daily.py data/research/incoming [--builds ask|yes|no]
+    python scripts/daily.py data/inbox_snapshot.txt --legacy-links
 
-It runs twice a day and every pass does the same six stages. The free
-models read what is new, Claude finishes whatever they could not (the rule
-is that this happens without asking), the site is rebuilt, and then the
-build queue: builds are never started on a schedule any more. The queue is
-offered as a card listing each project and roughly how long it takes, and
-whatever I pick is built on the next pass.
-
-Anything the run could not decide on its own is printed at the top, before
-any work, because that is the moment I am actually reading the output.
-
-Refuses to publish the site if the leak audit finds anything, and says so
-loudly rather than pushing and hoping.
+Builds start only from the owner's queue decisions. No source is cleaned
+up until the audited export and every public file have been verified live.
 """
 from __future__ import annotations
 
@@ -186,9 +179,12 @@ def stage_ship() -> list[dict]:
 
 
 def main() -> int:
-    if len(sys.argv) < 2:
-        print("usage: daily.py <inbox text file> [--builds ask|yes|no]")
-        return 2
+    import argparse
+    parser=argparse.ArgumentParser(description='Research Muse READMEs, publish, and run only consented builds.')
+    parser.add_argument('folder',nargs='?',default=str(ROOT/'data'/'research'/'incoming'))
+    parser.add_argument('--legacy-links',action='store_true',help='Explicitly opt into the archived URL acquisition workflow')
+    parser.add_argument('--builds',choices=('ask','yes','no'),default='ask')
+    args=parser.parse_args()
 
     mode = "ask"
     for i, a in enumerate(sys.argv):
@@ -204,16 +200,31 @@ def main() -> int:
         print(questions.render(waiting))
     shown = {q["id"]: q.get("asked_count") for q in waiting}
 
-    text = Path(sys.argv[1]).read_text(encoding="utf-8")
-
-    try:
-        added, total = stage_inbox(text)
-    except Exception as e:
-        print(f"[1/{STAGES}] inbox failed: {type(e).__name__}: {e}")
-        added, total = 0, 0
-
-    followed = stage_claude()
+    failures=0
+    if args.legacy_links:
+        text=Path(args.folder).read_text(encoding='utf-8')
+        try:added,total=stage_inbox(text)
+        except Exception as e:
+            print(f'[1/{STAGES}] legacy inbox failed: {e}');added,total=0,0;failures+=1
+        followed=stage_claude()
+    else:
+        from kiln import readme
+        folder=Path(args.folder)
+        if not folder.is_dir():parser.error('README intake expects a directory; URL files require --legacy-links')
+        conn=store.connect();before=store.counts(conn)['total'];conn.close()
+        results=readme.import_folder(folder)
+        for r in results:print('      '+str(r),flush=True)
+        failures=sum(bool(r.get('error')) for r in results)
+        conn=store.connect();total=store.counts(conn)['total'];added=total-before
+        reviews=conn.execute("SELECT COUNT(*) FROM match_reviews WHERE state='pending'").fetchone()[0];conn.close()
+        print(f'[1/{STAGES}] README research: {len(results)} input(s), {failures} pending retry',flush=True)
+        print(f'[2/{STAGES}] topic matching: checked each researched source; {reviews} uncertain comparison(s) in local inbox',flush=True)
+        followed={}
     ok, site = stage_site()
+    if ok and not args.legacy_links:
+        from kiln import release
+        try:print('      publication receipt: '+str(release.verify_public(attempts=30)),flush=True)
+        except Exception as e:print('      no cleanup receipt: '+str(e),flush=True);failures+=1
     built = stage_builds(mode)
     shipped = stage_ship()
 
@@ -258,7 +269,7 @@ def main() -> int:
         print("\n%d question%s waiting for you: %s. Each is also a card in the "
               "Kiln UI." % (len(still), "" if len(still) == 1 else "s",
                             ", ".join(where)))
-    return 0 if ok else 1
+    return 0 if ok and not failures else 1
 
 
 if __name__ == "__main__":

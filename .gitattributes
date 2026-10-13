@@ -1,0 +1,2 @@
+/web/** text eol=lf
+/public/** -text

@@ -94,6 +94,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def _body(self) -> dict:
         n = int(self.headers.get("Content-Length") or 0)
+        if n<0 or n>101_000_000:
+            raise ValueError('Request body exceeds the import limit')
         if not n:
             return {}
         try:
@@ -161,7 +163,7 @@ class Handler(BaseHTTPRequestHandler):
                     conn, status=q.get("status", ""), action=q.get("action", ""),
                     topic=q.get("topic", ""), place=q.get("place", ""),
                     section=q.get("section", ""),
-                    q=q.get("q", ""), urgent=q.get("urgent") == "1",
+                    q=q.get("q", ""), content=q.get("content", ""), urgent=q.get("urgent") == "1",
                     limit=int(q.get("limit", 200)))
                 conn.close()
                 with _jobs_lock:
@@ -170,13 +172,30 @@ class Handler(BaseHTTPRequestHandler):
 
             if p.startswith("/api/item/"):
                 conn = store.connect()
-                it = store.get_item(conn, p.rsplit("/", 1)[-1])
+                from . import topics
+                iid = topics.resolve(conn, p.rsplit("/", 1)[-1])
+                it = store.get_item(conn, iid)
+                if it:
+                    it['related'] = topics.related(conn,iid)
+                    it['members'] = [{'id':m['id'],'title':m['title'],'source_urls':m['source_urls'],
+                                     'transcript':(m.get('note') or {}).get('spoken_transcript','')}
+                                     for m in topics.members(conn,iid)]
                 conn.close()
                 if it:
                     # Built by the publisher's own function, so the page shows
                     # the answer the same way here and on the site.
                     from . import jobs, publish
                     it["followup"] = publish.followup(it)
+                    it['note'] = publish.render_note(it.get('note') or {})
+                    # The drawer uses the saved image format locally, just
+                    # as the static export does. Older captures include JPEGs.
+                    media = Path(it.get("media_dir") or "").resolve()
+                    if media.is_relative_to(config.MEDIA.resolve()) and media.is_dir():
+                        slides = sorted(f for f in media.iterdir()
+                                        if f.is_file() and f.suffix.lower() in
+                                        (".webp", ".jpg", ".jpeg", ".png"))
+                        if slides:
+                            it["slide_ext"] = slides[0].suffix.lower()
                     # The same prompt Queue it writes. Without it the page fell
                     # back to its own copy of the builder, which had drifted.
                     if ((it.get("enrich") or {}).get("project") or {}).get("name"):
@@ -226,6 +245,13 @@ class Handler(BaseHTTPRequestHandler):
                 from . import questions
                 return self._json({"open": questions.open_questions()})
 
+            if p == '/api/research':
+                conn=store.connect()
+                docs=[dict(r) for r in conn.execute('SELECT source_id,name,item_id,state,error,imported_at,researched_at,published_at FROM research_documents ORDER BY imported_at DESC')]
+                reviews=[dict(r) for r in conn.execute("SELECT * FROM match_reviews WHERE state='pending'")]
+                conn.close()
+                return self._json({'documents':docs,'matches':reviews})
+
             return self._json({"error": "not found"}, 404)
         except Exception as e:
             return self._json({"error": f"{type(e).__name__}: {e}",
@@ -257,9 +283,78 @@ class Handler(BaseHTTPRequestHandler):
             # 404, not 401 - do not confirm the route exists.
             return self._json({"error": "not found"}, 404)
 
-        b = self._body()
         try:
+            b = self._body()
+            if not isinstance(b,dict):raise ValueError('Expected a JSON object')
+            if p == '/api/import':
+                from . import readme
+                files=b.get('files') or [{'name':b.get('name') or 'README.md','text':b.get('text') or ''}]
+                if not isinstance(files,list) or any(not isinstance(f,dict) for f in files):raise ValueError('Expected a list of README files')
+                if len(files)>50:return self._json({'error':'Import at most 50 files at once'},400)
+                staged=[]
+                for f in files:
+                    staged.append(readme.stage(str(f.get('text') or ''),str(f.get('name') or 'README.md')))
+                def research_run(rows):
+                    for r in rows:
+                        if r.get('unchanged'):continue
+                        iid=r['id'];_set_job(iid,stage='working',started=time.time())
+                        try:
+                            readme.process(r['source_id']);_set_job(iid,stage='done',finished=time.time())
+                        except Exception as exc:_set_job(iid,stage='error',error=str(exc),finished=time.time())
+                threading.Thread(target=research_run,args=(staged,),daemon=True).start()
+                return self._json({'queued':[r['id'] for r in staged],'documents':staged})
+
+            if p == '/api/organize':
+                from . import topics
+                conn=store.connect()
+                try:
+                    iid=topics.resolve(conn,str(b.get('id') or ''))
+                    if not store.get_item(conn,iid):return self._json({'error':'Unknown item'},404)
+                    if 'tags' in b:
+                        tags=b['tags']
+                        if not isinstance(tags,list) or len(tags)>40:raise ValueError('Use a list of at most 40 tags')
+                        store.set_tags(conn,iid,'topic',[str(t).strip()[:60] for t in tags])
+                    if 'sections' in b:
+                        sections=b['sections']
+                        if not isinstance(sections,list) or len(sections)>20:raise ValueError('Use a list of sections')
+                        for sid in sections:
+                            if not conn.execute('SELECT 1 FROM sections WHERE id=?',(sid,)).fetchone():raise ValueError('Unknown section')
+                        store.set_tags(conn,iid,'section',sections)
+                    if b.get('new_section'):
+                        parts=[s.strip() for s in str(b['new_section']).split('/') if s.strip()]
+                        if not 1<=len(parts)<=2:raise ValueError('Use Section or Section / Subsection')
+                        sid=store.ensure_section(conn,parts)
+                        store.file_item(conn,iid,[sid])
+                    pipeline.index(conn,iid)
+                    return self._json({'ok':True,'id':iid})
+                finally:conn.close()
+
+            if p == '/api/topics/merge':
+                from . import topics
+                ids=b.get('ids') or []
+                if not isinstance(ids,list) or not 2<=len(ids)<=20:raise ValueError('Choose 2-20 topics to combine')
+                conn=store.connect()
+                try:
+                    iid=topics.consolidate(conn,ids,title=str(b.get('title') or 'Combined topic')[:180],reason='Owner combined related sources',generate=True)
+                    return self._json({'id':iid})
+                finally:conn.close()
+
+            if p == '/api/topics/split':
+                from . import topics
+                conn=store.connect()
+                try:return self._json({'ids':topics.split(conn,b.get('id') or '')})
+                finally:conn.close()
+
+            if p == '/api/topics/dismiss':
+                conn=store.connect()
+                conn.execute("UPDATE match_reviews SET state='dismissed' WHERE item_id=? AND candidate_id=?",(b.get('id'),b.get('candidate_id')))
+                conn.commit();conn.close()
+                return self._json({'ok':True})
+
             if p == "/api/add":
+                return self._json({'error':'Import a Muse README using /api/import. Direct URL capture is archived; explicitly use /api/legacy/add.'},400)
+
+            if p == '/api/legacy/add':
                 raw = (b.get("text") or b.get("url") or "").strip()
                 if not raw:
                     return self._json({"error": "nothing to add"}, 400)
@@ -284,7 +379,10 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json({"queued": added})
 
             if p == "/api/status":
+                if b.get('status') not in store.STATUSES:return self._json({'error':'Unknown stage'},400)
                 conn = store.connect()
+                from . import topics
+                b['id']=topics.resolve(conn,b.get('id') or '')
                 conn.execute("UPDATE items SET status=?, updated_at=? WHERE id=?",
                              (b.get("status", "triage"), time.time(), b.get("id")))
                 conn.commit()
@@ -303,15 +401,23 @@ class Handler(BaseHTTPRequestHandler):
             if p == "/api/reprocess":
                 iid = b.get("id")
                 conn = store.connect()
+                from . import topics,readme
+                iid=topics.resolve(conn,iid)
+                docs=[dict(r) for r in conn.execute('SELECT source_id,item_id FROM research_documents') if topics.resolve(conn,r['item_id'])==iid]
+                if docs:
+                    def reread(rows):
+                        for d in rows:
+                            _set_job(iid,stage='working',started=time.time())
+                            try:readme.process(d['source_id']);_set_job(iid,stage='done',finished=time.time())
+                            except Exception as exc:_set_job(iid,stage='error',error=str(exc),finished=time.time())
+                    conn.close()
+                    threading.Thread(target=reread,args=(docs,),daemon=True).start()
+                    return self._json({'queued':iid})
                 it = store.get_item(conn, iid)
                 conn.close()
                 if not it:
                     return self._json({"error": "not found"}, 404)
-                _process_async([it["url"]], user_note=it.get("user_note") or "",
-                               user_do=it.get("user_do") or "",
-                               urgent=bool(it.get("urgent")), force=True,
-                               source=it.get("source") or "manual")
-                return self._json({"queued": iid})
+                return self._json({'error':'This is an archived link-first item. Import its Muse README to refresh the research.'},400)
 
             if p == "/api/run":
                 return self._run_command(b)
@@ -392,6 +498,8 @@ class Handler(BaseHTTPRequestHandler):
                     return self._json({"ok": True})
 
             return self._json({"error": "not found"}, 404)
+        except ValueError as e:
+            return self._json({'error':str(e)},400)
         except Exception as e:
             return self._json({"error": f"{type(e).__name__}: {e}",
                                "trace": traceback.format_exc()[-1200:]}, 500)

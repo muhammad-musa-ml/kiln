@@ -22,11 +22,13 @@ OUT = config.ROOT / "public"
 
 # --- the whitelist -------------------------------------------------------
 ITEM_FIELDS = ("id", "url", "kind", "action", "title", "hook", "summary",
-               "owner", "posted", "slide_count", "focus_slide", "links_checked")
+               "owner", "posted", "slide_count", "focus_slide", "links_checked",
+               "source_urls", "source_count", "contents")
 # Added by public_item(): media_id, pdf_file - both opaque, neither a real path.
 
 NOTE_FIELDS = ("sections", "onscreen_text", "entities", "topics",
-               "code_snippets", "spoken_transcript", "open_questions")
+               "code_snippets", "spoken_transcript", "open_questions",
+               "commands", "prompts", "research_date", "evidence_notice")
 
 ENRICH_FIELDS = ("what_it_is", "current_state", "why_it_matters",
                  "prerequisites", "time_to_useful", "gotchas",
@@ -35,7 +37,7 @@ ENRICH_FIELDS = ("what_it_is", "current_state", "why_it_matters",
                  "where_it_applies", "what_it_replaces",
                  "role", "company", "location", "remote", "is_open",
                  "deadline_public", "requirements", "how_to_stand_out",
-                 "useful_links", "next_action")
+                 "useful_links", "next_action", "install", "posting_urls")
 
 # What the follow-up produced that a stranger may see: the answer, the files
 # and where the facts came from. Why it ran, what it could not do, and which
@@ -62,7 +64,8 @@ NEVER = ("user_note", "user_do", "status", "urgent", "deadline", "cost_usd",
 
 _ABS_PATH = re.compile(r"[A-Za-z]:\\\\?[^\s\"']+|/(?:home|Users)/[^\s\"']+")
 _KEYISH = re.compile(r"AIza[0-9A-Za-z_\-]{10,}|sk-[0-9A-Za-z_\-]{10,}"
-                     r"|sb_secret_[0-9A-Za-z_\-]+")
+                     r"|sb_secret_[0-9A-Za-z_\-]+"
+                     r"|https://hooks\.slack\.com/services/[^\s<>\"`\)\]]+")
 
 # Share and tracking parameters. A link I share carries a token that ties the
 # post to my account: Instagram has called it igshid, then igsh, and now stkn,
@@ -207,6 +210,8 @@ def public_item(full: dict) -> dict:
     d = pick(full, ITEM_FIELDS)
     d["note"] = pick(note, NOTE_FIELDS)
     d["enrich"] = pick(enr, ENRICH_FIELDS)
+    d['progress'] = {'inbox':'ready','triage':'ready','active':'in-progress','done':'made','dropped':'set-aside'}.get(full.get('status'),'ready')
+    d['note'] = render_note(d['note'])
 
     if gate.get("gated"):
         d["gate"] = pick(gate, GATE_FIELDS)
@@ -248,6 +253,15 @@ def public_item(full: dict) -> dict:
     return d
 
 
+def render_note(note: dict) -> dict:
+    """Safe Markdown display, shared by local and static views."""
+    from . import artifacts
+    note=dict(note)
+    for key in ('sections','prompts'):
+        note[key]=[{**s,'html':artifacts.markdown(s.get('detail') or '')} for s in note.get(key) or [] if isinstance(s,dict)]
+    return note
+
+
 def followup(full: dict) -> dict:
     """The part of an item's answer that is safe to publish, or {}.
 
@@ -280,13 +294,27 @@ def followup(full: dict) -> dict:
 
 
 def build(out: Path = OUT, copy_media: bool = True) -> dict:
+    from . import topics
     conn = store.connect()
     rows = store.list_items(conn, limit=10000)
     items = []
     for r in rows:
         full = store.get_item(conn, r["id"])
         if full:
-            items.append(public_item(full))
+            pending=conn.execute("SELECT 1 FROM research_documents WHERE item_id=? AND state='pending'",(full['id'],)).fetchone()
+            if pending and full.get('claude_state')!='done':continue
+            it=public_item(full)
+            it['related']=scrub(topics.related(conn,full['id']))
+            it['members']=[{'id':m['id'],'title':scrub(m['title']),'source_urls':scrub(m['source_urls']),
+                            'transcript':scrub((m.get('note') or {}).get('spoken_transcript') or '')}
+                           for m in topics.members(conn,full['id'])]
+            items.append(it)
+    aliases={r['id']:topics.resolve(conn,r['id']) for r in conn.execute("SELECT id FROM items WHERE COALESCE(canonical_id,'')!=''")}
+    # Keep original download/slide URLs usable after a tile is consolidated.
+    # These rows do not become duplicate shelf tiles; all files still pass
+    # the same whitelist and document scrubbing as visible topics.
+    group_ids={r['id'] for r in conn.execute('SELECT id FROM topic_groups')}
+    media_items=items+[public_item(store.get_item(conn,i)) for i in aliases if i not in group_ids]
     tree = store.sections(conn)
     conn.close()
 
@@ -324,11 +352,11 @@ def build(out: Path = OUT, copy_media: bool = True) -> dict:
                              "parent": s.get("parent") or "", "count": n})
 
     (out / "data" / "items.json").write_text(
-        json.dumps({"items": items, "built": built}, ensure_ascii=False, indent=1),
+        json.dumps({"items": items, "built": built, "aliases":aliases}, ensure_ascii=False, indent=1),
         encoding="utf-8")
     (out / "data" / "facets.json").write_text(
         json.dumps({"total": len(items), **facets, "sections": sections,
-                    "by_status": {}, "gated": sum(1 for i in items if i.get("gate")),
+                    "by_status": {s:sum(1 for i in items if i['progress']==s) for s in ('ready','in-progress','made','set-aside')}, "gated": sum(1 for i in items if i.get("gate")),
                     "dead_links": sum(1 for i in items for l in i.get("links", []) if not l["alive"])},
                    ensure_ascii=False, indent=1),
         encoding="utf-8")
@@ -338,6 +366,11 @@ def build(out: Path = OUT, copy_media: bool = True) -> dict:
     html = html.replace("</head>",
                         f'<script>window.KILN_STATIC=true;window.KILN_BUILT="{built}";</script></head>', 1)
     (out / "index.html").write_text(html, encoding="utf-8")
+    for name in ('app.js','app.css'):
+        src=config.WEB/name
+        if src.is_file():
+            (out/'static').mkdir(exist_ok=True)
+            shutil.copy2(src,out/'static'/name)
 
     # Host config travels WITH the build, so it can never drift out of sync.
     # The CSP is the answer to "secure even through inspecting elements":
@@ -375,7 +408,7 @@ def build(out: Path = OUT, copy_media: bool = True) -> dict:
     withheld: list[str] = []
     if copy_media:
         from . import artifacts
-        for it in items:
+        for it in media_items:
             # Documents the follow-up made go under files/, so one called
             # doc.pdf can never overwrite the carousel's own bound PDF.
             fu = it.get("followup") or {}
@@ -419,9 +452,14 @@ def build(out: Path = OUT, copy_media: bool = True) -> dict:
 
         # rewrite items.json now that media names are settled
         (out / "data" / "items.json").write_text(
-            json.dumps({"items": items, "built": built}, ensure_ascii=False, indent=1),
+            json.dumps({"items": items, "built": built, "aliases":aliases}, ensure_ascii=False, indent=1),
             encoding="utf-8")
 
+    # Stable bytes across Windows staging and Git/Vercel deployment. Public
+    # files bypass Git newline conversion so live SHA-256 checks are exact.
+    for path in out.rglob('*'):
+        if path.is_file() and path.suffix.lower() in {'.html','.js','.css','.json','.md','.txt','.csv'}:
+            path.write_bytes(path.read_bytes().replace(b'\r\n',b'\n'))
     return {"items": len(items), "media_files": copied, "out": str(out), "built": built,
             "withheld": withheld}
 

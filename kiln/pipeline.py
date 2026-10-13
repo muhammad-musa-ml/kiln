@@ -383,8 +383,15 @@ def index(conn, iid: str) -> None:
         json.dumps(enriched, ensure_ascii=False)[:40000] if enriched else "",
         claude.get("answer", "") or "",
         _texts(claude.get("extra_sections")),
+        json.dumps(it.get('tags') or {},ensure_ascii=False),
+        json.dumps(note.get('prompts') or [],ensure_ascii=False),
+        '\n'.join(note.get('commands') or []),
+        ' '.join(it.get('source_urls') or []),
         it.get("user_note") or "", it.get("user_do") or "",
     ])
+    for member in conn.execute("SELECT title,note_json FROM items WHERE canonical_id=? AND id NOT IN (SELECT id FROM topic_groups)",(iid,)):
+        member_note=json.loads(member['note_json'] or '{}')
+        body += '\n'+(member['title'] or '')+'\n'+(member_note.get('spoken_transcript') or '')
     store.index_fts(conn, iid, it.get("title", ""), it.get("hook", ""),
                     it.get("summary", ""), body)
 

@@ -26,6 +26,7 @@ OUT = ROOT / "public"
 # that from a leak. Same reasoning that already moved this check off
 # index.html. Their VALUES are covered by FORBIDDEN_PATTERNS below.
 FORBIDDEN_KEYS = [
+    "_readme", "research_documents", "parents_json", "research_json", "local_token",
     "user_note", "user_do", "cost_usd", "media_dir", "pdf_path",
     "enrich_json", "note_json", "processed_at",
     "claude_json", "claude_state", "claude_attempts", "run_dir",
@@ -38,6 +39,7 @@ FORBIDDEN_PATTERNS = [
     (r"\bsk-[0-9A-Za-z_\-]{20,}", "OpenAI-style key"),
     (r"sb_secret_[0-9A-Za-z_\-]+", "Supabase secret key"),
     (r"gsk_[0-9A-Za-z]{20,}", "Groq key"),
+    (r"https://hooks\.slack\.com/services/[^\s<>\"`\)\]]+", "Slack webhook"),
     (r"[A-Za-z]:\\\\?Users\\\\?[A-Za-z0-9_.\-]+", "Windows user path"),
     (r"/(?:home|Users)/[A-Za-z0-9_.\-]+/", "POSIX home path"),
 ]
@@ -192,7 +194,7 @@ def main() -> int:
     data = json.loads((OUT / "data" / "items.json").read_text(encoding="utf-8"))
     allowed = set(publish.ITEM_FIELDS) | {
         "note", "enrich", "tags", "links", "gate",
-        "media_id", "pdf_file", "slide_ext", "build_prompt", "followup"}
+        "media_id", "pdf_file", "slide_ext", "build_prompt", "followup", "progress", "related", "members"}
     extra: set[str] = set()
     for it in data.get("items", []):
         extra |= set(it.keys()) - allowed
@@ -381,14 +383,14 @@ def main() -> int:
     else:
         ok("published page matches the local page exactly")
 
-    # 10. the page itself names no AI vendor or model. The items may: a post
-    #     can be about one. The page is the owner's, and says "the follow-up".
+    # 10. Shared behavior and styling must be published with the shared page.
+    # The workflow now intentionally explains Muse by name at the owner's request.
     checks += 1
-    named = sorted(set(m.lower() for m in VENDOR_WORDS.findall(html)))
-    if named:
-        fail(f"the published page names {named}; it should name no vendor")
+    drift=[name for name in ('app.js','app.css') if not (OUT/'static'/name).is_file() or (OUT/'static'/name).read_bytes()!=(ROOT/'web'/name).read_bytes()]
+    if drift:
+        fail(f"published scripts/styles differ from the local app: {drift}")
     else:
-        ok("the published page names no AI vendor or model")
+        ok("published scripts and styles match the local app exactly")
 
     print()
     if failures:

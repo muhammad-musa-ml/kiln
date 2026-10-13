@@ -1,5 +1,35 @@
 # Kiln overhaul, September 2026
 
+### October 2026: Muse README intake migration
+
+- Replaced normal URL scraping with immutable Muse Markdown intake, current
+  official-source research, practical guides and PDF downloads. Exact source
+  digests, revision checks and publication receipts gate archive cleanup.
+- Researched all 30 incoming dossiers. The library now has 47 visible topics
+  retaining 63 original sources; 10 curated topic groups combine specific
+  overlaps and expansions into coherent guides. Originals remain available,
+  existing media URLs still work, and groups can be split locally.
+- Rebuilt the shared local/public interface with combined search and filters,
+  content badges, saved items, drawer tabs and collapsible sections. Local
+  controls support tags, section moves and Ready/In progress/Made progress.
+  The public explanation describes Muse, publication and local-only work.
+- Documented the exact old/new workflows and Muse rationale in README.md.
+  Preserved the old implementation and original README in archive/link-first.
+  Updated the installed inbox routine to use researched and Kilned folders.
+- Verification: all 15 standalone test suites passed; the final exported site
+  passed 40 privacy/publication checks. Browser checks covered search, tabs,
+  copying commands, tags, moves, progress and mobile filtering, with temporary
+  edits restored. Cloud cleanup waits for byte-for-byte live verification.
+- During verification, combined unittest discovery reused production config
+  and damaged local state. Restored the database, full guides and source bytes
+  from private backups, verified all 47 topics/63 sources/30 dossiers, and
+  added a refusal guard before the new suite can touch a non-test database.
+  Run these suites as separate processes, never combined discovery.
+- GitHub push protection caught a webhook-shaped example copied into a
+  dossier's code block. Removed the literal, added publisher redaction and
+  an audit rule with regression coverage, and amended the unpublished commit
+  so the blocked version is absent from the pushed history.
+
 Why this file exists: the work below is long enough to cross several sessions,
 and the owner needs to see at a glance what is done, what is left, and what
 turned up along the way. It is updated as work happens, not at the end.

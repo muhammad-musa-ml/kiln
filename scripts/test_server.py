@@ -66,6 +66,13 @@ def main() -> int:
             "scope": "IN: parse a file. OUT: a web UI.", "stack": ["python"],
             "milestones": [{"step": "parse", "outcome": "it parses"}]}})})
     want = jobs.build_prompt(store.get_item(conn, "p1"))
+    media = config.MEDIA / "carousel"
+    media.mkdir(parents=True)
+    (media / "carousel_01.jpg").write_bytes(b"jpeg fixture")
+    (media / "carousel.pdf").write_bytes(b"%PDF-1.4\n%%EOF\n")
+    store.upsert_item(conn, {
+        "id": "p2", "url": "https://example.com/p2", "slide_count": 1,
+        "media_dir": str(media), "processed_at": 1.0})
     conn.close()
 
     doc = artifacts.ARTIFACTS / "p1"
@@ -76,12 +83,45 @@ def main() -> int:
     srv = ThreadingHTTPServer(("127.0.0.1", PORT), server.Handler)
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     try:
+        def post(path,payload,token=True):
+            headers={'Content-Type':'application/json'}
+            if token:headers['X-Kiln-Token']=config.LOCAL_TOKEN
+            req=urllib.request.Request('http://127.0.0.1:%d%s'%(PORT,path),data=json.dumps(payload).encode(),headers=headers,method='POST')
+            try:
+                with urllib.request.urlopen(req,timeout=20) as r:return r.status,json.loads(r.read())
+            except urllib.error.HTTPError as e:return e.code,json.loads(e.read())
+        print('README and organization write routes')
+        code,_=post('/api/status',{'id':'p1','status':'done'},token=False)
+        check('writes without the local token are refused',code==404)
+        code,_=post('/api/status',{'id':'p1','status':'invalid'})
+        check('invalid progress is refused',code==400)
+        code,_=post('/api/status',{'id':'p1','status':'done'})
+        check('valid progress is saved',code==200 and json.loads(get('/api/item/p1')[2])['status']=='done')
+        code,_=post('/api/organize',{'id':'p1','tags':['Test Tag'],'new_section':'Ideas / Tools','sections':[]})
+        data=json.loads(get('/api/item/p1')[2])
+        check('tags and new subsection are saved',code==200 and data['tags']['topic']==['test tag'] and data['tags']['section']==['ideas/tools'])
+        code,_=post('/api/organize',{'id':'p1','sections':[]})
+        check('replacing sections removes old filing',code==200 and not json.loads(get('/api/item/p1')[2])['tags'].get('section'))
+        code,_=post('/api/import',{'files':['bad']})
+        check('malformed README import is refused',code==400)
+        code,_=post('/api/add',{'url':'https://example.com'})
+        check('default URL scraping is archived',code==400)
         print("the prompt the page copies")
         code, _, body = get("/api/item/p1")
         got = json.loads(body or b"{}").get("build_prompt")
         check("an item with a brief comes with the prompt Queue it writes",
               code == 200 and got == want and len(want) > 200,
               "code %s, prompt %s chars" % (code, len(got or "")))
+
+        print("carousel image links")
+        code, _, body = get("/api/item/p2")
+        ext = json.loads(body).get("slide_ext")
+        check("a JPEG capture reports its saved extension", code == 200 and ext == ".jpg")
+        code, _, body = get("/media/carousel/carousel_01" + (ext or ".webp"))
+        check("the drawer's image link serves the saved image",
+              code == 200 and body == b"jpeg fixture")
+        code, _, body = get("/api/item/p1")
+        check("an item without media still opens", code == 200 and "slide_ext" not in json.loads(body))
 
         print("the names it answers to")
         code, _, _ = get("/api/item/p1", host="localhost:%d" % PORT)

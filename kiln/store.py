@@ -126,6 +126,20 @@ CREATE TABLE IF NOT EXISTS playbook (
   used        INTEGER DEFAULT 0,
   last_used   REAL
 );
+
+CREATE TABLE IF NOT EXISTS research_documents (
+  source_id TEXT PRIMARY KEY, name TEXT NOT NULL, digest TEXT NOT NULL,
+  item_id TEXT NOT NULL, path TEXT NOT NULL, state TEXT NOT NULL DEFAULT 'pending',
+  error TEXT, imported_at REAL, researched_at REAL, published_at REAL,
+  cleaned_at REAL, parents_json TEXT, research_json TEXT
+);
+CREATE TABLE IF NOT EXISTS topic_groups (
+  id TEXT PRIMARY KEY, title TEXT NOT NULL, reason TEXT, created_at REAL
+);
+CREATE TABLE IF NOT EXISTS match_reviews (
+  item_id TEXT, candidate_id TEXT, score REAL, reason TEXT, state TEXT DEFAULT 'pending',
+  PRIMARY KEY(item_id,candidate_id)
+);
 """
 
 
@@ -148,7 +162,8 @@ def _migrate(conn: sqlite3.Connection) -> None:
                              ("items", "claude_state", "TEXT"),
                              ("items", "claude_json", "TEXT"),
                              ("items", "claude_attempts", "INTEGER DEFAULT 0"),
-                             ("items", "claude_at", "REAL")):
+                             ("items", "claude_at", "REAL"),
+                             ("items", "canonical_id", "TEXT")):
         have = {r["name"] for r in conn.execute("PRAGMA table_info(%s)" % table)}
         if col not in have:
             conn.execute("ALTER TABLE %s ADD COLUMN %s %s" % (table, col, decl))
@@ -203,7 +218,7 @@ def upsert_item(conn: sqlite3.Connection, rec: dict) -> str:
         "slide_count", "focus_slide", "pdf_path", "media_dir", "links_checked", "gate_json",
         "note_json", "enrich_json", "attempts", "created_at", "updated_at",
         "processed_at", "error", "claude_state", "claude_json", "claude_attempts",
-        "claude_at"}]
+        "claude_at", "canonical_id"}]
     placeholders = ",".join("?" for _ in cols)
     updates = ",".join(f"{c}=excluded.{c}" for c in cols if c != "id")
     conn.execute(
@@ -285,7 +300,25 @@ def get_item(conn, iid: str) -> dict | None:
     d["tags"] = facets_for(conn, iid)
     d["links"] = [dict(r) for r in conn.execute(
         "SELECT url,label,where_found,alive,status_code,page_title FROM links WHERE item_id=?", (iid,))]
+    d.update(content_flags(d))
+    research=conn.execute('SELECT state FROM research_documents WHERE item_id=? ORDER BY imported_at DESC LIMIT 1',(iid,)).fetchone()
+    d['research_state']=research['state'] if research else ''
     return d
+
+
+def content_flags(it: dict) -> dict:
+    """Small, identical tile indicators on localhost and the public copy."""
+    note, enr, fu = it.get('note') or {}, it.get('enrich') or {}, it.get('claude') or {}
+    guide=fu.get('answer') or ''
+    urls = note.get('source_urls') or [it.get('url')]
+    return {'source_urls': list(dict.fromkeys(u for u in urls if u)),
+            'source_count': len(set(u for u in urls if u)),
+            'contents': {'project': bool((enr.get('project') or {}).get('name') or re.search(r'(?im)^#{1,6} .*\bproject\b',guide)),
+                         'prompt': bool(note.get('prompts') or (enr.get('project') or {}).get('name') or re.search(r'```(?:text|prompt)\n',guide)),
+                         'commands': bool(note.get('commands') or note.get('code_snippets') or enr.get('install')),
+                         'pdf': any(str(a.get('file','')).endswith('.pdf') for a in fu.get('artifacts') or []) or bool(it.get('pdf_path')),
+                         'transcript': bool(note.get('spoken_transcript') or note.get('transcript_count')),
+                         'research': bool(fu.get('answer') or enr.get('what_it_is'))}}
 
 
 def facets_for(conn, iid: str) -> dict[str, list[str]]:
@@ -296,7 +329,7 @@ def facets_for(conn, iid: str) -> dict[str, list[str]]:
 
 
 def list_items(conn, *, status: str = "", action: str = "", topic: str = "",
-               place: str = "", section: str = "", q: str = "",
+               place: str = "", section: str = "", q: str = "", content: str = "",
                urgent: bool = False, limit: int = 200) -> list[dict]:
     sql = ["SELECT i.* FROM items i"]
     # Kept apart because the joins come before the WHERE in the SQL text.
@@ -304,12 +337,15 @@ def list_items(conn, *, status: str = "", action: str = "", topic: str = "",
     # moment a search and a filter were both on, and the list came back empty.
     join_args: list[Any] = []
     where_args: list[Any] = []
-    joins, where = [], []
+    joins, where = [], ["COALESCE(i.canonical_id,'')=''"]
 
-    if q.strip():
+    if q.strip() and re.findall(r'\w+',q,re.UNICODE):
         joins.append("JOIN items_fts f ON f.id = i.id")
         where.append("items_fts MATCH ?")
-        where_args.append(q.strip())
+        # User search is plain text: quotes, C++, slash commands and dashes
+        # must not become FTS operators or produce a server error.
+        words = re.findall(r'\w+', q, re.UNICODE)
+        where_args.append(' AND '.join('"' + w + '"*' for w in words) or '""')
     for facet, val in (("action", action), ("topic", topic), ("place", place)):
         if val:
             alias = f"t_{facet}"
@@ -336,6 +372,11 @@ def list_items(conn, *, status: str = "", action: str = "", topic: str = "",
     out = []
     for r in rows:
         d = dict(r)
+        full = get_item(conn, d['id'])
+        d.update(content_flags(full))
+        d['research_state']=full.get('research_state','')
+        if content and not d['contents'].get(content):
+            continue
         d.pop("note_json", None)
         d.pop("enrich_json", None)
         # The tile only needs to know whether the follow-up answered, not the
@@ -366,19 +407,20 @@ def list_items(conn, *, status: str = "", action: str = "", topic: str = "",
 
 
 def counts(conn) -> dict:
+    visible = "COALESCE(canonical_id,'')=''"
     out: dict[str, Any] = {}
-    out["total"] = conn.execute("SELECT COUNT(*) c FROM items").fetchone()["c"]
+    out["total"] = conn.execute("SELECT COUNT(*) c FROM items WHERE " + visible).fetchone()["c"]
     out["by_status"] = {r["status"] or "inbox": r["c"] for r in conn.execute(
-        "SELECT status, COUNT(*) c FROM items GROUP BY status")}
+        "SELECT status, COUNT(*) c FROM items WHERE " + visible + " GROUP BY status")}
     out["by_action"] = {r["value"]: r["c"] for r in conn.execute(
-        "SELECT value, COUNT(*) c FROM tags WHERE facet='action' GROUP BY value ORDER BY c DESC")}
+        "SELECT value, COUNT(*) c FROM tags JOIN items ON items.id=tags.item_id WHERE " + visible + " AND facet='action' GROUP BY value ORDER BY c DESC")}
     out["by_topic"] = {r["value"]: r["c"] for r in conn.execute(
-        "SELECT value, COUNT(*) c FROM tags WHERE facet='topic' GROUP BY value ORDER BY c DESC LIMIT 40")}
+        "SELECT value, COUNT(*) c FROM tags JOIN items ON items.id=tags.item_id WHERE " + visible + " AND facet='topic' GROUP BY value ORDER BY c DESC")}
     out["by_place"] = {r["value"]: r["c"] for r in conn.execute(
-        "SELECT value, COUNT(*) c FROM tags WHERE facet='place' GROUP BY value ORDER BY c DESC LIMIT 20")}
+        "SELECT value, COUNT(*) c FROM tags JOIN items ON items.id=tags.item_id WHERE " + visible + " AND facet='place' GROUP BY value ORDER BY c DESC")}
     out["gated"] = conn.execute(
-        "SELECT COUNT(*) c FROM items WHERE gate_json LIKE '%\"gated\": true%'").fetchone()["c"]
-    out["dead_links"] = conn.execute("SELECT COUNT(*) c FROM links WHERE alive=0").fetchone()["c"]
+        "SELECT COUNT(*) c FROM items WHERE COALESCE(canonical_id,'')='' AND gate_json LIKE '%\"gated\": true%'").fetchone()["c"]
+    out["dead_links"] = conn.execute("SELECT COUNT(*) c FROM links JOIN items ON items.id=links.item_id WHERE alive=0 AND COALESCE(canonical_id,'')=''").fetchone()["c"]
     out["sections"] = sections(conn)
     return out
 
@@ -431,7 +473,7 @@ def sections(conn) -> list[dict]:
         "SELECT id, name, parent, about FROM sections")]
     for r in rows:
         r["count"] = conn.execute(
-            "SELECT COUNT(DISTINCT item_id) c FROM tags WHERE facet='section'"
+            "SELECT COUNT(DISTINCT item_id) c FROM tags JOIN items ON items.id=tags.item_id WHERE COALESCE(canonical_id,'')='' AND facet='section'"
             " AND (value=? OR value LIKE ?)", (r["id"], r["id"] + "/%")).fetchone()["c"]
     top = sorted((r for r in rows if not r["parent"]), key=lambda r: r["name"].lower())
     out = []

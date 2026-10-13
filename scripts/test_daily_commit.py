@@ -181,7 +181,7 @@ def sync(repo: Path, inbox: Path, build: str, morning: bool = False,
          answer: dict | None = None, args: list | None = None,
          **fakes) -> tuple[int, str, list]:
     daily, calls = load_daily(repo, build, morning, answer, **fakes)
-    argv, sys.argv = sys.argv, ["daily.py", str(inbox)] + (args or [])
+    argv, sys.argv = sys.argv, ["daily.py", str(inbox), "--legacy-links"] + (args or [])
     out = io.StringIO()
     try:
         with contextlib.redirect_stdout(out):

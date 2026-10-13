@@ -130,7 +130,7 @@ def check_items(conn) -> list[dict]:
     now = time.time()
 
     for row in conn.execute(
-            "SELECT id, url, title, status, error, created_at FROM items"):
+            "SELECT id, url, title, status, error, created_at, claude_state FROM items WHERE COALESCE(canonical_id,'')=''"):
         d = dict(row)
         tags = store.facets_for(conn, d["id"]).get("action") or []
         if not (d.get("title") or "").strip():
@@ -141,7 +141,7 @@ def check_items(conn) -> list[dict]:
             redo.append(d["url"])
         if d.get("error"):
             errored.append("%s  %s" % (d["url"][:54], (d["error"] or "")[:60]))
-        if (d.get("status") == "inbox"
+        if (d.get("status") == "inbox" and d.get('claude_state')!='done'
                 and now - float(d.get("created_at") or now) > STUCK_AFTER):
             stuck.append(d["url"])
 

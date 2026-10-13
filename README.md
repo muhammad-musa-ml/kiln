@@ -1,398 +1,110 @@
 # Kiln
 
-I save a lot of reels. Courses I mean to take, repos I mean to look at, job
-posts, resume tips. Then they sit in a folder I never open again.
+Saved ideas, researched into something useful.
 
-This reads them for me.
+[Public library](https://kiln-by-m.vercel.app) · [Source](https://github.com/muhammad-musa-ml/kiln) · [Previous workflow](archive/link-first/README.md)
 
-I paste a link into a Google Doc. Kiln opens the post, goes through every
-slide, pulls the caption and whatever text is on screen, checks if the links
-still work, and then goes and looks up the stuff the post skipped. Everything
-lands in a local UI I can search.
+Kiln starts with a **Muse-produced Markdown dossier**, researches the practical next steps against current sources, and turns overlapping reels into one topic with guides, source links, prompts, commands, PDFs and project ideas. Every original URL remains attached.
 
-**Live: https://kiln-by-m.vercel.app**
+## Before and now
 
-That link is a published copy of my library, not the app itself. Worth
-explaining properly, because half of Kiln isn't there and that's on purpose.
+Previously, a scheduled run read URLs and instructions from a Google Doc named **links**. Kiln downloaded the post, extracted carousel text or video frames, transcribed audio locally, enriched the extraction and asked its follow-up worker to finish missing research. Instagram authentication, scraping failures, frame selection and transcription were part of intake.
 
-## What the live site is, and isn't
+Now **Muse does the first reading**. Its README contains the original URL, transcript/visual observations, named tools, claims and gaps. The shared **To-Do AI / researched** folder is the primary inbox. Kiln consumes these READMEs and concentrates on verification, practical instructions and deliverables. The URL identifies evidence; it is no longer the extraction input.
 
-It's a static export. A folder of JSON and images on a CDN. There is no
-database behind it, no API key, and no write endpoint at all. Not hidden,
-not disabled by a flag, just not built into it.
+The [archived implementation](archive/link-first/README.md) includes the original README, extraction/orchestration modules and UI. URL acquisition remains an explicit compatibility option, never the default scheduled path.
 
-**Works there:** browsing everything, filtering by tag or by section, search,
-every carousel slide, the PDFs, the full write-up for each item, the answer
-to whatever I asked about it along with any document made for it, the
-project briefs, and the copy-the-prompt button. That last one works because
-the prompt ships inside the data, so it needs no server.
+## Why Muse supplies the initial README
 
-**Doesn't work there, and why:**
+Meta describes Muse as a personal agent with user-controlled service connections, including Instagram, and gives the example of turning a saved recipe reel into a grocery list. This makes Muse a practical first reader in this owner's Instagram workflow. The benefit is an inference from that integration and Kiln's acquisition failures; it does not imply unrestricted access to every post. [Meta launch announcement](https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/), [Muse product](https://ai.meta.com/muse/), [Meta security design](https://research.meta.ai/blog/security-and-safety-for-ai-agents-our-approach-with-muse).
 
-- **Adding links.** No write route exists. If you POST to one you get a 405.
-- **Running or queueing a build.** Needs a real machine with a shell.
-- **Installing anything.** Same. A public endpoint that runs shell commands
-  is remote code execution with extra steps, so it only exists on the local
-  server. That server refuses every write, and the install route above all,
-  when `KILN_LOCAL` is set to anything but 1 (it is 1 unless set otherwise),
-  and it answers only to this machine's own names.
-- **Live link checking.** It says "checked 23 Sep" rather than "checked just
-  now" because that's the truth. The check ran when I processed the item and
-  the result was stored. A static page has nothing to re-check with. The
-  heading used to say "just now" and that was wrong, so I changed it.
-- **Model controls.** Adding a provider, reordering the models or testing a
-  key goes through local routes under `/api/models`, which need my keys.
-  Neither copy of the page has a panel for them.
+Meta's model API separately documents reading video visuals and embedded audio together, including transcription. Capturing what the reel shows and says before handing a stable dossier to Kiln avoids repeating fragile media extraction. Model API capabilities do not guarantee identical access or transcription quality in the personal agent. The documentation also notes model-specific audio limitations. [Video and audio documentation](https://dev.meta.ai/docs/video-understanding).
 
-**The reason the whole thing can't just live on Vercel:** Instagram blocks
-requests from data centre IP ranges. The browser trick works *because* it
-runs unauthenticated from a normal home connection. Move it to a server and
-you get the same 401s that killed every other approach. That isn't a Vercel
-limitation, and no amount of code fixes it. So the reading happens on my
-laptop and the result gets published.
+Checked **October 12, 2026**. Muse's “verified” labels, reconstructed transcripts, prices and claims remain source evidence. Kiln independently checks current sources and records uncertainty. Muse/Instagram credentials and raw dossiers are never published.
 
-## What only exists on localhost
+## Exact workflow
 
-Everything that touches a key, a browser, or a shell:
+1. **Capture:** Muse writes a `.md` dossier into `To-Do AI / researched`. Put the original Instagram or YouTube URL near the top. Transcript, visual notes, tools, links, prompts and gaps can use ordinary Markdown headings, tables and fenced code.
+2. **Stage:** the connected local routine downloads exact UTF-8 content and a private manifest of Drive file IDs, names and parents. Local upload/paste also works. Kiln saves a SHA-256-addressed revision before changing the database. Re-importing the same completed revision is idempotent; changed revisions become pending.
+3. **Parse:** recognize headings outside code fences; distinguish original URLs from resource URLs; preserve tables, code, transcript attribution and reusable prompts. Source text is evidence, never permission to execute commands.
+4. **Research now:** search and fetch current sources, preferring official docs and repositories. Explicit links and documented resource seeds help when search fails. Separate creator claims, corroborated facts and gaps. Find supported setup/run steps, prerequisites, missing application/resource links, limitations, prompts and feasible projects. Ingestion never executes commands.
+5. **Create files:** write a practical Markdown guide and printable PDF with citations. Missing evidence, incomplete research or a failed PDF leaves the dossier pending with a retryable error; the source is retained.
+6. **Compare:** retrieve library candidates by specific title terms, tools/repositories and original URLs, then compare purpose and subject. Exact sources or sufficiently confident specific matches are synthesized. A broad shared category is insufficient. Ambiguous comparisons stay in the local research inbox. Every successfully researched source is checked.
+7. **Unify:** synthesize one task-oriented guide, retaining distinct methods and disagreements. Keep every original URL, transcript and download. Original database rows remain intact; old item URLs resolve to the combined topic. Local **Organize → Restore separate sources** reverses membership. Updating a member refreshes its unified guide.
+8. **Organize:** edit public tags and select replacement sections locally, allowing moves or multiple placements. Sections support two levels. **Ready → In progress → Made** tracks the owner's outcome; research completion alone never means a project was built. **Set aside** preserves an unused topic.
+9. **Publish:** whitelist safe fields/artifacts into `public/`, strip tracking tokens, secrets and local paths, run the privacy audit, then commit/push the audited snapshot. Both surfaces use the same HTML, JavaScript and CSS source.
+10. **Verify live:** wait for the exact JSON snapshot and compare every deployed file's SHA-256 against the export. Only a matching release issues publication receipts. An export or push alone does not complete a dossier.
+11. **Clear completed inputs:** the connected routine re-reads the Drive file and checks its digest, moves it from `researched` into sibling **Kilned** while preserving unrelated parents, verifies the move, and confirms local cleanup. Remove only handled original-URL paragraphs from the **links** Doc using a fresh revision. Keep pending URLs, requests and unrelated text. Local files move from `data/research/incoming` into `data/research/Kilned`; attachments stay intact.
+12. **Build separately:** copy project prompts or queue builds locally. Building/review/shipping still uses the owner's queue decision; research never starts every suggested project automatically.
 
-- Adding links and re-processing them
-- Model management through the `/api/models` routes: add any provider,
-  reorder a list, disable one, test a key before it's saved. There is no
-  panel for these; they are called directly.
-- Queueing a build, and the card that asks me which queued builds to run
-- Claude's follow-up on each item (below), and the cards it leaves me
-- Install previews with a Run button
-- The Google Drive sync
-- Live model health
+## Using the website
 
-I haven't moved these online because each one would mean putting my API keys
-on a host I don't control, and I'd be building auth, rate limiting and
-row-level security for an app with exactly one user. The static export gets
-me the part worth sharing without any of that surface. If I ever want to add
-links from my phone, the smallest honest version is a tiny authenticated
-endpoint that only writes to a queue, and the laptop still does the work.
+- Search titles, research, source URLs, tags, prompts and commands. Combine search with section/tag/action/platform and **Contains** filters: project, prompt, commands, PDF, transcript or research.
+- Sort by recent research, title or source count; filter outcome progress; star browser-local bookmarks.
+- Tiles show contents before opening. Drawers have Overview, Research, Prompts & tools, Files, Sources and Related tabs, plus local Organize. Heading jump links and collapsible sections help with long guides.
+- Share a direct topic or filtered library URL. Original item URLs continue to resolve after merging.
+- Open **How Kiln works** on either website for the workflow and public/local explanation.
 
-## Running it
+| Capability | Public website | Local workspace |
+| --- | --- | --- |
+| Search, filters, guides, sources, prompts, commands, downloads | Yes | Yes |
+| Published outcome progress | View | Edit |
+| Stars | This browser only | This browser only |
+| README import, research and retries | No | Yes |
+| Tags, sections, merge/split | View published result | Edit |
+| Build queue, decision cards, shell operations | No | Yes |
+| Raw dossiers, personal notes, credentials, Drive cleanup | No | Private |
 
-```bash
+The public deployment is a **static snapshot** with no write API or access to the owner's computer. Shared UI, topic/filter links, downloads and live verification bridge the surfaces; private operations stay local. Local edits appear after publishing.
+
+## Run locally
+
+Python 3.11+, pip and Chromium for PDF rendering. The dependencies also support optional legacy extraction. Publishing needs Git/GitHub authentication. Model credentials stay in private storage/environment. No JavaScript build step is needed.
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-playwright install chromium
 python -m kiln.server
 ```
 
-Then open http://127.0.0.1:7878 and paste a link.
+Open [localhost](http://127.0.0.1:7878). The default bind is loopback; mutation routes require the local token and a validated host. Only the local page receives that token.
 
-You can add context on the same line if you want:
+```powershell
+# Research staged READMEs; never build their proposed projects automatically.
+python scripts/research_sync.py import data/research/incoming
+python scripts/research_sync.py retry
 
-```
-https://instagram.com/p/ABC/ | do: find the actual job posting | by: Oct 14 | !
-https://github.com/x/y | note: is this worth installing?
-```
+# Full scheduled cycle, using only owner-consented builds.
+python scripts/daily.py data/research/incoming --builds ask
 
-The `!` marks it urgent. An urgent item, like anything I wrote a note or an
-instruction on, gets the deep reading list, which has the pro model second,
-and is always read twice with the two reads merged.
+# Build/audit before committing and pushing the intended changes.
+python -m kiln.publish
+python scripts/audit_public.py
 
-## Feeding it from Drive
-
-I keep a doc in Drive and just paste links there. Kiln reads it and never
-writes to it, so I can reorganise the doc however I want. It remembers each
-link it has read, not each line, so a link added to an old line later still
-gets read and joins the others on that line, and an instruction I write
-under a link after it was read still reaches it, if the item had none of
-its own.
-
-The scheduled sync reads the doc through the Drive connector and saves a
-copy of it for `scripts/daily.py` (next section). By hand, from a saved copy:
-
-```bash
-python scripts/sync_inbox.py inbox.txt
+# After deployment: verify all live files and obtain cleanup receipts.
+python scripts/research_sync.py verify-live --attempts 30
+python scripts/research_sync.py cleanup-plan
+# Only after the connector verifies that exact Drive file was moved:
+python scripts/research_sync.py confirm-cleanup SOURCE_ID SHA256
 ```
 
-Safe to run twice, it skips any link it has read. It also retries failed
-reads and runs the same Claude follow-up the scheduled sync runs. It does
-not rebuild the site or touch the build queue; `scripts/daily.py` does.
+Drive reads/moves and Google Docs edits use the local routine's authenticated connector. `data/research/drive-manifest.json` is a list of `{id,name,parents}` records next to `incoming`. Account-specific IDs, raw dossiers and credentials are not committed. The routine needs a connected Drive account and running machine; local file upload alone cannot move a remote file.
 
-## The twice-daily sync
+## Code map and validation
 
-A scheduled task on this laptop runs at nine in the morning and nine at
-night. It saves the doc and runs
+| Location | Responsibility |
+| --- | --- |
+| `kiln/readme.py` | Dossier parsing, immutable revisions, current research and cleanup states |
+| `kiln/topics.py` | Candidate comparisons, coherent synthesis, reversible membership, aliases |
+| `kiln/store.py`, `pipeline.py` | SQLite/FTS, facets, states and search indexing |
+| `kiln/search.py`, `models.py` | Retrieval and configured provider fallback |
+| `kiln/artifacts.py` | Safe document rendering and file index |
+| `kiln/server.py`, `web/` | Local API and shared responsive UI |
+| `kiln/publish.py`, `release.py` | Whitelisted export and live file verification |
+| `kiln/jobs.py`, `runner.py`, `ship.py` | Owner-consented builds, review and shipping |
+| `scripts/daily.py`, `research_sync.py` | Scheduled orchestration and connector handoff |
+| `scripts/audit_public.py` | Privacy, tracking-token, artifact and shared-UI checks |
+| `archive/link-first/` | Original implementation snapshot and explanation |
 
-```bash
-python scripts/daily.py data/inbox_snapshot.txt
-```
-
-Every pass does the same six stages, and prints each one: the inbox (new
-links, plus another go at reads that failed), Claude's follow-up, the site
-(rebuilt, audited, and pushed if it changed), the build queue, publishing
-finished builds, and a check of its own work, which includes whether the
-push carried the build (the site deploys from what was pushed). Questions
-waiting on me are printed
-before any of that, and any raised during the pass are printed in full at
-the end.
-
-## Why a browser
-
-Instagram's API doesn't give you other people's posts. I tried instaloader
-and yt-dlp and both hit a login wall. Scraping the HTML gets you the first
-slide and nothing else.
-
-A headless browser just works. No login, so there's no account to ban. It
-also has to rewind the carousel first, because a shared link opens on
-whatever slide the person was looking at and if you only click forward you
-silently lose the earlier ones. Took me a while to notice that.
-
-## The part I actually use
-
-Two things turned out more useful than I expected.
-
-**Comment-gated links.** Loads of posts say "comment PDF and I'll send it".
-The file isn't public so nothing can scrape it. Kiln spots the pattern and
-tells me what word to comment, which at least turns a dead end into a thing
-I can do in five seconds.
-
-**Dead links.** It checks every link before showing it. On the first carousel
-I ran, two of three links were already dead. Nice to know up front instead of
-finding out later.
-
-For anything I want to learn, it also writes a small project brief. Scope,
-stack with versions, milestones. I can copy that prompt into any chat and get
-a repo out of it, or queue it and have a sync build it once I say yes.
-
-## From a saved post to a repo
-
-A project brief has one button that does anything on this machine. Pressing
-it puts the project in a queue. Pressing it again finds the job already
-sitting there rather than writing a second copy of it, and that check is on
-the item the brief came from, not on the file name, because the naming
-scheme changed once and left me two files for one project.
-
-Nothing builds on a schedule. It used to be three at a time on the nine in
-the morning run, and whatever was queued got built whether or not I still
-wanted it. Now every sync looks at the queue and, if anything is waiting,
-puts one card at the top of the local page: each project numbered, what it
-is, and roughly how long it takes to build and publish, from how long past
-builds actually took here. I tick the ones I want, or take all or none, and
-the next sync builds what I picked, three at a time, each one its own agent
-in its own directory. None just means not now; the card comes back on the
-next sync.
-
-A finished build does not go straight out. A reviewer reads it, installs it,
-runs whatever tests it has, fixes what it can and writes down whether the
-thing actually works. Kiln then runs the project's Python tests itself with
-pytest, wherever in the project they are, and reads the exit code, because
-the reviewer saying they pass is not the same as them passing. Tests in
-another language are only run by the reviewer.
-Then a readme gets written and has to pass a check for writing that reads
-like a machine wrote it. Build tooling is stripped and the history is
-started clean. Only then is the repo created and pushed.
-
-In the files themselves, two things stop a push and neither is a judgement
-call: a banned character, and any line crediting a tool for the work. Wording I dislike in a docstring
-is reported and left alone, because holding a working project back over one
-word in a comment helps nobody.
-
-Nobody is at the keyboard while a sync runs, so it cannot stop and ask me
-anything. When it reaches something that is mine to decide it writes the
-question down and carries on with the rest of the queue. An agent that was
-rate limited or signed out is not the project failing, so that job stays
-queued and is offered again on the next sync. A build that ran and broke
-twice stops retrying and asks what I want to do about it. Open questions
-show up as cards at the top of the local page. A run prints them before it
-does anything else, and prints the ones it raised itself at the end.
-After a push the run waits up to ten minutes for the project's own CI and
-prints whether it passed, failed, or was still going when the wait ran
-out. A red run is reported; the push has already happened by then.
-
-```bash
-python -m kiln.runner pending      # build up to three queued projects now, without asking
-python -m kiln.runner ship         # review and publish up to three finished builds
-python -m kiln.questions list      # what is waiting on me
-python -m kiln.questions answer build-queue.queue some 1 3   # tick projects from a terminal
-python scripts/dedupe_jobs.py      # one project, one job
-```
-
-## Models
-
-Each task has a list of models, best first, and every read has to clear a
-floor. A read of a post with pictures or video that comes back with no
-sections and no on-screen text (and, for a video, no speech either) has not
-been read, whatever the model said, so it counts as a failure and the next
-one on the list is tried. The lite and local models are off the lists.
-Every thin entry I ever got came off one of them, and a fallback that
-quietly makes the work worse is not a fallback.
-
-```
-extract        gemini 3.8 flash -> 3.7 flash -> 3.6 flash -> 3.5 flash
-extract_deep   3.8 flash -> 3.1 pro -> 3.7 flash -> 3.6 flash   (urgent, or anything I wrote on)
-reason         3.8 flash -> 3.1 pro -> 3.7 flash -> 3.6 flash   (research and answering)
-classify       3.5 flash -> 3.6 flash -> 3.7 flash              (search queries)
-```
-
-All of that is free tier. The pro rung and Gemini's own grounded search
-mostly come back out of quota on a free key, and switching billing on needs
-a card, so the research here is Kiln's own search and page fetch. Anything
-past that is Claude's job (next section).
-
-When every model on a list is out of quota or under the floor, the item is
-not filed thin. It waits, and the next sync asks me whether Claude should
-read it instead. A read turned away only because every model had used up
-its free day does not count as one of the link's three tries.
-
-You can add any provider through the local `/api/models` routes (OpenAI,
-Groq, OpenRouter, DeepSeek, Anthropic, xAI, Mistral, Together, or anything
-OpenAI-compatible). Keys are encrypted with DPAPI and nothing is saved until
-a real test call succeeds.
-
-There used to be a running cost figure in the sidebar. It was token counts
-multiplied by a price list I had typed in by hand and never checked against
-anything, and it counted free-tier calls at the paid rate, so it was a guess
-wearing a dollar sign. I took it out. Token counts are still recorded per
-call, which is the part that was ever true.
-
-A couple of things I found out the hard way:
-
-- Turning thinking on made extraction worse, not better. It reasons instead
-  of transcribing and you get less text for more money. So Kiln only asks
-  for thinking on judgement calls. For reading it asks for none, which leaves
-  each model's own default in place; whether to switch it off outright is an
-  open question in `WORKLOG.md`.
-- The same model on the same images gives different results run to run, so
-  anything important gets read twice and the results merged.
-- Local vision models can't do video at all, only frames.
-
-## What Claude does after the free models
-
-The free models do a first pass on everything. Then Claude looks at what
-they produced and finishes whatever they could not: the PDF I asked for, the
-links they said to check and could not reach, the part of my note they
-skipped, a title that is only the post's clickbait. It does this every sync,
-on its own, without asking.
-
-A planner on Opus 5 at max effort reads each new item next to whatever I
-wrote with it and decides whether anything is left to do. For an item I
-wrote nothing on, the answer is usually no, and a later look that finds
-nothing to add leaves the earlier answer as it was. When there is work, it splits
-it into tasks and picks a model and an effort level for each one: Opus 5,
-Opus 5.5, Sonnet or Haiku, anywhere from low to max. Never Fable, and that
-is checked in code before anything runs rather than left to the prompt. The
-tasks run three at a time, and a last step puts together what I see: the
-answer, any document (turned into a PDF here), where the facts came from,
-and a better title if the first one was bad. When the first pass researched
-the wrong question, say a setup guide taken for a job posting, that research
-and the links it added come off the page and the item's tag is corrected;
-it stays on this machine with the reason. Whatever it learned about handling
-a kind of post goes into a playbook, and the next post like it is searched
-and planned with that in hand.
-
-It also files things into sections I name myself. "make a new section called
-to watch with subsections for types of videos" makes the section, works out
-the types, and puts later videos into them as they arrive.
-
-Every worker runs headless with no shell, and its file tools only reach its
-own folder: I asked one to read a file one folder over and it was refused.
-It sees the post's pictures and what the first pass found, and the web when
-its task needs it. Safe mode matters for cost too: without it every call
-loads my whole Claude setup first, about 183k tokens of it.
-
-A sync follows up six units at most (`KILN_BRAIN_UNITS`; all the links on
-one line of the inbox are one unit), so one busy day cannot turn into hours
-of Claude work, and the rest wait for the next one. A unit can still take a
-while: the planner alone at max effort has taken about seventeen minutes. Items no
-free model could read go on a card first. One yes covers every item on it,
-and they are read within the same six a sync.
-
-```bash
-python -m kiln.brain sweep        # follow up what is waiting, six units at most
-python -m kiln.brain run <id>     # one item, now; reads it too if no free model could
-python -m kiln.brain show <id>    # what it did for that item
-```
-
-## Publishing
-
-`python -m kiln.publish` builds a static copy into `public/`. It's a
-whitelist, so only named fields get out. My notes and my file paths stay
-here, and so does anything about how an answer was made.
-
-Links go out without their share and tracking parameters. The token
-Instagram puts on a link I share (stkn now, igsh and igshid before) ties the
-post to my account, and so does YouTube's si. On Instagram only img_index,
-the slide a link opens on, is kept; everywhere else a link keeps whatever
-says which page it is, like YouTube's v= and list=. A document the follow-up
-made is printed again from its cleaned source when its PDF carries a token.
-My own copy keeps every link as I saved it.
-
-`python scripts/audit_public.py` greps the build for anything that shouldn't
-be there and exits non-zero if it finds something. It reads the text inside
-every PDF as well, and fails if any eight words in a row of what I wrote
-next to a link turn up anywhere in the build. A note of five to seven words
-is looked for whole. One under five is not checked, because that few words
-turn up in ordinary text. It also fails if the page itself names an AI
-vendor or model; the items may, since a post can be about one. And it fails
-if any link, in any file or inside any PDF, still carries a share token.
-`scripts/test_audit.py` plants a private field name, long and short runs of
-my notes, a stray gate key, a whitelist that admits a private field, a
-vendor named in the page, and share tokens in links and inside PDFs, each in
-a throwaway copy, to make sure the audit still catches them. It also runs
-the real publish step to check that what it lets out passes.
-`scripts/publish_and_deploy.sh` runs the build and the audit and won't
-deploy if the audit fails.
-
-## Layout
-
-```
-kiln/
-  config.py         paths and routing policy
-  models.py         the router, quotas, JSON repair
-  providers.py      provider adapters
-  registry.py       which models exist and in what order
-  secrets_store.py  API keys, encrypted with DPAPI
-  search.py         web search and page fetch
-  acquire.py        browser capture, PDF building
-  extract.py        the multimodal read
-  enrich.py         research, link checking, install previews
-  brain.py          Claude's follow-up: plan, run, record
-  claude_cli.py     how the follow-up runs Claude headless
-  artifacts.py      documents kept per item, and turned into PDFs
-  handoff.py        items no free model could read
-  ingest.py         inbox parsing
-  pipeline.py       ties it together
-  store.py          sqlite, sections, the playbook
-  questions.py      the cards that wait on me
-  health.py         the run checking its own work
-  jobs.py           build prompts and the queue
-  runner.py         runs build agents, and the queue card
-  ship.py           review, readme, push
-  slop.py           the writing check
-  server.py         stdlib http, no framework
-  publish.py        static export
-web/index.html      the whole UI, one file
-```
-
-No build step, no node_modules. It starts instantly and I'd like it to still
-work in five years.
-
-## Needs
-
-Python 3.11+ and `pip install -r requirements.txt`, then `playwright install
-chromium`. A `GEMINI_API_KEY`: every reading list is Gemini's free tier (see
-Models). ffmpeg on the path, with the ffprobe that comes with it, because a
-reel arrives as separate picture and sound and the follow-up takes frames
-from it. The `claude` CLI, signed in, for the follow-up and for the review
-and readme before a publish.
-
-For builds, a coding CLI: codex, or gemini's. `claude` builds a job only
-when I answer a card saying so. For publishing, `git` and `gh` signed in,
-and pytest wherever a project's tests run (its own `.venv`, or Kiln's
-Python), or a project that has tests will not publish. `npx` (Node) only
-for `scripts/publish_and_deploy.sh`; the sync pushes instead.
-
-Ollama is optional. Kiln finds its port on its own, because mine was on a
-non-standard one, and it can be added as a provider, but no list uses it.
-
-faster-whisper is optional too: `pip install faster-whisper`, plus a
-faster-whisper model already in the Hugging Face cache (or `KILN_WHISPER_DIR`
-pointing at one), because it never downloads anything. With it, a reel no
-free model could read is transcribed here before Claude reads it, since
-Claude only sees the frames. Without it Claude reads the frames alone.
-`KILN_LISTEN=0` turns it off.
+Private state lives under ignored `data/`. Only audited `public/` is served by Vercel. A database backup and source revisions precede this migration. Run `python scripts/test_readme.py` for the lifecycle/merge regressions and `python scripts/test_server.py` for local API checks; other suites are in `scripts/test_*.py`.

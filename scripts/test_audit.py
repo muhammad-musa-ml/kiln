@@ -64,6 +64,10 @@ def audit(name: str, items: list[dict], notes: list[str],
     (root / "scripts").mkdir()
     shutil.copy2(HERE / "audit_public.py", root / "scripts" / "audit_public.py")
     (root / "web").mkdir()
+    (root / 'public' / 'static').mkdir(parents=True)
+    for name in ('app.js','app.css'):
+        shutil.copy2(REPO/'web'/name,root/'web'/name)
+        shutil.copy2(REPO/'web'/name,root/'public'/'static'/name)
     # page_extra goes into both copies, so it is the page that says it and
     # not a published copy that drifted from the local one.
     page = (REPO / "web" / "index.html").read_text(encoding="utf-8") + page_extra
@@ -118,6 +122,7 @@ STRIP = chr(10).join([
     "out = {'clean': [publish.clean_urls(t) for t in cases['texts']]}",
     "out['twice'] = [publish.clean_urls(t) for t in out['clean']]",
     "out['item'] = publish.public_item(cases['item'])",
+    "out['webhook'] = publish.scrub(cases.get('webhook', ''))",
     "src = Path(sys.argv[2]) / 'notes.md'",
     "src.write_text(cases['doc'], encoding='utf-8')",
     "rec = artifacts.store('doc1', src, title='Notes', pdf=True)",
@@ -253,11 +258,11 @@ def main() -> int:
           code == 1 and "a whitelist admits private fields: ['user_note']" in out,
           out[-400:])
 
-    print("the page names no vendor")
+    print("the shared workflow explanation may name its source services")
     code, out = audit("vendor", [item()], [],
                       page_extra="<!-- read by Gemini, followed up by Claude -->\n")
-    check("a vendor named in the page itself fails it",
-          code == 1 and "names ['claude', 'gemini']" in out, out[-400:])
+    check("a workflow explanation can name source services",
+          code == 0, out[-400:])
     code, out = audit("vendor-item", [item(title="Claude Code in ten minutes")], [])
     check("while an item about one is fine", code == 0, out[-400:])
 
@@ -317,6 +322,13 @@ def main() -> int:
         [])
     check("while a link's own parameters (v=, list=, img_index=) are fine", code == 0,
           out[-400:])
+
+    print("webhook examples are treated as credentials")
+    hook = 'https://hooks.slack.com/' + 'services/' + '/'.join(['T'+'0'*8, 'B'+'0'*8, 'x'*24])
+    hook_result = strip({'texts':[], 'item':item(), 'doc':'Safe notes', 'webhook':hook})
+    check("publisher strips a webhook-shaped literal", hook not in hook_result['webhook'])
+    code, out = audit("slack-webhook", [item(summary=hook)], [])
+    check("audit rejects webhook literals without printing them", code == 1 and 'Slack webhook' in out and hook not in out, out[-300:])
 
     print("share tokens in a published document")
     check("the document was printed with the token in it, as a stand-in for mine",
