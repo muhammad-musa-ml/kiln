@@ -1,29 +1,60 @@
 {
- "total": 47,
+ "total": 53,
  "by_action": {
+  "reference": 20,
+  "install": 8,
+  "learn": 7,
   "build": 11,
-  "reference": 17,
-  "learn": 6,
-  "install": 4,
   "apply": 3,
   "read": 3,
   "watch": 8
  },
  "by_topic": {
-  "claude code": 7,
+  "application tracking": 1,
+  "career planning": 1,
+  "job search": 2,
+  "referrals": 1,
+  "code intelligence": 2,
+  "codebase graphs": 1,
+  "onboarding": 1,
+  "understand anything": 1,
+  "agent orchestration": 2,
+  "coordination costs": 1,
+  "mcp": 1,
+  "ruflo": 1,
+  "ai comedy": 1,
+  "evaluation": 7,
+  "model provenance": 1,
+  "open weight models": 1,
+  "agent skills": 3,
+  "matt pocock": 1,
+  "retrospectives": 1,
+  "skill authoring": 1,
+  "specifications": 1,
+  "agent memory": 1,
+  "context engineering": 2,
+  "optmem": 1,
+  "claude code": 8,
+  "code cleanup": 1,
+  "dead code": 1,
+  "knip": 1,
+  "vulture": 1,
+  "dashboards": 1,
+  "mods": 1,
+  "session handoff": 1,
+  "task tracking": 1,
+  "verification": 2,
   "generative ai": 2,
   "video generation": 1,
   "wangp": 1,
   "youtube shorts": 1,
-  "agent skills": 2,
   "draft workflows": 1,
   "linkedin": 1,
   "api costs": 1,
   "cache": 1,
   "caching": 1,
-  "claude": 9,
-  "code": 2,
-  "context engineering": 1,
+  "claude": 7,
+  "code": 1,
   "optimizing": 1,
   "prompt": 1,
   "prompt caching": 2,
@@ -51,22 +82,6 @@
   "product prototyping": 1,
   "replica": 1,
   "testing": 1,
-  "agent orchestration": 2,
-  "application security": 1,
-  "architecture": 1,
-  "auditing": 2,
-  "building": 1,
-  "developer tooling": 1,
-  "guide": 2,
-  "implementation": 1,
-  "know": 1,
-  "left": 1,
-  "mods": 1,
-  "plugin": 1,
-  "should": 1,
-  "side": 1,
-  "terminal ui": 1,
-  "verification": 2,
   "handoff": 1,
   "knowledge base": 1,
   "llm wiki": 1,
@@ -74,21 +89,7 @@
   "obsidian": 2,
   "provenance": 1,
   "shared memory": 1,
-  "against": 1,
-  "agent": 1,
-  "agentic": 1,
-  "ai": 8,
-  "coding": 2,
-  "craft": 1,
-  "engineering": 1,
-  "from": 1,
-  "productivity": 3,
-  "skill": 1,
-  "skills": 1,
-  "structuring": 1,
-  "web development": 2,
   "critical thinking": 1,
-  "evaluation": 4,
   "hallucinations": 1,
   "prompting": 1,
   "configuration": 1,
@@ -99,7 +100,6 @@
   "gtm engineering": 1,
   "outreach": 1,
   "atomic claude": 1,
-  "code intelligence": 1,
   "semantic search": 1,
   "cost optimization": 1,
   "ai engineering": 1,
@@ -112,6 +112,7 @@
   "vibe coding": 1,
   "vibecoding": 1,
   "web accessibility": 1,
+  "web development": 1,
   "web security": 1,
   "website security": 1,
   "website seo": 1,
@@ -182,7 +183,6 @@
   "chatgpt plugins": 1,
   "composio": 1,
   "engagement bait": 1,
-  "job search": 1,
   "agentic coding": 1,
   "ai safety guardrails": 1,
   "claude opus 5.5": 1,
@@ -190,6 +190,7 @@
   "llm effortreasoning settings": 1,
   "prompt engineering": 2,
   "subagents": 1,
+  "ai": 7,
   "design": 1,
   "motiongraphics": 1,
   "tech": 1,
@@ -206,9 +207,11 @@
   "automation": 2,
   "hermes agent": 1,
   "jarvis": 1,
+  "productivity": 2,
   "workflow": 1,
   "data science": 2,
   "finetuning": 1,
+  "coding": 1,
   "development": 1,
   "programming": 1,
   "software architecture": 1,
@@ -235,7 +238,7 @@
    "id": "agents-assistants",
    "name": "Agents & Assistants",
    "parent": "",
-   "count": 8
+   "count": 10
   },
   {
    "id": "agents-assistants/agent-security-permissions",
@@ -247,7 +250,7 @@
    "id": "agents-assistants/frameworks-patterns",
    "name": "Frameworks & Patterns",
    "parent": "agents-assistants",
-   "count": 3
+   "count": 4
   },
   {
    "id": "agents-assistants/jarvis-voice",
@@ -259,7 +262,7 @@
    "id": "agents-assistants/knowledge-memory",
    "name": "Knowledge & memory",
    "parent": "agents-assistants",
-   "count": 1
+   "count": 2
   },
   {
    "id": "agents-assistants/mcp-connectors",
@@ -271,7 +274,7 @@
    "id": "claude-prompting",
    "name": "Claude & Prompting",
    "parent": "",
-   "count": 17
+   "count": 18
   },
   {
    "id": "claude-prompting/claude-code-skills",
@@ -295,13 +298,13 @@
    "id": "claude-prompting/tools-workflows",
    "name": "Tools & workflows",
    "parent": "claude-prompting",
-   "count": 11
+   "count": 12
   },
   {
    "id": "jobs-money",
    "name": "Jobs & Money",
    "parent": "",
-   "count": 7
+   "count": 8
   },
   {
    "id": "jobs-money/certifications",
@@ -331,7 +334,7 @@
    "id": "jobs-money/roadmaps-side-income",
    "name": "Roadmaps & Side Income",
    "parent": "jobs-money",
-   "count": 2
+   "count": 3
   },
   {
    "id": "learning",
@@ -373,13 +376,13 @@
    "id": "models-training",
    "name": "Models & Training",
    "parent": "",
-   "count": 4
+   "count": 5
   },
   {
    "id": "models-training/fundamentals",
    "name": "Fundamentals",
    "parent": "models-training",
-   "count": 2
+   "count": 3
   },
   {
    "id": "models-training/interview-questions",
@@ -421,7 +424,7 @@
    "id": "shipping-quality",
    "name": "Shipping & Quality",
    "parent": "",
-   "count": 4
+   "count": 5
   },
   {
    "id": "shipping-quality/design",
@@ -439,7 +442,7 @@
    "id": "shipping-quality/security-launch",
    "name": "Security & Launch",
    "parent": "shipping-quality",
-   "count": 1
+   "count": 2
   },
   {
    "id": "to-watch",
@@ -467,7 +470,7 @@
   }
  ],
  "by_status": {
-  "ready": 45,
+  "ready": 51,
   "in-progress": 2,
   "made": 0,
   "set-aside": 0

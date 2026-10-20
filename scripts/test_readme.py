@@ -46,6 +46,18 @@ class IntakeTests(unittest.TestCase):
         self.assertEqual(n['spoken_transcript'],'Creator claim.')
         self.assertTrue(n['prompts'])
         self.assertEqual(readme.urls('https://gist.github.com/karpathy/abc'),['https://gist.github.com/karpathy/abc'])
+    def test_owner_advice_stays_in_private_dossier(self):
+        source=[{'heading':'Adapting the system for a Dec 2026 CS grad','detail':'Personal graduation and watch setup'},
+                {'heading':'Actions','detail':'Use a scratch repository.\n3. Match this user\'s job watch, padel watch and trip copilot.\nKeep the generic checklist.\n### Adapting the system for a Dec 2026 CS grad\nPrivate facts\n#### Details\nMore personal facts\n### Public resources\nKeep this link.\n```text\n### Adapting the system for an example\nA code example\n```'}]
+        public=readme.public_sections(source)
+        self.assertEqual(len(public),1)
+        self.assertNotIn('job watch',public[0]['detail'])
+        self.assertIn('generic checklist',public[0]['detail'])
+        self.assertNotIn('Private facts',public[0]['detail'])
+        self.assertNotIn('More personal facts',public[0]['detail'])
+        self.assertIn('Keep this link.',public[0]['detail'])
+        self.assertIn('A code example',public[0]['detail'])
+        self.assertIn('job watch',source[1]['detail'])
     def test_live_file_mismatch_cannot_issue_receipt(self):
         out=Path(TMP.name)/'release';(out/'data').mkdir(parents=True,exist_ok=True)
         snapshot={'items':[],'built':'fixture'}

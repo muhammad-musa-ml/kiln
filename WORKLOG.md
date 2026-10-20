@@ -1,5 +1,27 @@
 # Kiln overhaul, September 2026
 
+### October 20, 2026: next Muse dossier batch
+
+- Processed eight new READMEs from researched. The links Doc was empty;
+  the owner explicitly kept the separate jobs folder outside this update.
+- Fetched current primary documentation and wrote eight substantive guides
+  with PDFs, practical commands, prompts and proposed evaluation projects.
+  Added six blank CSV templates. The configured model ladder returned a
+  high-demand failure, so the assistant completed the research directly.
+- Expanded the existing mods topic from five to six sources with handoffs,
+  and the skills topic from three to four sources with the Pocock workflow.
+  The library now contains 53 topics retaining 71 original source URLs.
+- Corrected the stale three-reviewer simplify claim using current official
+  documentation, and replaced outdated Ruflo setup with upstream instructions.
+  Commands and proposed projects were documented, not executed or built.
+- Improved private-note filtering for personal advice nested inside generic
+  source sections, with a ten-test lifecycle suite passing. Fixed recent
+  ordering across legacy display dates and ISO dates; checked mixed-date,
+  missing-date and invalid-date cases and JavaScript syntax.
+- Verified the full exported topic counts, new PDFs and CSVs, original URL
+  aliases and personal-note exclusions. Publication and exact cloud cleanup
+  are verified before archive moves.
+
 ### October 2026: Muse README intake migration
 
 - Replaced normal URL scraping with immutable Muse Markdown intake, current

@@ -17,6 +17,7 @@ function link(u,title){return `<a href="${href(u)}" target="_blank" rel="noopene
 function toast(s){clearTimeout(toastTimer);$('#toast').innerHTML=`<div class="toast">${esc(s)}</div>`;toastTimer=setTimeout(()=>$('#toast').replaceChildren(),4000);}
 function progress(i){return i.research_state==='pending'?'pending':i.progress||STATUS[i.status]||'ready';}
 function words(s){return s.toLocaleLowerCase().match(/[\p{L}\p{N}_]+/gu)||[];}
+function researchTime(i){const value=String(i.note?.research_date||i.links_checked||'');const parsed=Date.parse(value);return Number.isFinite(parsed)?parsed:(i.processed_at||0)*1000;}
 function syncUrl(){const p=new URLSearchParams();if(state.q)p.set('q',state.q);for(const[k,v]of Object.entries(state.filters))if(v)p.set(k,v);if(state.sort!=='recent')p.set('sort',state.sort);if(state.saved)p.set('saved','1');history.replaceState(null,'',location.pathname+(p.size?'?'+p:'')+location.hash);}
 async function api(url,options={}){
  if(STATIC){
@@ -60,7 +61,7 @@ function renderShelf(){
  let items=state.items.filter(i=>!state.filters.stage||progress(i)===state.filters.stage).filter(i=>!state.saved||saved.has(i.id));
  if(state.sort==='title')items.sort((a,b)=>(a.title||'').localeCompare(b.title||''));
  else if(state.sort==='sources')items.sort((a,b)=>(b.source_count||1)-(a.source_count||1));
- else items.sort((a,b)=>String(b.note?.research_date||b.links_checked||'').localeCompare(String(a.note?.research_date||a.links_checked||''))||((b.processed_at||0)-(a.processed_at||0)));
+ else items.sort((a,b)=>researchTime(b)-researchTime(a)||((b.processed_at||0)-(a.processed_at||0)));
  const section=state.facets?.sections?.find(s=>s.id===state.filters.section)?.name;
  $('#heading').textContent=section||state.filters.topic||(state.saved?'Saved on this device':'All topics');
  $('#count').textContent=`${items.length} topic${items.length===1?'':'s'} · ${items.reduce((n,i)=>n+(i.source_count||1),0)} sources`;

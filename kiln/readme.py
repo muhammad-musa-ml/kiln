@@ -36,11 +36,31 @@ MEDIA_RE = re.compile(r'https?://(?:www\.)?(?:instagram\.com/(?:[\w.]+/)?(?:reel
 
 def public_sections(sections: list[dict]) -> list[dict]:
     """Keep the reel evidence, exclude Muse's owner-specific career/site advice."""
+    private_heading=re.compile(r'iammusa|your profile|for muhamm?ed|adapting the system for|owner.s (?:career|profile)|for this user',re.I)
     out=[]
     for original in sections:
-        if re.search(r'iammusa|your profile|for muhamm?ed',original.get('heading',''),re.I):continue
+        if private_heading.search(original.get('heading','')):continue
         section=dict(original)
+        # A dossier can nest personal advice under ### inside a generic ##
+        # section. Drop that entire block, including deeper subheadings,
+        # while leaving headings inside code fences untouched.
+        kept=[];hidden=0;fence=''
+        for line in section.get('detail','').splitlines():
+            marker=re.match(r'^\s*(`{3,}|~{3,})',line)
+            if marker:
+                token=marker[1][0]
+                fence='' if fence==token else (token if not fence else fence)
+            heading=re.match(r'^(#{1,6})\s+(.+)',line) if not fence else None
+            if heading:
+                level=len(heading[1])
+                if hidden and level<=hidden:hidden=0
+                if private_heading.search(heading[2]):hidden=hidden or level
+            if not hidden:kept.append(line)
+        section['detail']='\n'.join(kept)
         section['detail']=re.sub(r'(?im)^\*\*(?:For [^\n:]+ specifically|Mapping to your profile)[^\n]*(?:\n(?!\n)[^\n]*)*','',section.get('detail','')).strip()
+        # Muse sometimes places personal workflow references in a generic
+        # section. Keep those references in the immutable private source.
+        section['detail']=re.sub(r'(?im)^.*(?:your (?:six-hour |existing )?job watch|this user.{0,40}(?:job watch|padel watch|trip copilot)|your six-hour job watch).*(?:\n|$)','',section['detail']).strip()
         if section['detail']:out.append(section)
     return out
 
