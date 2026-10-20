@@ -19,8 +19,14 @@
   ordering across legacy display dates and ISO dates; checked mixed-date,
   missing-date and invalid-date cases and JavaScript syntax.
 - Verified the full exported topic counts, new PDFs and CSVs, original URL
-  aliases and personal-note exclusions. Publication and exact cloud cleanup
-  are verified before archive moves.
+  aliases and personal-note exclusions. The complete 294-file export passed
+  all 40 publication checks; all 293 served files matched the live deployment
+  byte-for-byte before cleanup (Vercel consumes its config privately).
+- Re-downloaded and hashed all eight Drive sources, then moved the same IDs
+  into Kilned and verified both folder listings and parent metadata. Kilned
+  now has 38 READMEs; researched has no pending Markdown and retains its five
+  images. Confirmed local archives only after cloud readback. The links Doc
+  remained empty and required no edit. No job listings or builds were run.
 
 ### October 2026: Muse README intake migration
 
