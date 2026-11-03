@@ -1,5 +1,33 @@
 # Kiln overhaul, September 2026
 
+### November 2, 2026: nine more Muse dossiers
+
+- Independently researched all nine new reel READMEs: MiroFish, SupoClip,
+  BASE/basemode, app marketing, launch SEO, remote-company discovery,
+  AI-role preparation, long-context prefill and voice-agent latency.
+- Checked current primary repositories, documentation, papers and company
+  careers pages. Corrected setup/configuration details and distinguished
+  simulated customers, marketing outcomes and latency targets from measured
+  results. Gated bundles and inaccessible individual job details stay explicit.
+- Wrote nine practical guides with PDFs, prompts, documented commands and
+  proposed projects. Added nine blank CSV templates. Commands were not run,
+  accounts were not connected and suggested projects were not built.
+- Reviewed all nine against the previous 53 topics, recording 477 comparisons.
+  Combined AI-role preparation with the 90-day search workflow into one
+  synthesized career guide, retaining both reels, original guides and aliases.
+  The library now has 61 visible topics and 80 original source URLs.
+- Excluded owner-specific career context from public notes. The separate jobs
+  folder remains outside this update. The links Doc was empty at intake.
+- Fixed combined-topic refreshes dropping downloads added directly to a topic.
+  Custom files now survive refresh and joins between existing groups, including
+  same-named files from different groups. All 11 isolated lifecycle tests pass.
+  Fixed singular source counts in filtered search results; JavaScript syntax
+  and local search/drawer/old-link behavior were checked in the browser.
+- Checked all 43 guide resource URLs. Visually reviewed 20 PDF pages across
+  the nine source guides and the unified career guide. The completed 327-file
+  export passed all 40 publication checks and retained every previous source
+  URL, both career aliases and the current shared UI assets.
+
 ### October 20, 2026: next Muse dossier batch
 
 - Processed eight new READMEs from researched. The links Doc was empty;

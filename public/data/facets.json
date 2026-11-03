@@ -1,18 +1,61 @@
 {
- "total": 53,
+ "total": 61,
  "by_action": {
-  "reference": 20,
-  "install": 8,
-  "learn": 7,
-  "build": 11,
+  "install": 11,
+  "reference": 23,
+  "build": 12,
+  "learn": 9,
   "apply": 3,
   "read": 3,
   "watch": 8
  },
  "by_topic": {
+  "ollama": 1,
+  "supoclip": 1,
+  "video clipping": 1,
+  "whisper": 1,
+  "indexnow": 1,
+  "launch checklist": 2,
+  "open graph": 1,
+  "seo": 1,
+  "sitemaps": 1,
+  "mirofish": 1,
+  "oasis": 1,
+  "social simulation": 1,
+  "startup validation": 1,
+  "barge in": 1,
+  "latency": 1,
+  "livekit": 1,
+  "turn detection": 1,
+  "voice agents": 1,
+  "inference latency": 1,
+  "long context": 1,
+  "prefill": 1,
+  "prompt compression": 1,
+  "ring attention": 1,
+  "circle": 1,
+  "openzeppelin": 1,
+  "railway": 1,
+  "remote work": 1,
+  "revenuecat": 1,
+  "supabase": 1,
+  "agent memory": 2,
+  "base": 1,
+  "basemode": 1,
+  "code graphs": 1,
+  "hooks": 1,
+  "activation": 1,
+  "app marketing": 1,
+  "product growth": 1,
+  "trial reels": 1,
+  "ai careers": 1,
+  "ai engineer": 1,
   "application tracking": 1,
   "career planning": 1,
+  "forward deployed engineer": 1,
   "job search": 2,
+  "portfolio evidence": 1,
+  "product management": 1,
   "referrals": 1,
   "code intelligence": 2,
   "codebase graphs": 1,
@@ -31,7 +74,6 @@
   "retrospectives": 1,
   "skill authoring": 1,
   "specifications": 1,
-  "agent memory": 1,
   "context engineering": 2,
   "optmem": 1,
   "claude code": 8,
@@ -106,7 +148,6 @@
   "app security": 1,
   "buildinpublic": 1,
   "devops": 1,
-  "launch checklist": 1,
   "owasp": 1,
   "pre-launch checklist": 1,
   "vibe coding": 1,
@@ -238,7 +279,7 @@
    "id": "agents-assistants",
    "name": "Agents & Assistants",
    "parent": "",
-   "count": 10
+   "count": 13
   },
   {
    "id": "agents-assistants/agent-security-permissions",
@@ -250,19 +291,19 @@
    "id": "agents-assistants/frameworks-patterns",
    "name": "Frameworks & Patterns",
    "parent": "agents-assistants",
-   "count": 4
+   "count": 5
   },
   {
    "id": "agents-assistants/jarvis-voice",
    "name": "Jarvis & Voice",
    "parent": "agents-assistants",
-   "count": 2
+   "count": 3
   },
   {
    "id": "agents-assistants/knowledge-memory",
    "name": "Knowledge & memory",
    "parent": "agents-assistants",
-   "count": 2
+   "count": 3
   },
   {
    "id": "agents-assistants/mcp-connectors",
@@ -304,7 +345,7 @@
    "id": "jobs-money",
    "name": "Jobs & Money",
    "parent": "",
-   "count": 8
+   "count": 10
   },
   {
    "id": "jobs-money/certifications",
@@ -316,7 +357,7 @@
    "id": "jobs-money/hiring-companies",
    "name": "Hiring & Companies",
    "parent": "jobs-money",
-   "count": 2
+   "count": 3
   },
   {
    "id": "jobs-money/outreach-workflows",
@@ -334,7 +375,7 @@
    "id": "jobs-money/roadmaps-side-income",
    "name": "Roadmaps & Side Income",
    "parent": "jobs-money",
-   "count": 3
+   "count": 4
   },
   {
    "id": "learning",
@@ -352,7 +393,7 @@
    "id": "media-generation",
    "name": "Media Generation",
    "parent": "",
-   "count": 6
+   "count": 7
   },
   {
    "id": "media-generation/image-generation",
@@ -370,19 +411,19 @@
    "id": "media-generation/voice-video",
    "name": "Voice & video",
    "parent": "media-generation",
-   "count": 2
+   "count": 3
   },
   {
    "id": "models-training",
    "name": "Models & Training",
    "parent": "",
-   "count": 5
+   "count": 6
   },
   {
    "id": "models-training/fundamentals",
    "name": "Fundamentals",
    "parent": "models-training",
-   "count": 3
+   "count": 4
   },
   {
    "id": "models-training/interview-questions",
@@ -424,7 +465,7 @@
    "id": "shipping-quality",
    "name": "Shipping & Quality",
    "parent": "",
-   "count": 5
+   "count": 6
   },
   {
    "id": "shipping-quality/design",
@@ -442,7 +483,7 @@
    "id": "shipping-quality/security-launch",
    "name": "Security & Launch",
    "parent": "shipping-quality",
-   "count": 2
+   "count": 3
   },
   {
    "id": "to-watch",
@@ -470,7 +511,7 @@
   }
  ],
  "by_status": {
-  "ready": 51,
+  "ready": 59,
   "in-progress": 2,
   "made": 0,
   "set-aside": 0

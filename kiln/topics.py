@@ -179,6 +179,7 @@ def consolidate(conn, ids: list[str], *, title: str, reason: str = '', synthesis
     # Keep every original file, prefix collisions, copy its source too so
     # the public publisher can safely re-render PDFs with tracking removed.
     files=[];folder=artifacts.item_dir(iid)
+    oldgroup=store.get_item(conn,iid) or {}
     for p in flat:
         for rec in (p.get('claude') or {}).get('artifacts') or []:
             if rec.get('error') or not rec.get('file'):continue
@@ -199,6 +200,30 @@ def consolidate(conn, ids: list[str], *, title: str, reason: str = '', synthesis
             if src.is_file():
                 rec=artifacts.store(iid,src,title=p['title']+' (original slides)')
                 if not rec.get('error'):files.append(rec)
+    # Downloads added directly to a combined topic are not member files.
+    # Preserve them when refreshing, and when joining two existing groups.
+    # Member copies have already been refreshed above; the unified PDF below
+    # replaces its previous edition rather than retaining a stale duplicate.
+    member_files={r['file'] for r in files}
+    for previous in resolved:
+        if not conn.execute('SELECT 1 FROM topic_groups WHERE id=?',(previous,)).fetchone():continue
+        group=store.get_item(conn,previous) or {}
+        for original in (group.get('claude') or {}).get('artifacts') or []:
+            name=original.get('file')
+            if original.get('error') or not name or name=='topic-guide.pdf':continue
+            if name in member_files:continue
+            srcdir=artifacts.item_dir(previous)
+            if not (srcdir/PathName(name)).is_file():continue
+            rec=dict(original)
+            if previous!=iid:
+                for key in ('file','source'):
+                    source=rec.get(key)
+                    if not source:continue
+                    src=srcdir/PathName(source)
+                    if not src.is_file():continue
+                    safe=artifacts.safe_name(previous+'-'+source)
+                    shutil.copy2(src,folder/safe);rec[key]=safe
+            files.append(rec);artifacts._remember(folder,rec)
     guide=folder/'topic-guide.md'
     guide.write_text('# '+title+'\n\n'+synthesis['answer']+'\n\n## Original sources\n'+'\n'.join('- '+u for u in note['source_urls']),encoding='utf-8')
     guidefile=artifacts.store(iid,guide,title='Unified topic guide',pdf=True)
@@ -207,7 +232,6 @@ def consolidate(conn, ids: list[str], *, title: str, reason: str = '', synthesis
     fu={'answer':synthesis['answer'],'answered':'fully','sources':unique([s for p in flat for s in (p.get('claude') or {}).get('sources') or []]),'artifacts':unique(files)}
     action=next((p['action'] for p in flat if p.get('action')=='build'),flat[0].get('action') or 'reference')
     status=next((p['status'] for p in flat if p.get('status')=='active'),flat[0].get('status') or 'inbox')
-    oldgroup=store.get_item(conn,iid) or {}
     store.upsert_item(conn,{'id':iid,'canonical_id':None,'url':flat[0]['url'],'source':'topic','kind':'guide','title':title,'hook':note['hook'],
         'summary':note['summary'],'action':action,'status':oldgroup.get('status') or status,
         'processed_at':max(p.get('processed_at') or 0 for p in flat),'note_json':json.dumps(note,ensure_ascii=False),

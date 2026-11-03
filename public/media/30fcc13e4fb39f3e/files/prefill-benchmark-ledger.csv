@@ -1,0 +1,1 @@
+run_id,model_revision,hardware,precision,serving_version,input_tokens,output_tokens,concurrency,cache_state,ttft_ms,itl_ms,end_to_end_ms,quality_score,cost,errors

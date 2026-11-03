@@ -64,7 +64,8 @@ function renderShelf(){
  else items.sort((a,b)=>researchTime(b)-researchTime(a)||((b.processed_at||0)-(a.processed_at||0)));
  const section=state.facets?.sections?.find(s=>s.id===state.filters.section)?.name;
  $('#heading').textContent=section||state.filters.topic||(state.saved?'Saved on this device':'All topics');
- $('#count').textContent=`${items.length} topic${items.length===1?'':'s'} · ${items.reduce((n,i)=>n+(i.source_count||1),0)} sources`;
+ const sourceCount=items.reduce((n,i)=>n+(i.source_count||1),0);
+ $('#count').textContent=`${items.length} topic${items.length===1?'':'s'} · ${sourceCount} source${sourceCount===1?'':'s'}`;
  $('#clear').hidden=!state.q&&!Object.values(state.filters).some(Boolean)&&!state.saved;
  $$('.stage-tabs [data-stage]').forEach(b=>b.setAttribute('aria-pressed',String((state.filters.stage||'')===b.dataset.stage)));
  $('#savedBtn').setAttribute('aria-pressed',String(state.saved));

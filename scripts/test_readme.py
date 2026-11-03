@@ -132,6 +132,25 @@ class IntakeTests(unittest.TestCase):
         store.upsert_item(self.c,{'id':a,'url':store.get_item(self.c,a)['url'],'title':'Claude skills for architecture'})
         store.upsert_item(self.c,{'id':b,'url':store.get_item(self.c,b)['url'],'title':'Claude cooking recipe notebook','note_json':json.dumps({'source_urls':['https://www.instagram.com/reel/B/']})})
         self.assertFalse(any(m['auto'] for m in topics.candidates(self.c,a)))
+    def test_topic_downloads_survive_refresh_and_group_merge(self):
+        ids=[self.stage(code) for code in 'ABCD']
+        for code in 'ABCD':self.finish(code)
+        synthesis={'summary':'Unified','answer':'A coherent combined guide. '*40}
+        first=topics.consolidate(self.c,ids[:2],title='First',synthesis=synthesis)
+        second=topics.consolidate(self.c,ids[2:],title='Second',synthesis=synthesis)
+        for group,content in ((first,'first custom template'),(second,'second custom template')):
+            path=artifacts.item_dir(group)/'custom.csv';path.write_text(content)
+            it=store.get_item(self.c,group);fu=it['claude']
+            fu['artifacts'].append({'file':'custom.csv','source':'custom.csv','kind':'csv','title':'Custom template'})
+            self.c.execute('UPDATE items SET claude_json=? WHERE id=?',(json.dumps(fu),group));self.c.commit()
+        topics.refresh(self.c,first,synthesis=synthesis)
+        self.assertIn('custom.csv',[a['file'] for a in store.get_item(self.c,first)['claude']['artifacts']])
+        merged=topics.consolidate(self.c,[first,second],title='Together',synthesis=synthesis)
+        files=store.get_item(self.c,merged)['claude']['artifacts']
+        contents=[(artifacts.item_dir(merged)/a['file']).read_text() for a in files if a['kind']=='csv']
+        self.assertCountEqual(contents,['first custom template','second custom template'])
+        self.assertEqual(sum(a['file']=='topic-guide.pdf' for a in files),1)
+        self.assertEqual(len(topics.members(self.c,merged)),4)
     def test_renderer_failure_keeps_originals_visible(self):
         ids=[self.stage(code) for code in 'AB']
         with patch.object(artifacts,'store',return_value={'error':'renderer unavailable'}):

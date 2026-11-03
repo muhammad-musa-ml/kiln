@@ -1,0 +1,1 @@
+scenario,speech_end_ms,transcript_ready_ms,llm_first_token_ms,tts_first_audio_ms,playback_start_ms,stop_audio_delay_ms,false_interruption,heard_history_correct,notes

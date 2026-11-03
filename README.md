@@ -6,6 +6,8 @@ Saved ideas, researched into something useful.
 
 Kiln starts with a **Muse-produced Markdown dossier**, researches the practical next steps against current sources, and turns overlapping reels into one topic with guides, source links, prompts, commands, PDFs and project ideas. Every original URL remains attached.
 
+The **November 2, 2026** research update adds nine reel dossiers, including a career-plan expansion synthesized with the earlier job-search guide. The library contains **61 topics and 80 original sources**, with current source checks, practical guides, PDFs, reusable prompts and nine new blank evaluation/planning templates. See [the update log](WORKLOG.md) for scope and verification.
+
 ## Before and now
 
 Previously, a scheduled run read URLs and instructions from a Google Doc named **links**. Kiln downloaded the post, extracted carousel text or video frames, transcribed audio locally, enriched the extraction and asked its follow-up worker to finish missing research. Instagram authentication, scraping failures, frame selection and transcription were part of intake.
