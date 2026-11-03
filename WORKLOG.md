@@ -27,6 +27,14 @@
   the nine source guides and the unified career guide. The completed 327-file
   export passed all 40 publication checks and retained every previous source
   URL, both career aliases and the current shared UI assets.
+- Pushed the audited release and verified all 326 served files byte-for-byte
+  against the export before issuing nine publication receipts. Browser checks
+  confirmed the public count and all seven combined-career downloads.
+- Streamed fresh Drive copies and matched all nine source digests, moved the
+  same file IDs into Kilned, then verified both folders and every parent list.
+  Kilned now contains 47 READMEs; researched has no pending Markdown and keeps
+  its five images. Local cleanup and a final database backup followed cloud
+  verification. The links Doc had no URLs and required no edit.
 
 ### October 20, 2026: next Muse dossier batch
 
