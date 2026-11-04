@@ -6,7 +6,7 @@ Saved ideas, researched into something useful.
 
 Kiln starts with a **Muse-produced Markdown dossier**, researches the practical next steps against current sources, and turns overlapping reels into one topic with guides, source links, prompts, commands, PDFs and project ideas. Every original URL remains attached.
 
-The **November 2, 2026** research update adds nine reel dossiers, including a career-plan expansion synthesized with the earlier job-search guide. The library contains **61 topics and 80 original sources**, with current source checks, practical guides, PDFs, reusable prompts and nine new blank evaluation/planning templates. See [the update log](WORKLOG.md) for scope and verification.
+The **November 3, 2026** update adds six reel dossiers, including a treg pilot incorporated into the GTM guide. The library contains **66 topics and 86 original sources**. This batch adds practical guides, PDFs, reusable prompts, and six blank worksheets. See [the update log](WORKLOG.md) for scope and verification.
 
 ## Before and now
 

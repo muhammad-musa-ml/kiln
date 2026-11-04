@@ -1,5 +1,18 @@
 # Kiln overhaul, September 2026
 
+### November 3, 2026: six new Muse dossiers
+
+- Researched mobile bottom navigation, the Anthropic Residency, open-source
+  repository launches, peer-review-driven research design, weight-space
+  programming, and a treg lead-research pilot. Each guide has a reusable
+  prompt, a practice exercise, and a blank worksheet.
+- Combined the lead-research pilot with the existing GTM engineering topic.
+  Both original reels and their downloads remain available. The library now
+  contains 66 topics and 86 original sources.
+- Checked 28 primary source URLs. The creator's gateway choice and reported
+  spend remain unverified. OpenReview blocked access to the review count and venue
+  status. The Anthropic guide links directly to both regional applications.
+
 ### November 2, 2026: nine more Muse dossiers
 
 - Independently researched all nine new reel READMEs: MiroFish, SupoClip,

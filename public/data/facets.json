@@ -1,21 +1,45 @@
 {
- "total": 61,
+ "total": 66,
  "by_action": {
+  "reference": 27,
+  "apply": 4,
   "install": 11,
-  "reference": 23,
   "build": 12,
   "learn": 9,
-  "apply": 3,
   "read": 3,
   "watch": 8
  },
  "by_topic": {
+  "ablation": 1,
+  "mechanistic interpretability": 1,
+  "model evaluation": 1,
+  "weight editing": 1,
+  "experiment design": 1,
+  "peer review": 1,
+  "research methods": 1,
+  "voice benchmarks": 1,
+  "github": 3,
+  "launch checklist": 3,
+  "maintainer workflow": 1,
+  "open source": 2,
+  "enrichment": 1,
+  "gtm engineering": 1,
+  "lead research": 1,
+  "outreach": 1,
+  "treg": 1,
+  "accessibility": 1,
+  "mobile ux": 1,
+  "navigation": 1,
+  "usability testing": 1,
+  "ai safety": 1,
+  "anthropic": 3,
+  "research careers": 1,
+  "research residency": 1,
   "ollama": 1,
   "supoclip": 1,
   "video clipping": 1,
   "whisper": 1,
   "indexnow": 1,
-  "launch checklist": 2,
   "open graph": 1,
   "seo": 1,
   "sitemaps": 1,
@@ -106,7 +130,6 @@
   "ai agents": 7,
   "browser automation": 1,
   "decision models": 1,
-  "github": 2,
   "guardrails": 1,
   "jev": 1,
   "model routing": 1,
@@ -138,9 +161,6 @@
   "code visualization": 1,
   "program comprehension": 1,
   "typescript": 1,
-  "enrichment": 1,
-  "gtm engineering": 1,
-  "outreach": 1,
   "atomic claude": 1,
   "semantic search": 1,
   "cost optimization": 1,
@@ -183,7 +203,6 @@
   "claude skills": 1,
   "heygen": 1,
   "hyperframes": 1,
-  "open source": 1,
   "product launch marketing": 1,
   "video editing": 1,
   "desktop app": 1,
@@ -208,7 +227,6 @@
   "surge ai": 1,
   "tech hiring without interviews": 1,
   "ai certifications": 1,
-  "anthropic": 2,
   "anthropic claude certification": 1,
   "artificial intelligence": 4,
   "career advice": 1,
@@ -345,7 +363,7 @@
    "id": "jobs-money",
    "name": "Jobs & Money",
    "parent": "",
-   "count": 10
+   "count": 11
   },
   {
    "id": "jobs-money/certifications",
@@ -357,7 +375,7 @@
    "id": "jobs-money/hiring-companies",
    "name": "Hiring & Companies",
    "parent": "jobs-money",
-   "count": 3
+   "count": 4
   },
   {
    "id": "jobs-money/outreach-workflows",
@@ -381,13 +399,13 @@
    "id": "learning",
    "name": "Learning",
    "parent": "",
-   "count": 3
+   "count": 4
   },
   {
    "id": "learning/courses-practice",
    "name": "Courses & practice",
    "parent": "learning",
-   "count": 3
+   "count": 4
   },
   {
    "id": "media-generation",
@@ -417,7 +435,7 @@
    "id": "models-training",
    "name": "Models & Training",
    "parent": "",
-   "count": 6
+   "count": 7
   },
   {
    "id": "models-training/fundamentals",
@@ -435,7 +453,7 @@
    "id": "models-training/training-tuning",
    "name": "Training & Tuning",
    "parent": "models-training",
-   "count": 1
+   "count": 2
   },
   {
    "id": "retrieval-rag",
@@ -465,13 +483,13 @@
    "id": "shipping-quality",
    "name": "Shipping & Quality",
    "parent": "",
-   "count": 6
+   "count": 8
   },
   {
    "id": "shipping-quality/design",
    "name": "Design",
    "parent": "shipping-quality",
-   "count": 1
+   "count": 2
   },
   {
    "id": "shipping-quality/design-reconstruction",
@@ -483,7 +501,7 @@
    "id": "shipping-quality/security-launch",
    "name": "Security & Launch",
    "parent": "shipping-quality",
-   "count": 3
+   "count": 4
   },
   {
    "id": "to-watch",
@@ -511,7 +529,7 @@
   }
  ],
  "by_status": {
-  "ready": 59,
+  "ready": 64,
   "in-progress": 2,
   "made": 0,
   "set-aside": 0
