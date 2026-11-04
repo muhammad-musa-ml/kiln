@@ -12,6 +12,13 @@
 - Checked 28 primary source URLs. The creator's gateway choice and reported
   spend remain unverified. OpenReview blocked access to the review count and venue
   status. The Anthropic guide links directly to both regional applications.
+- Passed 11 lifecycle tests and 40 publication checks. Verified the local
+  topic count, both GTM aliases, the combined downloads, and all 350 served
+  files on the public site.
+- Matched six fresh source digests to their publication receipts. Moved and
+  verified all six dossiers in Kilned on Drive and locally. The archive now
+  holds 53 READMEs. The researched folder contains five image attachments,
+  and the links document contained no URLs.
 
 ### November 2, 2026: nine more Muse dossiers
 
