@@ -29,6 +29,14 @@
   source URL, the new templates, and the shared public/local JavaScript.
   Rendered and visually reviewed all 28 new PDFs (38 pages), corrected orphan
   pages, and rechecked the three PDFs re-rendered during public URL cleanup.
+- Pushed the audited export and verified every one of the 465 served files
+  against its SHA-256. All 19 dossiers received exact-publication receipts.
+  Fresh raw Drive downloads matched the researched revisions before cleanup.
+- Moved all 19 completed dossiers into Kilned and read back every file's
+  parents and size. Both folder inventories confirm 72 archived READMEs,
+  no pending Markdown, all five retained images, and all prior archive files.
+  Confirmed the 19 matching local archives and 72 cleaned records. The links
+  document still contained no pending URLs.
 
 ### November 3, 2026: six new Muse dossiers
 
