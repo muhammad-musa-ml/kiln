@@ -1,8 +1,8 @@
 {
- "total": 66,
+ "total": 74,
  "by_action": {
-  "reference": 27,
   "apply": 4,
+  "reference": 37,
   "install": 11,
   "build": 12,
   "learn": 9,
@@ -10,6 +10,58 @@
   "watch": 8
  },
  "by_topic": {
+  "application security": 1,
+  "launch checklist": 2,
+  "owasp": 1,
+  "supabase": 2,
+  "code cleanup": 1,
+  "knip": 1,
+  "refactoring": 1,
+  "untangle codebase": 1,
+  "continual learning": 1,
+  "evaluation": 8,
+  "nested learning": 1,
+  "sleep": 1,
+  "hyperframes": 2,
+  "motion graphics": 1,
+  "video effects": 1,
+  "content pipeline": 1,
+  "ffmpeg": 1,
+  "video editing": 1,
+  "video-use": 1,
+  "ai evaluation": 1,
+  "ai gigs": 1,
+  "crowdgen": 1,
+  "mindrift": 1,
+  "brag": 1,
+  "documentary": 1,
+  "video production": 2,
+  "clipping": 1,
+  "content rewards": 1,
+  "creator income": 2,
+  "audience retention": 1,
+  "content strategy": 1,
+  "video hooks": 1,
+  "sideshift": 1,
+  "ugc": 1,
+  "concurrency": 1,
+  "idempotency": 1,
+  "postgresql": 1,
+  "race conditions": 1,
+  "google search": 1,
+  "open graph": 1,
+  "preferred sources": 1,
+  "seo": 1,
+  "media provenance": 1,
+  "openmontage": 1,
+  "claude code": 6,
+  "dynamic workflows": 1,
+  "projects": 1,
+  "task orchestration": 1,
+  "accessibility": 1,
+  "app polish": 1,
+  "interface animation": 1,
+  "navigation": 1,
   "ablation": 1,
   "mechanistic interpretability": 1,
   "model evaluation": 1,
@@ -19,18 +71,13 @@
   "research methods": 1,
   "voice benchmarks": 1,
   "github": 3,
-  "launch checklist": 3,
   "maintainer workflow": 1,
-  "open source": 2,
+  "open source": 1,
   "enrichment": 1,
   "gtm engineering": 1,
   "lead research": 1,
   "outreach": 1,
   "treg": 1,
-  "accessibility": 1,
-  "mobile ux": 1,
-  "navigation": 1,
-  "usability testing": 1,
   "ai safety": 1,
   "anthropic": 3,
   "research careers": 1,
@@ -39,10 +86,6 @@
   "supoclip": 1,
   "video clipping": 1,
   "whisper": 1,
-  "indexnow": 1,
-  "open graph": 1,
-  "seo": 1,
-  "sitemaps": 1,
   "mirofish": 1,
   "oasis": 1,
   "social simulation": 1,
@@ -62,7 +105,6 @@
   "railway": 1,
   "remote work": 1,
   "revenuecat": 1,
-  "supabase": 1,
   "agent memory": 2,
   "base": 1,
   "basemode": 1,
@@ -90,7 +132,6 @@
   "mcp": 1,
   "ruflo": 1,
   "ai comedy": 1,
-  "evaluation": 7,
   "model provenance": 1,
   "open weight models": 1,
   "agent skills": 3,
@@ -100,17 +141,12 @@
   "specifications": 1,
   "context engineering": 2,
   "optmem": 1,
-  "claude code": 8,
-  "code cleanup": 1,
-  "dead code": 1,
-  "knip": 1,
-  "vulture": 1,
   "dashboards": 1,
   "mods": 1,
   "session handoff": 1,
   "task tracking": 1,
-  "verification": 2,
-  "generative ai": 2,
+  "verification": 1,
+  "generative ai": 1,
   "video generation": 1,
   "wangp": 1,
   "youtube shorts": 1,
@@ -119,7 +155,7 @@
   "api costs": 1,
   "cache": 1,
   "caching": 1,
-  "claude": 7,
+  "claude": 5,
   "code": 1,
   "optimizing": 1,
   "prompt": 1,
@@ -164,31 +200,16 @@
   "atomic claude": 1,
   "semantic search": 1,
   "cost optimization": 1,
-  "ai engineering": 1,
-  "app security": 1,
-  "buildinpublic": 1,
-  "devops": 1,
-  "owasp": 1,
-  "pre-launch checklist": 1,
-  "vibe coding": 1,
-  "vibecoding": 1,
-  "web accessibility": 1,
-  "web development": 1,
-  "web security": 1,
-  "website security": 1,
-  "website seo": 1,
   "stanford cs329a": 1,
   "conversion optimization": 1,
   "figma to code": 1,
   "landing page architecture": 1,
-  "motion design": 2,
+  "motion design": 1,
   "web performance": 1,
   "machine learning": 8,
   "numpy": 1,
   "practice": 1,
   "tensortonic": 1,
-  "project orchestration": 1,
-  "workspaces": 1,
   "model comparison": 1,
   "rea": 1,
   "reconstruction": 1,
@@ -198,13 +219,6 @@
   "chatgpt": 1,
   "ecommerce": 1,
   "side hustle": 1,
-  "ai video generation": 1,
-  "ai-generated motion graphics": 1,
-  "claude skills": 1,
-  "heygen": 1,
-  "hyperframes": 1,
-  "product launch marketing": 1,
-  "video editing": 1,
   "desktop app": 1,
   "dictation software": 1,
   "mcp model context protocol": 1,
@@ -218,14 +232,6 @@
   "production ml systems": 1,
   "rag retrieval-augmented generation": 1,
   "vector databases": 1,
-  "ai data-labelingrlhf jobs": 1,
-  "alignerr": 1,
-  "mercor": 1,
-  "outlier": 1,
-  "remote job opportunities": 1,
-  "resume template": 1,
-  "surge ai": 1,
-  "tech hiring without interviews": 1,
   "ai certifications": 1,
   "anthropic claude certification": 1,
   "artificial intelligence": 4,
@@ -297,13 +303,13 @@
    "id": "agents-assistants",
    "name": "Agents & Assistants",
    "parent": "",
-   "count": 13
+   "count": 12
   },
   {
    "id": "agents-assistants/agent-security-permissions",
    "name": "Agent Security & Permissions",
    "parent": "agents-assistants",
-   "count": 2
+   "count": 1
   },
   {
    "id": "agents-assistants/frameworks-patterns",
@@ -363,7 +369,7 @@
    "id": "jobs-money",
    "name": "Jobs & Money",
    "parent": "",
-   "count": 11
+   "count": 13
   },
   {
    "id": "jobs-money/certifications",
@@ -375,7 +381,7 @@
    "id": "jobs-money/hiring-companies",
    "name": "Hiring & Companies",
    "parent": "jobs-money",
-   "count": 4
+   "count": 3
   },
   {
    "id": "jobs-money/outreach-workflows",
@@ -393,7 +399,7 @@
    "id": "jobs-money/roadmaps-side-income",
    "name": "Roadmaps & Side Income",
    "parent": "jobs-money",
-   "count": 4
+   "count": 7
   },
   {
    "id": "learning",
@@ -411,7 +417,7 @@
    "id": "media-generation",
    "name": "Media Generation",
    "parent": "",
-   "count": 7
+   "count": 11
   },
   {
    "id": "media-generation/image-generation",
@@ -423,19 +429,19 @@
    "id": "media-generation/motion-graphics-video",
    "name": "Motion Graphics & Video",
    "parent": "media-generation",
-   "count": 3
+   "count": 5
   },
   {
    "id": "media-generation/voice-video",
    "name": "Voice & video",
    "parent": "media-generation",
-   "count": 3
+   "count": 5
   },
   {
    "id": "models-training",
    "name": "Models & Training",
    "parent": "",
-   "count": 7
+   "count": 8
   },
   {
    "id": "models-training/fundamentals",
@@ -453,7 +459,7 @@
    "id": "models-training/training-tuning",
    "name": "Training & Tuning",
    "parent": "models-training",
-   "count": 2
+   "count": 3
   },
   {
    "id": "retrieval-rag",
@@ -507,13 +513,13 @@
    "id": "to-watch",
    "name": "To Watch",
    "parent": "",
-   "count": 16
+   "count": 15
   },
   {
    "id": "to-watch/concept-explainers",
    "name": "Concept Explainers",
    "parent": "to-watch",
-   "count": 10
+   "count": 9
   },
   {
    "id": "to-watch/full-courses",
@@ -529,11 +535,11 @@
   }
  ],
  "by_status": {
-  "ready": 64,
+  "ready": 72,
   "in-progress": 2,
   "made": 0,
   "set-aside": 0
  },
- "gated": 5,
+ "gated": 4,
  "dead_links": 7
 }

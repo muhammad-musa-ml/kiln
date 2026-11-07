@@ -1,5 +1,35 @@
 # Kiln overhaul, September 2026
 
+### November 7, 2026: 19 new Muse dossiers
+
+- Independently checked 70 primary source URLs across video tools, UI quality,
+  coding workflows, creator campaigns, AI evaluation work, concurrency, and
+  continual learning. Every new guide begins with strengths and best use,
+  then separates current facts, creator claims, practical steps and limits.
+- Found the published Caldo Untangle Codebase skill and installation route.
+  Updated the brag classic/slim distinction, Toloka's migration to Mindrift,
+  and Preferred Sources coverage of supported AI Search experiences. Checked
+  current campaign submission, fees and settlement rules. Preserved experiment
+  labels for Sleep and distinguished pending earnings from settled payments.
+- Wrote 19 guides, printable PDFs, reusable prompts, proposed projects and
+  blank CSV worksheets. Commands are reference instructions; video production,
+  earnings and model experiments were not reproduced. Gated effect packs,
+  creator attributions and unavailable live pricing remain explicit gaps.
+- Compared each addition with all 66 previous topics and the other 18 additions:
+  1,596 recorded comparisons. Synthesized nine groups covering interface quality,
+  HyperFrames production, work coordination, assisted editing, clipping, SEO,
+  AI evaluation opportunities, code cleanup and application launch evidence.
+  The library contains 74 topics and 105 original source URLs. Original source
+  records, guides, downloads and old item aliases remain available.
+- Excluded owner-specific account and career context from public notes.
+  The separate jobs folder remains outside this update. The links Doc
+  contained no URLs at intake.
+- Passed 11 isolated lifecycle tests and all 40 publication audit checks.
+  Verified 74 local topics, all new aliases, 81 served downloads, every original
+  source URL, the new templates, and the shared public/local JavaScript.
+  Rendered and visually reviewed all 28 new PDFs (38 pages), corrected orphan
+  pages, and rechecked the three PDFs re-rendered during public URL cleanup.
+
 ### November 3, 2026: six new Muse dossiers
 
 - Researched mobile bottom navigation, the Anthropic Residency, open-source
