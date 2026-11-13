@@ -14,6 +14,12 @@
 - Public summaries use the independently written research. Exact source
   dossiers retain the original materials privately. Each guide includes its
   strengths, a practice project, a reusable prompt, and source references.
+- Passed 11 lifecycle tests and 40 publication audit checks. Verified 87 local
+  downloads, all 24 new or updated PDFs, and all 580 files served by the public
+  deployment. Old item links resolve to the updated topics.
+- Matched all 15 fresh Drive downloads to the published revisions before
+  archiving. Drive and the local archive now contain 87 completed dossiers.
+  The researched folder contains five attachments and no pending dossiers.
 
 ### November 7, 2026: 19 new Muse dossiers
 
