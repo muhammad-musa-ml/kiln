@@ -1,5 +1,20 @@
 # Kiln overhaul, September 2026
 
+### November 12, 2026 — 15 new Muse dossiers
+
+- Added 15 source guides and worksheets. Updated nine existing topics covering
+  remote gig work, interface quality, design references, video tools, AI career
+  preparation, product launches, hiring, credentials, and creator campaigns.
+  The library now includes 74 topics and 120 original source links.
+- Checked current provider documentation, employer posting APIs, repositories,
+  and course requirements. The hiring guide includes direct links to verified
+  ElevenLabs, Anduril, Perplexity, and Cursor requisitions. The gig guide uses
+  UserTesting's documented 14-day payout timeline. The credential guide records
+  provider eligibility and assessment rules.
+- Public summaries use the independently written research. Exact source
+  dossiers retain the original materials privately. Each guide includes its
+  strengths, a practice project, a reusable prompt, and source references.
+
 ### November 7, 2026: 19 new Muse dossiers
 
 - Independently checked 70 primary source URLs across video tools, UI quality,
