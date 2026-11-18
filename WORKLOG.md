@@ -1,5 +1,21 @@
 # Kiln overhaul, September 2026
 
+### November 18, 2026 — seven new Muse dossiers
+
+- Combined five palette reels into one topic with independently calculated
+  text and button contrast. The guide identifies a mislabeled lime hex and
+  gives tested foregrounds for the accents. It covers control boundaries,
+  focus, and the use of labels or shapes to communicate state.
+- Updated the AI credentials topic with OpenAI's badge criteria, Oracle's
+  exam format, Hugging Face's course requirements, and IBM's enrollment
+  condition for the SkillsBuild badge.
+- Added a separate guide on live clipping. It uses Twitch's documented
+  authenticated chat route and includes a verified 30-second FFmpeg cut from
+  a synthetic fixture. The creator's private build and results are unverified.
+- Wrote seven source guides with worksheets and two consolidated guides.
+  Preserved every original reel link. The library now has 76 topics and
+  127 original sources.
+
 ### November 12, 2026 — 15 new Muse dossiers
 
 - Added 15 source guides and worksheets. Updated nine existing topics covering

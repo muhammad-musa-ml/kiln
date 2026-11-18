@@ -1,12 +1,692 @@
 {
  "items": [
   {
+   "id": "8b0acab7320d664f",
+   "url": "https://www.instagram.com/reel/DfwuUDyRPTe/",
+   "kind": "tutorial",
+   "action": "reference",
+   "title": "Live clipping from chat signals, buffered recordings, and captions",
+   "hook": "Turn bursts of chat activity into reviewable clip candidates on an authorized stream.",
+   "summary": "Chat activity can mark moments worth reviewing while footage is still being recorded. A rolling buffer, timestamped signals, and draft captions let an editor find candidates before going through the whole recording. The reel shows a mock terminal. Its private build and turnaround claims remain unverified.",
+   "slide_count": 0,
+   "links_checked": "2026-11-18",
+   "source_urls": [
+    "https://www.instagram.com/reel/DfwuUDyRPTe/"
+   ],
+   "source_count": 1,
+   "contents": {
+    "project": true,
+    "prompt": true,
+    "commands": true,
+    "pdf": true,
+    "transcript": false,
+    "research": true
+   },
+   "note": {
+    "sections": [
+     {
+      "heading": "Source takeaways",
+      "detail": "Chat activity can mark moments worth reviewing while footage is still being recorded. A rolling buffer, timestamped signals, and draft captions let an editor find candidates before going through the whole recording. The reel shows a mock terminal. Its private build and turnaround claims remain unverified.",
+      "html": "<p>Chat activity can mark moments worth reviewing while footage is still being recorded. A rolling buffer, timestamped signals, and draft captions let an editor find candidates before going through the whole recording. The reel shows a mock terminal. Its private build and turnaround claims remain unverified.</p>\n"
+     }
+    ],
+    "topics": [
+     "live clipping",
+     "Twitch",
+     "FFmpeg",
+     "captions"
+    ],
+    "commands": [
+     "ffmpeg -ss 00:00:10 -i local-fixture.mp4 -t 30 -c:v libx264 -pix_fmt yuv420p -c:a aac candidate.mp4"
+    ],
+    "prompts": [
+     {
+      "heading": "Reusable research prompt",
+      "detail": "Design a clip review queue for my authorized stream. Use a recording plus synthetic chat counts to test alignment, reconnects, and false positives. Keep outputs as drafts and include captions and rights review.",
+      "html": "<p>Design a clip review queue for my authorized stream. Use a recording plus synthetic chat counts to test alignment, reconnects, and false positives. Keep outputs as drafts and include captions and rights review.</p>\n"
+     }
+    ],
+    "research_date": "2026-11-18",
+    "evidence_notice": "Initial account supplied by Muse. Transcripts may be auto-transcribed or reconstructed; source claims are not independent verification."
+   },
+   "enrich": {
+    "what_it_is": "Chat activity can mark moments worth reviewing while footage is still being recorded. A rolling buffer, timestamped signals, and draft captions let an editor find candidates before going through the whole recording. The reel shows a mock terminal. Its private build and turnaround claims remain unverified.",
+    "project": {
+     "name": "Live clipping from chat signals, buffered recordings, and captions",
+     "one_liner": "Turn bursts of chat activity into reviewable clip candidates on an authorized stream.",
+     "scope": "Replay a consented 30-minute fixture with labeled events. Compare your detector against the labels, chart false positives and time from event to reviewed cut, and test gaps on reconnect. Check the game publisher and platform before redistributing footage. For the reel's GTA VI example, PlayStation announced a November 19 rollout. Rockstar's guidance describes limits for fan footage, and YouTube applies a separate reused-content monetization policy. [PlayStation launch details](https://blog.playstation.com/2026/11/10/pre-load-grand-theft-auto-vi-on-ps5-starting-today/) · [Rockstar content policy](https://support.rockstargames.com/articles/7bNaeoMFTV0iUDGhStTXvz/policy-on-posting-copyrighted-rockstar-games-material) · [YouTube monetization policies](https://support.google.com/youtube/answer/1311392?hl=en)",
+     "stack": [],
+     "milestones": [
+      {
+       "step": "Establish a baseline",
+       "outcome": "Record evidence and a measurable success condition."
+      },
+      {
+       "step": "Run a small pilot",
+       "outcome": "Document observations and the next decision."
+      }
+     ]
+    },
+    "next_action": "Use the worksheet to run the proposed exercise."
+   },
+   "progress": "ready",
+   "tags": {
+    "action": [
+     "reference"
+    ],
+    "section": [
+     "media-generation/voice-video"
+    ],
+    "topic": [
+     "captions",
+     "ffmpeg",
+     "live clipping",
+     "twitch"
+    ]
+   },
+   "followup": {
+    "answer_html": "<h2>Strengths and best use</h2>\n<p>Chat activity can mark moments worth reviewing while footage is still being recorded. A rolling buffer, timestamped signals, and draft captions let an editor find candidates before going through the whole recording. The reel shows a mock terminal. Its private build and turnaround claims remain unverified.</p>\n<h2>Capture and detect</h2>\n<p>Use a stream you own or have permission to record. Write short segments, log the ingest start and reconnects, and retain enough footage before and after each event. The documented Twitch EventSub chat route uses authorization. With WebSockets, use the user access token and required chat read scope. Store message counts by time window and deduplicate deliveries by message ID. <a href=\"https://streamlink.github.io/cli.html\">Streamlink CLI</a> - <a href=\"https://dev.twitch.tv/docs/eventsub/reference/chat\">Twitch EventSub chat</a></p>\n<p>Start with 10-second windows, a rolling median and an absolute minimum count. Merge nearby peaks and flag raids and other disruptions. Map chat time to the recorded timeline using a known marker because playback and chat can drift. Wait for the post-event footage before rendering. Twitch's built-in Clip features are an alternative for qualifying streams. <a href=\"https://dev.twitch.tv/docs/api/clips/\">Twitch Clips guide</a></p>\n<h2>Test the cut and captions</h2>\n<p>I tested the cut below on a 45-second synthetic fixture. The output was exactly 30 seconds with H.264 video and AAC audio. Use a local recording as input. Faster-whisper can generate timestamped caption candidates. Review names, words, timing, and crop by hand. <a href=\"https://ffmpeg.org/ffmpeg.html\">FFmpeg</a> - <a href=\"https://github.com/SYSTRAN/faster-whisper\">Faster Whisper</a></p>\n<pre><code class=\"language-sh\">ffmpeg -ss 00:00:10 -i local-fixture.mp4 -t 30 -c:v libx264 -pix_fmt yuv420p -c:a aac candidate.mp4\n</code></pre>\n<h2>Project idea</h2>\n<p>Replay a consented 30-minute fixture with labeled events. Compare your detector against the labels, chart false positives and time from event to reviewed cut, and test gaps on reconnect. Check the game publisher and platform before redistributing footage. For the reel's GTA VI example, PlayStation announced a November 19 rollout. Rockstar's guidance describes limits for fan footage, and YouTube applies a separate reused-content monetization policy. <a href=\"https://blog.playstation.com/2026/11/10/pre-load-grand-theft-auto-vi-on-ps5-starting-today/\">PlayStation launch details</a> - <a href=\"https://support.rockstargames.com/articles/7bNaeoMFTV0iUDGhStTXvz/policy-on-posting-copyrighted-rockstar-games-material\">Rockstar content policy</a> - <a href=\"https://support.google.com/youtube/answer/1311392?hl=en\">YouTube monetization policies</a></p>\n<h2>Reusable prompt</h2>\n<pre><code class=\"language-text\">Design a clip review queue for my authorized stream. Use a recording plus synthetic chat counts to test alignment, reconnects, and false positives. Keep outputs as drafts and include captions and rights review.\n</code></pre>\n",
+    "answered": "fully",
+    "artifacts": [
+     {
+      "file": "kiln-guide.md",
+      "title": "Practical research guide",
+      "about": "Current research, verified sources, commands and next steps",
+      "kind": "md",
+      "pages": 0
+     },
+     {
+      "file": "kiln-guide.pdf",
+      "title": "Practical research guide (PDF)",
+      "about": "Printable guide with source links",
+      "kind": "pdf",
+      "pages": 2
+     },
+     {
+      "file": "clipping-worksheet.csv",
+      "title": "Live clipping from chat signals, buffered recordings, and captions worksheet",
+      "about": "Blank evidence worksheet for the proposed exercise.",
+      "kind": "csv",
+      "pages": 0
+     }
+    ],
+    "sources": [
+     {
+      "key": "streamlink",
+      "url": "https://streamlink.github.io/cli.html",
+      "resolved_url": "https://streamlink.github.io/cli.html",
+      "title": "streamlink",
+      "checked_at": "2026-11-18",
+      "chars": 33691,
+      "status": 200
+     },
+     {
+      "key": "streaminstall",
+      "url": "https://streamlink.github.io/install.html",
+      "resolved_url": "https://streamlink.github.io/install.html",
+      "title": "streaminstall",
+      "checked_at": "2026-11-18",
+      "chars": 9874,
+      "status": 200
+     },
+     {
+      "key": "ffmpeg",
+      "url": "https://ffmpeg.org/ffmpeg.html",
+      "resolved_url": "https://ffmpeg.org/ffmpeg.html",
+      "title": "ffmpeg",
+      "checked_at": "2026-11-18",
+      "chars": 130281,
+      "status": 200
+     },
+     {
+      "key": "whisper",
+      "url": "https://github.com/SYSTRAN/faster-whisper",
+      "resolved_url": "https://github.com/SYSTRAN/faster-whisper",
+      "title": "whisper",
+      "checked_at": "2026-11-18",
+      "chars": 11477,
+      "status": 200
+     },
+     {
+      "key": "chat",
+      "url": "https://dev.twitch.tv/docs/chat/",
+      "resolved_url": "https://dev.twitch.tv/docs/chat/",
+      "title": "chat",
+      "checked_at": "2026-11-18",
+      "chars": 11510,
+      "status": 200
+     },
+     {
+      "key": "sub",
+      "url": "https://dev.twitch.tv/docs/eventsub/reference/chat",
+      "resolved_url": "https://dev.twitch.tv/docs/eventsub/reference/chat",
+      "title": "sub",
+      "checked_at": "2026-11-18",
+      "chars": 99265,
+      "status": 200
+     },
+     {
+      "key": "clips",
+      "url": "https://dev.twitch.tv/docs/api/clips/",
+      "resolved_url": "https://dev.twitch.tv/docs/api/clips/",
+      "title": "clips",
+      "checked_at": "2026-11-18",
+      "chars": 9043,
+      "status": 200
+     },
+     {
+      "key": "monetization",
+      "url": "https://support.google.com/youtube/answer/1311392?hl=en",
+      "resolved_url": "https://support.google.com/youtube/answer/1311392?hl=en",
+      "title": "monetization",
+      "checked_at": "2026-11-18",
+      "chars": 20658,
+      "status": 200
+     },
+     {
+      "key": "rights",
+      "url": "https://support.rockstargames.com/articles/7bNaeoMFTV0iUDGhStTXvz/policy-on-posting-copyrighted-rockstar-games-material",
+      "checked_at": "2026-11-18",
+      "status": 200,
+      "method": "Read from official publisher via the browser index."
+     },
+     {
+      "key": "sony",
+      "url": "https://blog.playstation.com/2026/11/10/pre-load-grand-theft-auto-vi-on-ps5-starting-today/",
+      "resolved_url": "https://blog.playstation.com/2026/11/10/pre-load-grand-theft-auto-vi-on-ps5-starting-today/",
+      "title": "sony",
+      "checked_at": "2026-11-18",
+      "chars": 1927,
+      "status": 200
+     }
+    ],
+    "next_action": "Use the worksheet to run the proposed exercise."
+   },
+   "links": [
+    {
+     "url": "https://blog.playstation.com/2026/11/10/pre-load-grand-theft-auto-vi-on-ps5-starting-today/",
+     "label": "sony",
+     "alive": true,
+     "page_title": "sony"
+    },
+    {
+     "url": "https://dev.twitch.tv/docs/api/clips/",
+     "label": "clips",
+     "alive": true,
+     "page_title": "clips"
+    },
+    {
+     "url": "https://dev.twitch.tv/docs/chat/",
+     "label": "chat",
+     "alive": true,
+     "page_title": "chat"
+    },
+    {
+     "url": "https://dev.twitch.tv/docs/eventsub/reference/chat",
+     "label": "sub",
+     "alive": true,
+     "page_title": "sub"
+    },
+    {
+     "url": "https://ffmpeg.org/ffmpeg.html",
+     "label": "ffmpeg",
+     "alive": true,
+     "page_title": "ffmpeg"
+    },
+    {
+     "url": "https://github.com/SYSTRAN/faster-whisper",
+     "label": "whisper",
+     "alive": true,
+     "page_title": "whisper"
+    },
+    {
+     "url": "https://streamlink.github.io/cli.html",
+     "label": "streamlink",
+     "alive": true,
+     "page_title": "streamlink"
+    },
+    {
+     "url": "https://streamlink.github.io/install.html",
+     "label": "streaminstall",
+     "alive": true,
+     "page_title": "streaminstall"
+    },
+    {
+     "url": "https://support.google.com/youtube/answer/1311392?hl=en",
+     "label": "monetization",
+     "alive": true,
+     "page_title": "monetization"
+    },
+    {
+     "url": "https://support.rockstargames.com/articles/7bNaeoMFTV0iUDGhStTXvz/policy-on-posting-copyrighted-rockstar-games-material",
+     "label": "https://support.rockstargames.com/articles/7bNaeoMFTV0iUDGhStTXvz/policy-on-posting-copyrighted-rockstar-games-material",
+     "alive": true,
+     "page_title": ""
+    }
+   ],
+   "build_prompt": "# Build: Live clipping from chat signals, buffered recordings, and captions\n\nTurn bursts of chat activity into reviewable clip candidates on an authorized stream.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Scope\nBuild these:\n- Replay a consented 30-minute fixture with labeled events. Compare your detector against the labels\n- chart false positives and time from event to reviewed cut\n- and test gaps on reconnect. Check the game publisher and platform before redistributing footage. For the reel's GTA VI example\n- PlayStation announced a November 19 rollout. Rockstar's guidance describes limits for fan footage\n- and YouTube applies a separate reused-content monetization policy. [PlayStation launch details](https://blog.playstation.com/2026/11/10/pre-load-grand-theft-auto-vi-on-ps5-starting-today/) · [Rockstar content policy](https://support.rockstargames.com/articles/7bNaeoMFTV0iUDGhStTXvz/policy-on-posting-copyrighted-rockstar-games-material) · [YouTube monetization policies](https://support.google.com/youtube/answer/1311392?hl=en)\n\n## Milestones - each must be verifiably done before the next\n1. **Establish a baseline**\n   - Done when: Record evidence and a measurable success condition.\n2. **Run a small pilot**\n   - Done when: Document observations and the next decision.\n\n## Background\nChat activity can mark moments worth reviewing while footage is still being recorded. A rolling buffer, timestamped signals, and draft captions let an editor find candidates before going through the whole recording. The reel shows a mock terminal. Its private build and turnaround claims remain unverified.\n\n## Reference (checked and reachable)\n- sony: https://blog.playstation.com/2026/11/10/pre-load-grand-theft-auto-vi-on-ps5-starting-today/\n- clips: https://dev.twitch.tv/docs/api/clips/\n- chat: https://dev.twitch.tv/docs/chat/\n- sub: https://dev.twitch.tv/docs/eventsub/reference/chat\n- ffmpeg: https://ffmpeg.org/ffmpeg.html\n- whisper: https://github.com/SYSTRAN/faster-whisper\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. Python tests are run with pytest before\n  any of this is published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the, boasts, in today's, ever-evolving, at its core, robust and scalable, first-class, battle-tested, rock-solid, supercharge, effortlessly, in conclusion, let's explore, we'll explore, whether you're, look no further, the world of.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/reel/DfwuUDyRPTe/",
+   "related": [
+    {
+     "id": "fe9c129ddb93bd0f",
+     "title": "Assisted video production: visual editing, modular stages and measured costs",
+     "why": "ffmpeg",
+     "score": 2
+    },
+    {
+     "id": "00d18fb924fbf5bf",
+     "title": "Clipping campaigns: authorized edits, submission rules and settled economics",
+     "why": "Related subject",
+     "score": 1
+    },
+    {
+     "id": "13b51c70398aec3c",
+     "title": "GTM engineering: signals, account enrichment and a measured treg pilot",
+     "why": "Related subject",
+     "score": 1
+    }
+   ],
+   "members": []
+  },
+  {
+   "id": "33a9d2333371ac55",
+   "url": "https://www.instagram.com/reel/DfAPe9bpWlJ/",
+   "kind": "guide",
+   "action": "reference",
+   "title": "Accessible website palettes and the 60-30-10 layout heuristic",
+   "hook": "Pick a dominant surface, a supporting color, and a tested action accent.",
+   "summary": "The five reels show how a dominant surface, a supporting color, and a scarce accent can create a clear hierarchy. The 60-30-10 split is a starting point for distributing visual emphasis. Give each color a job and judge the result on one real screen. Percentage targets can vary with the viewport, content, and interaction state.",
+   "slide_count": 0,
+   "source_urls": [
+    "https://www.instagram.com/reel/DfAPe9bpWlJ/",
+    "https://www.instagram.com/reel/DfeMVHnvzAK/",
+    "https://www.instagram.com/reel/DflEGyfuojv/",
+    "https://www.instagram.com/reel/DfScZgPSqc1/",
+    "https://www.instagram.com/reel/DfUJpcvh4tm/"
+   ],
+   "source_count": 5,
+   "contents": {
+    "project": true,
+    "prompt": true,
+    "commands": false,
+    "pdf": true,
+    "transcript": false,
+    "research": true
+   },
+   "note": {
+    "sections": [
+     {
+      "heading": "Source takeaways",
+      "detail": "Lavender, violet, and coral can give surfaces, actions, and highlights recognizable roles. Assign a foreground to each fill so the same palette works for a button, a badge, and body text.\n\nHolding the headline, layout, and base palette steady makes an accent swap easy to compare. The same headphone hero can test where visitors look and whether they recognize its primary action.\n\nThe reel shows how color roles apply to whole product pages. A warm keyboard hero, a dark audio hero, and a soft speaker hero can share the same layout hierarchy while using different colors. Keep the product, action, and label clear in each version.\n\nTwo base colors can do most of the work of grouping information. A spare accent gives the next action a distinct visual cue. Reserve it for actions or highlights that have a meaningful role in the page.\n\nThe three palettes have strong headline pairs. By explicitly choosing a dark label for each bright accent, you can keep the visual identity and make the primary action readable.",
+      "html": "<p>Lavender, violet, and coral can give surfaces, actions, and highlights recognizable roles. Assign a foreground to each fill so the same palette works for a button, a badge, and body text.</p>\n<p>Holding the headline, layout, and base palette steady makes an accent swap easy to compare. The same headphone hero can test where visitors look and whether they recognize its primary action.</p>\n<p>The reel shows how color roles apply to whole product pages. A warm keyboard hero, a dark audio hero, and a soft speaker hero can share the same layout hierarchy while using different colors. Keep the product, action, and label clear in each version.</p>\n<p>Two base colors can do most of the work of grouping information. A spare accent gives the next action a distinct visual cue. Reserve it for actions or highlights that have a meaningful role in the page.</p>\n<p>The three palettes have strong headline pairs. By explicitly choosing a dark label for each bright accent, you can keep the visual identity and make the primary action readable.</p>\n"
+     }
+    ],
+    "topics": [
+     "accessibility",
+     "color palettes",
+     "design tokens",
+     "visual hierarchy"
+    ],
+    "prompts": [
+     {
+      "heading": "Reusable research prompt",
+      "detail": "Apply the tested violet palette to one card. Specify text and surface tokens for every interactive state. Calculate contrast before deciding whether each pair meets its applicable threshold. Record remaining checks on the rendered page.",
+      "html": "<p>Apply the tested violet palette to one card. Specify text and surface tokens for every interactive state. Calculate contrast before deciding whether each pair meets its applicable threshold. Record remaining checks on the rendered page.</p>\n"
+     },
+     {
+      "heading": "Reusable research prompt",
+      "detail": "Create three accent variants over one fixed layout. Use the verified text pairs, then test focus, hover, and adjacent surfaces. Give me a small comparison plan for which action people pick first.",
+      "html": "<p>Create three accent variants over one fixed layout. Use the verified text pairs, then test focus, hover, and adjacent surfaces. Give me a small comparison plan for which action people pick first.</p>\n"
+     },
+     {
+      "heading": "Reusable research prompt",
+      "detail": "Create three product hero themes from these color roles. Keep content and layout fixed. Show the default, hover, and focus color pairs, calculate their contrast, and record where the render needs manual checks.",
+      "html": "<p>Create three product hero themes from these color roles. Keep content and layout fixed. Show the default, hover, and focus color pairs, calculate their contrast, and record where the render needs manual checks.</p>\n"
+     },
+     {
+      "heading": "Reusable research prompt",
+      "detail": "Propose two base colors and one accent for this screen. Name each color's role, verify the actual foreground and background pairs, and make focus, errors, and the primary action clear without relying on hue alone.",
+      "html": "<p>Propose two base colors and one accent for this screen. Name each color's role, verify the actual foreground and background pairs, and make focus, errors, and the primary action clear without relying on hue alone.</p>\n"
+     },
+     {
+      "heading": "Reusable research prompt",
+      "detail": "Map these three themes to semantic tokens. Measure text and control contrast in every important state and show which cues communicate focus, errors, and selection beyond color.",
+      "html": "<p>Map these three themes to semantic tokens. Measure text and control contrast in every important state and show which cues communicate focus, errors, and selection beyond color.</p>\n"
+     },
+     {
+      "heading": "Reusable prompt",
+      "detail": "```text\nBuild two color variants of this screen using semantic surface, ink, action, and focus tokens. Calculate the actual text pairs and check control boundaries and state cues. Keep the layout fixed and propose a short user task to compare clarity.\n```",
+      "html": "<pre><code class=\"language-text\">Build two color variants of this screen using semantic surface, ink, action, and focus tokens. Calculate the actual text pairs and check control boundaries and state cues. Keep the layout fixed and propose a short user task to compare clarity.\n</code></pre>\n"
+     }
+    ],
+    "research_date": "2026-11-18",
+    "evidence_notice": "This topic combines several sources. The guide synthesizes their overlap and differences; each original source remains listed below."
+   },
+   "enrich": {
+    "what_it_is": "Lavender, violet, and coral can give surfaces, actions, and highlights recognizable roles. Assign a foreground to each fill so the same palette works for a button, a badge, and body text.",
+    "project": {
+     "name": "Accessible website palettes and the 60-30-10 layout heuristic",
+     "one_liner": "Pick a dominant surface, a supporting color, and a tested action accent.",
+     "scope": "Prototype one page with two color variants. Keep the copy and layout fixed. Record every body, button, and state pair in the worksheet. Test focus, zoom, a narrow viewport, and a forced-colors mode. Then ask a few people to identify the first action without coaching. Use both the measured contrast and observed task to choose the variant.",
+     "stack": [],
+     "milestones": [
+      {
+       "step": "Establish a baseline",
+       "outcome": "Record evidence and a measurable success condition."
+      },
+      {
+       "step": "Run a small pilot",
+       "outcome": "Document observations and the next decision."
+      }
+     ]
+    },
+    "next_action": "Use the worksheet to run the proposed exercise."
+   },
+   "progress": "ready",
+   "tags": {
+    "action": [
+     "reference"
+    ],
+    "section": [
+     "shipping-quality/design"
+    ],
+    "topic": [
+     "accessibility",
+     "color palettes",
+     "design tokens",
+     "visual hierarchy"
+    ]
+   },
+   "followup": {
+    "answer_html": "<h2>Strengths and best use</h2>\n<p>The five reels show how a dominant surface, a supporting color, and a scarce accent can create a clear hierarchy. The 60-30-10 split is a starting point for distributing visual emphasis. Give each color a job and judge the result on one real screen. Percentage targets can vary with the viewport, content, and interaction state.</p>\n<h2>Choose colors by role</h2>\n<p>Set a page surface and body text first. Choose a supporting surface for grouping and an accent for the primary action. Define foregrounds independently for supporting surfaces and accent fills. For dark mode, treat each role as a separate mapping and check it again. <a href=\"https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Cascading_variables/Using_custom_properties\">CSS custom properties</a> - <a href=\"https://www.designtokens.org/tr/2025.10/format/\">Design tokens format</a></p>\n<h2>Check text and controls</h2>\n<p>For WCAG 2.2 AA, check normal text at 4.5:1 and qualifying large text at 3:1. Where a graphic or control cue is required to identify information, verify its applicable 3:1 contrast with adjacent colors. Check focus, selected state, and error cues on the rendered page. Add labels, icons, or another visible cue where color alone would carry the meaning. <a href=\"https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html\">Text contrast</a> - <a href=\"https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html\">Non-text contrast</a> - <a href=\"https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html\">Use of color</a></p>\n<h2>Measured starting points</h2>\n<p>These ratios use opaque sRGB colors. Treat each tested pair as a starting value and check the actual composition. The contributing guides include additional palettes and examples.</p>\n<table>\n<thead>\n<tr>\n<th>Use</th>\n<th>Foreground</th>\n<th>Background</th>\n<th>Contrast</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Violet primary button</td>\n<td><code>#FFFFFF</code></td>\n<td><code>#7C3AED</code></td>\n<td>5.70:1</td>\n</tr>\n<tr>\n<td>Coral badge</td>\n<td><code>#1A0B2E</code></td>\n<td><code>#FF6B6B</code></td>\n<td>6.69:1</td>\n</tr>\n<tr>\n<td>Acid lime button</td>\n<td><code>#111316</code></td>\n<td><code>#C2F23A</code></td>\n<td>14.23:1</td>\n</tr>\n<tr>\n<td>Blaze orange button</td>\n<td><code>#111316</code></td>\n<td><code>#FF5A1F</code></td>\n<td>5.97:1</td>\n</tr>\n<tr>\n<td>Tomato red button</td>\n<td><code>#111316</code></td>\n<td><code>#F2462E</code></td>\n<td>5.04:1</td>\n</tr>\n<tr>\n<td>Deep blue button</td>\n<td><code>#FFFFFF</code></td>\n<td><code>#2456CC</code></td>\n<td>6.41:1</td>\n</tr>\n<tr>\n<td>Yellow button on blue theme</td>\n<td><code>#02167F</code></td>\n<td><code>#FFD014</code></td>\n<td>10.03:1</td>\n</tr>\n</tbody>\n</table>\n<p>The violet reel labels <code>#84CC16</code> as violet. Tailwind v3 identifies it as lime-500, and its white-text pair measures 1.98:1. The <code>#7C3AED</code> replacement is violet-600 in that palette. White on the source speaker blue <code>#2E6BFF</code> clears 4.5:1 by about 0.0033. Choose a stronger pair for small text over real UI surfaces. <a href=\"https://github.com/tailwindlabs/tailwindcss/blob/v3.4.17/src/public/colors.js\">Tailwind v3 palette</a></p>\n<h2>Project idea</h2>\n<p>Prototype one page with two color variants. Keep the copy and layout fixed. Record every body, button, and state pair in the worksheet. Test focus, zoom, a narrow viewport, and a forced-colors mode. Then ask a few people to identify the first action without coaching. Use both the measured contrast and observed task to choose the variant.</p>\n<h2>Reusable prompt</h2>\n<pre><code class=\"language-text\">Build two color variants of this screen using semantic surface, ink, action, and focus tokens. Calculate the actual text pairs and check control boundaries and state cues. Keep the layout fixed and propose a short user task to compare clarity.\n</code></pre>\n",
+    "answered": "fully",
+    "artifacts": [
+     {
+      "file": "06d76477618b2e91-kiln-guide.md",
+      "title": "Practical research guide",
+      "about": "Current research, verified sources, commands and next steps",
+      "kind": "md",
+      "pages": 0
+     },
+     {
+      "file": "06d76477618b2e91-kiln-guide.pdf",
+      "title": "Practical research guide (PDF)",
+      "about": "Printable guide with source links",
+      "kind": "pdf",
+      "pages": 1
+     },
+     {
+      "file": "06d76477618b2e91-violet-worksheet.csv",
+      "title": "A tested violet, lavender, and coral color system worksheet",
+      "about": "Blank evidence worksheet for the proposed exercise.",
+      "kind": "csv",
+      "pages": 0
+     },
+     {
+      "file": "2b841cd1516799a2-kiln-guide.md",
+      "title": "Practical research guide",
+      "about": "Current research, verified sources, commands and next steps",
+      "kind": "md",
+      "pages": 0
+     },
+     {
+      "file": "2b841cd1516799a2-kiln-guide.pdf",
+      "title": "Practical research guide (PDF)",
+      "about": "Printable guide with source links",
+      "kind": "pdf",
+      "pages": 1
+     },
+     {
+      "file": "2b841cd1516799a2-accents-worksheet.csv",
+      "title": "Swap three accents against one product-page baseline worksheet",
+      "about": "Blank evidence worksheet for the proposed exercise.",
+      "kind": "csv",
+      "pages": 0
+     },
+     {
+      "file": "5cc2505e97149261-kiln-guide.md",
+      "title": "Practical research guide",
+      "about": "Current research, verified sources, commands and next steps",
+      "kind": "md",
+      "pages": 0
+     },
+     {
+      "file": "5cc2505e97149261-kiln-guide.pdf",
+      "title": "Practical research guide (PDF)",
+      "about": "Printable guide with source links",
+      "kind": "pdf",
+      "pages": 1
+     },
+     {
+      "file": "5cc2505e97149261-product-worksheet.csv",
+      "title": "Three complete product palettes with tested button colors worksheet",
+      "about": "Blank evidence worksheet for the proposed exercise.",
+      "kind": "csv",
+      "pages": 0
+     },
+     {
+      "file": "b04e8e56abdc8ffc-kiln-guide.md",
+      "title": "Practical research guide",
+      "about": "Current research, verified sources, commands and next steps",
+      "kind": "md",
+      "pages": 0
+     },
+     {
+      "file": "b04e8e56abdc8ffc-kiln-guide.pdf",
+      "title": "Practical research guide (PDF)",
+      "about": "Printable guide with source links",
+      "kind": "pdf",
+      "pages": 1
+     },
+     {
+      "file": "b04e8e56abdc8ffc-quiet-worksheet.csv",
+      "title": "Two base colors and one accent for a clearer next action worksheet",
+      "about": "Blank evidence worksheet for the proposed exercise.",
+      "kind": "csv",
+      "pages": 0
+     },
+     {
+      "file": "d8bddf91d73f963d-kiln-guide.md",
+      "title": "Practical research guide",
+      "about": "Current research, verified sources, commands and next steps",
+      "kind": "md",
+      "pages": 0
+     },
+     {
+      "file": "d8bddf91d73f963d-kiln-guide.pdf",
+      "title": "Practical research guide (PDF)",
+      "about": "Printable guide with source links",
+      "kind": "pdf",
+      "pages": 1
+     },
+     {
+      "file": "d8bddf91d73f963d-accessible-worksheet.csv",
+      "title": "Three palettes with measured text and button contrast worksheet",
+      "about": "Blank evidence worksheet for the proposed exercise.",
+      "kind": "csv",
+      "pages": 0
+     },
+     {
+      "file": "topic-guide.pdf",
+      "title": "Unified topic guide",
+      "kind": "pdf",
+      "pages": 2
+     }
+    ],
+    "sources": [
+     {
+      "key": "contrast",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+      "resolved_url": "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+      "title": "contrast",
+      "checked_at": "2026-11-18",
+      "chars": 27805,
+      "status": 200
+     },
+     {
+      "key": "nontext",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html",
+      "resolved_url": "https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html",
+      "title": "nontext",
+      "checked_at": "2026-11-18",
+      "chars": 32614,
+      "status": 200
+     },
+     {
+      "key": "tailwindv3",
+      "url": "https://raw.githubusercontent.com/tailwindlabs/tailwindcss/v3.4.17/src/public/colors.js",
+      "resolved_url": "https://raw.githubusercontent.com/tailwindlabs/tailwindcss/v3.4.17/src/public/colors.js",
+      "title": "tailwindv3",
+      "checked_at": "2026-11-18",
+      "chars": 4955,
+      "status": 200
+     },
+     {
+      "key": "css",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascading_variables/Using_CSS_custom_properties",
+      "resolved_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Cascading_variables/Using_custom_properties",
+      "title": "css",
+      "checked_at": "2026-11-18",
+      "chars": 14016,
+      "status": 200
+     },
+     {
+      "key": "luminance",
+      "url": "https://www.w3.org/WAI/GL/wiki/Relative_luminance",
+      "resolved_url": "https://www.w3.org/WAI/GL/wiki/Relative_luminance",
+      "title": "luminance",
+      "checked_at": "2026-11-18",
+      "chars": 2876,
+      "status": 200
+     },
+     {
+      "key": "usecolor",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html",
+      "resolved_url": "https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html",
+      "title": "usecolor",
+      "checked_at": "2026-11-18",
+      "chars": 9990,
+      "status": 200
+     },
+     {
+      "key": "tokens",
+      "url": "https://www.designtokens.org/tr/2025.10/format/",
+      "resolved_url": "https://www.designtokens.org/tr/2025.10/format/",
+      "title": "tokens",
+      "checked_at": "2026-11-18",
+      "chars": 41370,
+      "status": 200
+     }
+    ]
+   },
+   "links": [
+    {
+     "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascading_variables/Using_CSS_custom_properties",
+     "label": "css",
+     "alive": true,
+     "page_title": "css"
+    },
+    {
+     "url": "https://raw.githubusercontent.com/tailwindlabs/tailwindcss/v3.4.17/src/public/colors.js",
+     "label": "tailwindv3",
+     "alive": true,
+     "page_title": "tailwindv3"
+    },
+    {
+     "url": "https://www.designtokens.org/tr/2025.10/format/",
+     "label": "tokens",
+     "alive": true,
+     "page_title": "tokens"
+    },
+    {
+     "url": "https://www.w3.org/WAI/GL/wiki/Relative_luminance",
+     "label": "luminance",
+     "alive": true,
+     "page_title": "luminance"
+    },
+    {
+     "url": "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+     "label": "contrast",
+     "alive": true,
+     "page_title": "contrast"
+    },
+    {
+     "url": "https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html",
+     "label": "nontext",
+     "alive": true,
+     "page_title": "nontext"
+    },
+    {
+     "url": "https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html",
+     "label": "usecolor",
+     "alive": true,
+     "page_title": "usecolor"
+    }
+   ],
+   "build_prompt": "# Build: Accessible website palettes and the 60-30-10 layout heuristic\n\nPick a dominant surface, a supporting color, and a tested action accent.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Scope\nBuild these:\n- Prototype one page with two color variants. Keep the copy and layout fixed. Record every body\n- button\n- and state pair in the worksheet. Test focus\n- zoom\n- a narrow viewport\n- and a forced-colors mode. Then ask a few people to identify the first action without coaching. Use both the measured contrast and observed task to choose the variant\n\n## Milestones - each must be verifiably done before the next\n1. **Establish a baseline**\n   - Done when: Record evidence and a measurable success condition.\n2. **Run a small pilot**\n   - Done when: Document observations and the next decision.\n\n## Background\nLavender, violet, and coral can give surfaces, actions, and highlights recognizable roles. Assign a foreground to each fill so the same palette works for a button, a badge, and body text.\n\n## Reference (checked and reachable)\n- css: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascading_variables/Using_CSS_custom_properties\n- tailwindv3: https://raw.githubusercontent.com/tailwindlabs/tailwindcss/v3.4.17/src/public/colors.js\n- tokens: https://www.designtokens.org/tr/2025.10/format/\n- luminance: https://www.w3.org/WAI/GL/wiki/Relative_luminance\n- contrast: https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html\n- nontext: https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. Python tests are run with pytest before\n  any of this is published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the, boasts, in today's, ever-evolving, at its core, robust and scalable, first-class, battle-tested, rock-solid, supercharge, effortlessly, in conclusion, let's explore, we'll explore, whether you're, look no further, the world of.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/reel/DfAPe9bpWlJ/",
+   "related": [
+    {
+     "id": "d39aa31ed33b5492",
+     "title": "Design references and practical critique for AI-assisted interfaces",
+     "why": "accessibility, visual hierarchy",
+     "score": 4
+    },
+    {
+     "id": "232bf47682f022fc",
+     "title": "App interaction quality under latency, errors, and different inputs",
+     "why": "accessibility",
+     "score": 2
+    }
+   ],
+   "members": [
+    {
+     "id": "06d76477618b2e91",
+     "title": "A tested violet, lavender, and coral color system",
+     "source_urls": [
+      "https://www.instagram.com/reel/DfAPe9bpWlJ/"
+     ],
+     "transcript": ""
+    },
+    {
+     "id": "2b841cd1516799a2",
+     "title": "Swap three accents against one product-page baseline",
+     "source_urls": [
+      "https://www.instagram.com/reel/DfeMVHnvzAK/"
+     ],
+     "transcript": ""
+    },
+    {
+     "id": "5cc2505e97149261",
+     "title": "Three complete product palettes with tested button colors",
+     "source_urls": [
+      "https://www.instagram.com/reel/DflEGyfuojv/"
+     ],
+     "transcript": ""
+    },
+    {
+     "id": "b04e8e56abdc8ffc",
+     "title": "Two base colors and one accent for a clearer next action",
+     "source_urls": [
+      "https://www.instagram.com/reel/DfScZgPSqc1/"
+     ],
+     "transcript": ""
+    },
+    {
+     "id": "d8bddf91d73f963d",
+     "title": "Three palettes with measured text and button contrast",
+     "source_urls": [
+      "https://www.instagram.com/reel/DfUJpcvh4tm/"
+     ],
+     "transcript": ""
+    }
+   ]
+  },
+  {
    "id": "dbadd698e460a0f5",
    "url": "https://www.instagram.com/reel/DdnRJ7Jxlll/",
    "kind": "guide",
    "action": "apply",
    "title": "AI training and credentials by skill, assessment, and access",
-   "hook": "Match a course to a work sample and confirm how its credential is earned.",
+   "hook": "Choose training that produces a work sample and verify how the credential is earned.",
    "summary": "The reels bring together several credible introductory and applied courses. Choose a route that addresses a real skill gap. Compare course completion, badge criteria, timed assessments and proctored exams using the exact terminology of each provider.",
    "slide_count": 0,
    "source_urls": [
@@ -14,9 +694,10 @@
     "https://www.instagram.com/reel/Dba3L3EzeWo/",
     "https://www.instagram.com/reel/Dfh6Zq3uZKh/",
     "https://www.instagram.com/reel/DfSGafIg-KG/",
-    "https://www.instagram.com/reel/DfZ6wM7uT91/"
+    "https://www.instagram.com/reel/DfZ6wM7uT91/",
+    "https://www.instagram.com/reel/Dfqdn5IhA6Y/"
    ],
-   "source_count": 5,
+   "source_count": 6,
    "contents": {
     "project": true,
     "prompt": true,
@@ -134,8 +815,8 @@
      },
      {
       "heading": "Source takeaways",
-      "detail": "The seven-day list connects AI foundations with Claude Code, MongoDB, LangChain, Hugging Face agents and advanced MCP. Each can support a small build that provides more context than a credential name alone.\n\nThe list’s strongest feature is its range from team practices to practical agent exercises. It provides options for Python developers, teams trying visual workflows and learners preparing an MCP integration.\n\nThe reel collects short introductions across software, networking, marketing, security and finance. A focused selection can help you explore a role before committing to a longer program.",
-      "html": "<p>The seven-day list connects AI foundations with Claude Code, MongoDB, LangChain, Hugging Face agents and advanced MCP. Each can support a small build that provides more context than a credential name alone.</p>\n<p>The list&#x27;s strongest feature is its range from team practices to practical agent exercises. It provides options for Python developers, teams trying visual workflows and learners preparing an MCP integration.</p>\n<p>The reel collects short introductions across software, networking, marketing, security and finance. A focused selection can help you explore a role before committing to a longer program.</p>\n"
+      "detail": "The seven-day list connects AI foundations with Claude Code, MongoDB, LangChain, Hugging Face agents and advanced MCP. Each can support a small build that provides more context than a credential name alone.\n\nThe list’s strongest feature is its range from team practices to practical agent exercises. It provides options for Python developers, teams trying visual workflows and learners preparing an MCP integration.\n\nThe reel collects short introductions across software, networking, marketing, security and finance. A focused selection can help you explore a role before committing to a longer program.\n\nThe five options cover structured delegation, agent design, hands-on implementation, and a vendor exam. Pick the route that advances your next project or gives you the specific credential you need.",
+      "html": "<p>The seven-day list connects AI foundations with Claude Code, MongoDB, LangChain, Hugging Face agents and advanced MCP. Each can support a small build that provides more context than a credential name alone.</p>\n<p>The list&#x27;s strongest feature is its range from team practices to practical agent exercises. It provides options for Python developers, teams trying visual workflows and learners preparing an MCP integration.</p>\n<p>The reel collects short introductions across software, networking, marketing, security and finance. A focused selection can help you explore a role before committing to a longer program.</p>\n<p>The five options cover structured delegation, agent design, hands-on implementation, and a vendor exam. Pick the route that advances your next project or gives you the specific credential you need.</p>\n"
      }
     ],
     "entities": [
@@ -260,6 +941,11 @@
       "html": "<p>Select two role-relevant resources from this list. Verify eligibility and assessment requirements, and suggest a work sample that can demonstrate the skills.</p>\n"
      },
      {
+      "heading": "Reusable research prompt",
+      "detail": "Plan an agentic AI learning track for the next week. Use current provider descriptions, record badge, certificate, and exam requirements, and give me one reproducible agent exercise that demonstrates what I learned.",
+      "html": "<p>Plan an agentic AI learning track for the next week. Use current provider descriptions, record badge, certificate, and exam requirements, and give me one reproducible agent exercise that demonstrates what I learned.</p>\n"
+     },
+     {
       "heading": "Reusable prompt",
       "detail": "```text\nBuild a dated course plan around one role and work sample. Compare credential types, prerequisites, time and costs. Cite the provider for each assessment and distinguish estimates from measured study time.\n```",
       "html": "<pre><code class=\"language-text\">Build a dated course plan around one role and work sample. Compare credential types, prerequisites, time and costs. Cite the provider for each assessment and distinguish estimates from measured study time.\n</code></pre>\n"
@@ -272,7 +958,7 @@
     "what_it_is": "The seven-day list connects AI foundations with Claude Code, MongoDB, LangChain, Hugging Face agents and advanced MCP. Each can support a small build that provides more context than a credential name alone.",
     "project": {
      "name": "AI training and credentials by skill, assessment, and access",
-     "one_liner": "Match a course to a work sample and confirm how its credential is earned.",
+     "one_liner": "Choose training that produces a work sample and verify how the credential is earned.",
      "scope": "Pick one track and pair two courses with a short work sample. Record enrollment terms, account requirements, lab and project time, credential criteria and proof. Budget API usage separately where needed. For a formal Claude exam, check current eligibility and fees with the [partner certification FAQ](https://anthropic-partners.skilljar.com/page/faq-certifications) and [Pearson VUE](https://www.pearsonvue.com/us/en/anthropic.html). The reels' salary and universal study-time promises lack evidence.",
      "stack": [],
      "milestones": [
@@ -319,7 +1005,7 @@
     ]
    },
    "followup": {
-    "answer_html": "<h2>Strengths and best use</h2>\n<p>The reels bring together several credible introductory and applied courses. Choose a route that addresses a real skill gap. Compare course completion, badge criteria, timed assessments and proctored exams using the exact terminology of each provider.</p>\n<h2>Build an AI agent</h2>\n<p>Start with <a href=\"https://www.skills.google/course_templates/536\">Google's introductory microcourse</a> or <a href=\"https://academy.claude.com/courses/building-effective-human-agent-teams\">human-agent teams</a>. The separate <a href=\"https://grow.google/enroll-certificates/ai-professional-certificate-mid/\">Google AI Professional Certificate</a> has its own enrollment terms.</p>\n<p>Choose <a href=\"https://academy.claude.com/courses/claude-code-101\">Claude Code 101</a> for the coding agent, <a href=\"https://academy.claude.com/courses/claude-platform-101\">Claude Platform 101</a> for the API, <a href=\"https://academy.langchain.com/courses/langchain-essentials-python\">LangChain Python</a> for coded workflows, or <a href=\"https://academy.langchain.com/courses/quickstart-agent-builder\">LangSmith Fleet</a> for a visual workflow. <a href=\"https://www.credly.com/org/mongodb/badge/building-ai-agents-with-mongodb\">MongoDB's badge</a> specifies completion and a skill check.</p>\n<p>Work through <a href=\"https://academy.claude.com/courses/introduction-to-model-context-protocol\">Intro to MCP</a> before <a href=\"https://academy.claude.com/courses/model-context-protocol-advanced-topics\">MCP Advanced Topics</a> if the protocol is new to you. <a href=\"https://huggingface.co/learn/agents-course/en/unit0/introduction\">Hugging Face</a> distinguishes Unit 1 fundamentals from full completion with an assignment and challenge. <a href=\"https://learn.microsoft.com/en-us/credentials/applied-skills/develop-an-agent-with-integrated-tools/\">Microsoft Applied Skills</a> is assessed and expects experience building Foundry agents.</p>\n<h2>Select a short course by role</h2>\n<p>Software and infrastructure: <a href=\"https://anthropic.skilljar.com/claude-code-in-action\">Claude Code in Action</a>, <a href=\"https://academy.nvidia.com/en/wp-content/uploads/2025/10/NVIDIA_Academy_Courses_Catalog.pdf\">NVIDIA Academy's SONiC catalog</a>, <a href=\"https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/\">Microsoft's 37-minute introduction</a>, and <a href=\"https://skillbuilder.aws/search?searchText=introduction-to-generative-ai-art-of-the-possible\">AWS Skill Builder</a>. The AWS course's credential outcome remains unconfirmed.</p>\n<p>Marketing, data and simulations: <a href=\"https://www.facebookblueprint.com/student/path/253135\">Meta Advantage+</a> lists 25 minutes. <a href=\"https://www.credly.com/org/ibm-skillsbuild/badge/getting-started-with-data\">IBM Getting Started with Data</a> restricts its badge to eligible partner learners. Other options are <a href=\"https://trailhead.salesforce.com/content/learn/modules/generative-ai-basics\">Salesforce Trailhead</a>, <a href=\"https://www.simplilearn.com/learn-ai-basics-skillup\">Simplilearn SkillUp</a>, <a href=\"https://www.theforage.com/simulations/deloitte-au/cyber-c1e3\">Deloitte's cyber simulation</a> and <a href=\"https://www.theforage.com/simulations/jpmorgan/investment-banking-hkyd\">J.P. Morgan's banking simulation</a>.</p>\n<h2>Project idea</h2>\n<p>Pick one track and pair two courses with a short work sample. Record enrollment terms, account requirements, lab and project time, credential criteria and proof. Budget API usage separately where needed. For a formal Claude exam, check current eligibility and fees with the <a href=\"https://anthropic-partners.skilljar.com/page/faq-certifications\">partner certification FAQ</a> and <a href=\"https://www.pearsonvue.com/us/en/anthropic.html\">Pearson VUE</a>. The reels' salary and universal study-time promises lack evidence.</p>\n<h2>Reusable prompt</h2>\n<pre><code class=\"language-text\">Build a dated course plan around one role and work sample. Compare credential types, prerequisites, time and costs. Cite the provider for each assessment and distinguish estimates from measured study time.\n</code></pre>\n",
+    "answer_html": "<h2>Strengths and best use</h2>\n<p>The reels bring together several credible introductory and applied courses. Choose a route that addresses a real skill gap. Compare course completion, badge criteria, timed assessments and proctored exams using the exact terminology of each provider.</p>\n<h2>Build an AI agent</h2>\n<p>Start with <a href=\"https://www.skills.google/course_templates/536\">Google's introductory microcourse</a> or <a href=\"https://academy.claude.com/courses/building-effective-human-agent-teams\">human-agent teams</a>. The separate <a href=\"https://grow.google/enroll-certificates/ai-professional-certificate-mid/\">Google AI Professional Certificate</a> has its own enrollment terms.</p>\n<p>Choose <a href=\"https://academy.claude.com/courses/claude-code-101\">Claude Code 101</a> for the coding agent, <a href=\"https://academy.claude.com/courses/claude-platform-101\">Claude Platform 101</a> for the API, <a href=\"https://academy.langchain.com/courses/langchain-essentials-python\">LangChain Python</a> for coded workflows, or <a href=\"https://academy.langchain.com/courses/quickstart-agent-builder\">LangSmith Fleet</a> for a visual workflow. <a href=\"https://www.credly.com/org/mongodb/badge/building-ai-agents-with-mongodb\">MongoDB's badge</a> specifies completion and a skill check.</p>\n<p>Work through <a href=\"https://academy.claude.com/courses/introduction-to-model-context-protocol\">Intro to MCP</a> before <a href=\"https://academy.claude.com/courses/model-context-protocol-advanced-topics\">MCP Advanced Topics</a> if the protocol is new to you. <a href=\"https://huggingface.co/learn/agents-course/en/unit0/introduction\">Hugging Face</a> distinguishes Unit 1 fundamentals from full completion with an assignment and challenge. <a href=\"https://learn.microsoft.com/en-us/credentials/applied-skills/develop-an-agent-with-integrated-tools/\">Microsoft Applied Skills</a> is assessed and expects experience building Foundry agents.</p>\n<h2>Add a focused agentic AI credential</h2>\n<p>OpenAI Academy's Agents and Workflows takes an estimated 75-90 minutes and focuses on delegating work with boundaries and review. Design and Build Agentic Systems takes 110 minutes and covers controlled tools and handoffs. Academy courses are free with a ChatGPT account and their course badges require at least 80% on the assessment. <a href=\"https://help.openai.com/en/articles/20001270-openai-academy-courses\">OpenAI Academy course guide</a></p>\n<p>Oracle University lists a free Agentic AI Foundations Associate exam with 40 questions, 60 minutes, and a pass mark of 65%. Check MyLearn for current booking terms and the practice exam. IBM's Make Agentic AI Work for You badge requires 80% on the assessments and registration through a participating organization. <a href=\"https://blogs.oracle.com/oracleuniversity/oracle-agentic-ai-foundations-training-certification-now-available\">Oracle certification and prep</a> - <a href=\"https://www.credly.com/org/ibm-skillsbuild/badge/make-agentic-ai-work-for-you\">IBM badge criteria</a></p>\n<h2>Select a short course by role</h2>\n<p>Software and infrastructure: <a href=\"https://anthropic.skilljar.com/claude-code-in-action\">Claude Code in Action</a>, <a href=\"https://academy.nvidia.com/en/wp-content/uploads/2025/10/NVIDIA_Academy_Courses_Catalog.pdf\">NVIDIA Academy's SONiC catalog</a>, <a href=\"https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/\">Microsoft's 37-minute introduction</a>, and <a href=\"https://skillbuilder.aws/search?searchText=introduction-to-generative-ai-art-of-the-possible\">AWS Skill Builder</a>. The AWS course's credential outcome remains unconfirmed.</p>\n<p>Marketing, data and simulations: <a href=\"https://www.facebookblueprint.com/student/path/253135\">Meta Advantage+</a> lists 25 minutes. <a href=\"https://www.credly.com/org/ibm-skillsbuild/badge/getting-started-with-data\">IBM Getting Started with Data</a> restricts its badge to eligible partner learners. Other options are <a href=\"https://trailhead.salesforce.com/content/learn/modules/generative-ai-basics\">Salesforce Trailhead</a>, <a href=\"https://www.simplilearn.com/learn-ai-basics-skillup\">Simplilearn SkillUp</a>, <a href=\"https://www.theforage.com/simulations/deloitte-au/cyber-c1e3\">Deloitte's cyber simulation</a> and <a href=\"https://www.theforage.com/simulations/jpmorgan/investment-banking-hkyd\">J.P. Morgan's banking simulation</a>.</p>\n<h2>Project idea</h2>\n<p>Pick one track and pair two courses with a short work sample. Record enrollment terms, account requirements, lab and project time, credential criteria and proof. Budget API usage separately where needed. For a formal Claude exam, check current eligibility and fees with the <a href=\"https://anthropic-partners.skilljar.com/page/faq-certifications\">partner certification FAQ</a> and <a href=\"https://www.pearsonvue.com/us/en/anthropic.html\">Pearson VUE</a>. The reels' salary and universal study-time promises lack evidence.</p>\n<h2>Reusable prompt</h2>\n<pre><code class=\"language-text\">Build a dated course plan around one role and work sample. Compare credential types, prerequisites, time and costs. Cite the provider for each assessment and distinguish estimates from measured study time.\n</code></pre>\n",
     "answered": "fully",
     "artifacts": [
      {
@@ -388,6 +1074,27 @@
      {
       "file": "e2befef6fe4e6bde-certc-worksheet.csv",
       "title": "Eleven short courses and what each credential represents worksheet",
+      "about": "Blank evidence worksheet for the proposed exercise.",
+      "kind": "csv",
+      "pages": 0
+     },
+     {
+      "file": "9bb9a18e46e586ea-kiln-guide.md",
+      "title": "Practical research guide",
+      "about": "Current research, verified sources, commands and next steps",
+      "kind": "md",
+      "pages": 0
+     },
+     {
+      "file": "9bb9a18e46e586ea-kiln-guide.pdf",
+      "title": "Practical research guide (PDF)",
+      "about": "Printable guide with source links",
+      "kind": "pdf",
+      "pages": 1
+     },
+     {
+      "file": "9bb9a18e46e586ea-agentcourses-worksheet.csv",
+      "title": "Five routes into agentic AI and what each credential earns worksheet",
       "about": "Blank evidence worksheet for the proposed exercise.",
       "kind": "csv",
       "pages": 0
@@ -730,6 +1437,56 @@
       "checked_at": "2026-11-12",
       "chars": 1072,
       "status": 200
+     },
+     {
+      "key": "academy",
+      "url": "https://help.openai.com/en/articles/20001270-openai-academy-courses",
+      "checked_at": "2026-11-18",
+      "status": 200,
+      "method": "Read from official publisher via the browser index."
+     },
+     {
+      "key": "oracle",
+      "url": "https://blogs.oracle.com/oracleuniversity/oracle-agentic-ai-foundations-training-certification-now-available",
+      "checked_at": "2026-11-18",
+      "status": 200,
+      "method": "Read from official publisher via the browser index."
+     },
+     {
+      "key": "oraclepath",
+      "url": "https://mylearn.oracle.com/ou/learning-path/become-an-oracle-agentic-ai-foundations-associate-2026/163239",
+      "resolved_url": "https://mylearn.oracle.com/ou/learning-path/become-an-oracle-agentic-ai-foundations-associate-2026/163239",
+      "title": "oraclepath",
+      "checked_at": "2026-11-18",
+      "chars": 6486,
+      "status": 200
+     },
+     {
+      "key": "hf",
+      "url": "https://huggingface.co/learn/agents-course/en/unit0/introduction",
+      "resolved_url": "https://huggingface.co/learn/agents-course/en/unit0/introduction",
+      "title": "hf",
+      "checked_at": "2026-11-18",
+      "chars": 6823,
+      "status": 200
+     },
+     {
+      "key": "hf1",
+      "url": "https://huggingface.co/learn/agents-course/en/unit1/introduction",
+      "resolved_url": "https://huggingface.co/learn/agents-course/en/unit1/introduction",
+      "title": "hf1",
+      "checked_at": "2026-11-18",
+      "chars": 1389,
+      "status": 200
+     },
+     {
+      "key": "ibm",
+      "url": "https://www.credly.com/org/ibm-skillsbuild/badge/make-agentic-ai-work-for-you",
+      "resolved_url": "https://www.credly.com/org/ibm-skillsbuild/badge/make-agentic-ai-work-for-you",
+      "title": "ibm",
+      "checked_at": "2026-11-18",
+      "chars": 841,
+      "status": 200
      }
     ]
    },
@@ -831,6 +1588,12 @@
      "page_title": "action"
     },
     {
+     "url": "https://blogs.oracle.com/oracleuniversity/oracle-agentic-ai-foundations-training-certification-now-available",
+     "label": "https://blogs.oracle.com/oracleuniversity/oracle-agentic-ai-foundations-training-certification-now-available",
+     "alive": true,
+     "page_title": ""
+    },
+    {
      "url": "https://coursera.org/verify/4ROJ4I4QXZWL",
      "label": "Coursera verify link for the DeepLearning.AI/AWS certificate",
      "alive": true,
@@ -849,10 +1612,22 @@
      "page_title": "googlecert"
     },
     {
-     "url": "https://huggingface.co/learn/agents-course/en/unit0/introduction",
-     "label": "hface",
+     "url": "https://help.openai.com/en/articles/20001270-openai-academy-courses",
+     "label": "https://help.openai.com/en/articles/20001270-openai-academy-courses",
      "alive": true,
-     "page_title": "hface"
+     "page_title": ""
+    },
+    {
+     "url": "https://huggingface.co/learn/agents-course/en/unit0/introduction",
+     "label": "hf",
+     "alive": true,
+     "page_title": "hf"
+    },
+    {
+     "url": "https://huggingface.co/learn/agents-course/en/unit1/introduction",
+     "label": "hf1",
+     "alive": true,
+     "page_title": "hf1"
     },
     {
      "url": "https://learn.microsoft.com/en-us/credentials/applied-skills/develop-an-agent-with-integrated-tools/",
@@ -865,6 +1640,12 @@
      "label": "msintro",
      "alive": true,
      "page_title": "msintro"
+    },
+    {
+     "url": "https://mylearn.oracle.com/ou/learning-path/become-an-oracle-agentic-ai-foundations-associate-2026/163239",
+     "label": "oraclepath",
+     "alive": true,
+     "page_title": "oraclepath"
     },
     {
      "url": "https://skillbuilder.aws/search?searchText=introduction-to-generative-ai-art-of-the-possible",
@@ -898,6 +1679,12 @@
     },
     {
      "url": "https://www.credly.com/org/ibm-skillsbuild/badge/getting-started-with-data",
+     "label": "ibm",
+     "alive": true,
+     "page_title": "ibm"
+    },
+    {
+     "url": "https://www.credly.com/org/ibm-skillsbuild/badge/make-agentic-ai-work-for-you",
      "label": "ibm",
      "alive": true,
      "page_title": "ibm"
@@ -939,7 +1726,7 @@
      "page_title": "jpm"
     }
    ],
-   "build_prompt": "# Build: AI training and credentials by skill, assessment, and access\n\nMatch a course to a work sample and confirm how its credential is earned.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Scope\nBuild these:\n- Pick one track and pair two courses with a short work sample. Record enrollment terms\n- account requirements\n- lab and project time\n- credential criteria and proof. Budget API usage separately where needed. For a formal Claude exam\n- check current eligibility and fees with the [partner certification FAQ](https://anthropic-partners.skilljar.com/page/faq-certifications) and [Pearson VUE](https://www.pearsonvue.com/us/en/anthropic.html). The reels' salary and universal study-time promises lack evidence\n\n## Milestones - each must be verifiably done before the next\n1. **Establish a baseline**\n   - Done when: Record evidence and a measurable success condition.\n2. **Run a small pilot**\n   - Done when: Document observations and the next decision.\n\n## Background\nThe seven-day list connects AI foundations with Claude Code, MongoDB, LangChain, Hugging Face agents and advanced MCP. Each can support a small build that provides more context than a credential name alone.\n\n## Reference (checked and reachable)\n- AI Fluency: Framework and foundations · Claude Academy: https://academy.claude.com/courses/ai-fluency-framework-foundations\n- teams: https://academy.claude.com/courses/building-effective-human-agent-teams\n- Building with the Claude API · Claude Academy: https://academy.claude.com/courses/building-with-the-claude-api\n- Claude 101 · Claude Academy: https://academy.claude.com/courses/claude-101\n- claudecode: https://academy.claude.com/courses/claude-code-101\n- claudeplatform: https://academy.claude.com/courses/claude-platform-101\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. Python tests are run with pytest before\n  any of this is published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the, boasts, in today's, ever-evolving, at its core, robust and scalable, first-class, battle-tested, rock-solid, supercharge, effortlessly, in conclusion, let's explore, we'll explore, whether you're, look no further, the world of.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/reel/DdnRJ7Jxlll/",
+   "build_prompt": "# Build: AI training and credentials by skill, assessment, and access\n\nChoose training that produces a work sample and verify how the credential is earned.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Scope\nBuild these:\n- Pick one track and pair two courses with a short work sample. Record enrollment terms\n- account requirements\n- lab and project time\n- credential criteria and proof. Budget API usage separately where needed. For a formal Claude exam\n- check current eligibility and fees with the [partner certification FAQ](https://anthropic-partners.skilljar.com/page/faq-certifications) and [Pearson VUE](https://www.pearsonvue.com/us/en/anthropic.html). The reels' salary and universal study-time promises lack evidence\n\n## Milestones - each must be verifiably done before the next\n1. **Establish a baseline**\n   - Done when: Record evidence and a measurable success condition.\n2. **Run a small pilot**\n   - Done when: Document observations and the next decision.\n\n## Background\nThe seven-day list connects AI foundations with Claude Code, MongoDB, LangChain, Hugging Face agents and advanced MCP. Each can support a small build that provides more context than a credential name alone.\n\n## Reference (checked and reachable)\n- AI Fluency: Framework and foundations · Claude Academy: https://academy.claude.com/courses/ai-fluency-framework-foundations\n- teams: https://academy.claude.com/courses/building-effective-human-agent-teams\n- Building with the Claude API · Claude Academy: https://academy.claude.com/courses/building-with-the-claude-api\n- Claude 101 · Claude Academy: https://academy.claude.com/courses/claude-101\n- claudecode: https://academy.claude.com/courses/claude-code-101\n- claudeplatform: https://academy.claude.com/courses/claude-platform-101\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. Python tests are run with pytest before\n  any of this is published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the, boasts, in today's, ever-evolving, at its core, robust and scalable, first-class, battle-tested, rock-solid, supercharge, effortlessly, in conclusion, let's explore, we'll explore, whether you're, look no further, the world of.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/reel/DdnRJ7Jxlll/",
    "related": [
     {
      "id": "4dcac0d58babc153",
@@ -1010,6 +1797,14 @@
      "title": "Eleven short courses and what each credential represents",
      "source_urls": [
       "https://www.instagram.com/reel/DfZ6wM7uT91/"
+     ],
+     "transcript": ""
+    },
+    {
+     "id": "9bb9a18e46e586ea",
+     "title": "Five routes into agentic AI and what each credential earns",
+     "source_urls": [
+      "https://www.instagram.com/reel/Dfqdn5IhA6Y/"
      ],
      "transcript": ""
     }
@@ -3378,6 +4173,12 @@
    "build_prompt": "# Build: Design references and practical critique for AI-assisted interfaces\n\nTurn examples into a brief and test design decisions against the real screen.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Scope\nBuild these:\n- Design two versions of the same screen. Save references with their intended effect\n- keep content and the primary task constant\n- and compare task completion\n- time to locate the action\n- keyboard behavior and reduced-motion fallback\n\n## Milestones - each must be verifiably done before the next\n1. **Establish a baseline**\n   - Done when: Record evidence and a measurable success condition.\n2. **Run a small pilot**\n   - Done when: Document observations and the next decision.\n\n## Background\nThe reel’s most transferable ideas are to make the main action prominent, show the real product, and group information with spacing. Pair visual changes with readable copy, consistent iconography, and clear loading feedback.\n\n## Reference (checked and reachable)\n- animos — Motion templates for design showcases: https://animos.app\n- Deck.gallery - Beautifully designed decks, curated: https://deck.gallery\n- Membership - Deck.gallery: https://deck.gallery/pricing\n- eye: https://eyecannndy.com/technique/parallax\n- reactbits: https://github.com/DavidHDev/react-bits\n- refskill: https://github.com/furkancingoz/prompt-motion-skill\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. Python tests are run with pytest before\n  any of this is published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the, boasts, in today's, ever-evolving, at its core, robust and scalable, first-class, battle-tested, rock-solid, supercharge, effortlessly, in conclusion, let's explore, we'll explore, whether you're, look no further, the world of.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/p/Ddqj0svm6yq/",
    "related": [
     {
+     "id": "33a9d2333371ac55",
+     "title": "Accessible website palettes and the 60-30-10 layout heuristic",
+     "why": "accessibility, visual hierarchy",
+     "score": 4
+    },
+    {
      "id": "232bf47682f022fc",
      "title": "App interaction quality under latency, errors, and different inputs",
      "why": "accessibility",
@@ -5095,6 +5896,12 @@
    "build_prompt": "# Build: App interaction quality under latency, errors, and different inputs\n\nValidate navigation, recovery, and responsive motion against a real user task.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Scope\nBuild these:\n- Audit one settings flow on desktop and touch. Record loading\n- success\n- rejection\n- retry\n- interruption and undo. Check focus visibility\n- safe areas\n- one-time-code autofill where applicable and readable numbers. Try BlurHash on an image-heavy screen. Measure transfer and latency before introducing prerendering or prefetching. [BlurHash](https://github.com/woltapp/blurhash)\n\n## Milestones - each must be verifiably done before the next\n1. **Establish a baseline**\n   - Done when: Record evidence and a measurable success condition.\n2. **Run a small pilot**\n   - Done when: Document observations and the next decision.\n\n## Background\nMeasure whether people can identify and reach destinations on a real screen.\n\n## Reference (checked and reachable)\n- android: https://developer.android.com/guide/navigation/custom-back/predictive-back-gesture\n- https://developer.apple.com/tutorials/data/design/human-interface-guidelines/tab-bars.json: https://developer.apple.com/tutorials/data/design/human-interface-guidelines/tab-bars.json\n- mdn: https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API\n- https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion\n- stripe: https://docs.stripe.com/api/idempotent_requests\n- blur: https://github.com/woltapp/blurhash\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. Python tests are run with pytest before\n  any of this is published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the, boasts, in today's, ever-evolving, at its core, robust and scalable, first-class, battle-tested, rock-solid, supercharge, effortlessly, in conclusion, let's explore, we'll explore, whether you're, look no further, the world of.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/reel/DfRfBE_skb5/",
    "related": [
     {
+     "id": "33a9d2333371ac55",
+     "title": "Accessible website palettes and the 60-30-10 layout heuristic",
+     "why": "accessibility",
+     "score": 2
+    },
+    {
      "id": "d39aa31ed33b5492",
      "title": "Design references and practical critique for AI-assisted interfaces",
      "why": "accessibility",
@@ -5121,12 +5928,6 @@
     {
      "id": "1db10d293e06ccc0",
      "title": "Claude efficiency: measure quality, caching, batches and model choice",
-     "why": "Related subject",
-     "score": 1
-    },
-    {
-     "id": "ff608848fd33513a",
-     "title": "Voicebox: a free, open-source, local voice-cloning and dictation app (GitHub: jamiepine/voicebox)",
      "why": "Related subject",
      "score": 1
     }
@@ -7316,6 +8117,12 @@
    "build_prompt": "# Build: Assisted video editing practice pilot\n\nPair transcript-based decisions with visual evidence and editable outputs.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Scope\nBuild these:\n- Use the proposed exercise and blank worksheet for a bounded evaluation\n\n## Stack - use these exact versions\n- Markdown\n- CSV\n\n## Milestones - each must be verifiably done before the next\n1. **Define one comparison**\n   - Done when: Fixtures, baseline, budget and acceptance criteria\n2. **Record observations**\n   - Done when: Evidence, limitations and a reviewed decision\n\n## Background\nPair transcript-based decisions with visual evidence and editable outputs.\n\n## Reference (checked and reachable)\n- https://apify.com/pricing: https://apify.com/pricing\n- https://claude.com/pricing: https://claude.com/pricing\n- https://ffmpeg.org/ffmpeg.html: https://ffmpeg.org/ffmpeg.html\n- https://raw.githubusercontent.com/browser-use/video-use/main/README.md: https://raw.githubusercontent.com/browser-use/video-use/main/README.md\n- https://raw.githubusercontent.com/heygen-com/hyperframes/main/README.md: https://raw.githubusercontent.com/heygen-com/hyperframes/main/README.md\n- https://raw.githubusercontent.com/mifi/editly/master/README.md: https://raw.githubusercontent.com/mifi/editly/master/README.md\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. Python tests are run with pytest before\n  any of this is published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the, boasts, in today's, ever-evolving, at its core, robust and scalable, first-class, battle-tested, rock-solid, supercharge, effortlessly, in conclusion, let's explore, we'll explore, whether you're, look no further, the world of.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/reel/DfYBF8ySvpx/",
    "related": [
     {
+     "id": "8b0acab7320d664f",
+     "title": "Live clipping from chat signals, buffered recordings, and captions",
+     "why": "ffmpeg",
+     "score": 2
+    },
+    {
      "id": "f53be664feada95c",
      "title": "App marketing through launch channels and measured activation",
      "why": "Related subject",
@@ -7342,12 +8149,6 @@
     {
      "id": "13b51c70398aec3c",
      "title": "GTM engineering: signals, account enrichment and a measured treg pilot",
-     "why": "Related subject",
-     "score": 1
-    },
-    {
-     "id": "30fcc13e4fb39f3e",
-     "title": "Long-context latency: prefill, compression and a measured serving baseline",
      "why": "Related subject",
      "score": 1
     }
@@ -8395,6 +9196,12 @@
      "title": "UGC creator campaigns with SideShift and Trybe",
      "why": "creator income",
      "score": 3
+    },
+    {
+     "id": "8b0acab7320d664f",
+     "title": "Live clipping from chat signals, buffered recordings, and captions",
+     "why": "Related subject",
+     "score": 1
     },
     {
      "id": "e18003a818d918c0",
@@ -10907,6 +11714,12 @@
    "build_prompt": "# Build: Capped account research queue\n\nTrack provider spend, source quality and manually approved leads separately.\n\nI want a working repository I can push to GitHub. Build it completely -\nrunnable code, tests where they make sense, and a README.\n\n## Scope\nBuild these:\n- Use the guide and its blank template to run a small evaluation\n\n## Stack - use these exact versions\n- CSV\n- Markdown\n\n## Milestones - each must be verifiably done before the next\n1. **Choose a bounded fixture and baseline**\n   - Done when: An explicit comparison and acceptance criteria\n2. **Record observations**\n   - Done when: A reviewable results sheet\n\n## Background\nTrack provider spend, source quality and manually approved leads separately.\n\n## Reference (checked and reachable)\n- https://developers.google.com/maps/documentation/places/web-service/text-search: https://developers.google.com/maps/documentation/places/web-service/text-search\n- https://ducktate.com/learn/gtm-engineering/: https://ducktate.com/learn/gtm-engineering/\n- https://github.com/: https://github.com/\n- https://github.com/jobinthomas1189/gtm-agent-engine-workshop: https://github.com/jobinthomas1189/gtm-agent-engine-workshop\n- https://github.com/superdesigndev/treg: https://github.com/superdesigndev/treg\n- https://raw.githubusercontent.com/superdesigndev/treg/main/docs/CLAUDE-PLUGIN.md: https://raw.githubusercontent.com/superdesigndev/treg/main/docs/CLAUDE-PLUGIN.md\n\n## How I want it delivered\n- A single repository, ready to `git init` and push.\n- Pin every dependency to the versions above.\n- Tests that actually run. Python tests are run with pytest before\n  any of this is published, and a failure stops the whole thing.\n- A README that explains what it does and how to run it, written plainly.\n- No placeholder code and no TODO stubs - if something is out of scope,\n  leave it out rather than stubbing it.\n\n## How to write it\n\nWrite the way I write. A graduate student saying plainly what\nsomething does. First person where it is natural. Short sentences. No selling.\n\nPlain ASCII punctuation only. No em dashes, en dashes, arrows, middots, curly\nquotes, bullet characters, ellipsis characters, check marks or emoji. Hyphens\nand straight quotes are fine.\n\nNever say or imply that any AI tool, model or assistant had a hand in this.\nNo co-author lines, no credit, no mention of one anywhere. Naming a library\nthe project genuinely depends on is fine.\n\nDo not use any of these words or phrases: seamless, seamlessly, elevate, unlock, leverage, dive into, deep dive, delve, a testament to, in the realm of, it is important to note, worth noting that, furthermore, moreover, cutting edge, cutting-edge, state of the art, state-of-the-art, game changer, game-changer, best in class, best-in-class, empower, streamline, plethora, myriad, revolutionize, harness the, boasts, in today's, ever-evolving, at its core, robust and scalable, first-class, battle-tested, rock-solid, supercharge, effortlessly, in conclusion, let's explore, we'll explore, whether you're, look no further, the world of.\nDo not write \"not just X but Y\", or \"it is not X, it is Y\", or \"more than just\".\n\nComments explain why something is the way it is, not what the line does. No\ncomment blocks five lines long, no banner headers, no restating the function\nname in a docstring. If a comment would only repeat the code, leave it out.\n\nNo padding, no marketing, and no section that exists only so there is a\nsection.\n\nSource this came from: https://www.instagram.com/reel/DeMtZKYARb3/",
    "related": [
     {
+     "id": "8b0acab7320d664f",
+     "title": "Live clipping from chat signals, buffered recordings, and captions",
+     "why": "Related subject",
+     "score": 1
+    },
+    {
      "id": "978e0192b0c99e78",
      "title": "Company discovery and verified engineering requisitions",
      "why": "Related subject",
@@ -10933,12 +11746,6 @@
     {
      "id": "30fcc13e4fb39f3e",
      "title": "Long-context latency: prefill, compression and a measured serving baseline",
-     "why": "Related subject",
-     "score": 1
-    },
-    {
-     "id": "6a2e7b84cd39f453",
-     "title": "Claude skills: choose, author and evaluate engineering workflows",
      "why": "Related subject",
      "score": 1
     }
@@ -26740,7 +27547,7 @@
    "slide_ext": ".webp"
   }
  ],
- "built": "12 Nov 2026",
+ "built": "18 Nov 2026",
  "aliases": {
   "2c2a8864f72ad461": "6a2e7b84cd39f453",
   "4a4f9e2c6f9530d9": "dbadd698e460a0f5",
@@ -26811,6 +27618,12 @@
   "1a24a336e95e9387": "978e0192b0c99e78",
   "2fccd5282b513911": "8742e18e4f6b5756",
   "02d5927ef3a90ae7": "dbadd698e460a0f5",
-  "e2befef6fe4e6bde": "dbadd698e460a0f5"
+  "e2befef6fe4e6bde": "dbadd698e460a0f5",
+  "06d76477618b2e91": "33a9d2333371ac55",
+  "2b841cd1516799a2": "33a9d2333371ac55",
+  "5cc2505e97149261": "33a9d2333371ac55",
+  "9bb9a18e46e586ea": "dbadd698e460a0f5",
+  "b04e8e56abdc8ffc": "33a9d2333371ac55",
+  "d8bddf91d73f963d": "33a9d2333371ac55"
  }
 }

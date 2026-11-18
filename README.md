@@ -6,7 +6,7 @@ Saved ideas, researched into something useful.
 
 Kiln starts with a **Muse-produced Markdown dossier**, researches the practical next steps against current sources, and turns overlapping reels into one topic with guides, source links, prompts, commands, PDFs and project ideas. Every original URL remains attached.
 
-The **November 12, 2026** update adds 15 reel dossiers covering remote work, hiring, AI credentials, design, video tools, and product launches. The library contains **74 topics and 120 original sources**. The additions update nine existing topics and include practical guides, printable PDFs, reusable prompts, and blank worksheets. [Update log](WORKLOG.md)
+The **November 18, 2026** update adds seven reel dossiers covering website palettes, agentic AI credentials, and live clipping. The library contains **76 topics and 127 original sources**. The additions include measured contrast examples, an FFmpeg cut tested on synthetic footage, printable guides, reusable prompts, and worksheets. [Update log](WORKLOG.md)
 
 ## Before and now
 

@@ -1,15 +1,23 @@
 {
- "total": 74,
+ "total": 76,
  "by_action": {
+  "reference": 41,
   "apply": 4,
   "learn": 9,
-  "reference": 39,
   "install": 11,
   "build": 12,
   "read": 3,
   "watch": 8
  },
  "by_topic": {
+  "captions": 1,
+  "ffmpeg": 2,
+  "live clipping": 1,
+  "twitch": 1,
+  "accessibility": 3,
+  "color palettes": 1,
+  "design tokens": 1,
+  "visual hierarchy": 2,
   "agents": 1,
   "ai certifications": 1,
   "ai courses": 1,
@@ -61,7 +69,6 @@
   "rag": 4,
   "referrals": 1,
   "resume": 1,
-  "accessibility": 2,
   "ai development": 1,
   "claude ai": 1,
   "design critique": 1,
@@ -70,7 +77,6 @@
   "nocode": 1,
   "react bits": 1,
   "ui ux": 1,
-  "visual hierarchy": 1,
   "web design": 1,
   "hyperframes": 2,
   "motion graphics": 1,
@@ -101,7 +107,6 @@
   "nested learning": 1,
   "sleep": 1,
   "content pipeline": 1,
-  "ffmpeg": 1,
   "video editing": 1,
   "video-use": 1,
   "brag": 1,
@@ -447,7 +452,7 @@
    "id": "media-generation",
    "name": "Media Generation",
    "parent": "",
-   "count": 11
+   "count": 12
   },
   {
    "id": "media-generation/image-generation",
@@ -465,7 +470,7 @@
    "id": "media-generation/voice-video",
    "name": "Voice & video",
    "parent": "media-generation",
-   "count": 5
+   "count": 6
   },
   {
    "id": "models-training",
@@ -519,13 +524,13 @@
    "id": "shipping-quality",
    "name": "Shipping & Quality",
    "parent": "",
-   "count": 8
+   "count": 9
   },
   {
    "id": "shipping-quality/design",
    "name": "Design",
    "parent": "shipping-quality",
-   "count": 2
+   "count": 3
   },
   {
    "id": "shipping-quality/design-reconstruction",
@@ -565,7 +570,7 @@
   }
  ],
  "by_status": {
-  "ready": 72,
+  "ready": 74,
   "in-progress": 2,
   "made": 0,
   "set-aside": 0
